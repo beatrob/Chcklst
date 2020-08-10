@@ -3,18 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62424E19EF000A9A1FC /* AppDelegate.swift */; };
 		DD52A62724E19EF000A9A1FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */; };
 		DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */; };
-		DD52A62C24E19EF000A9A1FC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62B24E19EF000A9A1FC /* ContentView.swift */; };
 		DD52A62E24E19EF100A9A1FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD52A62D24E19EF100A9A1FC /* Assets.xcassets */; };
 		DD52A63124E19EF100A9A1FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD52A63024E19EF100A9A1FC /* Preview Assets.xcassets */; };
 		DD52A63424E19EF100A9A1FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD52A63224E19EF100A9A1FC /* LaunchScreen.storyboard */; };
 		DD52A63F24E19EF100A9A1FC /* checklistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A63E24E19EF100A9A1FC /* checklistTests.swift */; };
+		DD52A64C24E1A00200A9A1FC /* DashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */; };
+		DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */ = {isa = PBXBuildFile; productRef = DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */; };
+		DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65124E1A20800A9A1FC /* AppContext.swift */; };
+		DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */; };
+		DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */; };
+		DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */; };
+		DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */; };
+		DD52A65F24E1BE5300A9A1FC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD52A65E24E1BE5300A9A1FC /* PromiseKit */; };
+		DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */; };
+		DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */; };
+		DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66524E1D08C00A9A1FC /* DashboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +42,6 @@
 		DD52A62424E19EF000A9A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		DD52A62924E19EF000A9A1FC /* checklist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = checklist.xcdatamodel; sourceTree = "<group>"; };
-		DD52A62B24E19EF000A9A1FC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DD52A62D24E19EF100A9A1FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD52A63024E19EF100A9A1FC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DD52A63324E19EF100A9A1FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -40,6 +49,15 @@
 		DD52A63A24E19EF100A9A1FC /* checklistTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = checklistTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD52A63E24E19EF100A9A1FC /* checklistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = checklistTests.swift; sourceTree = "<group>"; };
 		DD52A64024E19EF100A9A1FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewModel.swift; sourceTree = "<group>"; };
+		DD52A65124E1A20800A9A1FC /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
+		DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembly.swift; sourceTree = "<group>"; };
+		DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistDataModel.swift; sourceTree = "<group>"; };
+		DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemDataModel.swift; sourceTree = "<group>"; };
+		DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistDataSource.swift; sourceTree = "<group>"; };
+		DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockChecklistDataSource.swift; sourceTree = "<group>"; };
+		DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceAssembly.swift; sourceTree = "<group>"; };
+		DD52A66524E1D08C00A9A1FC /* DashboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +65,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
+				DD52A65F24E1BE5300A9A1FC /* PromiseKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,9 +101,14 @@
 		DD52A62324E19EF000A9A1FC /* checklist */ = {
 			isa = PBXGroup;
 			children = (
+				DD52A65A24E1BCD700A9A1FC /* DataSource */,
+				DD52A65524E1BB1B00A9A1FC /* DataModel */,
+				DD52A65024E1A1E200A9A1FC /* Infrastructure */,
+				DD52A64A24E19FF000A9A1FC /* ViewModel */,
+				DD52A64924E19FE400A9A1FC /* View */,
 				DD52A62424E19EF000A9A1FC /* AppDelegate.swift */,
+				DD52A65124E1A20800A9A1FC /* AppContext.swift */,
 				DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */,
-				DD52A62B24E19EF000A9A1FC /* ContentView.swift */,
 				DD52A62D24E19EF100A9A1FC /* Assets.xcassets */,
 				DD52A63224E19EF100A9A1FC /* LaunchScreen.storyboard */,
 				DD52A63524E19EF100A9A1FC /* Info.plist */,
@@ -110,6 +135,57 @@
 			path = checklistTests;
 			sourceTree = "<group>";
 		};
+		DD52A64924E19FE400A9A1FC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A66524E1D08C00A9A1FC /* DashboardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DD52A64A24E19FF000A9A1FC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
+				DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		DD52A65024E1A1E200A9A1FC /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		DD52A65524E1BB1B00A9A1FC /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */,
+				DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */,
+			);
+			path = DataModel;
+			sourceTree = "<group>";
+		};
+		DD52A65A24E1BCD700A9A1FC /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A66024E1C04A00A9A1FC /* Mock */,
+				DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */,
+				DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
+		DD52A66024E1C04A00A9A1FC /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */,
+			);
+			path = Mock;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,6 +202,10 @@
 			dependencies = (
 			);
 			name = checklist;
+			packageProductDependencies = (
+				DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */,
+				DD52A65E24E1BE5300A9A1FC /* PromiseKit */,
+			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
 			productType = "com.apple.product-type.application";
@@ -176,6 +256,10 @@
 				Base,
 			);
 			mainGroup = DD52A61824E19EF000A9A1FC;
+			packageReferences = (
+				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
+				DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
+			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -211,9 +295,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
+				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
+				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
+				DD52A64C24E1A00200A9A1FC /* DashboardViewModel.swift in Sources */,
+				DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */,
 				DD52A62724E19EF000A9A1FC /* SceneDelegate.swift in Sources */,
-				DD52A62C24E19EF000A9A1FC /* ContentView.swift in Sources */,
+				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
+				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
+				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
+				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -477,6 +569,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/SwinjectAutoregistration";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.0;
+			};
+		};
+		DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/PromiseKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.13.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */;
+			productName = SwinjectAutoregistration;
+		};
+		DD52A65E24E1BE5300A9A1FC /* PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */;
+			productName = PromiseKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */ = {
