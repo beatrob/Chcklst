@@ -34,9 +34,9 @@ class DashboardViewModel: ObservableObject {
     init(checklistDataSource: ChecklistDataSource) {
         self.checklistDataSource = checklistDataSource
         
-        checklistDataSource.getActiveChecklists()
-        .done { self.handleChecklistData($0) }
-        .catch { print(String(describing: $0)) }
+        checklistDataSource.checkLists.sink {
+            self.handleChecklistData($0)
+        }.store(in: &cancellables)
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
@@ -48,21 +48,6 @@ class DashboardViewModel: ObservableObject {
                 counter: "\($0.items.filter(\.isDone).count)/\($0.items.count)",
                 isDone: $0.isDone
             )
-        }
-    }
-}
-
-
-class MockDashboardViewModel: DashboardViewModel {
-    
-    override init(checklistDataSource: ChecklistDataSource) {
-        super.init(checklistDataSource: checklistDataSource)
-        do {
-            handleChecklistData(
-                try checklistDataSource.getActiveChecklists().wait()
-            )
-        } catch {
-            print(String(describing: error))
         }
     }
 }

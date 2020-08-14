@@ -7,12 +7,13 @@
 //
 
 import Foundation
-import PromiseKit
+import Combine
 
 
 class MockChecklistDataSource: ChecklistDataSource {
     
-    var checkLists: [ChecklistDataModel] = [
+    var _selectedChecklist: PassthroughSubject<ChecklistDataModel, Never> = .init()
+    var _checkLists: CurrentValueSubject<[ChecklistDataModel], Never> = .init([
         .init(
             id: "1",
             title: "My first check-list",
@@ -52,9 +53,13 @@ class MockChecklistDataSource: ChecklistDataSource {
                 .init(id: "6", name: "Do this for the sixth.", isDone: false, updateDate: Date())
             ]
         )
-    ]
+    ])
     
-    func getActiveChecklists() -> Promise<[ChecklistDataModel]> {
-        .value(checkLists)
+    var selectedCheckList: AnyPublisher<ChecklistDataModel, Never> {
+        _selectedChecklist.eraseToAnyPublisher()
+    }
+    
+    var checkLists: AnyPublisher<[ChecklistDataModel], Never> {
+        _checkLists.eraseToAnyPublisher()
     }
 }

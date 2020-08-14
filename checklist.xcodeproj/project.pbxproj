@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */; };
+		DD2BD1A624E6F87A004B2060 /* ChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */; };
 		DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62424E19EF000A9A1FC /* AppDelegate.swift */; };
 		DD52A62724E19EF000A9A1FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */; };
 		DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */; };
@@ -21,7 +23,6 @@
 		DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */; };
 		DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */; };
 		DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */; };
-		DD52A65F24E1BE5300A9A1FC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD52A65E24E1BE5300A9A1FC /* PromiseKit */; };
 		DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */; };
 		DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */; };
 		DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66524E1D08C00A9A1FC /* DashboardView.swift */; };
@@ -38,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
+		DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistViewModel.swift; sourceTree = "<group>"; };
 		DD52A62124E19EF000A9A1FC /* checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD52A62424E19EF000A9A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +69,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
-				DD52A65F24E1BE5300A9A1FC /* PromiseKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,19 +103,19 @@
 		DD52A62324E19EF000A9A1FC /* checklist */ = {
 			isa = PBXGroup;
 			children = (
-				DD52A65A24E1BCD700A9A1FC /* DataSource */,
-				DD52A65524E1BB1B00A9A1FC /* DataModel */,
-				DD52A65024E1A1E200A9A1FC /* Infrastructure */,
-				DD52A64A24E19FF000A9A1FC /* ViewModel */,
-				DD52A64924E19FE400A9A1FC /* View */,
-				DD52A62424E19EF000A9A1FC /* AppDelegate.swift */,
+				DD52A63524E19EF100A9A1FC /* Info.plist */,
 				DD52A65124E1A20800A9A1FC /* AppContext.swift */,
+				DD52A62424E19EF000A9A1FC /* AppDelegate.swift */,
 				DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */,
 				DD52A62D24E19EF100A9A1FC /* Assets.xcassets */,
-				DD52A63224E19EF100A9A1FC /* LaunchScreen.storyboard */,
-				DD52A63524E19EF100A9A1FC /* Info.plist */,
 				DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */,
+				DD52A63224E19EF100A9A1FC /* LaunchScreen.storyboard */,
+				DD52A65524E1BB1B00A9A1FC /* DataModel */,
+				DD52A65A24E1BCD700A9A1FC /* DataSource */,
+				DD52A65024E1A1E200A9A1FC /* Infrastructure */,
 				DD52A62F24E19EF100A9A1FC /* Preview Content */,
+				DD52A64924E19FE400A9A1FC /* View */,
+				DD52A64A24E19FF000A9A1FC /* ViewModel */,
 			);
 			path = checklist;
 			sourceTree = "<group>";
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				DD52A66524E1D08C00A9A1FC /* DashboardView.swift */,
+				DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -146,8 +149,9 @@
 		DD52A64A24E19FF000A9A1FC /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
 				DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */,
+				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
+				DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -204,7 +208,6 @@
 			name = checklist;
 			packageProductDependencies = (
 				DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */,
-				DD52A65E24E1BE5300A9A1FC /* PromiseKit */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -258,7 +261,6 @@
 			mainGroup = DD52A61824E19EF000A9A1FC;
 			packageReferences = (
 				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
-				DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -298,6 +300,7 @@
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
 				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
+				DD2BD1A624E6F87A004B2060 /* ChecklistViewModel.swift in Sources */,
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
 				DD52A64C24E1A00200A9A1FC /* DashboardViewModel.swift in Sources */,
 				DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */,
@@ -305,6 +308,7 @@
 				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
+				DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
 			);
@@ -579,14 +583,6 @@
 				minimumVersion = 2.7.0;
 			};
 		};
-		DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/mxcl/PromiseKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.13.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -594,11 +590,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */;
 			productName = SwinjectAutoregistration;
-		};
-		DD52A65E24E1BE5300A9A1FC /* PromiseKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DD52A65D24E1BE5300A9A1FC /* XCRemoteSwiftPackageReference "PromiseKit" */;
-			productName = PromiseKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

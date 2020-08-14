@@ -7,18 +7,23 @@
 //
 
 import Foundation
-import PromiseKit
+import Combine
 
 
 protocol ChecklistDataSource {
     
-    func getActiveChecklists() -> Promise<[ChecklistDataModel]>
+    var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
+    var selectedCheckList: AnyPublisher<ChecklistDataModel, Never> { get }
 }
 
 
 class CheckListDataSourceImpl: ChecklistDataSource {
     
-    func getActiveChecklists() -> Promise<[ChecklistDataModel]> {
-        .value([])
+    var checkLists: AnyPublisher<[ChecklistDataModel], Never> {
+        AnyPublisher(Empty())
+    }
+    
+    var selectedCheckList: AnyPublisher<ChecklistDataModel, Never> {
+        AnyPublisher(Empty())
     }
 }
