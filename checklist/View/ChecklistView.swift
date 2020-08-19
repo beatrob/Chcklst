@@ -14,7 +14,15 @@ struct ChecklistView: View {
     @ObservedObject var viewModel: ChecklistViewModel
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text(viewModel.checklistVO.description)
+                .font(.caption)
+                .lineLimit(nil)
+                .padding()
+            List(viewModel.checklistVO.items, id: \.id) { item in
+                ChecklistItemView(viewModel: self.viewModel.getItemViewModel(for: item))
+            }
+        }.navigationBarTitle(viewModel.checklistVO.title)
     }
 }
 
@@ -22,7 +30,7 @@ struct ChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         ChecklistView(
             viewModel: .init(
-                checklist: AnyPublisher(MockChecklistDataSource()._checkLists.eraseToAnyPublisher().map { $0.first! })
+                checklist: .init(MockChecklistDataSource()._checkLists.value.first)
             )
         )
     }

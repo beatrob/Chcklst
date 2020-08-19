@@ -9,10 +9,16 @@
 import Foundation
 import Swinject
 import SwinjectAutoregistration
+import Combine
 
 class ViewModelAssembly: Assembly {
     
     func assemble(container: Container) {
         container.autoregister(DashboardViewModel.self, initializer: DashboardViewModel.init)
+        container.autoregister(
+            CreateChecklistViewModel.self,
+            argument: CreateChecklistSubject.self,
+            initializer: CreateChecklistViewModel.init
+        )
     }
 }

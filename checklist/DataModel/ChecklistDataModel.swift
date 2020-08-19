@@ -9,13 +9,18 @@
 import Foundation
 
 
-struct ChecklistDataModel {
+struct ChecklistDataModel: Equatable {
     
     let id: String
     let title: String
     let description: String
-    let items: [ChecklistItemDataModel]
+    var updateDate: Date
+    var items: [ChecklistItemDataModel]
     var isDone: Bool {
         items.filter(\.isDone).count == items.count
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
     }
 }

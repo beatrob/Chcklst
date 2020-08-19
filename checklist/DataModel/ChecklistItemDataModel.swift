@@ -9,10 +9,37 @@
 import Foundation
 
 
-struct ChecklistItemDataModel {
+struct ChecklistItemDataModel: Equatable {
     
     let id: String
-    let name: String
+    var name: String
     var isDone: Bool
     var updateDate: Date
+    
+    var isUndone: Bool { !isDone }
+    
+    mutating func toDone() {
+        self.isDone = true
+        self.updateDate = Date()
+    }
+    
+    mutating func toUnDone() {
+        self.isDone = false
+        self.updateDate = Date()
+    }
+    
+    mutating func toggleDone() {
+        self.isDone.toggle()
+        self.updateDate = Date()
+    }
+    
+    mutating func update(with item: ChecklistItemDataModel) {
+        self.name = item.name
+        self.isDone = item.isDone
+        self.updateDate = item.updateDate
+    }
+    
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }

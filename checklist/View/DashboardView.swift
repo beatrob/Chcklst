@@ -10,23 +10,49 @@ import SwiftUI
 
 struct DashboardView: View {
     
+    @State var currentTag: Int?
     @ObservedObject var viewModel: DashboardViewModel
     
     var body: some View {
-        List(viewModel.checklists, id: \.id) { checklist in
+        NavigationView {
             VStack {
-                HStack {
-                    Text(checklist.title).font(.title)
-                    Spacer()
-                    Text(checklist.counter).foregroundColor(.gray)
-                }
-                HStack {
-                    Image(systemName: "circle").foregroundColor(.gray)
-                    Text(checklist.firstItem).font(.caption).foregroundColor(.gray)
-                    Spacer()
+                List(viewModel.checklists, id: \.id) { checklist in
+                    VStack {
+                        HStack {
+                            Text(checklist.title).font(.title)
+                            Spacer()
+                            Text(checklist.counter).foregroundColor(.gray)
+                        }
+                        checklist.firstUndoneItem.map { first in
+                            HStack {
+                                ChecklistItemView(
+                                    viewModel: self.viewModel.getItemViewModel(
+                                        for: first,
+                                        in: checklist
+                                    )
+                                )
+                                Spacer()
+                            }
+                        }
+                        NavigationLink(destination: self.viewModel.checklistDetail, tag: checklist.tag, selection: self.$viewModel.currentChecklistIndex) {
+                            EmptyView()
+                        }
+                        .padding()
+                        
+                    }
+                    
                 }
             }
-            .padding()
+            .navigationBarTitle("My checklists")
+            .navigationBarItems(
+                trailing: Button.init(
+                    action: { self.viewModel.onCreateNewChecklist.send()},
+                    label: { Image(systemName: "plus") }
+                )
+            )
+        }
+        .sheet(isPresented: $viewModel.isSheetVisible) {
+            CreateChecklistView(viewModel: self.viewModel.getCreateChecklistViewModel())
         }
     }
 }
