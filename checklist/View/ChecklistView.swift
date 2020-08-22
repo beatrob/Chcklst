@@ -15,10 +15,12 @@ struct ChecklistView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(viewModel.checklistVO.description)
-                .font(.caption)
-                .lineLimit(nil)
-                .padding()
+            viewModel.checklistVO.description.map {
+                Text($0)
+                    .font(.caption)
+                    .lineLimit(nil)
+                    .padding()
+            }
             List(viewModel.checklistVO.items, id: \.id) { item in
                 ChecklistItemView(viewModel: self.viewModel.getItemViewModel(for: item))
             }

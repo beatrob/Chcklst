@@ -10,18 +10,28 @@ import SwiftUI
 
 struct CreateChecklistView: View {
     
+    @Environment(\.presentationMode) var presentationMode
     @ObservedObject var viewModel: CreateChecklistViewModel
     
     var body: some View {
-        VStack {
+        if viewModel.shouldDismissView {
+            presentationMode.wrappedValue.dismiss()
+        }
+        return VStack {
             NameYourChecklistView(
-                checklistName: $viewModel.checklistName,
+                checklistName: .init(
+                    get: { self.viewModel.checklistName },
+                    set: { self.viewModel.checklistName = $0 }
+                ),
                 shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
                 onCreateFromTemplate: viewModel.onCreateFromTemplate,
                 onNext: viewModel.onCreateTitleNext
             )
             AddItemsToChecklistView(
-                shouldDisplayAddItems: $viewModel.shouldDisplayAddItems
+                shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
+                shouldDisplayCreateButton: viewModel.shouldDisplayCreateChecklist,
+                items: viewModel.items,
+                onCreate: viewModel.onCreateChecklist
             )
             if viewModel.shouldDisplayAddItems {
                 Spacer()

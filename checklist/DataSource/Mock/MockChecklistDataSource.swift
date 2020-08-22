@@ -72,6 +72,11 @@ class MockChecklistDataSource: ChecklistDataSource {
             checklist.updateDate = Date()
             _ = self._checkLists.value.updateItem(checklist)
         }.store(in: &cancellables)
+        
+        createNewChecklist.sink { [weak self] checklist in
+            guard let self = self else { return }
+            self._checkLists.value.insert(checklist, at: 0)
+        }.store(in: &cancellables)
     }
     
     func updateItem(

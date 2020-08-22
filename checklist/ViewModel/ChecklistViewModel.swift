@@ -15,7 +15,7 @@ class ChecklistViewModel: ObservableObject {
     
     struct ChecklistVO {
         let title: String
-        let description: String
+        let description: String?
         var items: [ChecklistItemDataModel]
         
         mutating func setItems(_ items: [ChecklistItemDataModel]) {

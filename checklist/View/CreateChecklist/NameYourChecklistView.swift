@@ -24,8 +24,7 @@ struct NameYourChecklistView: View {
                     self.onNext.send()
                 }
             }
-            .font(.largeTitle)
-            .minimumScaleFactor(0.7)
+            .font(.system(size: 38))
             .padding()
             if shouldCreateChecklistName {
                 Button("Create from a template") {

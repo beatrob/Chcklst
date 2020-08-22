@@ -11,11 +11,33 @@ import SwiftUI
 struct AddItemsToChecklistView: View {
     
     @Binding var shouldDisplayAddItems: Bool
+    var shouldDisplayCreateButton: Bool
+    var items: [CreateChecklistItemVO]
+    let onCreate: EmptySubject
     
     var body: some View {
         VStack {
             if shouldDisplayAddItems {
-                Text("Add Items")
+                VStack {
+                    ForEach(items, id: \.id) { item in
+                        HStack {
+                            Image(systemName: "circle")
+                            TextField("TODO", text: item.$name)
+                        }
+                    }
+                    .padding()
+                    if shouldDisplayCreateButton {
+                        Button.init(action: {
+                            self.onCreate.send()
+                        }) {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("Create checklist")
+                            }
+                        }
+                        .padding()
+                    }
+                }
             }
         }
     }
@@ -24,7 +46,10 @@ struct AddItemsToChecklistView: View {
 struct AddItemsToChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         AddItemsToChecklistView(
-            shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 })
+            shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
+            shouldDisplayCreateButton: true,
+            items: [],
+            onCreate: .init()
         )
     }
 }

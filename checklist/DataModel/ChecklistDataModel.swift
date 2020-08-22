@@ -13,7 +13,7 @@ struct ChecklistDataModel: Equatable {
     
     let id: String
     let title: String
-    let description: String
+    let description: String?
     var updateDate: Date
     var items: [ChecklistItemDataModel]
     var isDone: Bool {
