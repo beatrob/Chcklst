@@ -12,7 +12,8 @@ import Combine
 
 protocol ChecklistDataSource {
     
-    var createNewChecklist: CreateChecklistSubject { get }
+    var createNewChecklist: ChecklistPassthroughSubject { get }
+    var deleteCheckList: ChecklistPassthroughSubject { get }
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
     var selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> { get }
     func updateItem(
@@ -31,7 +32,9 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     
     let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     
-    let createNewChecklist: CreateChecklistSubject = .init()
+    let createNewChecklist: ChecklistPassthroughSubject = .init()
+    
+    let deleteCheckList: ChecklistPassthroughSubject = .init()
     
     func updateItem(
         _ item: ChecklistItemDataModel,

@@ -38,7 +38,7 @@ class CreateChecklistViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     var idToName = [String: String]()
     
-    init(createChecklistSubject: CreateChecklistSubject) {
+    init(createChecklistSubject: ChecklistPassthroughSubject) {
         onCreateTitleNext.sink { [weak self] in
             self?.addNewItem()
             self?.shouldCreateChecklistName = false

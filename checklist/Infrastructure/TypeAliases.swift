@@ -9,5 +9,6 @@
 import Foundation
 import Combine
 
-typealias CreateChecklistSubject = PassthroughSubject<ChecklistDataModel, Never>
+typealias ChecklistPassthroughSubject = PassthroughSubject<ChecklistDataModel, Never>
 typealias EmptySubject = PassthroughSubject<Void, Never>
+typealias EmptyCompletion = () -> Void

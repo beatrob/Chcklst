@@ -57,7 +57,8 @@ class MockChecklistDataSource: ChecklistDataSource {
         )
     ])
     
-    let createNewChecklist: CreateChecklistSubject = .init()
+    let createNewChecklist: ChecklistPassthroughSubject = .init()
+    let deleteCheckList: ChecklistPassthroughSubject = .init()
     let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     var cancellables =  Set<AnyCancellable>()
     
@@ -76,6 +77,11 @@ class MockChecklistDataSource: ChecklistDataSource {
         createNewChecklist.sink { [weak self] checklist in
             guard let self = self else { return }
             self._checkLists.value.insert(checklist, at: 0)
+        }.store(in: &cancellables)
+        
+        deleteCheckList.sink { [weak self] checklist in
+            guard let self = self else { return }
+            self._checkLists.value.removeAll { $0.id == checklist.id }
         }.store(in: &cancellables)
     }
     

@@ -10,6 +10,49 @@ import Foundation
 import Combine
 import SwiftUI
 
+enum DashboardActionSheet {
+    case editChecklist(
+        checklist: ChecklistDataModel,
+        onEdit: EmptyCompletion,
+        onCreateTemplate: EmptyCompletion,
+        onDelete: EmptyCompletion
+    )
+    case none
+    
+    var isActionSheedVisible: Bool {
+        switch self {
+        case .none: return false
+        default: return true
+        }
+    }
+    
+    var actionSheet: ActionSheet {
+        switch self {
+        case .editChecklist(let checklist, let onEdit, let onCreateTemplate, let onDelete):
+            return ActionSheet(
+                title: Text(checklist.title),
+                message: nil,
+                buttons: [
+                    .default(Text("Mark all as done")) {
+                        
+                    },
+                    .default(Text("Edit")) {
+                        withAnimation { onEdit() }
+                    },
+                    .default(Text("Create template")) {
+                        onCreateTemplate()
+                    },
+                    .destructive(Text("Delete")) {
+                        withAnimation { onDelete() }
+                    },
+                    .cancel()
+                ]
+            )
+        default: return ActionSheet(title: Text(""))
+        }
+        
+    }
+}
 
 class DashboardViewModel: ObservableObject {
     
@@ -22,14 +65,6 @@ class DashboardViewModel: ObservableObject {
         var firstUndoneItem: ChecklistItemDataModel?
     }
     
-    @Published var currentChecklistIndex: Int? {
-        didSet {
-            guard let index = currentChecklistIndex else {
-                return
-            }
-            checklistDataSource.selectedCheckList.send(checklists[index].data)
-        }
-    }
     @Published var checklists: [ChecklistVO] = [] {
         didSet {
             self.objectWillChange.send()
@@ -37,15 +72,26 @@ class DashboardViewModel: ObservableObject {
     }
     @Published var isCheklistDetailVisible = false
     @Published var isSheetVisible = false
+    @Published var isActionSheetVisible = false
+    @Published var actionSheet: DashboardActionSheet = .none {
+        didSet {
+            self.isActionSheetVisible = actionSheet.isActionSheedVisible
+        }
+    }
     var checklistDetail: ChecklistView {
         let viewModel = ChecklistViewModel(
             checklist: self.checklistDataSource.selectedCheckList
         )
         return ChecklistView(viewModel: viewModel)
     }
-    let onCreateNewChecklist = PassthroughSubject<Void, Never>()
+    let onCreateNewChecklist = EmptySubject()
+    let onSettings = EmptySubject()
+    let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()
+    let onChecklistTapped = PassthroughSubject<ChecklistVO, Never>()
     var cancellables =  Set<AnyCancellable>()
+    var actionSheetView: ActionSheet { actionSheet.actionSheet }
     
+    private var checklistToEdit: ChecklistVO?
     private let checklistDataSource: ChecklistDataSource
     
     init(checklistDataSource: ChecklistDataSource) {
@@ -55,8 +101,32 @@ class DashboardViewModel: ObservableObject {
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
         
+        checklistDataSource.selectedCheckList.dropFirst().sink { [weak self] checklist in
+            self?.isCheklistDetailVisible = checklist != nil
+        }.store(in: &cancellables)
+        
         onCreateNewChecklist.sink { [weak self] in
             self?.isSheetVisible.toggle()
+        }.store(in: &cancellables)
+        
+        onChecklistLongTapped.sink { [weak self] checklist in
+            guard let self = self else { return }
+            self.actionSheet = .editChecklist(
+                checklist: checklist.data,
+                onEdit: {
+                    #warning("TODO: implement edit checklist")
+                },
+                onCreateTemplate: {
+                    #warning("TODO: implement create template")
+                },
+                onDelete: {
+                    checklistDataSource.deleteCheckList.send(checklist.data)
+                }
+            )
+        }.store(in: &cancellables)
+        
+        onChecklistTapped.sink { checklist in
+            checklistDataSource.selectedCheckList.send(checklist.data)
         }.store(in: &cancellables)
     }
     

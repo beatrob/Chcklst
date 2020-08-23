@@ -10,46 +10,59 @@ import SwiftUI
 
 struct DashboardView: View {
     
-    @State var currentTag: Int?
     @ObservedObject var viewModel: DashboardViewModel
     
     var body: some View {
         NavigationView {
             VStack {
-                List(viewModel.checklists, id: \.id) { checklist in
-                    VStack {
-                        HStack {
-                            Text(checklist.title).font(.title)
-                            Spacer()
-                            Text(checklist.counter).foregroundColor(.gray)
-                        }
-                        checklist.firstUndoneItem.map { first in
+                NavigationLink(destination: viewModel.checklistDetail, isActive: $viewModel.isCheklistDetailVisible) {
+                    EmptyView()
+                }.hidden()
+                Spacer().frame(height: 15.0)
+                ForEach(viewModel.checklists, id: \.id) { checklist in
+                        VStack {
                             HStack {
-                                ChecklistItemView(
-                                    viewModel: self.viewModel.getItemViewModel(
-                                        for: first,
-                                        in: checklist
-                                    )
-                                )
+                                Text(checklist.title).font(.title)
                                 Spacer()
+                                Text(checklist.counter).foregroundColor(.gray)
                             }
+                            checklist.firstUndoneItem.map { first in
+                                HStack {
+                                    ChecklistItemView(
+                                        viewModel: self.viewModel.getItemViewModel(
+                                            for: first,
+                                            in: checklist
+                                        )
+                                    )
+                                    Spacer()
+                                }
+                            }
+                            Rectangle().frame(height: 0.5).foregroundColor(.gray)
                         }
-                        NavigationLink(destination: self.viewModel.checklistDetail, tag: checklist.tag, selection: self.$viewModel.currentChecklistIndex) {
-                            EmptyView()
+                        .padding(.horizontal)
+                        .onTapGesture {
+                            self.viewModel.onChecklistTapped.send(checklist)
                         }
-                        .padding()
-                        
-                    }
-                    
+                    .simultaneousGesture(LongPressGesture().onEnded({ _ in
+                        self.viewModel.onChecklistLongTapped.send(checklist)
+                    }))
                 }
+                Spacer()
             }
-            .navigationBarTitle("My checklists")
+            .navigationBarTitle("C H C K ✓ L S T", displayMode: .inline)
             .navigationBarItems(
+                leading: Button.init(
+                    action: { self.viewModel.onSettings.send() },
+                    label: { Image(systemName: "gear") }
+                ),
                 trailing: Button.init(
                     action: { self.viewModel.onCreateNewChecklist.send()},
                     label: { Image(systemName: "plus") }
                 )
             )
+        }
+        .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
+            self.viewModel.actionSheetView
         }
         .sheet(isPresented: $viewModel.isSheetVisible) {
             CreateChecklistView(viewModel: self.viewModel.getCreateChecklistViewModel())
