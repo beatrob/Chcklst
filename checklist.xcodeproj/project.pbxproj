@@ -30,6 +30,11 @@
 		DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */; };
 		DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */; };
 		DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66524E1D08C00A9A1FC /* DashboardView.swift */; };
+		DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4824F271E1004089B6 /* SettingsView.swift */; };
+		DD727A4D24F2722A004089B6 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */; };
+		DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */; };
+		DD727A5224F27300004089B6 /* DashboardNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A5124F27300004089B6 /* DashboardNavigation.swift */; };
+		DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A5324F2730F004089B6 /* DashboardAlert.swift */; };
 		DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */; };
 		DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */; };
 		DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */; };
@@ -75,6 +80,11 @@
 		DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockChecklistDataSource.swift; sourceTree = "<group>"; };
 		DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceAssembly.swift; sourceTree = "<group>"; };
 		DD52A66524E1D08C00A9A1FC /* DashboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		DD727A4824F271E1004089B6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardActionSheet.swift; sourceTree = "<group>"; };
+		DD727A5124F27300004089B6 /* DashboardNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardNavigation.swift; sourceTree = "<group>"; };
+		DD727A5324F2730F004089B6 /* DashboardAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardAlert.swift; sourceTree = "<group>"; };
 		DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChecklistViewModel.swift; sourceTree = "<group>"; };
 		DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
 		DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameYourChecklistView.swift; sourceTree = "<group>"; };
@@ -174,6 +184,7 @@
 				DD52A66524E1D08C00A9A1FC /* DashboardView.swift */,
 				DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */,
 				DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */,
+				DD727A4824F271E1004089B6 /* SettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -181,11 +192,12 @@
 		DD52A64A24E19FF000A9A1FC /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				DD727A4E24F272C4004089B6 /* Dashboard */,
 				DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */,
-				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
 				DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */,
 				DD2BD1AB24E937C2004B2060 /* ChecklistItemViewModel.swift */,
 				DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */,
+				DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -224,6 +236,17 @@
 				DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */,
 			);
 			path = Mock;
+			sourceTree = "<group>";
+		};
+		DD727A4E24F272C4004089B6 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
+				DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */,
+				DD727A5124F27300004089B6 /* DashboardNavigation.swift */,
+				DD727A5324F2730F004089B6 /* DashboardAlert.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */ = {
@@ -358,14 +381,19 @@
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
+				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
 				DD2BD1AA24E937B0004B2060 /* ChecklistItemView.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				DD2BD1AC24E937C2004B2060 /* ChecklistItemViewModel.swift in Sources */,
+				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
 				DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
+				DD727A4D24F2722A004089B6 /* SettingsViewModel.swift in Sources */,
 				DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */,
+				DD727A5224F27300004089B6 /* DashboardNavigation.swift in Sources */,
 				DD7AF2B024EDB8110051CD16 /* CreateChecklistView.swift in Sources */,
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
+				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
 				DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

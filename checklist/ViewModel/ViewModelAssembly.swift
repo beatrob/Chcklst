@@ -15,6 +15,12 @@ class ViewModelAssembly: Assembly {
     
     func assemble(container: Container) {
         container.autoregister(DashboardViewModel.self, initializer: DashboardViewModel.init)
+        container.autoregister(SettingsViewModel.self, initializer: SettingsViewModel.init)
+        container.autoregister(
+            ChecklistViewModel.self,
+            argument: ChecklistCurrentValueSubject.self,
+            initializer: ChecklistViewModel.init
+        )
         container.autoregister(
             CreateChecklistViewModel.self,
             argument: ChecklistPassthroughSubject.self,

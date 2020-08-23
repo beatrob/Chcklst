@@ -15,7 +15,7 @@ struct DashboardView: View {
     var body: some View {
         NavigationView {
             VStack {
-                NavigationLink(destination: viewModel.checklistDetail, isActive: $viewModel.isCheklistDetailVisible) {
+                NavigationLink(destination: viewModel.viewToNavigate, isActive: $viewModel.isViewToNavigateVisible) {
                     EmptyView()
                 }.hidden()
                 Spacer().frame(height: 15.0)
@@ -53,11 +53,19 @@ struct DashboardView: View {
             .navigationBarItems(
                 leading: Button.init(
                     action: { self.viewModel.onSettings.send() },
-                    label: { Image(systemName: "gear") }
+                    label: {
+                        Image(systemName: "gear")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }
                 ),
                 trailing: Button.init(
                     action: { self.viewModel.onCreateNewChecklist.send()},
-                    label: { Image(systemName: "plus") }
+                    label: {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                    }
                 )
             )
         }

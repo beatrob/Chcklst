@@ -10,50 +10,6 @@ import Foundation
 import Combine
 import SwiftUI
 
-enum DashboardActionSheet {
-    case editChecklist(
-        checklist: ChecklistDataModel,
-        onEdit: EmptyCompletion,
-        onCreateTemplate: EmptyCompletion,
-        onDelete: EmptyCompletion
-    )
-    case none
-    
-    var isActionSheedVisible: Bool {
-        switch self {
-        case .none: return false
-        default: return true
-        }
-    }
-    
-    var actionSheet: ActionSheet {
-        switch self {
-        case .editChecklist(let checklist, let onEdit, let onCreateTemplate, let onDelete):
-            return ActionSheet(
-                title: Text(checklist.title),
-                message: nil,
-                buttons: [
-                    .default(Text("Mark all as done")) {
-                        
-                    },
-                    .default(Text("Edit")) {
-                        withAnimation { onEdit() }
-                    },
-                    .default(Text("Create template")) {
-                        onCreateTemplate()
-                    },
-                    .destructive(Text("Delete")) {
-                        withAnimation { onDelete() }
-                    },
-                    .cancel()
-                ]
-            )
-        default: return ActionSheet(title: Text(""))
-        }
-        
-    }
-}
-
 class DashboardViewModel: ObservableObject {
     
     struct ChecklistVO {
@@ -70,7 +26,7 @@ class DashboardViewModel: ObservableObject {
             self.objectWillChange.send()
         }
     }
-    @Published var isCheklistDetailVisible = false
+    @Published var isViewToNavigateVisible = false
     @Published var isSheetVisible = false
     @Published var isActionSheetVisible = false
     @Published var actionSheet: DashboardActionSheet = .none {
@@ -78,12 +34,12 @@ class DashboardViewModel: ObservableObject {
             self.isActionSheetVisible = actionSheet.isActionSheedVisible
         }
     }
-    var checklistDetail: ChecklistView {
-        let viewModel = ChecklistViewModel(
-            checklist: self.checklistDataSource.selectedCheckList
-        )
-        return ChecklistView(viewModel: viewModel)
+    @Published var navigation: DashboardNavigation = .none {
+        didSet {
+            self.isViewToNavigateVisible = navigation.isViewVisible
+        }
     }
+    var viewToNavigate: AnyView { navigation.view }
     let onCreateNewChecklist = EmptySubject()
     let onSettings = EmptySubject()
     let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()
@@ -101,12 +57,17 @@ class DashboardViewModel: ObservableObject {
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
         
-        checklistDataSource.selectedCheckList.dropFirst().sink { [weak self] checklist in
-            self?.isCheklistDetailVisible = checklist != nil
+        checklistDataSource.selectedCheckList.dropFirst().sink { [weak self] _ in
+            guard let self = self else { return }
+            self.navigation = .checklistDetail(checklist: checklistDataSource.selectedCheckList)
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
             self?.isSheetVisible.toggle()
+        }.store(in: &cancellables)
+        
+        onSettings.sink { [weak self] in
+            self?.navigation = .settings
         }.store(in: &cancellables)
         
         onChecklistLongTapped.sink { [weak self] checklist in

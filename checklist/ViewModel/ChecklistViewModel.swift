@@ -31,9 +31,9 @@ class ChecklistViewModel: ObservableObject {
     @Published var checklistVO = ChecklistVO(title: "", description: "", items: [])
     
     var cancellables =  Set<AnyCancellable>()
-    var checklist: CurrentValueSubject<ChecklistDataModel?, Never>
+    var checklist: ChecklistCurrentValueSubject
     
-    init(checklist: CurrentValueSubject<ChecklistDataModel?, Never>) {
+    init(checklist: ChecklistCurrentValueSubject) {
         self.checklist = checklist
         checklist.sink { [weak self] checklist in
             guard let self = self, let checklist = checklist else {
