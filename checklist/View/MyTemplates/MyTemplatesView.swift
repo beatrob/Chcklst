@@ -14,6 +14,11 @@ struct MyTemplatesView: View {
     
     var body: some View {
         VStack {
+            NavigationLink(
+                destination: viewModel.viewToNavigate,
+                isActive: $viewModel.isViewToNavigateVisible,
+                label: { EmptyView() }
+            )
             ForEach(
                 viewModel.templates,
                 id: \.id) { template in
@@ -21,10 +26,21 @@ struct MyTemplatesView: View {
                         name: template.title,
                         description: template.description
                     )
+                    .onTapGesture {
+                        self.viewModel.onTemplateTapped.send(template)
+                    }
+                    .simultaneousGesture(
+                        LongPressGesture().onEnded { _ in
+                            self.viewModel.onTemplateLongTapped.send(template)
+                        }
+                    )
             }
             Spacer()
         }
         .navigationBarTitle("My templates", displayMode: .large)
+        .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
+            self.viewModel.actionSheetView
+        }
     }
 }
 

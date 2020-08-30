@@ -30,6 +30,10 @@
 		DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */; };
 		DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */; };
 		DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66524E1D08C00A9A1FC /* DashboardView.swift */; };
+		DD6C506B24FC355A0056C476 /* MyTemplatesNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C506A24FC355A0056C476 /* MyTemplatesNavigation.swift */; };
+		DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C506C24FC35610056C476 /* MyTemplatesActionSheet.swift */; };
+		DD6C506F24FC37F20056C476 /* EditTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C506E24FC37F20056C476 /* EditTemplateView.swift */; };
+		DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6C507024FC38050056C476 /* EditTemplateViewModel.swift */; };
 		DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4824F271E1004089B6 /* SettingsView.swift */; };
 		DD727A4D24F2722A004089B6 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */; };
 		DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */; };
@@ -87,6 +91,10 @@
 		DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockChecklistDataSource.swift; sourceTree = "<group>"; };
 		DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceAssembly.swift; sourceTree = "<group>"; };
 		DD52A66524E1D08C00A9A1FC /* DashboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		DD6C506A24FC355A0056C476 /* MyTemplatesNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesNavigation.swift; sourceTree = "<group>"; };
+		DD6C506C24FC35610056C476 /* MyTemplatesActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesActionSheet.swift; sourceTree = "<group>"; };
+		DD6C506E24FC37F20056C476 /* EditTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplateView.swift; sourceTree = "<group>"; };
+		DD6C507024FC38050056C476 /* EditTemplateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplateViewModel.swift; sourceTree = "<group>"; };
 		DD727A4824F271E1004089B6 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardActionSheet.swift; sourceTree = "<group>"; };
@@ -207,13 +215,13 @@
 		DD52A64A24E19FF000A9A1FC /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				DD6C506924FC351C0056C476 /* MyTemplates */,
 				DD727A4E24F272C4004089B6 /* Dashboard */,
 				DD90240F24FB79D40084CDDC /* Settings */,
 				DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */,
 				DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */,
 				DD2BD1AB24E937C2004B2060 /* ChecklistItemViewModel.swift */,
 				DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */,
-				DD90241424FB7A6F0084CDDC /* MyTemplatesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -257,6 +265,17 @@
 			path = Mock;
 			sourceTree = "<group>";
 		};
+		DD6C506924FC351C0056C476 /* MyTemplates */ = {
+			isa = PBXGroup;
+			children = (
+				DD6C506C24FC35610056C476 /* MyTemplatesActionSheet.swift */,
+				DD6C506A24FC355A0056C476 /* MyTemplatesNavigation.swift */,
+				DD90241424FB7A6F0084CDDC /* MyTemplatesViewModel.swift */,
+				DD6C507024FC38050056C476 /* EditTemplateViewModel.swift */,
+			);
+			path = MyTemplates;
+			sourceTree = "<group>";
+		};
 		DD727A4E24F272C4004089B6 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +311,7 @@
 			children = (
 				DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */,
 				DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */,
+				DD6C506E24FC37F20056C476 /* EditTemplateView.swift */,
 			);
 			path = MyTemplates;
 			sourceTree = "<group>";
@@ -419,17 +439,21 @@
 				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
+				DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
+				DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */,
 				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
 				DD2BD1AA24E937B0004B2060 /* ChecklistItemView.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				DD2BD1AC24E937C2004B2060 /* ChecklistItemViewModel.swift in Sources */,
+				DD6C506F24FC37F20056C476 /* EditTemplateView.swift in Sources */,
 				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
 				DD90241124FB79F30084CDDC /* SettingsNavigation.swift in Sources */,
 				DD90241524FB7A6F0084CDDC /* MyTemplatesViewModel.swift in Sources */,
 				DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */,
+				DD6C506B24FC355A0056C476 /* MyTemplatesNavigation.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
 				DD727A4D24F2722A004089B6 /* SettingsViewModel.swift in Sources */,
 				DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */,

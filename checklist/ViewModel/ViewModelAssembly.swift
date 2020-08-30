@@ -27,5 +27,10 @@ class ViewModelAssembly: Assembly {
             initializer: CreateChecklistViewModel.init
         )
         container.autoregister(MyTemplatesViewModel.self, initializer: MyTemplatesViewModel.init)
+        container.autoregister(
+            EditTemplateViewModel.self,
+            argument: TemplateCurrentValueSubject.self,
+            initializer: EditTemplateViewModel.init
+        )
     }
 }

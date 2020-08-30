@@ -15,7 +15,7 @@ protocol TemplateDataSource {
     var createNewTemplate: TemplatePassthroughSubject { get }
     var deleteTemplate: TemplatePassthroughSubject { get }
     var templates: AnyPublisher<[TemplateDataModel], Never> { get }
-    var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> { get }
+    var selectedTemplate: TemplateCurrentValueSubject { get }
     func updateItem(
         _ item: ChecklistItemDataModel,
         for template: TemplateDataModel,
