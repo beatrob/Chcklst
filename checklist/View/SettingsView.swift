@@ -28,7 +28,7 @@ struct SettingsView: View {
             .padding()
             Spacer()
         }
-        .navigationBarTitle("Settings")
+        .navigationBarTitle("Settings", displayMode: .large)
     }
 }
 

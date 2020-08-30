@@ -24,7 +24,11 @@ struct ChecklistView: View {
             List(viewModel.checklistVO.items, id: \.id) { item in
                 ChecklistItemView(viewModel: self.viewModel.getItemViewModel(for: item))
             }
-        }.navigationBarTitle(viewModel.checklistVO.title)
+        }
+        .navigationBarTitle(
+            Text(viewModel.checklistVO.title),
+            displayMode: .large
+        )
     }
 }
 

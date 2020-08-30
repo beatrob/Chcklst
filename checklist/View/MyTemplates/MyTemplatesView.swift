@@ -13,7 +13,18 @@ struct MyTemplatesView: View {
     @ObservedObject var viewModel: MyTemplatesViewModel
     
     var body: some View {
-        Text("My templates")
+        VStack {
+            ForEach(
+                viewModel.templates,
+                id: \.id) { template in
+                    MyTemplateItemView(
+                        name: template.title,
+                        description: template.description
+                    )
+            }
+            Spacer()
+        }
+        .navigationBarTitle("My templates", displayMode: .large)
     }
 }
 

@@ -13,11 +13,13 @@ import SwiftUI
 
 class MyTemplatesViewModel: ObservableObject {
     
-    @Published var title: String = ""
+    @Published var templates: [TemplateDataModel] = []
     
     var cancellables =  Set<AnyCancellable>()
     
     init(templateDataSource: TemplateDataSource) {
-        
+        templateDataSource.templates.sink { [weak self] templates in
+            self?.templates = templates
+        }.store(in: &cancellables)
     }
 }

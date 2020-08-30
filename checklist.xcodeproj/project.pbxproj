@@ -47,6 +47,7 @@
 		DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241624FB7D590084CDDC /* TemplateDataSource.swift */; };
 		DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241824FB7DCD0084CDDC /* TemplateDataModel.swift */; };
 		DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241A24FB7F9D0084CDDC /* MockTemplateDataSource.swift */; };
+		DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +104,7 @@
 		DD90241624FB7D590084CDDC /* TemplateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDataSource.swift; sourceTree = "<group>"; };
 		DD90241824FB7DCD0084CDDC /* TemplateDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDataModel.swift; sourceTree = "<group>"; };
 		DD90241A24FB7F9D0084CDDC /* MockTemplateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTemplateDataSource.swift; sourceTree = "<group>"; };
+		DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplateItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,12 +194,12 @@
 		DD52A64924E19FE400A9A1FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DD90241D24FB94E10084CDDC /* MyTemplates */,
 				DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */,
 				DD52A66524E1D08C00A9A1FC /* DashboardView.swift */,
 				DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */,
 				DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */,
 				DD727A4824F271E1004089B6 /* SettingsView.swift */,
-				DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -283,6 +285,15 @@
 				DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		DD90241D24FB94E10084CDDC /* MyTemplates */ = {
+			isa = PBXGroup;
+			children = (
+				DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */,
+				DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */,
+			);
+			path = MyTemplates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -407,6 +418,7 @@
 				DD7AF2B424EDCED90051CD16 /* UIApplication+Extension.swift in Sources */,
 				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
+				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
