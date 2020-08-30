@@ -11,5 +11,9 @@ import Combine
 
 typealias ChecklistPassthroughSubject = PassthroughSubject<ChecklistDataModel, Never>
 typealias ChecklistCurrentValueSubject = CurrentValueSubject<ChecklistDataModel?, Never>
+
+typealias TemplatePassthroughSubject = PassthroughSubject<TemplateDataModel, Never>
+typealias TemplateCurrentValueSubject = CurrentValueSubject<ChecklistDataModel?, Never>
+
 typealias EmptySubject = PassthroughSubject<Void, Never>
 typealias EmptyCompletion = () -> Void

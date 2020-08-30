@@ -13,7 +13,21 @@ struct SettingsView: View {
     @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
-        Text("")
+        VStack(alignment: .leading) {
+            NavigationLink(
+                destination: viewModel.viewToNavigate,
+                isActive: $viewModel.isViewToNavigateVisible,
+                label: { EmptyView() }
+            )
+            HStack {
+                Button("My templates") {
+                    self.viewModel.onMyTemplates.send()
+                }
+                Spacer()
+            }
+            .padding()
+            Spacer()
+        }
         .navigationBarTitle("Settings")
     }
 }

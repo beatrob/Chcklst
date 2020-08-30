@@ -15,15 +15,16 @@ class DataSourceAssembly: Assembly {
     
     func assemble(container: Container) {
         container.autoregister(ChecklistDataSource.self, initializer: CheckListDataSourceImpl.init)
+        container.autoregister(TemplateDataSource.self, initializer: TemplateDataSourceImpl.init)
     }
 }
 
 
 class MockDataSourceAssembly: Assembly {
     
-    
     func assemble(container: Container) {
         container.autoregister(ChecklistDataSource.self, initializer: MockChecklistDataSource.init)
+        container.autoregister(TemplateDataSource.self, initializer: MockTemplateDataSource.init)
     }
 }
 

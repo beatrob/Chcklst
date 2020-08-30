@@ -26,5 +26,6 @@ class ViewModelAssembly: Assembly {
             argument: ChecklistPassthroughSubject.self,
             initializer: CreateChecklistViewModel.init
         )
+        container.autoregister(MyTemplatesViewModel.self, initializer: MyTemplatesViewModel.init)
     }
 }
