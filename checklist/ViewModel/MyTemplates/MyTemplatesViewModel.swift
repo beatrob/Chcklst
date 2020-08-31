@@ -53,7 +53,11 @@ class MyTemplatesViewModel: ObservableObject {
             self?.actionSheet = .templateActions(
                 template: template,
                 onCreateChecklist: { },
-                onDelete: { }
+                onDelete: {
+                    withAnimation {
+                        templateDataSource.deleteTemplate.send(template)
+                    }
+                }
             )
         }.store(in: &cancellables)
     }

@@ -14,8 +14,12 @@ import SwinjectAutoregistration
 class DataSourceAssembly: Assembly {
     
     func assemble(container: Container) {
-        container.autoregister(ChecklistDataSource.self, initializer: CheckListDataSourceImpl.init)
-        container.autoregister(TemplateDataSource.self, initializer: TemplateDataSourceImpl.init)
+        container
+            .autoregister(ChecklistDataSource.self, initializer: CheckListDataSourceImpl.init)
+            .inObjectScope(.container)
+        container
+            .autoregister(TemplateDataSource.self, initializer: TemplateDataSourceImpl.init)
+            .inObjectScope(.container)
     }
 }
 
@@ -23,8 +27,12 @@ class DataSourceAssembly: Assembly {
 class MockDataSourceAssembly: Assembly {
     
     func assemble(container: Container) {
-        container.autoregister(ChecklistDataSource.self, initializer: MockChecklistDataSource.init)
-        container.autoregister(TemplateDataSource.self, initializer: MockTemplateDataSource.init)
+        container
+            .autoregister(ChecklistDataSource.self, initializer: MockChecklistDataSource.init)
+            .inObjectScope(.container)
+        container
+            .autoregister(TemplateDataSource.self, initializer: MockTemplateDataSource.init)
+            .inObjectScope(.container)
     }
 }
 

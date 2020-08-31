@@ -45,7 +45,15 @@ class MockTemplateDataSource: TemplateDataSource {
     
     var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> = .init(nil)
     
+    var cancellables =  Set<AnyCancellable>()
+    
     func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Result<Void, DataSourceError>) -> Void) {
         
+    }
+    
+    init() {
+        deleteTemplate.sink { [weak self] template in
+            self?._templates.value.removeAll { $0.id == template.id }
+        }.store(in: &cancellables)
     }
 }
