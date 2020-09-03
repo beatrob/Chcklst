@@ -14,20 +14,14 @@ struct MyTemplateItemView: View {
     let description: String?
     
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Text(name)
-                        .font(.title)
-                    description.map {
-                        Text($0)
-                            .font(.footnote)
-                            .padding(.top)
-                            .lineLimit(3)
-                    }
-                }
-                Spacer()
-                Image(systemName: "chevron.right")
+        VStack(alignment: .leading) {
+            Text(name)
+                .font(.title)
+            description.map {
+                Text($0)
+                    .font(.footnote)
+                    .padding(.top)
+                    .lineLimit(3)
             }
             Rectangle()
                 .frame(height: 0.5)

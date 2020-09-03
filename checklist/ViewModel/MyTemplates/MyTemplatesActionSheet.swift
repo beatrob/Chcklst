@@ -14,6 +14,7 @@ enum MyTemplatesActionSheet {
     case templateActions(
         template: TemplateDataModel,
         onCreateChecklist: EmptyCompletion,
+        onEdit: EmptyCompletion,
         onDelete: EmptyCompletion
     )
     case none
@@ -27,13 +28,21 @@ enum MyTemplatesActionSheet {
     
     var actionSheet: ActionSheet {
         switch self {
-        case .templateActions(let template, let onCreateChecklist, let onDelete):
+        case .templateActions(
+            let template,
+            let onCreateChecklist,
+            let onEdit,
+            let onDelete
+            ):
             return ActionSheet(
                 title: Text(template.title),
                 message: nil,
                 buttons: [
                     .default(Text("Create checklist")) {
                         onCreateChecklist()
+                    },
+                    .default(Text("Edit")) {
+                        onEdit()
                     },
                     .destructive(Text("Delete")) {
                         withAnimation { onDelete() }

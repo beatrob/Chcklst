@@ -29,15 +29,13 @@ struct MyTemplatesView: View {
                     .onTapGesture {
                         self.viewModel.onTemplateTapped.send(template)
                     }
-                    .simultaneousGesture(
-                        LongPressGesture().onEnded { _ in
-                            self.viewModel.onTemplateLongTapped.send(template)
-                        }
-                    )
             }
             Spacer()
         }
         .navigationBarTitle("My templates", displayMode: .large)
+        .sheet(isPresented: $viewModel.isSheetVisible) {
+            self.viewModel.sheetView
+        }
         .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
             self.viewModel.actionSheetView
         }
@@ -48,7 +46,8 @@ struct MyTemplatesView_Previews: PreviewProvider {
     static var previews: some View {
         MyTemplatesView(
             viewModel: .init(
-                templateDataSource: MockTemplateDataSource()
+                templateDataSource: MockTemplateDataSource(),
+                checklistDataSource: MockChecklistDataSource()
             )
         )
     }

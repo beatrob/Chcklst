@@ -17,6 +17,10 @@ struct CreateChecklistItemVO {
 
 class CreateChecklistViewModel: ObservableObject {
     
+    enum Constants {
+        static let fromTemplate = "fromTemplate"
+    }
+    
     @Published var shouldCreateChecklistName: Bool = true {
         didSet {
             shouldDisplayAddItems = !shouldCreateChecklistName
@@ -38,7 +42,13 @@ class CreateChecklistViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     var idToName = [String: String]()
     
-    init(createChecklistSubject: ChecklistPassthroughSubject) {
+    init(
+        createChecklistSubject: ChecklistPassthroughSubject,
+        template: TemplateDataModel? = nil
+    ) {
+        if let template = template {
+            setupTemplate(template)
+        }
         onCreateTitleNext.sink { [weak self] in
             self?.addNewItem()
             self?.shouldCreateChecklistName = false
@@ -69,7 +79,7 @@ class CreateChecklistViewModel: ObservableObject {
         }.store(in: &cancellables)
     }
     
-    private func addNewItem() {
+    private func addNewItem(name: String? = nil) {
         let id = UUID().uuidString
         let item = CreateChecklistItemVO(
             id: id,
@@ -85,7 +95,15 @@ class CreateChecklistViewModel: ObservableObject {
                 }
             )
         )
+        self.idToName[id] = name
         self.items.append(item)
         self.objectWillChange.send()
+    }
+    
+    private func setupTemplate(_ template: TemplateDataModel) {
+        checklistName = template.title
+        template.items.forEach { self.addNewItem(name: $0.name) }
+        addNewItem()
+        shouldCreateChecklistName = false
     }
 }

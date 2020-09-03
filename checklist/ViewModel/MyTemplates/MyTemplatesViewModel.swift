@@ -14,18 +14,23 @@ import SwiftUI
 class MyTemplatesViewModel: ObservableObject {
     
     @Published var templates: [TemplateDataModel] = []
-    @Published var isActionSheetVisible: Bool = false
+    @Published var isActionSheetVisible = false
     @Published var isViewToNavigateVisible = false
+    @Published var isSheetVisible = false
     
     private var actionSheet: MyTemplatesActionSheet = .none {
         didSet {
             self.isActionSheetVisible = actionSheet.isActionSheetVisible
         }
     }
-    var cancellables =  Set<AnyCancellable>()
-    var actionSheetView: ActionSheet {
-        actionSheet.actionSheet
+    private var sheet: MyTemaplatesSheet = .none {
+        didSet {
+            self.isSheetVisible = sheet.isVisible
+        }
     }
+    var cancellables =  Set<AnyCancellable>()
+    var actionSheetView: ActionSheet { actionSheet.actionSheet }
+    var sheetView: AnyView { sheet.view }
     var viewToNavigate: AnyView { navigation.view }
     var navigation: MyTemplatesNavigation = .none {
         didSet {
@@ -34,9 +39,11 @@ class MyTemplatesViewModel: ObservableObject {
     }
     
     let onTemplateTapped = TemplatePassthroughSubject()
-    let onTemplateLongTapped = TemplatePassthroughSubject()
     
-    init(templateDataSource: TemplateDataSource) {
+    init(
+        templateDataSource: TemplateDataSource,
+        checklistDataSource: ChecklistDataSource
+    ) {
         templateDataSource.templates.sink { [weak self] templates in
             self?.templates = templates
         }.store(in: &cancellables)
@@ -45,14 +52,16 @@ class MyTemplatesViewModel: ObservableObject {
             self?.navigation = .edit(template: templateDataSource.selectedTemplate)
         }.store(in: &cancellables)
         
-        onTemplateTapped.sink { template in
-            templateDataSource.selectedTemplate.send(template)
-        }.store(in: &cancellables)
-        
-        onTemplateLongTapped.sink { [weak self] template in
+        onTemplateTapped.sink { [weak self] template in
             self?.actionSheet = .templateActions(
                 template: template,
-                onCreateChecklist: { },
+                onCreateChecklist: {
+                    self?.sheet = .createChecklist(
+                        dataSource: checklistDataSource,
+                        template: template
+                    )
+                },
+                onEdit: { },
                 onDelete: {
                     withAnimation {
                         templateDataSource.deleteTemplate.send(template)
