@@ -11,13 +11,32 @@ import SwiftUI
 struct DashboardView: View {
     
     @ObservedObject var viewModel: DashboardViewModel
+    @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
         NavigationView {
             VStack {
-                NavigationLink(destination: viewModel.viewToNavigate, isActive: $viewModel.isViewToNavigateVisible) {
+                
+                NavigationLink(
+                    destination: navigationHelper.dashboardDestination,
+                    tag: .settings,
+                    selection: $navigationHelper.dashboardSelection
+                ) {
                     EmptyView()
-                }.hidden()
+                }
+                .isDetailLink(false)
+                .hidden()
+                
+                NavigationLink(
+                    destination: navigationHelper.dashboardDestination,
+                    tag: .checklistDetail,
+                    selection: $navigationHelper.dashboardSelection
+                ) {
+                    EmptyView()
+                }
+                .isDetailLink(false)
+                .hidden()
+                
                 Spacer().frame(height: 15.0)
                 ForEach(viewModel.checklists, id: \.id) { checklist in
                         VStack {
@@ -81,7 +100,7 @@ struct DashboardView: View {
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
         DashboardView(
-            viewModel: DashboardViewModel(checklistDataSource: MockChecklistDataSource())
+            viewModel: DashboardViewModel(checklistDataSource: MockChecklistDataSource(), navigationHelper: NavigationHelper())
         )
     }
 }

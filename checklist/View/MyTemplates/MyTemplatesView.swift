@@ -11,14 +11,10 @@ import SwiftUI
 struct MyTemplatesView: View {
     
     @ObservedObject var viewModel: MyTemplatesViewModel
+    @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
         VStack {
-            NavigationLink(
-                destination: viewModel.viewToNavigate,
-                isActive: $viewModel.isViewToNavigateVisible,
-                label: { EmptyView() }
-            )
             ForEach(
                 viewModel.templates,
                 id: \.id) { template in
@@ -39,6 +35,9 @@ struct MyTemplatesView: View {
         .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
             self.viewModel.actionSheetView
         }
+        .alert(isPresented: $viewModel.isAlertVisible) {
+            self.viewModel.alertView
+        }
     }
 }
 
@@ -47,7 +46,8 @@ struct MyTemplatesView_Previews: PreviewProvider {
         MyTemplatesView(
             viewModel: .init(
                 templateDataSource: MockTemplateDataSource(),
-                checklistDataSource: MockChecklistDataSource()
+                checklistDataSource: MockChecklistDataSource(),
+                navigationHelper: NavigationHelper()
             )
         )
     }

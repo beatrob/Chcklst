@@ -19,7 +19,8 @@ class AppContext {
     private let assembler = Assembler(
         [
             MockDataSourceAssembly(),
-            ViewModelAssembly()
+            ViewModelAssembly(),
+            InfrastructureAssembly()
         ]
     )
     

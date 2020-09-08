@@ -11,14 +11,20 @@ import SwiftUI
 struct SettingsView: View {
     
     @ObservedObject var viewModel: SettingsViewModel
+    @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
         VStack(alignment: .leading) {
             NavigationLink(
-                destination: viewModel.viewToNavigate,
-                isActive: $viewModel.isViewToNavigateVisible,
-                label: { EmptyView() }
-            )
+                destination: navigationHelper.settingsDestination,
+                tag: .myTemplates,
+                selection: $navigationHelper.settingsSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
+            
             HStack {
                 Button("My templates") {
                     self.viewModel.onMyTemplates.send()
@@ -34,6 +40,6 @@ struct SettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsView(viewModel: SettingsViewModel())
+        SettingsView(viewModel: SettingsViewModel(navigationHelper: NavigationHelper()))
     }
 }

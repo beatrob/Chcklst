@@ -17,6 +17,7 @@ class MyTemplatesViewModel: ObservableObject {
     @Published var isActionSheetVisible = false
     @Published var isViewToNavigateVisible = false
     @Published var isSheetVisible = false
+    @Published var isAlertVisible = false
     
     private var actionSheet: MyTemplatesActionSheet = .none {
         didSet {
@@ -28,35 +29,40 @@ class MyTemplatesViewModel: ObservableObject {
             self.isSheetVisible = sheet.isVisible
         }
     }
-    var cancellables =  Set<AnyCancellable>()
-    var actionSheetView: ActionSheet { actionSheet.actionSheet }
-    var sheetView: AnyView { sheet.view }
-    var viewToNavigate: AnyView { navigation.view }
-    var navigation: MyTemplatesNavigation = .none {
+    private var alert: MyTemplatesAlert = .none {
         didSet {
-            self.isViewToNavigateVisible = navigation.isViewVisible
+            self.isAlertVisible = alert.isVisible
         }
     }
+    var cancellables =  Set<AnyCancellable>()
+    
+    var actionSheetView: ActionSheet { actionSheet.actionSheet }
+    var sheetView: AnyView { sheet.view }
+    var alertView: Alert { alert.alert }
     
     let onTemplateTapped = TemplatePassthroughSubject()
+    let navigationHelper: NavigationHelper
     
     init(
         templateDataSource: TemplateDataSource,
-        checklistDataSource: ChecklistDataSource
+        checklistDataSource: ChecklistDataSource,
+        navigationHelper: NavigationHelper
     ) {
+        self.navigationHelper = navigationHelper
         templateDataSource.templates.sink { [weak self] templates in
             self?.templates = templates
         }.store(in: &cancellables)
         
         templateDataSource.selectedTemplate.dropFirst().sink { [weak self] _ in
-            self?.navigation = .edit(template: templateDataSource.selectedTemplate)
+            //todo
         }.store(in: &cancellables)
         
         onTemplateTapped.sink { [weak self] template in
             self?.actionSheet = .templateActions(
                 template: template,
                 onCreateChecklist: {
-                    self?.sheet = .createChecklist(
+                    guard let self = self else { return }
+                    self.sheet = .createChecklist(
                         dataSource: checklistDataSource,
                         template: template
                     )
@@ -69,5 +75,13 @@ class MyTemplatesViewModel: ObservableObject {
                 }
             )
         }.store(in: &cancellables)
+        
+        checklistDataSource.checkLists.dropFirst().delay(for: .seconds(1.0), scheduler: RunLoop.main).sink { [weak self] _ in
+                self?.alert = .createChecklistSucess(
+                    onGotoDashboard: {
+                        self?.navigationHelper.popToDashboard()
+                    }
+                )
+        }.store(in: &self.cancellables)
     }
 }

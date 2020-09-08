@@ -13,20 +13,13 @@ import SwiftUI
 
 class SettingsViewModel: ObservableObject {
     
-    @Published var isViewToNavigateVisible = false
     
     let onMyTemplates = EmptySubject()
     var cancellables =  Set<AnyCancellable>()
-    var navigation: SettingsNavigation = .none {
-        didSet {
-            self.isViewToNavigateVisible = navigation.isViewVisible
-        }
-    }
-    var viewToNavigate: AnyView { navigation.view }
     
-    init() {
-        onMyTemplates.sink { [weak self] in
-            self?.navigation = .myTemplates
+    init(navigationHelper: NavigationHelper) {
+        onMyTemplates.sink {
+            navigationHelper.navigateToMyTemplates()
         }.store(in: &cancellables)
     }
 }
