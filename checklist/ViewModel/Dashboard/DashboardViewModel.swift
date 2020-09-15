@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import SwiftUI
 
 class DashboardViewModel: ObservableObject {
     
@@ -26,20 +25,19 @@ class DashboardViewModel: ObservableObject {
             self.objectWillChange.send()
         }
     }
-
-    @Published var isSheetVisible = false
-    @Published var isActionSheetVisible = false
-    @Published var isAlertVisible = false
+    
+    @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
+    @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
+    @Published var sheetVisibility = ViewVisibility(view: DashboardSheet.none.view)
     
     @Published var actionSheet: DashboardActionSheet = .none {
-        didSet {
-            self.isActionSheetVisible = actionSheet.isActionSheedVisible
-        }
+        didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
     }
     @Published var alert: DashboardAlert = .none {
-        didSet {
-            self.isAlertVisible = alert.isVisible
-        }
+        didSet { alertVisibility.set(view: alert.view, isVisible: alert.isVisible) }
+    }
+    @Published var sheet: DashboardSheet = .none {
+        didSet { sheetVisibility.set(view: sheet.view, isVisible: sheet.isVisible) }
     }
     
     let onCreateNewChecklist = EmptySubject()
@@ -47,8 +45,6 @@ class DashboardViewModel: ObservableObject {
     let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()
     let onChecklistTapped = PassthroughSubject<ChecklistVO, Never>()
     var cancellables =  Set<AnyCancellable>()
-    var actionSheetView: ActionSheet { actionSheet.actionSheet }
-    var alertView: Alert { alert.view }
     
     private var checklistToEdit: ChecklistVO?
     private let checklistDataSource: ChecklistDataSource
@@ -75,7 +71,7 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
-            self?.isSheetVisible.toggle()
+            self?.sheet = .createChecklist(createNewChecklist: checklistDataSource.createNewChecklist)
         }.store(in: &cancellables)
         
         onSettings.sink {
@@ -133,10 +129,6 @@ class DashboardViewModel: ObservableObject {
             }
         }.store(in: &cancellables)
         return .init(item: itemSubject)
-    }
-    
-    func getCreateChecklistViewModel() -> CreateChecklistViewModel {
-        AppContext.resolver.resolve(CreateChecklistViewModel.self, argument: checklistDataSource.createNewChecklist)!
     }
     
     func getFirstUndoneItem(form items: [ChecklistItemDataModel]) -> ChecklistItemDataModel? {

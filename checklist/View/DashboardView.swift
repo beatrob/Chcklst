@@ -100,14 +100,14 @@ struct DashboardView: View {
                 )
             }
         }
-        .alert(isPresented: $viewModel.isAlertVisible) {
-            self.viewModel.alertView
+        .alert(isPresented: $viewModel.alertVisibility.isVisible) {
+            self.viewModel.alertVisibility.view
         }
-        .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
-            self.viewModel.actionSheetView
+        .actionSheet(isPresented: $viewModel.actionSheetVisibility.isVisible) {
+            self.viewModel.actionSheetVisibility.view
         }
-        .sheet(isPresented: $viewModel.isSheetVisible) {
-            CreateChecklistView(viewModel: self.viewModel.getCreateChecklistViewModel())
+        .sheet(isPresented: $viewModel.sheetVisibility.isVisible) {
+            self.viewModel.sheetVisibility.view
         }
     }
 }

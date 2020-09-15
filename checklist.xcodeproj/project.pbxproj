@@ -54,6 +54,8 @@
 		DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241A24FB7F9D0084CDDC /* MockTemplateDataSource.swift */; };
 		DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */; };
 		DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DA25114F4A00F326D2 /* String+Extension.swift */; };
+		DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DC2511623500F326D2 /* ViewVisibility.swift */; };
+		DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DE2511626000F326D2 /* DashboardSheet.swift */; };
 		DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */; };
 /* End PBXBuildFile section */
 
@@ -118,6 +120,8 @@
 		DD90241A24FB7F9D0084CDDC /* MockTemplateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTemplateDataSource.swift; sourceTree = "<group>"; };
 		DD90241E24FB94FB0084CDDC /* MyTemplateItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplateItemView.swift; sourceTree = "<group>"; };
 		DDB298DA25114F4A00F326D2 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		DDB298DC2511623500F326D2 /* ViewVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewVisibility.swift; sourceTree = "<group>"; };
+		DDB298DE2511626000F326D2 /* DashboardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSheet.swift; sourceTree = "<group>"; };
 		DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -240,6 +244,7 @@
 				DD72BA892507782800318F62 /* Navigation */,
 				DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */,
 				DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */,
+				DDB298DC2511623500F326D2 /* ViewVisibility.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -293,6 +298,7 @@
 				DD52A64B24E1A00200A9A1FC /* DashboardViewModel.swift */,
 				DD727A4F24F272D7004089B6 /* DashboardActionSheet.swift */,
 				DD727A5324F2730F004089B6 /* DashboardAlert.swift */,
+				DDB298DE2511626000F326D2 /* DashboardSheet.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -470,7 +476,9 @@
 				DD2BD1AC24E937C2004B2060 /* ChecklistItemViewModel.swift in Sources */,
 				DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */,
 				DD6C506F24FC37F20056C476 /* EditTemplateView.swift in Sources */,
+				DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */,
 				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
+				DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */,
 				DD90241524FB7A6F0084CDDC /* MyTemplatesViewModel.swift in Sources */,
 				DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
