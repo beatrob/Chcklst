@@ -29,23 +29,33 @@ class DashboardViewModel: ObservableObject {
 
     @Published var isSheetVisible = false
     @Published var isActionSheetVisible = false
+    @Published var isAlertVisible = false
+    
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet {
             self.isActionSheetVisible = actionSheet.isActionSheedVisible
         }
     }
+    @Published var alert: DashboardAlert = .none {
+        didSet {
+            self.isAlertVisible = alert.isVisible
+        }
+    }
+    
     let onCreateNewChecklist = EmptySubject()
     let onSettings = EmptySubject()
     let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()
     let onChecklistTapped = PassthroughSubject<ChecklistVO, Never>()
     var cancellables =  Set<AnyCancellable>()
     var actionSheetView: ActionSheet { actionSheet.actionSheet }
+    var alertView: Alert { alert.view }
     
     private var checklistToEdit: ChecklistVO?
     private let checklistDataSource: ChecklistDataSource
     
     init(
         checklistDataSource: ChecklistDataSource,
+        templateDataSource: TemplateDataSource,
         navigationHelper: NavigationHelper
     ) {
         self.checklistDataSource = checklistDataSource
@@ -56,6 +66,12 @@ class DashboardViewModel: ObservableObject {
         
         checklistDataSource.selectedCheckList.dropFirst().sink { _ in
             navigationHelper.navigateToChecklistDetail(with: checklistDataSource.selectedCheckList)
+        }.store(in: &cancellables)
+        
+        templateDataSource.templateCreated.sink { [weak self] _ in
+            self?.alert = .templateCreated(gotoTemplates: {
+                navigationHelper.navigateToMyTemplates(source: .dashboard)
+            })
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
@@ -74,7 +90,9 @@ class DashboardViewModel: ObservableObject {
                     #warning("TODO: implement edit checklist")
                 },
                 onCreateTemplate: {
-                    #warning("TODO: implement create template")
+                    templateDataSource.createNewTemplate.send(
+                        TemplateDataModel(checklist: checklist.data)
+                    )
                 },
                 onDelete: {
                     checklistDataSource.deleteCheckList.send(checklist.data)

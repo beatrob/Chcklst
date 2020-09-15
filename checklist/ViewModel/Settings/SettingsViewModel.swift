@@ -19,7 +19,7 @@ class SettingsViewModel: ObservableObject {
     
     init(navigationHelper: NavigationHelper) {
         onMyTemplates.sink {
-            navigationHelper.navigateToMyTemplates()
+            navigationHelper.navigateToMyTemplates(source: .settings)
         }.store(in: &cancellables)
     }
 }

@@ -11,9 +11,15 @@ import SwiftUI
 
 class NavigationHelper: ObservableObject {
     
+    enum Source {
+        case dashboard
+        case settings
+    }
+    
     enum DashboardSelection: String {
         case settings
         case checklistDetail
+        case myTemplates
     }
     
     enum SettingsSelection: String {
@@ -31,10 +37,16 @@ class NavigationHelper: ObservableObject {
         dashboardSelection = .settings
     }
     
-    func navigateToMyTemplates() {
+    func navigateToMyTemplates(source: Source) {
         let viewModel = AppContext.resolver.resolve(MyTemplatesViewModel.self)!
-        settingsDestination = AnyView(MyTemplatesView(viewModel: viewModel))
-        settingsSelection = .myTemplates
+        switch source {
+        case .dashboard:
+            dashboardDestination = AnyView(MyTemplatesView(viewModel: viewModel))
+            dashboardSelection = .myTemplates
+        case .settings:
+            settingsDestination = AnyView(MyTemplatesView(viewModel: viewModel))
+            settingsSelection = .myTemplates
+        }
     }
     
     func navigateToChecklistDetail(with checklist: ChecklistCurrentValueSubject) {

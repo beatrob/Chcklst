@@ -37,7 +37,13 @@ class MockTemplateDataSource: TemplateDataSource {
     
     var createNewTemplate: TemplatePassthroughSubject = .init()
     
+    var updateTemplate: TemplatePassthroughSubject = .init()
+    
     var deleteTemplate: TemplatePassthroughSubject = .init()
+    
+    var templateCreated: AnyPublisher<TemplateDataModel, Never> {
+        _templateCreated.eraseToAnyPublisher()
+    }
     
     var templates: AnyPublisher<[TemplateDataModel], Never> {
         _templates.eraseToAnyPublisher()
@@ -47,6 +53,8 @@ class MockTemplateDataSource: TemplateDataSource {
     
     var cancellables =  Set<AnyCancellable>()
     
+    private let _templateCreated: TemplatePassthroughSubject = .init()
+    
     func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Result<Void, DataSourceError>) -> Void) {
         
     }
@@ -54,6 +62,18 @@ class MockTemplateDataSource: TemplateDataSource {
     init() {
         deleteTemplate.sink { [weak self] template in
             self?._templates.value.removeAll { $0.id == template.id }
+        }.store(in: &cancellables)
+        
+        updateTemplate.sink { [weak self] template in
+            guard let self = self else { return }
+            if let index = self._templates.value.firstIndex(where: { $0 == template }) {
+                self._templates.value[index] = template
+            }
+        }.store(in: &cancellables)
+        
+        createNewTemplate.sink { [weak self] template in
+            self?._templates.value.insert(template, at: 0)
+            self?._templateCreated.send(template)
         }.store(in: &cancellables)
     }
 }

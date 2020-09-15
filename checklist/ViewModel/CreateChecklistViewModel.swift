@@ -31,7 +31,6 @@ class CreateChecklistViewModel: ObservableObject {
     @Published var checklistDescription: String?
     @Published var shouldDismissView: Bool = false
     var items: [CreateChecklistItemVO] = []
-    let onCreateFromTemplate: EmptySubject = .init()
     let onCreateTitleNext: EmptySubject = .init()
     let onCreateChecklist: EmptySubject = .init()
     

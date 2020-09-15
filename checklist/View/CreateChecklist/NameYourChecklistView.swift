@@ -13,7 +13,6 @@ struct NameYourChecklistView: View {
     
     @Binding var checklistName: String
     @Binding var shouldCreateChecklistName: Bool
-    let onCreateFromTemplate: EmptySubject
     let onNext: EmptySubject
     @State var textHeight: CGFloat = 150
     
@@ -27,12 +26,6 @@ struct NameYourChecklistView: View {
             .font(.system(size: 38))
             .padding()
             if shouldCreateChecklistName {
-                Button("Create from a template") {
-                    withAnimation {
-                        self.onCreateFromTemplate.send()
-                    }
-                }
-                .padding()
                 Button("Next") {
                     UIApplication.shared.endEditing()
                     withAnimation {
@@ -50,7 +43,6 @@ struct NameYourChecklistView_Previews: PreviewProvider {
         NameYourChecklistView(
             checklistName: .init(get: { "" }, set: { _ = $0 }),
             shouldCreateChecklistName: .init(get: { true }, set: { _ = $0 }),
-            onCreateFromTemplate: .init(),
             onNext: .init()
         )
     }

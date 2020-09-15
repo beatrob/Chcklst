@@ -53,8 +53,14 @@ class MyTemplatesViewModel: ObservableObject {
             self?.templates = templates
         }.store(in: &cancellables)
         
-        templateDataSource.selectedTemplate.dropFirst().sink { [weak self] _ in
-            //todo
+        templateDataSource.selectedTemplate.dropFirst().sink { [weak self] template in
+            guard let template = template else {
+                return
+            }
+            self?.sheet = .editTemplate(
+                template: template,
+                update: templateDataSource.updateTemplate
+            )
         }.store(in: &cancellables)
         
         onTemplateTapped.sink { [weak self] template in
@@ -67,7 +73,7 @@ class MyTemplatesViewModel: ObservableObject {
                         template: template
                     )
                 },
-                onEdit: { },
+                onEdit: { templateDataSource.selectedTemplate.send(template) },
                 onDelete: {
                     withAnimation {
                         templateDataSource.deleteTemplate.send(template)

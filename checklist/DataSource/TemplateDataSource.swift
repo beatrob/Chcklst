@@ -13,8 +13,10 @@ import Combine
 protocol TemplateDataSource {
     
     var createNewTemplate: TemplatePassthroughSubject { get }
+    var updateTemplate: TemplatePassthroughSubject { get }
     var deleteTemplate: TemplatePassthroughSubject { get }
     var templates: AnyPublisher<[TemplateDataModel], Never> { get }
+    var templateCreated: AnyPublisher<TemplateDataModel, Never> { get }
     var selectedTemplate: TemplateCurrentValueSubject { get }
     func updateItem(
         _ item: ChecklistItemDataModel,
@@ -28,9 +30,13 @@ class TemplateDataSourceImpl: TemplateDataSource {
     
     var createNewTemplate: TemplatePassthroughSubject = .init()
     
+    var updateTemplate: TemplatePassthroughSubject = .init()
+    
     var deleteTemplate: TemplatePassthroughSubject = .init()
     
     var templates: AnyPublisher<[TemplateDataModel], Never> = AnyPublisher(Empty())
+    
+    var templateCreated: AnyPublisher<TemplateDataModel, Never> = AnyPublisher(Empty())
     
     var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> = .init(nil)
     

@@ -19,4 +19,23 @@ struct TemplateDataModel: Equatable {
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }
+    
+    init(
+        id: String,
+        title: String,
+        description: String?,
+        items: [ChecklistItemDataModel]
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.items = items
+    }
+    
+    init(checklist: ChecklistDataModel) {
+        id = UUID().uuidString
+        title = checklist.title
+        description = checklist.description
+        items = checklist.items
+    }
 }

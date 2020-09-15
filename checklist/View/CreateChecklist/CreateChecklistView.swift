@@ -24,7 +24,6 @@ struct CreateChecklistView: View {
                     set: { self.viewModel.checklistName = $0 }
                 ),
                 shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
-                onCreateFromTemplate: viewModel.onCreateFromTemplate,
                 onNext: viewModel.onCreateTitleNext
             )
             AddItemsToChecklistView(

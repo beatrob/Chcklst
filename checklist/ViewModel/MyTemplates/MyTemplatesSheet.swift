@@ -11,6 +11,7 @@ import SwiftUI
 
 enum MyTemaplatesSheet {
     case createChecklist(dataSource: ChecklistDataSource, template: TemplateDataModel)
+    case editTemplate(template: TemplateDataModel, update: TemplatePassthroughSubject)
     case none
     
     var isVisible: Bool {
@@ -29,6 +30,12 @@ enum MyTemaplatesSheet {
                 arguments: dataSource.createNewChecklist, template
             )!
             return AnyView(CreateChecklistView(viewModel: viewModel))
+        case .editTemplate(let template, let update):
+            let viewModel = AppContext.resolver.resolve(
+                EditTemplateViewModel.self,
+                arguments: template, update
+            )!
+            return AnyView(EditTemplateView(viewModel: viewModel))
         case .none: return AnyView(EmptyView())
         }
     }
