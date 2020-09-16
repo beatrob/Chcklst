@@ -90,8 +90,10 @@ class DashboardViewModel: ObservableObject {
                         TemplateDataModel(checklist: checklist.data)
                     )
                 },
-                onDelete: {
-                    checklistDataSource.deleteCheckList.send(checklist.data)
+                onDelete: { [weak self] in
+                    self?.alert = .confirmDeleteChecklist(onDelete: {
+                        checklistDataSource.deleteCheckList.send(checklist.data)
+                    })
                 }
             )
         }.store(in: &cancellables)

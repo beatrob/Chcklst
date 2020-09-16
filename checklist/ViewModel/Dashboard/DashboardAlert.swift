@@ -14,6 +14,7 @@ enum DashboardAlert {
     
     case none
     case templateCreated(gotoTemplates: EmptyCompletion)
+    case confirmDeleteChecklist(onDelete: EmptyCompletion)
     
     var view: Alert {
         switch self {
@@ -23,6 +24,13 @@ enum DashboardAlert {
                 message: Text("Do you want to see your templates?"),
                 primaryButton: .default(Text("Yes"), action: gotoTemplates),
                 secondaryButton: .cancel(Text("No"))
+            )
+        case .confirmDeleteChecklist(let onDelete):
+            return Alert(
+                title: Text("Delete"),
+                message: Text("Do you really want to delete this checklist?"),
+                primaryButton: .default(Text("Delete"), action: onDelete),
+                secondaryButton: .cancel(Text("Cancel"))
             )
         case .none: return Alert(title: Text(""))
         }
