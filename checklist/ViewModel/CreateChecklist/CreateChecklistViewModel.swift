@@ -30,13 +30,16 @@ class CreateChecklistViewModel: ObservableObject {
     @Published var checklistName: String = ""
     @Published var checklistDescription: String?
     @Published var shouldDismissView: Bool = false
+    @Published var shouldDisplayFinalizeView: Bool = false
     var items: [CreateChecklistItemVO] = []
     let onCreateTitleNext: EmptySubject = .init()
-    let onCreateChecklist: EmptySubject = .init()
+    let onAddItemsNext: EmptySubject = .init()
+    let createChecklistSubject: ChecklistPassthroughSubject
     
-    var shouldDisplayCreateChecklist: Bool {
+    var shouldDisplayNextAfterItems: Bool {
         !checklistName.isEmpty &&
-            !idToName.values.filter { !$0.isEmpty }.isEmpty
+            !idToName.values.filter { !$0.isEmpty }.isEmpty &&
+            !shouldDisplayFinalizeView
     }
     var cancellables =  Set<AnyCancellable>()
     var idToName = [String: String]()
@@ -45,17 +48,26 @@ class CreateChecklistViewModel: ObservableObject {
         createChecklistSubject: ChecklistPassthroughSubject,
         template: TemplateDataModel? = nil
     ) {
+        self.createChecklistSubject = createChecklistSubject
         if let template = template {
             setupTemplate(template)
         }
+        
         onCreateTitleNext.sink { [weak self] in
             self?.addNewItem()
             self?.shouldCreateChecklistName = false
         }.store(in: &cancellables)
         
-        onCreateChecklist.sink { [weak self] in
+        onAddItemsNext.sink { [weak self] in
+            self?.shouldDisplayFinalizeView = true
+        }.store(in: &cancellables)
+    }
+    
+    func getFinalizeCheckistViewModel() -> FinalizeChecklistViewModel {
+        let viewModel = AppContext.resolver.resolve(FinalizeChecklistViewModel.self)!
+        viewModel.onCreate.sink { [weak self] in
             guard let self = self else { return }
-            createChecklistSubject.send(
+            self.createChecklistSubject.send(
                 ChecklistDataModel(
                     id: UUID().uuidString,
                     title: self.checklistName,
@@ -76,6 +88,7 @@ class CreateChecklistViewModel: ObservableObject {
             )
             self.shouldDismissView = true
         }.store(in: &cancellables)
+        return viewModel
     }
     
     private func addNewItem(name: String? = nil) {

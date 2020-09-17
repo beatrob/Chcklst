@@ -17,27 +17,34 @@ struct CreateChecklistView: View {
         if viewModel.shouldDismissView {
             presentationMode.wrappedValue.dismiss()
         }
-        return VStack {
-            NameYourChecklistView(
-                checklistName: .init(
-                    get: { self.viewModel.checklistName },
-                    set: { self.viewModel.checklistName = $0 }
-                ),
-                shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
-                onNext: viewModel.onCreateTitleNext
-            )
-            AddItemsToChecklistView(
-                shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
-                shouldDisplayCreateButton: viewModel.shouldDisplayCreateChecklist,
-                items: viewModel.items,
-                onCreate: viewModel.onCreateChecklist
-            )
-            if viewModel.shouldDisplayAddItems {
-                Spacer()
+        return ScrollView {
+            VStack {
+                NameYourChecklistView(
+                    checklistName: .init(
+                        get: { self.viewModel.checklistName },
+                        set: { self.viewModel.checklistName = $0 }
+                    ),
+                    shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
+                    onNext: viewModel.onCreateTitleNext
+                )
+                AddItemsToChecklistView(
+                    shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
+                    shouldDisplayNextButton: viewModel.shouldDisplayNextAfterItems,
+                    items: viewModel.items,
+                    onNext: viewModel.onAddItemsNext
+                )
+                if viewModel.shouldDisplayFinalizeView {
+                    FinalizeChecklistView(
+                        viewModel: viewModel.getFinalizeCheckistViewModel()
+                    )
+                }
+                if viewModel.shouldDisplayAddItems {
+                    Spacer()
+                }
             }
         }
     }
-        
+    
 }
 
 struct CreateChecklistView_Previews: PreviewProvider {

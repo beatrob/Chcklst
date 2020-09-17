@@ -11,9 +11,9 @@ import SwiftUI
 struct AddItemsToChecklistView: View {
     
     @Binding var shouldDisplayAddItems: Bool
-    var shouldDisplayCreateButton: Bool
+    var shouldDisplayNextButton: Bool
     var items: [CreateChecklistItemVO]
-    let onCreate: EmptySubject
+    let onNext: EmptySubject
     
     var body: some View {
         VStack {
@@ -26,13 +26,12 @@ struct AddItemsToChecklistView: View {
                         }
                     }
                     .padding()
-                    if shouldDisplayCreateButton {
+                    if shouldDisplayNextButton {
                         Button.init(action: {
-                            self.onCreate.send()
+                            self.onNext.send()
                         }) {
                             HStack {
-                                Image(systemName: "checkmark.circle.fill")
-                                Text("Create checklist")
+                                Text("Next")
                             }
                         }
                         .padding()
@@ -47,9 +46,9 @@ struct AddItemsToChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         AddItemsToChecklistView(
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
-            shouldDisplayCreateButton: true,
+            shouldDisplayNextButton: true,
             items: [],
-            onCreate: .init()
+            onNext: .init()
         )
     }
 }
