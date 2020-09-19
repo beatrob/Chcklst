@@ -50,7 +50,7 @@ struct CreateChecklistView: View {
 struct CreateChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         CreateChecklistView(
-            viewModel: .init(createChecklistSubject: .init())
+            viewModel: .init(createChecklistSubject: .init(), notificationManager: NotificationManager())
         )
     }
 }

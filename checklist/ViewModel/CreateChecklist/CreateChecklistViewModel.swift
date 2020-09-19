@@ -35,6 +35,7 @@ class CreateChecklistViewModel: ObservableObject {
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
     let createChecklistSubject: ChecklistPassthroughSubject
+    let notificationManager: NotificationManager
     
     var shouldDisplayNextAfterItems: Bool {
         !checklistName.isEmpty &&
@@ -46,8 +47,10 @@ class CreateChecklistViewModel: ObservableObject {
     
     init(
         createChecklistSubject: ChecklistPassthroughSubject,
-        template: TemplateDataModel? = nil
+        template: TemplateDataModel? = nil,
+        notificationManager: NotificationManager
     ) {
+        self.notificationManager = notificationManager
         self.createChecklistSubject = createChecklistSubject
         if let template = template {
             setupTemplate(template)
@@ -65,6 +68,7 @@ class CreateChecklistViewModel: ObservableObject {
     
     func getFinalizeCheckistViewModel() -> FinalizeChecklistViewModel {
         let viewModel = AppContext.resolver.resolve(FinalizeChecklistViewModel.self)!
+        
         viewModel.onCreate.sink { [weak self] in
             guard let self = self else { return }
             self.createChecklistSubject.send(
@@ -88,6 +92,20 @@ class CreateChecklistViewModel: ObservableObject {
             )
             self.shouldDismissView = true
         }.store(in: &cancellables)
+        
+        viewModel.onReminderOnOff.sink { isOn in
+            guard isOn else {
+                return
+            }
+            self.notificationManager.registerPushNotifications() { granted in
+                guard granted else {
+                    viewModel.isReminderOn = false
+                    return
+                }
+            }
+            
+        }.store(in: &cancellables)
+        
         return viewModel
     }
     

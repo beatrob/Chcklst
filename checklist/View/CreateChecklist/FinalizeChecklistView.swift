@@ -15,7 +15,7 @@ struct FinalizeChecklistView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Remind me")
+                Text("Remind me on this device")
                 Toggle(isOn: $viewModel.isReminderOn.animation()) {
                     EmptyView()
                 }

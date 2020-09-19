@@ -59,6 +59,7 @@
 		DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DC2511623500F326D2 /* ViewVisibility.swift */; };
 		DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DE2511626000F326D2 /* DashboardSheet.swift */; };
 		DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */; };
+		DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,8 @@
 		DDB298DC2511623500F326D2 /* ViewVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewVisibility.swift; sourceTree = "<group>"; };
 		DDB298DE2511626000F326D2 /* DashboardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSheet.swift; sourceTree = "<group>"; };
 		DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesSheet.swift; sourceTree = "<group>"; };
+		DDD4FBDC251660A3002B7F50 /* checklist.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = checklist.entitlements; sourceTree = "<group>"; };
+		DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +192,7 @@
 		DD52A62324E19EF000A9A1FC /* checklist */ = {
 			isa = PBXGroup;
 			children = (
+				DDD4FBDC251660A3002B7F50 /* checklist.entitlements */,
 				DD52A63524E19EF100A9A1FC /* Info.plist */,
 				DD52A65124E1A20800A9A1FC /* AppContext.swift */,
 				DD52A62424E19EF000A9A1FC /* AppDelegate.swift */,
@@ -254,6 +258,7 @@
 		DD52A65024E1A1E200A9A1FC /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				DDD4FBDD251660F4002B7F50 /* Notifications */,
 				DD72BA892507782800318F62 /* Navigation */,
 				DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */,
 				DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */,
@@ -351,6 +356,14 @@
 				DD6C506E24FC37F20056C476 /* EditTemplateView.swift */,
 			);
 			path = MyTemplates;
+			sourceTree = "<group>";
+		};
+		DDD4FBDD251660F4002B7F50 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -466,6 +479,7 @@
 				DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */,
 				DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */,
 				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
+				DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
 				DD2BD1A624E6F87A004B2060 /* ChecklistViewModel.swift in Sources */,
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
@@ -658,6 +672,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"checklist/Preview Content\"";
 				DEVELOPMENT_TEAM = N3HE852DA3;
@@ -667,7 +682,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist.checklist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -678,6 +693,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"checklist/Preview Content\"";
 				DEVELOPMENT_TEAM = N3HE852DA3;
@@ -687,7 +703,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist.checklist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

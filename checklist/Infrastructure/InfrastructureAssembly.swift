@@ -15,5 +15,6 @@ class InfrastructureAssembly: Assembly {
     
     func assemble(container: Container) {
         container.autoregister(NavigationHelper.self, initializer: NavigationHelper.init).inObjectScope(.container)
+        container.autoregister(NotificationManager.self, initializer: NotificationManager.init)
     }
 }

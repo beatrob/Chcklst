@@ -13,11 +13,16 @@ import SwiftUI
 
 class FinalizeChecklistViewModel: ObservableObject {
     
-    @Published var isReminderOn: Bool = false
+    @Published var isReminderOn: Bool = false {
+        didSet {
+            onReminderOnOff.send(isReminderOn)
+        }
+    }
     @Published var reminderDate: Date = Date()
     
     let onCreate: EmptySubject = .init()
     let onSaveAsTemplate: EmptySubject = .init()
+    let onReminderOnOff: PassthroughSubject<Bool, Never> = .init()
     
     var cancellables =  Set<AnyCancellable>()
     
