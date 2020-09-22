@@ -7,13 +7,16 @@
 //
 
 import SwiftUI
+import Combine
 
 struct AddItemsToChecklistView: View {
     
     @Binding var shouldDisplayAddItems: Bool
+    @State var deletableItemIDs: Set<String> = .init()
     var shouldDisplayNextButton: Bool
     var items: [CreateChecklistItemVO]
     let onNext: EmptySubject
+    let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never>
     
     var body: some View {
         VStack {
@@ -22,7 +25,19 @@ struct AddItemsToChecklistView: View {
                     ForEach(items, id: \.id) { item in
                         HStack {
                             Image(systemName: "circle")
-                            TextField("TODO", text: item.$name)
+                            TextField("TODO", text: item.$name, onEditingChanged: { _ in
+                                if !item.name.isEmpty {
+                                    self.deletableItemIDs.insert(item.id)
+                                } else {
+                                    self.deletableItemIDs.remove(item.id)
+                                }
+                            })
+                            if self.deletableItemIDs.contains(item.id) {
+                                Image(systemName: "xmark")
+                                    .onTapGesture {
+                                        withAnimation { self.onDeleteItem.send(item) }
+                                }
+                            }
                         }
                     }
                     .padding()
@@ -47,8 +62,11 @@ struct AddItemsToChecklistView_Previews: PreviewProvider {
         AddItemsToChecklistView(
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
             shouldDisplayNextButton: true,
-            items: [],
-            onNext: .init()
+            items: [.init(
+                id: "1",
+                name: .init(get: { "Item 1" }, set: { _ in }))],
+            onNext: .init(),
+            onDeleteItem: .init()
         )
     }
 }

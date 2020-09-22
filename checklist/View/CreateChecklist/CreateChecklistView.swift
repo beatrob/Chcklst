@@ -31,7 +31,8 @@ struct CreateChecklistView: View {
                     shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
                     shouldDisplayNextButton: viewModel.shouldDisplayNextAfterItems,
                     items: viewModel.items,
-                    onNext: viewModel.onAddItemsNext
+                    onNext: viewModel.onAddItemsNext,
+                    onDeleteItem: viewModel.onDeleteItem
                 )
                 if viewModel.shouldDisplayFinalizeView {
                     FinalizeChecklistView(

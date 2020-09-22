@@ -11,6 +11,7 @@ import Combine
 import SwiftUI
 
 struct CreateChecklistItemVO {
+    
     let id: String
     @Binding var name: String
 }
@@ -32,8 +33,11 @@ class CreateChecklistViewModel: ObservableObject {
     @Published var shouldDismissView: Bool = false
     @Published var shouldDisplayFinalizeView: Bool = false
     var items: [CreateChecklistItemVO] = []
+    
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
+    let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never> = .init()
+    
     let createChecklistSubject: ChecklistPassthroughSubject
     let notificationManager: NotificationManager
     
@@ -63,6 +67,12 @@ class CreateChecklistViewModel: ObservableObject {
         
         onAddItemsNext.sink { [weak self] in
             self?.shouldDisplayFinalizeView = true
+        }.store(in: &cancellables)
+        
+        onDeleteItem.sink { [weak self] item in
+            self?.idToName[item.id] = nil
+            self?.items.removeAll { $0.id == item.id }
+            self?.objectWillChange.send()
         }.store(in: &cancellables)
     }
     
