@@ -20,7 +20,8 @@ class AppContext {
         [
             MockDataSourceAssembly(),
             ViewModelAssembly(),
-            InfrastructureAssembly()
+            InfrastructureAssembly(),
+            CoreDataAssembly()
         ]
     )
     

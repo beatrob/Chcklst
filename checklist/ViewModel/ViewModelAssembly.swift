@@ -50,5 +50,6 @@ class ViewModelAssembly: Assembly {
             FinalizeChecklistViewModel.self,
             initializer: FinalizeChecklistViewModel.init
         )
+        container.autoregister(InitializeAppViewModel.self, initializer: InitializeAppViewModel.init)
     }
 }

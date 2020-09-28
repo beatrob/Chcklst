@@ -43,6 +43,17 @@
 		DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA85250686AE00318F62 /* NavigationHelper.swift */; };
 		DD72BA882506CCC200318F62 /* InfrastructureAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */; };
 		DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA8C250787C300318F62 /* AnyView+Extension.swift */; };
+		DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */; };
+		DD74DA6325213A82004587FC /* Checklist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6125213A82004587FC /* Checklist+CoreDataProperties.swift */; };
+		DD74DA6525213C25004587FC /* CoreDataManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */; };
+		DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6625213CF3004587FC /* CoreDataAssembly.swift */; };
+		DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD74DA6925213FA3004587FC /* PromiseKit */; };
+		DD74DA6C25213FCB004587FC /* CoreDataManager+Checklists.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */; };
+		DD74DA6E252147D0004587FC /* CoreDataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6D252147D0004587FC /* CoreDataError.swift */; };
+		DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6F2521E2AA004587FC /* InitializeAppView.swift */; };
+		DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA712521E365004587FC /* InitializeAppViewModel.swift */; };
+		DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA742521E63A004587FC /* CoreDataManager.swift */; };
+		DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA762521E705004587FC /* MockCoreDataManager.swift */; };
 		DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */; };
 		DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */; };
 		DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */; };
@@ -112,6 +123,16 @@
 		DD72BA85250686AE00318F62 /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
 		DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfrastructureAssembly.swift; sourceTree = "<group>"; };
 		DD72BA8C250787C300318F62 /* AnyView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyView+Extension.swift"; sourceTree = "<group>"; };
+		DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Checklist+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DD74DA6125213A82004587FC /* Checklist+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Checklist+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManagerImpl.swift; sourceTree = "<group>"; };
+		DD74DA6625213CF3004587FC /* CoreDataAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataAssembly.swift; sourceTree = "<group>"; };
+		DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Checklists.swift"; sourceTree = "<group>"; };
+		DD74DA6D252147D0004587FC /* CoreDataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataError.swift; sourceTree = "<group>"; };
+		DD74DA6F2521E2AA004587FC /* InitializeAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeAppView.swift; sourceTree = "<group>"; };
+		DD74DA712521E365004587FC /* InitializeAppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeAppViewModel.swift; sourceTree = "<group>"; };
+		DD74DA742521E63A004587FC /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		DD74DA762521E705004587FC /* MockCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataManager.swift; sourceTree = "<group>"; };
 		DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChecklistViewModel.swift; sourceTree = "<group>"; };
 		DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
 		DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameYourChecklistView.swift; sourceTree = "<group>"; };
@@ -138,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
+				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,8 +220,8 @@
 				DD52A62424E19EF000A9A1FC /* AppDelegate.swift */,
 				DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */,
 				DD52A62D24E19EF100A9A1FC /* Assets.xcassets */,
-				DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */,
 				DD52A63224E19EF100A9A1FC /* LaunchScreen.storyboard */,
+				DD74DA5F252139C4004587FC /* CoreData */,
 				DD52A65524E1BB1B00A9A1FC /* DataModel */,
 				DD2BD1AD24E96A49004B2060 /* Extensions */,
 				DD52A65A24E1BCD700A9A1FC /* DataSource */,
@@ -237,6 +259,7 @@
 				DD2BD1A324E6F82C004B2060 /* ChecklistView.swift */,
 				DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */,
 				DD727A4824F271E1004089B6 /* SettingsView.swift */,
+				DD74DA6F2521E2AA004587FC /* InitializeAppView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -251,6 +274,7 @@
 				DD90240F24FB79D40084CDDC /* Settings */,
 				DD2BD1A524E6F87A004B2060 /* ChecklistViewModel.swift */,
 				DD2BD1AB24E937C2004B2060 /* ChecklistItemViewModel.swift */,
+				DD74DA712521E365004587FC /* InitializeAppViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -329,6 +353,30 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		DD74DA5F252139C4004587FC /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				DD74DA6625213CF3004587FC /* CoreDataAssembly.swift */,
+				DD74DA732521E573004587FC /* Manager */,
+				DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */,
+				DD74DA6125213A82004587FC /* Checklist+CoreDataProperties.swift */,
+				DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */,
+				DD74DA6D252147D0004587FC /* CoreDataError.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		DD74DA732521E573004587FC /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				DD74DA742521E63A004587FC /* CoreDataManager.swift */,
+				DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */,
+				DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */,
+				DD74DA762521E705004587FC /* MockCoreDataManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
 		DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,6 +432,7 @@
 			name = checklist;
 			packageProductDependencies = (
 				DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */,
+				DD74DA6925213FA3004587FC /* PromiseKit */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -437,6 +486,7 @@
 			mainGroup = DD52A61824E19EF000A9A1FC;
 			packageReferences = (
 				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
+				DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -476,13 +526,18 @@
 				DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */,
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
+				DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */,
 				DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */,
 				DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */,
 				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
+				DD74DA6325213A82004587FC /* Checklist+CoreDataProperties.swift in Sources */,
+				DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */,
 				DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */,
+				DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
 				DD2BD1A624E6F87A004B2060 /* ChecklistViewModel.swift in Sources */,
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
+				DD74DA6C25213FCB004587FC /* CoreDataManager+Checklists.swift in Sources */,
 				DD52A64C24E1A00200A9A1FC /* DashboardViewModel.swift in Sources */,
 				DD7AF2B224EDC9C60051CD16 /* AddItemsToChecklistView.swift in Sources */,
 				DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */,
@@ -492,10 +547,14 @@
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
 				DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */,
+				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
+				DD74DA6525213C25004587FC /* CoreDataManagerImpl.swift in Sources */,
+				DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
+				DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */,
 				DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */,
 				DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */,
 				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
@@ -509,6 +568,7 @@
 				DD3F2906251402E400898F7D /* FinalizeChecklistViewModel.swift in Sources */,
 				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
 				DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */,
+				DD74DA6E252147D0004587FC /* CoreDataError.swift in Sources */,
 				DD90241524FB7A6F0084CDDC /* MyTemplatesViewModel.swift in Sources */,
 				DD2BD1A424E6F82C004B2060 /* ChecklistView.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
@@ -795,6 +855,14 @@
 				minimumVersion = 2.7.0;
 			};
 		};
+		DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mxcl/PromiseKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.13.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -802,6 +870,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */;
 			productName = SwinjectAutoregistration;
+		};
+		DD74DA6925213FA3004587FC /* PromiseKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */;
+			productName = PromiseKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

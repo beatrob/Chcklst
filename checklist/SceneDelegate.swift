@@ -8,10 +8,12 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var cancellables =  Set<AnyCancellable>()
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -19,23 +21,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
-        // Get the managed object context from the shared persistent container.
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
-        let contentView = DashboardView(
-            viewModel: AppContext.resolver.resolve(DashboardViewModel.self)!
-        ).environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
-
         
-        // Use a UIHostingController as window root view controller.
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
-            self.window = window
-            window.makeKeyAndVisible()
+        guard let windowScene = scene as? UIWindowScene else {
+            return
         }
+        let window = UIWindow(windowScene: windowScene)
+        
+        showInitializeAppView(in: window) {
+            let contentView = DashboardView(
+                viewModel: AppContext.resolver.resolve(DashboardViewModel.self)!
+            ).environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
+
+            window.rootViewController = UIHostingController(rootView: contentView)
+        }
+        self.window = window
+        window.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -66,9 +68,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+//        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
-
+    
+    func showInitializeAppView(
+        in window: UIWindow,
+        _ initializeDidFinish: @escaping () -> Void
+    ) {
+        let viewModel = AppContext.resolver.resolve(InitializeAppViewModel.self)!
+        let contentView = InitializeAppView(viewModel: viewModel)
+        
+        window.rootViewController = UIHostingController(rootView: contentView)
+        
+        viewModel.initializeDidFinish.sink {
+            initializeDidFinish()
+        }.store(in: &cancellables)
+    }
 }
 
