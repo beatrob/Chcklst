@@ -13,3 +13,8 @@ protocol CoreDataManager {
     
     func initialize() -> Promise<Void>
 }
+
+protocol CoreDataChecklistManager {
+    func fetchAllChecklists() -> Promise<[ChecklistDataModel]>
+    func save(checklist: ChecklistDataModel) -> Promise<Void>
+}

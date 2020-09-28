@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19G2021" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Checklist" representedClassName="Checklist" syncable="YES">
+    <entity name="Checklist" representedClassName="ChecklistMO" syncable="YES">
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
-        <attribute name="items" optional="YES" attributeType="Transformable"/>
+        <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="updateDate" attributeType="Date" defaultDateTimeInterval="622938540" usesScalarValueType="NO"/>

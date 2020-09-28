@@ -69,6 +69,7 @@ struct DashboardView: View {
                             }
                             Rectangle().frame(height: 0.5).foregroundColor(.gray)
                         }
+                        .frame(minWidth: 100, minHeight: 100)
                         .padding(.horizontal)
                         .onTapGesture {
                             self.viewModel.onChecklistTapped.send(checklist)

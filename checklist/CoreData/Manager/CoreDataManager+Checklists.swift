@@ -11,16 +11,24 @@ import PromiseKit
 import CoreData
 
 
-extension CoreDataManagerImpl {
+extension CoreDataManagerImpl: CoreDataChecklistManager {
     
     func fetchAllChecklists() -> Promise<[ChecklistDataModel]> {
         firstly { getViewContext() }
         .then { context -> Promise<[ChecklistMO]> in
             guard let data = try context.fetch(ChecklistMO.fetchRequest()) as? [ChecklistMO] else {
-                throw CoreDataError.failedToFetch
+                throw CoreDataError.fetchError
             }
             return .value(data)
         }
         .map { checklists in checklists.map { $0.toChecklistDataModel() } }
+    }
+    
+    func save(checklist: ChecklistDataModel) -> Promise<Void> {
+        firstly { getViewContext() }
+        .then { context -> Promise<Void> in
+            ChecklistMO.createEntity(from: checklist, andSaveToContext: context)
+        }
+        .then { self.saveContext() }
     }
 }

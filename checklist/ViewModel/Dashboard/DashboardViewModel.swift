@@ -16,16 +16,10 @@ class DashboardViewModel: ObservableObject {
         let title: String
         let counter: String
         let data: ChecklistDataModel
-        let tag: Int
         var firstUndoneItem: ChecklistItemDataModel?
     }
     
-    @Published var checklists: [ChecklistVO] = [] {
-        didSet {
-            self.objectWillChange.send()
-        }
-    }
-    
+    @Published var checklists: [ChecklistVO] = []
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var sheetVisibility = ViewVisibility(view: DashboardSheet.none.view)
@@ -56,7 +50,8 @@ class DashboardViewModel: ObservableObject {
     ) {
         self.checklistDataSource = checklistDataSource
         
-        checklistDataSource.checkLists.sink { [weak self] data in
+        checklistDataSource.checkLists
+            .sink { [weak self] data in
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
         
@@ -104,14 +99,13 @@ class DashboardViewModel: ObservableObject {
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
-        self.checklists =  checklists.enumerated().map {
+        self.checklists =  checklists.map {
             ChecklistVO(
-                id: $0.element.id,
-                title: $0.element.title,
-                counter: "\($0.element.items.filter(\.isDone).count)/\($0.element.items.count)",
-                data: $0.element,
-                tag: $0.offset,
-                firstUndoneItem: self.getFirstUndoneItem(form: $0.element.items)
+                id: $0.id,
+                title: $0.title,
+                counter: "\($0.items.filter(\.isDone).count)/\($0.items.count)",
+                data: $0,
+                firstUndoneItem: self.getFirstUndoneItem(form: $0.items)
             )
         }
     }

@@ -81,7 +81,8 @@ class CreateChecklistViewModel: ObservableObject {
         
         viewModel.onCreate.sink { [weak self] in
             guard let self = self else { return }
-            self.createChecklistSubject.send(
+            self.createChecklistSubject
+                .send(
                 ChecklistDataModel(
                     id: UUID().uuidString,
                     title: self.checklistName,

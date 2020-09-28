@@ -19,7 +19,7 @@ class CoreDataManagerImpl: CoreDataManager {
     
     func getViewContext() -> Promise<NSManagedObjectContext> {
         guard let context = persistentContainer?.viewContext else {
-            return .init(error: CoreDataError.viewContextIsNil)
+            return .init(error: CoreDataError.nilViewContext)
         }
         return .value(context)
     }

@@ -19,8 +19,12 @@ class InitializeAppViewModel: ObservableObject {
     @Published var errorMessage: String?
     let initializeDidFinish: EmptySubject = .init()
     
-    init(coreDataManager: CoreDataManager) {
+    init(
+        coreDataManager: CoreDataManager,
+        checklistDataSource: ChecklistDataSource
+    ) {
         coreDataManager.initialize()
+            .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { after(seconds: 1) }
             .done { self.initializeDidFinish.send() }
             .ensure { self.isLoading = false }

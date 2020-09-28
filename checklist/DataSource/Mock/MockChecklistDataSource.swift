@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import PromiseKit
 
 
 class MockChecklistDataSource: ChecklistDataSource {
@@ -88,7 +89,7 @@ class MockChecklistDataSource: ChecklistDataSource {
     func updateItem(
         _ item: ChecklistItemDataModel,
         for checkList: ChecklistDataModel,
-        _ completion: @escaping (Result<Void, DataSourceError>) -> Void
+        _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     ) {
         guard let index = _checkLists.value.firstIndex(of: checkList) else {
             completion(.failure(.checkListNotFound))
@@ -98,5 +99,9 @@ class MockChecklistDataSource: ChecklistDataSource {
             completion(.success(()))
         }
         completion(.failure(.checkListItemNotFound))
+    }
+    
+    func loadAllChecklists() -> Promise<[ChecklistDataModel]> {
+        .value(_checkLists.value)
     }
 }
