@@ -31,4 +31,28 @@ extension CoreDataManagerImpl: CoreDataChecklistManager {
         }
         .then { self.saveContext() }
     }
+    
+    func update(checklist: ChecklistDataModel) -> Promise<Void> {
+        firstly { getViewContext() }
+        .then { context -> Promise<Void> in
+            guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: checklist.id)).first else {
+                throw CoreDataError.fetchError
+            }
+            checklistMO.setup(with: checklist)
+            return .value
+        }
+        .then { self.saveContext() }
+    }
+    
+    func delete(checklist: ChecklistDataModel) -> Promise<Void> {
+        firstly { getViewContext() }
+        .then { context -> Promise<Void> in
+            guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: checklist.id)).first else {
+                throw CoreDataError.fetchError
+            }
+            context.delete(checklistMO)
+            return .value
+        }
+        .then { self.saveContext() }
+    }
 }

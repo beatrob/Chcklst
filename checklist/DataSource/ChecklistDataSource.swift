@@ -49,13 +49,31 @@ class CheckListDataSourceImpl: ChecklistDataSource {
             .done { self._checklists.value.append(checklist) }
             .catch { print($0.localizedDescription) }
         }.store(in: &cancellables)
+        
+        deleteCheckList.sink { checklist in
+            coreDataManager.delete(checklist: checklist)
+            .done { self._checklists.value.removeAll { $0.id == checklist.id } }
+            .catch { print($0.localizedDescription) }
+        }.store(in: &cancellables)
     }
     
     func updateItem(
         _ item: ChecklistItemDataModel,
         for checkList: ChecklistDataModel,
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
-    ) { }
+    ) {
+        guard let index = _checklists.value.firstIndex(of: checkList) else {
+            completion(.failure(.checkListNotFound))
+            return
+        }
+        coreDataManager.update(checklist: _checklists.value[index])
+        .done {
+            if self._checklists.value[index].items.updateItem(item) {
+                completion(.success(()))
+            }
+        }
+        .catch { completion(.failure(.persitentStorageError(error: $0))) }
+    }
     
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>{
         coreDataManager.fetchAllChecklists()

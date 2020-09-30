@@ -17,6 +17,13 @@ extension ChecklistMO {
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ChecklistMO> {
         return NSFetchRequest<ChecklistMO>(entityName: "Checklist")
     }
+    
+     @nonobjc public class func fetchRequest(withId id: String) -> NSFetchRequest<ChecklistMO> {
+        let request = NSFetchRequest<ChecklistMO>(entityName: "Checklist")
+        request.predicate = NSPredicate(format: "identifier == %@", id)
+        request.fetchLimit = 1
+        return request
+    }
 
     @NSManaged public var identifier: String
     @NSManaged public var title: String
