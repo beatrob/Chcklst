@@ -51,7 +51,11 @@ struct CreateChecklistView: View {
 struct CreateChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         CreateChecklistView(
-            viewModel: .init(createChecklistSubject: .init(), notificationManager: NotificationManager())
+            viewModel: .init(
+                createChecklistSubject: .init(),
+                createTemplateSubject: .init(),
+                notificationManager: NotificationManager()
+            )
         )
     }
 }

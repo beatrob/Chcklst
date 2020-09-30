@@ -28,13 +28,13 @@ class ViewModelAssembly: Assembly {
         )
         container.autoregister(
             CreateChecklistViewModel.self,
-            argument: ChecklistPassthroughSubject.self,
+            arguments: ChecklistPassthroughSubject.self, TemplatePassthroughSubject.self,
             initializer: CreateChecklistViewModel.init
         )
         container.autoregister(
             CreateChecklistViewModel.self,
             name: CreateChecklistViewModel.Constants.fromTemplate,
-            arguments: ChecklistPassthroughSubject.self, TemplateDataModel.self,
+            arguments: ChecklistPassthroughSubject.self, TemplatePassthroughSubject.self, TemplateDataModel.self,
             initializer: CreateChecklistViewModel.init
         )
         container.autoregister(

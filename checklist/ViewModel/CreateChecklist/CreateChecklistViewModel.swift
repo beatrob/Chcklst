@@ -39,6 +39,7 @@ class CreateChecklistViewModel: ObservableObject {
     let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never> = .init()
     
     let createChecklistSubject: ChecklistPassthroughSubject
+    let createTemplateSubject: TemplatePassthroughSubject
     let notificationManager: NotificationManager
     
     var shouldDisplayNextAfterItems: Bool {
@@ -51,11 +52,14 @@ class CreateChecklistViewModel: ObservableObject {
     
     init(
         createChecklistSubject: ChecklistPassthroughSubject,
+        createTemplateSubject: TemplatePassthroughSubject,
         template: TemplateDataModel? = nil,
         notificationManager: NotificationManager
     ) {
         self.notificationManager = notificationManager
         self.createChecklistSubject = createChecklistSubject
+        self.createTemplateSubject = createTemplateSubject
+        
         if let template = template {
             setupTemplate(template)
         }
@@ -104,6 +108,28 @@ class CreateChecklistViewModel: ObservableObject {
             self.shouldDismissView = true
         }.store(in: &cancellables)
         
+        viewModel.onSaveAsTemplate.sink { [weak self] in
+            guard let self = self else { return }
+            self.createTemplateSubject.send(
+                .init(
+                    id: UUID().uuidString,
+                    title: self.checklistName,
+                    description: self.checklistDescription,
+                    items: self.items.compactMap {
+                        guard let name = self.idToName[$0.id] else {
+                            return nil
+                        }
+                        return ChecklistItemDataModel(
+                            id: UUID().uuidString,
+                            name: name,
+                            isDone: false,
+                            updateDate: Date()
+                        )
+                    }
+                )
+            )
+        }.store(in: &cancellables)
+        
         viewModel.onReminderOnOff.sink { isOn in
             guard isOn else {
                 return
@@ -114,7 +140,6 @@ class CreateChecklistViewModel: ObservableObject {
                     return
                 }
             }
-            
         }.store(in: &cancellables)
         
         return viewModel
