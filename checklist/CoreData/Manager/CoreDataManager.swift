@@ -15,8 +15,17 @@ protocol CoreDataManager {
 }
 
 protocol CoreDataChecklistManager {
+    
     func fetchAllChecklists() -> Promise<[ChecklistDataModel]>
     func save(checklist: ChecklistDataModel) -> Promise<Void>
     func update(checklist: ChecklistDataModel) ->  Promise<Void>
     func delete(checklist: ChecklistDataModel) -> Promise<Void>
+}
+
+protocol CoreDataTemplateManager {
+    
+    func fetchAllTemplates() -> Promise<[TemplateDataModel]>
+    func save(template: TemplateDataModel) -> Promise<Void>
+    func update(template: TemplateDataModel) ->  Promise<Void>
+    func delete(template: TemplateDataModel) -> Promise<Void>
 }

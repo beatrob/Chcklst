@@ -72,6 +72,9 @@
 		DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DE2511626000F326D2 /* DashboardSheet.swift */; };
 		DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */; };
 		DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */; };
+		DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */; };
+		DDDFBE1E2525172100BFBE9D /* Template+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */; };
+		DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +156,9 @@
 		DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesSheet.swift; sourceTree = "<group>"; };
 		DDD4FBDC251660A3002B7F50 /* checklist.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = checklist.entitlements; sourceTree = "<group>"; };
 		DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Template+CoreDataClass.swift"; sourceTree = "<group>"; };
+		DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Template+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Templates.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,6 +380,7 @@
 				DD74DA742521E63A004587FC /* CoreDataManager.swift */,
 				DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */,
 				DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */,
+				DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */,
 				DD74DA762521E705004587FC /* MockCoreDataManager.swift */,
 			);
 			path = Manager;
@@ -390,6 +397,8 @@
 		DD74DA7B25220EA9004587FC /* ManagedObject */ = {
 			isa = PBXGroup;
 			children = (
+				DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */,
+				DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */,
 				DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */,
 				DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */,
 			);
@@ -551,6 +560,7 @@
 				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
 				DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */,
 				DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */,
+				DDDFBE1E2525172100BFBE9D /* Template+CoreDataProperties.swift in Sources */,
 				DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
 				DD2BD1A624E6F87A004B2060 /* ChecklistViewModel.swift in Sources */,
@@ -598,9 +608,11 @@
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
+				DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */,
 				DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */,
 				DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */,
 				DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */,
+				DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

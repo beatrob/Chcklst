@@ -18,7 +18,7 @@ extension ChecklistMO {
         return NSFetchRequest<ChecklistMO>(entityName: "Checklist")
     }
     
-     @nonobjc public class func fetchRequest(withId id: String) -> NSFetchRequest<ChecklistMO> {
+    @nonobjc public class func fetchRequest(withId id: String) -> NSFetchRequest<ChecklistMO> {
         let request = NSFetchRequest<ChecklistMO>(entityName: "Checklist")
         request.predicate = NSPredicate(format: "identifier == %@", id)
         request.fetchLimit = 1
@@ -29,7 +29,7 @@ extension ChecklistMO {
     @NSManaged public var title: String
     @NSManaged public var notes: String?
     @NSManaged public var updateDate: Date
-    @NSManaged public var items: NSObject?
+    @NSManaged public var items: ChecklistItemArrayTransformable?
     
     func toChecklistDataModel() -> ChecklistDataModel {
         .init(
@@ -37,7 +37,7 @@ extension ChecklistMO {
             title: title,
             description: notes,
             updateDate: updateDate,
-            items: getItemDataModels()
+            items: items?.getItemDataModels() ?? []
         )
     }
     
@@ -56,25 +56,5 @@ extension ChecklistMO {
         let checklistMO = ChecklistMO(entity: entity, insertInto: context)
         checklistMO.setup(with: dataModel)
         return .value
-    }
-}
-
-
-// MARK: - Private methods
-
-private extension ChecklistMO {
-    
-    func getItemDataModels() -> [ChecklistItemDataModel] {
-        guard let checklistItems = items as? ChecklistItemArrayTransformable else {
-            return []
-        }
-        return checklistItems.checklistItems.map {
-            ChecklistItemDataModel(
-                id: $0.id,
-                name: $0.name,
-                isDone: $0.isDone,
-                updateDate: $0.updateDate
-            )
-        }
     }
 }

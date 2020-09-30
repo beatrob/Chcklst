@@ -33,6 +33,17 @@ public class ChecklistItemArrayTransformable: NSObject, NSCoding {
         self.checklistItems = items
         super.init()
     }
+    
+    func getItemDataModels() -> [ChecklistItemDataModel]? {
+        return checklistItems.map {
+            ChecklistItemDataModel(
+                id: $0.id,
+                name: $0.name,
+                isDone: $0.isDone,
+                updateDate: $0.updateDate
+            )
+        }
+    }
 }
 
 
