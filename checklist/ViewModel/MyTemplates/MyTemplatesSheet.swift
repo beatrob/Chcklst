@@ -27,7 +27,7 @@ enum MyTemaplatesSheet {
             let viewModel = AppContext.resolver.resolve(
                 CreateChecklistViewModel.self,
                 name: CreateChecklistViewModel.Constants.fromTemplate,
-                arguments: dataSource.createNewChecklist, template
+                arguments: dataSource.createNewChecklist, TemplatePassthroughSubject(), template
             )!
             return AnyView(CreateChecklistView(viewModel: viewModel))
         case .editTemplate(let template, let update):
