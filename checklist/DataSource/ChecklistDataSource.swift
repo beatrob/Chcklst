@@ -66,7 +66,11 @@ class CheckListDataSourceImpl: ChecklistDataSource {
             completion(.failure(.checkListNotFound))
             return
         }
-        coreDataManager.update(checklist: _checklists.value[index])
+        var checklist = _checklists.value[index]
+        guard checklist.items.updateItem(item) else {
+            return
+        }
+        coreDataManager.update(checklist: checklist)
         .done {
             if self._checklists.value[index].items.updateItem(item) {
                 completion(.success(()))

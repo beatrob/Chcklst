@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import PromiseKit
 
 
 class MockTemplateDataSource: TemplateDataSource {
@@ -55,10 +56,6 @@ class MockTemplateDataSource: TemplateDataSource {
     
     private let _templateCreated: TemplatePassthroughSubject = .init()
     
-    func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Result<Void, DataSourceError>) -> Void) {
-        
-    }
-    
     init() {
         deleteTemplate.sink { [weak self] template in
             self?._templates.value.removeAll { $0.id == template.id }
@@ -75,5 +72,13 @@ class MockTemplateDataSource: TemplateDataSource {
             self?._templates.value.insert(template, at: 0)
             self?._templateCreated.send(template)
         }.store(in: &cancellables)
+    }
+    
+    func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
+        
+    }
+    
+    func loadAllTemplates() -> Promise<[TemplateDataModel]> {
+        .value(_templates.value)
     }
 }
