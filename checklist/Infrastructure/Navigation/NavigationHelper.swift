@@ -26,10 +26,16 @@ class NavigationHelper: ObservableObject {
         case myTemplates
     }
     
+    enum SelectTemplateSelection: String {
+        case createChecklist
+    }
+    
     @Published var dashboardSelection: DashboardSelection? = nil
     @Published var settingsSelection: SettingsSelection? = nil
+    @Published var selectTemplateSelection: SelectTemplateSelection? = nil
     var dashboardDestination: AnyView = .empty
     var settingsDestination: AnyView = .empty
+    var selectTemplateDestination: AnyView = .empty
     
     func navigateToSettings() {
         let viewModel = AppContext.resolver.resolve(SettingsViewModel.self)!
@@ -56,6 +62,20 @@ class NavigationHelper: ObservableObject {
         )!
         dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))
         dashboardSelection = .checklistDetail
+    }
+    
+    func navigateToCreateChecklist(
+        with template: TemplateDataModel,
+        createChecklist: ChecklistPassthroughSubject,
+        createTemplate: TemplatePassthroughSubject
+    ) {
+        let viewModel = AppContext.resolver.resolve(
+            CreateChecklistViewModel.self,
+            name: CreateChecklistViewModel.Constants.fromTemplate,
+            arguments: createChecklist, createTemplate, template
+        )!
+        selectTemplateDestination = AnyView(CreateChecklistView(viewModel: viewModel))
+        selectTemplateSelection = .createChecklist
     }
     
     func popToDashboard() {

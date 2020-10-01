@@ -66,10 +66,16 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
-            self?.sheet = .createChecklist(
-                createNewChecklist: checklistDataSource.createNewChecklist,
-                createNewTemplate: templateDataSource.createNewTemplate
-            )
+            self?.actionSheet = .createChecklist(
+                onNewChecklist: {
+                    self?.sheet = .createChecklist(
+                        createNewChecklist: checklistDataSource.createNewChecklist,
+                        createNewTemplate: templateDataSource.createNewTemplate
+                    )
+            },
+                onNewFromTemplate: {
+                    self?.sheet = .selectTemplate
+            })
         }.store(in: &cancellables)
         
         onSettings.sink {

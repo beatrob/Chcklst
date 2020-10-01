@@ -20,7 +20,8 @@ struct MyTemplatesView: View {
                 id: \.id) { template in
                     MyTemplateItemView(
                         name: template.title,
-                        description: template.description
+                        description: template.description,
+                        displayRightArrow: false
                     )
                     .onTapGesture {
                         self.viewModel.onTemplateTapped.send(template)

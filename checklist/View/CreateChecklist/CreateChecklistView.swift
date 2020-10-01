@@ -43,6 +43,7 @@ struct CreateChecklistView: View {
                     Spacer()
                 }
             }
+            .navigationBarTitle("Create checklist")
         }
     }
     

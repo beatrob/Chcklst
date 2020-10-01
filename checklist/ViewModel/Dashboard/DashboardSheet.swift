@@ -17,6 +17,7 @@ enum DashboardSheet {
         createNewChecklist: ChecklistPassthroughSubject,
         createNewTemplate: TemplatePassthroughSubject
     )
+    case selectTemplate
     
     var view: AnyView {
         switch self {
@@ -28,6 +29,11 @@ enum DashboardSheet {
                         arguments: createNewChecklist, createNewTemplate
                         )!
                 )
+            )
+        case .selectTemplate:
+            return AnyView(
+                SelectTemplateView(viewModel: AppContext.resolver.resolve(SelectTemplateViewModel.self)!)
+                    .environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
             )
         case .none: return AnyView.empty
         }

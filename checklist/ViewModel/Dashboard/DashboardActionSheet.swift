@@ -17,6 +17,7 @@ enum DashboardActionSheet {
         onCreateTemplate: EmptyCompletion,
         onDelete: EmptyCompletion
     )
+    case createChecklist(onNewChecklist: EmptyCompletion, onNewFromTemplate: EmptyCompletion)
     case none
     
     var isActionSheedVisible: Bool {
@@ -44,6 +45,20 @@ enum DashboardActionSheet {
                     },
                     .destructive(Text("Delete")) {
                         withAnimation { onDelete() }
+                    },
+                    .cancel()
+                ]
+            )
+        case .createChecklist(let onNewChecklist, let onNewFromTemplate):
+            return ActionSheet(
+                title: Text("Add checklist"),
+                message: nil,
+                buttons: [
+                    .default(Text("Create new")) {
+                        onNewChecklist()
+                    },
+                    .default(Text("Create from template")) {
+                        onNewFromTemplate()
                     },
                     .cancel()
                 ]
