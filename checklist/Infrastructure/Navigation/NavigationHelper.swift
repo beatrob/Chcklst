@@ -57,10 +57,10 @@ class NavigationHelper: ObservableObject {
     
     func navigateToChecklistDetail(with checklist: ChecklistCurrentValueSubject) {
         let viewModel = AppContext.resolver.resolve(
-            ChecklistViewModel.self,
+            ChecklistDetailViewModel.self,
             argument: checklist
         )!
-        dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))
+        dashboardDestination = AnyView(ChecklistDetailView(viewModel: viewModel))
         dashboardSelection = .checklistDetail
     }
     

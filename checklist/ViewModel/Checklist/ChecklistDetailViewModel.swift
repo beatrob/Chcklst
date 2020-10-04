@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 
-class ChecklistViewModel: ObservableObject {
+class ChecklistDetailViewModel: ObservableObject {
     
     struct ChecklistVO {
         let title: String
@@ -31,10 +31,13 @@ class ChecklistViewModel: ObservableObject {
     @Published var checklistVO = ChecklistVO(title: "", description: "", items: [])
     
     var cancellables =  Set<AnyCancellable>()
-    var checklist: ChecklistCurrentValueSubject
     
-    init(checklist: ChecklistCurrentValueSubject) {
+    private let checklist: ChecklistCurrentValueSubject
+    private let checklistDataSource: ChecklistDataSource
+    
+    init(checklist: ChecklistCurrentValueSubject, checklistDataSource: ChecklistDataSource) {
         self.checklist = checklist
+        self.checklistDataSource = checklistDataSource
         checklist.sink { [weak self] checklist in
             guard let self = self, let checklist = checklist else {
                 return
@@ -50,8 +53,13 @@ class ChecklistViewModel: ObservableObject {
     func getItemViewModel(for item: ChecklistItemDataModel) -> ChecklistItemViewModel {
         let itemSubject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
         itemSubject.dropFirst().sink { [weak self] item in
-            guard let self = self else { return }
-            _ = self.checklist.value?.items.updateItem(item)
+            guard
+                let self = self,
+                let checklist = self.checklist.value
+            else { return }
+            self.checklistDataSource.updateItem(item, for: checklist) { result in
+                #warning("TODO(): Add error handling!")
+            }
         }.store(in: &cancellables)
         return .init(item: itemSubject)
     }

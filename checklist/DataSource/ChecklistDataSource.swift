@@ -73,6 +73,9 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         coreDataManager.update(checklist: checklist)
         .done {
             if self._checklists.value[index].items.updateItem(item) {
+                if self.selectedCheckList.value == checklist {
+                    _ = self.selectedCheckList.value?.items.updateItem(item)
+                }
                 completion(.success(()))
             }
         }

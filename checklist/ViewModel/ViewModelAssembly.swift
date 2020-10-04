@@ -17,9 +17,9 @@ class ViewModelAssembly: Assembly {
         container.autoregister(DashboardViewModel.self, initializer: DashboardViewModel.init)
         container.autoregister(SettingsViewModel.self, initializer: SettingsViewModel.init)
         container.autoregister(
-            ChecklistViewModel.self,
+            ChecklistDetailViewModel.self,
             argument: ChecklistCurrentValueSubject.self,
-            initializer: ChecklistViewModel.init
+            initializer: ChecklistDetailViewModel.init
         )
         container.autoregister(
             CreateChecklistViewModel.self,

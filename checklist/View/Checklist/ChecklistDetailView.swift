@@ -9,9 +9,9 @@
 import SwiftUI
 import Combine
 
-struct ChecklistView: View {
+struct ChecklistDetailView: View {
     
-    @ObservedObject var viewModel: ChecklistViewModel
+    @ObservedObject var viewModel: ChecklistDetailViewModel
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -34,9 +34,10 @@ struct ChecklistView: View {
 
 struct ChecklistView_Previews: PreviewProvider {
     static var previews: some View {
-        ChecklistView(
+        ChecklistDetailView(
             viewModel: .init(
-                checklist: .init(MockChecklistDataSource()._checkLists.value.first)
+                checklist: .init(MockChecklistDataSource()._checkLists.value.first),
+                checklistDataSource: MockChecklistDataSource()
             )
         )
     }
