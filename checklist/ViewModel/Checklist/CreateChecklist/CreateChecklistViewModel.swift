@@ -105,29 +105,27 @@ class CreateChecklistViewModel: ObservableObject {
                     }
                 )
             )
-            self.shouldDismissView = true
-        }.store(in: &cancellables)
-        
-        viewModel.onSaveAsTemplate.sink { [weak self] in
-            guard let self = self else { return }
-            self.createTemplateSubject.send(
-                .init(
-                    id: UUID().uuidString,
-                    title: self.checklistName,
-                    description: self.checklistDescription,
-                    items: self.items.compactMap {
-                        guard let name = self.idToName[$0.id] else {
-                            return nil
+            if viewModel.isCreateTemplateChecked {
+                self.createTemplateSubject.send(
+                    .init(
+                        id: UUID().uuidString,
+                        title: self.checklistName,
+                        description: self.checklistDescription,
+                        items: self.items.compactMap {
+                            guard let name = self.idToName[$0.id] else {
+                                return nil
+                            }
+                            return ChecklistItemDataModel(
+                                id: UUID().uuidString,
+                                name: name,
+                                isDone: false,
+                                updateDate: Date()
+                            )
                         }
-                        return ChecklistItemDataModel(
-                            id: UUID().uuidString,
-                            name: name,
-                            isDone: false,
-                            updateDate: Date()
-                        )
-                    }
+                    )
                 )
-            )
+            }
+            self.shouldDismissView = true
         }.store(in: &cancellables)
         
         viewModel.onReminderOnOff.sink { isOn in

@@ -14,8 +14,10 @@
 		DD39A4272529B810003E73EA /* ChecklistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */; };
 		DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */; };
 		DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */; };
-		DD3F2903251401CF00898F7D /* FinalizeChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3F2902251401CF00898F7D /* FinalizeChecklistView.swift */; };
-		DD3F2906251402E400898F7D /* FinalizeChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3F2905251402E400898F7D /* FinalizeChecklistViewModel.swift */; };
+		DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A430252A1741003E73EA /* CheckboxView.swift */; };
+		DD39A433252A1DB3003E73EA /* FinalizeChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A432252A1DB3003E73EA /* FinalizeChecklistView.swift */; };
+		DD39A435252A1EBA003E73EA /* FinalizeChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A434252A1EBA003E73EA /* FinalizeChecklistViewModel.swift */; };
+		DD39A437252A236C003E73EA /* CreateChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A436252A236C003E73EA /* CreateChecklistViewModel.swift */; };
 		DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62424E19EF000A9A1FC /* AppDelegate.swift */; };
 		DD52A62724E19EF000A9A1FC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */; };
 		DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DD52A62824E19EF000A9A1FC /* checklist.xcdatamodeld */; };
@@ -55,7 +57,6 @@
 		DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA762521E705004587FC /* MockCoreDataManager.swift */; };
 		DD74DA7A25220027004587FC /* ChecklistItemTransformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA7925220027004587FC /* ChecklistItemTransformable.swift */; };
 		DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */; };
-		DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */; };
 		DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */; };
 		DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */; };
 		DD7AF2B024EDB8110051CD16 /* CreateChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AF24EDB8110051CD16 /* CreateChecklistView.swift */; };
@@ -97,8 +98,10 @@
 		DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailViewModel.swift; sourceTree = "<group>"; };
 		DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailView.swift; sourceTree = "<group>"; };
 		DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItemViewModel.swift; sourceTree = "<group>"; };
-		DD3F2902251401CF00898F7D /* FinalizeChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalizeChecklistView.swift; sourceTree = "<group>"; };
-		DD3F2905251402E400898F7D /* FinalizeChecklistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalizeChecklistViewModel.swift; sourceTree = "<group>"; };
+		DD39A430252A1741003E73EA /* CheckboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxView.swift; sourceTree = "<group>"; };
+		DD39A432252A1DB3003E73EA /* FinalizeChecklistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalizeChecklistView.swift; sourceTree = "<group>"; };
+		DD39A434252A1EBA003E73EA /* FinalizeChecklistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalizeChecklistViewModel.swift; sourceTree = "<group>"; };
+		DD39A436252A236C003E73EA /* CreateChecklistViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChecklistViewModel.swift; sourceTree = "<group>"; };
 		DD52A62124E19EF000A9A1FC /* checklist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = checklist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD52A62424E19EF000A9A1FC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DD52A62624E19EF000A9A1FC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,7 +143,6 @@
 		DD74DA762521E705004587FC /* MockCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataManager.swift; sourceTree = "<group>"; };
 		DD74DA7925220027004587FC /* ChecklistItemTransformable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemTransformable.swift; sourceTree = "<group>"; };
 		DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Checklist+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChecklistViewModel.swift; sourceTree = "<group>"; };
 		DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
 		DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameYourChecklistView.swift; sourceTree = "<group>"; };
 		DD7AF2AF24EDB8110051CD16 /* CreateChecklistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateChecklistView.swift; sourceTree = "<group>"; };
@@ -199,9 +201,9 @@
 		DD39A4252529B784003E73EA /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				DD3F2904251402C900898F7D /* CreateChecklist */,
 				DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */,
 				DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */,
-				DD3F2904251402C900898F7D /* CreateChecklist */,
 			);
 			path = Checklist;
 			sourceTree = "<group>";
@@ -209,17 +211,26 @@
 		DD39A4282529B929003E73EA /* Checklist */ = {
 			isa = PBXGroup;
 			children = (
+				DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */,
 				DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */,
 				DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */,
+				DD39A430252A1741003E73EA /* CheckboxView.swift */,
 			);
 			path = Checklist;
+			sourceTree = "<group>";
+		};
+		DD39A42D252A1563003E73EA /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		DD3F2904251402C900898F7D /* CreateChecklist */ = {
 			isa = PBXGroup;
 			children = (
-				DD7AF2A824EDB4160051CD16 /* CreateChecklistViewModel.swift */,
-				DD3F2905251402E400898F7D /* FinalizeChecklistViewModel.swift */,
+				DD39A436252A236C003E73EA /* CreateChecklistViewModel.swift */,
+				DD39A434252A1EBA003E73EA /* FinalizeChecklistViewModel.swift */,
 			);
 			path = CreateChecklist;
 			sourceTree = "<group>";
@@ -284,9 +295,9 @@
 		DD52A64924E19FE400A9A1FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DD39A42D252A1563003E73EA /* Subviews */,
 				DD39A4282529B929003E73EA /* Checklist */,
 				DD90241D24FB94E10084CDDC /* MyTemplates */,
-				DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */,
 				DD52A66524E1D08C00A9A1FC /* DashboardView.swift */,
 				DD727A4824F271E1004089B6 /* SettingsView.swift */,
 				DD74DA6F2521E2AA004587FC /* InitializeAppView.swift */,
@@ -429,10 +440,10 @@
 		DD7AF2AC24EDB68B0051CD16 /* CreateChecklist */ = {
 			isa = PBXGroup;
 			children = (
+				DD39A432252A1DB3003E73EA /* FinalizeChecklistView.swift */,
 				DD7AF2AF24EDB8110051CD16 /* CreateChecklistView.swift */,
 				DD7AF2AD24EDB7280051CD16 /* NameYourChecklistView.swift */,
 				DD7AF2B124EDC9C60051CD16 /* AddItemsToChecklistView.swift */,
-				DD3F2902251401CF00898F7D /* FinalizeChecklistView.swift */,
 			);
 			path = CreateChecklist;
 			sourceTree = "<group>";
@@ -593,7 +604,9 @@
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
 				DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */,
+				DD39A435252A1EBA003E73EA /* FinalizeChecklistViewModel.swift in Sources */,
 				DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */,
+				DD39A433252A1DB3003E73EA /* FinalizeChecklistView.swift in Sources */,
 				DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */,
 				DD52A66624E1D08C00A9A1FC /* DashboardView.swift in Sources */,
 				DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */,
@@ -622,17 +635,17 @@
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
 				DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */,
+				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
 				DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */,
 				DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */,
 				DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */,
+				DD39A437252A236C003E73EA /* CreateChecklistViewModel.swift in Sources */,
 				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
 				DD2BD1AA24E937B0004B2060 /* ChecklistItemView.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */,
-				DD3F2903251401CF00898F7D /* FinalizeChecklistView.swift in Sources */,
 				DD6C506F24FC37F20056C476 /* EditTemplateView.swift in Sources */,
 				DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */,
-				DD3F2906251402E400898F7D /* FinalizeChecklistViewModel.swift in Sources */,
 				DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */,
 				DDD22312252672A700C18BF9 /* SelectTemplateView.swift in Sources */,
 				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
@@ -649,7 +662,6 @@
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
 				DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */,
-				DD7AF2A924EDB4160051CD16 /* CreateChecklistViewModel.swift in Sources */,
 				DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */,
 				DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */,
 				DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */,

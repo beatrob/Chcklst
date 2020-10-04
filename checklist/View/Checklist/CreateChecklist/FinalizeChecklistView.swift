@@ -13,7 +13,7 @@ struct FinalizeChecklistView: View {
     @ObservedObject var viewModel: FinalizeChecklistViewModel
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             HStack {
                 Text("Remind me on this device")
                 Toggle(isOn: $viewModel.isReminderOn.animation()) {
@@ -28,13 +28,17 @@ struct FinalizeChecklistView: View {
                     EmptyView()
                 }
             }
-            Button("Create") {
-                self.viewModel.onCreate.send()
-            }.padding()
-            
-            Button("Save as template") {
-                self.viewModel.onSaveAsTemplate.send()
-            }.padding()
+            CheckboxView(
+                title: "Also save as template",
+                isChecked: $viewModel.isCreateTemplateChecked
+            ).padding()
+            HStack {
+                Spacer()
+                Button("Create") {
+                    self.viewModel.onCreate.send()
+                }.padding()
+                Spacer()
+            }
         }
     }
 }

@@ -19,9 +19,9 @@ class FinalizeChecklistViewModel: ObservableObject {
         }
     }
     @Published var reminderDate: Date = Date()
+    @Published var isCreateTemplateChecked: Bool = false
     
     let onCreate: EmptySubject = .init()
-    let onSaveAsTemplate: EmptySubject = .init()
     let onReminderOnOff: PassthroughSubject<Bool, Never> = .init()
     
     var cancellables =  Set<AnyCancellable>()
