@@ -49,6 +49,7 @@ struct DashboardView: View {
                     .hidden()
                     
                     Spacer().frame(height: 15.0)
+                    FilterView(viewModel: viewModel.filterViewModel)
                     ForEach(viewModel.checklists, id: \.id) { checklist in
                         VStack {
                             HStack {

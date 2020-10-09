@@ -15,5 +15,7 @@ typealias ChecklistCurrentValueSubject = CurrentValueSubject<ChecklistDataModel?
 typealias TemplatePassthroughSubject = PassthroughSubject<TemplateDataModel, Never>
 typealias TemplateCurrentValueSubject = CurrentValueSubject<TemplateDataModel?, Never>
 
+typealias FilterPassthroughSubject = PassthroughSubject<FilterItemData, Never>
+
 typealias EmptySubject = PassthroughSubject<Void, Never>
 typealias EmptyCompletion = () -> Void

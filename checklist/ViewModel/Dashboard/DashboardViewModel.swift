@@ -34,6 +34,15 @@ class DashboardViewModel: ObservableObject {
         didSet { sheetVisibility.set(view: sheet.view, isVisible: sheet.isVisible) }
     }
     
+    lazy var filterViewModel: FilterViewModel = {
+        let onSelectFilter = FilterPassthroughSubject()
+        onSelectFilter.sink { filter in
+            self.selectedFilter = filter
+        }.store(in: &cancellables)
+        return AppContext.resolver.resolve(FilterViewModel.self, argument: onSelectFilter)!
+    }()
+    var selectedFilter: FilterItemData = .initial
+    
     let onCreateNewChecklist = EmptySubject()
     let onSettings = EmptySubject()
     let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()

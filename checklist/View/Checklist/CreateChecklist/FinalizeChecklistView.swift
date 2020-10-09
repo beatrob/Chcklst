@@ -14,18 +14,18 @@ struct FinalizeChecklistView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text("Remind me on this device")
-                Toggle(isOn: $viewModel.isReminderOn.animation()) {
-                    EmptyView()
-                }
-            }.padding()
+            CheckboxView(
+                title: "Remind me on this device",
+                isChecked: $viewModel.isReminderOn.animation()
+            ).padding()
             if viewModel.isReminderOn {
-                DatePicker(
-                    selection: $viewModel.reminderDate,
-                    displayedComponents: [.date, .hourAndMinute]
-                ) {
-                    EmptyView()
+                HStack {
+                    Spacer()
+                    DatePicker("",
+                               selection: $viewModel.reminderDate,
+                               displayedComponents: [.date, .hourAndMinute]
+                    ).labelsHidden()
+                    Spacer()
                 }
             }
             CheckboxView(

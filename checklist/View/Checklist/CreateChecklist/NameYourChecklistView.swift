@@ -18,11 +18,11 @@ struct NameYourChecklistView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            TextField("Name your new checklist", text: $checklistName) {
+            TextField("Name your new checklist", text: $checklistName, onCommit:  {
                 withAnimation {
                     self.onNext.send()
                 }
-            }
+            })
             .font(.system(size: 38))
             .padding()
             if shouldCreateChecklistName {
