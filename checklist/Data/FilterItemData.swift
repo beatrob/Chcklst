@@ -26,5 +26,15 @@ enum FilterItemData: CaseIterable {
         }
     }
     
+    var title: String {
+        switch self {
+        case .latest: return "Latest"
+        case .abc: return "By name"
+        case .reminder: return "With reminder"
+        case .done: return "Done"
+        case .archive: return "Archived"
+        }
+    }
+    
     static let initial: FilterItemData = .latest
 }

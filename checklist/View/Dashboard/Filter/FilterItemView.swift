@@ -17,11 +17,11 @@ struct FilterItemView: View {
     var body: some View {
         ZStack {
             Capsule()
-                .fill(isSelected ? Color.blue : Color.white)
+                .fill(Color.blue)
                 .background(
-                    Capsule().stroke(isSelected ? Color.blue : Color.black, lineWidth: 1)
+                    Capsule().stroke(isSelected ? Color.white : Color.white.opacity(0.45), lineWidth: 1)
                 )
-            image.foregroundColor(isSelected ? Color.white : Color.black)
+            image.foregroundColor(isSelected ? Color.white : Color.white.opacity(0.45))
         }
         .frame(width: 40, height: 30)
         .onTapGesture {

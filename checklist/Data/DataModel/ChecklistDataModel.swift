@@ -15,10 +15,12 @@ struct ChecklistDataModel: Equatable {
     let title: String
     let description: String?
     var updateDate: Date
+    var reminderDate: Date?
     var items: [ChecklistItemDataModel]
     var isDone: Bool {
         items.filter(\.isDone).count == items.count
     }
+    var isArchived: Bool = false
     
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id

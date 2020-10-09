@@ -48,8 +48,18 @@ struct DashboardView: View {
                     .isDetailLink(false)
                     .hidden()
                     
-                    Spacer().frame(height: 15.0)
-                    FilterView(viewModel: viewModel.filterViewModel)
+                    
+                    VStack {
+                        Spacer().frame(height: 15.0)
+                        FilterView(viewModel: viewModel.filterViewModel)
+                        HStack {
+                            Text(viewModel.title)
+                                .font(.largeTitle)
+                                .foregroundColor(Color.white)
+                                .padding()
+                            Spacer()
+                        }
+                    }.background(Color.blue)
                     ForEach(viewModel.checklists, id: \.id) { checklist in
                         VStack {
                             HStack {
@@ -120,7 +130,8 @@ struct DashboardView_Previews: PreviewProvider {
             viewModel: DashboardViewModel(
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
-                navigationHelper: NavigationHelper()
+                navigationHelper: NavigationHelper(),
+                checklistFilter: ChecklistFilterImpl(dataSource: MockChecklistDataSource())
             )
         )
     }

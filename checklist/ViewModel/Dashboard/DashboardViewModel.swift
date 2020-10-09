@@ -19,6 +19,7 @@ class DashboardViewModel: ObservableObject {
         var firstUndoneItem: ChecklistItemDataModel?
     }
     
+    @Published var title: String = FilterItemData.initial.title
     @Published var checklists: [ChecklistVO] = []
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
@@ -36,12 +37,18 @@ class DashboardViewModel: ObservableObject {
     
     lazy var filterViewModel: FilterViewModel = {
         let onSelectFilter = FilterPassthroughSubject()
-        onSelectFilter.sink { filter in
+        onSelectFilter.sink { [weak self] filter in
+            guard let self = self else { return }
             self.selectedFilter = filter
         }.store(in: &cancellables)
         return AppContext.resolver.resolve(FilterViewModel.self, argument: onSelectFilter)!
     }()
-    var selectedFilter: FilterItemData = .initial
+    var selectedFilter: FilterItemData = .initial {
+        didSet {
+            self.checklistFilter.filter = selectedFilter
+            self.title = selectedFilter.title
+        }
+    }
     
     let onCreateNewChecklist = EmptySubject()
     let onSettings = EmptySubject()
@@ -51,15 +58,18 @@ class DashboardViewModel: ObservableObject {
     
     private var checklistToEdit: ChecklistVO?
     private let checklistDataSource: ChecklistDataSource
+    private let checklistFilter: ChecklistFilter
     
     init(
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
-        navigationHelper: NavigationHelper
+        navigationHelper: NavigationHelper,
+        checklistFilter: ChecklistFilter
     ) {
         self.checklistDataSource = checklistDataSource
+        self.checklistFilter = checklistFilter
         
-        checklistDataSource.checkLists
+        checklistFilter.filteredCheckLists
             .sink { [weak self] data in
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
