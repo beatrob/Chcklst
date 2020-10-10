@@ -8,6 +8,9 @@
 
 import Foundation
 import Swinject
+import AppCenter
+import AppCenterAnalytics
+import AppCenterCrashes
 
 class AppContext {
     
@@ -27,6 +30,10 @@ class AppContext {
     
     var resolver: Resolver {
         assembler.resolver
+    }
+    
+    init() {
+        MSAppCenter.start("2e52e116-6ccb-40e4-a8d9-e91aa19173b4", withServices: [MSAnalytics.self, MSCrashes.self])
     }
     
     func configure() { }

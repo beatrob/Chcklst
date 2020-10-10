@@ -19,6 +19,8 @@
 		DD2D91922530EB430032779C /* ChecklistFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91912530EB430032779C /* ChecklistFilter.swift */; };
 		DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */; };
 		DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */; };
+		DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A42531B9BA0032779C /* AppCenterCrashes */; };
+		DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A62531B9BA0032779C /* AppCenterAnalytics */; };
 		DD39A4272529B810003E73EA /* ChecklistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */; };
 		DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */; };
 		DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */; };
@@ -221,7 +223,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
+				DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */,
 				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -616,6 +620,8 @@
 			packageProductDependencies = (
 				DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */,
 				DD74DA6925213FA3004587FC /* PromiseKit */,
+				DD2D91A42531B9BA0032779C /* AppCenterCrashes */,
+				DD2D91A62531B9BA0032779C /* AppCenterAnalytics */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -690,6 +696,7 @@
 			packageReferences = (
 				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
 				DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
+				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -1145,6 +1152,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/appcenter-sdk-apple.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.4;
+			};
+		};
 		DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Swinject/SwinjectAutoregistration";
@@ -1164,6 +1179,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DD2D91A42531B9BA0032779C /* AppCenterCrashes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */;
+			productName = AppCenterCrashes;
+		};
+		DD2D91A62531B9BA0032779C /* AppCenterAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */;
+			productName = AppCenterAnalytics;
+		};
 		DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */;
