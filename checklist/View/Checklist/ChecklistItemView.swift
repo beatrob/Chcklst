@@ -22,10 +22,10 @@ struct ChecklistItemView: View {
                 .strikethrough(viewModel.isDone)
         }
         .gesture(
-            DragGesture(minimumDistance: 20.0, coordinateSpace: .local).onEnded { value in
-                if value.location.x > value.startLocation.x {
+            DragGesture(minimumDistance: 100.0, coordinateSpace: .local).onEnded { value in
+                if value.location.x > value.startLocation.x, value.translation.width > 100 {
                     self.viewModel.onSwipeRight.send()
-                } else {
+                } else if value.location.x < value.startLocation.x, value.translation.width < -100 {
                     self.viewModel.onSwipeLeft.send()
                 }
             }

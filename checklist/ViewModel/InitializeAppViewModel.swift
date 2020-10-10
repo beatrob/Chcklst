@@ -22,9 +22,11 @@ class InitializeAppViewModel: ObservableObject {
     init(
         coreDataManager: CoreDataManager,
         checklistDataSource: ChecklistDataSource,
-        templateDataSource: TemplateDataSource
+        templateDataSource: TemplateDataSource,
+        initializeAppDataSource: InitializeAppDataSource
     ) {
         coreDataManager.initialize()
+            .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { templateDataSource.loadAllTemplates().asVoid() }
             .then { after(seconds: 1) }

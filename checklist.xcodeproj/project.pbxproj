@@ -17,6 +17,8 @@
 		DD2D91812530B7E20032779C /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91802530B7E20032779C /* DashboardView.swift */; };
 		DD2D91872530CA2A0032779C /* FilterItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91862530CA2A0032779C /* FilterItemData.swift */; };
 		DD2D91922530EB430032779C /* ChecklistFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91912530EB430032779C /* ChecklistFilter.swift */; };
+		DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */; };
+		DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */; };
 		DD39A4272529B810003E73EA /* ChecklistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */; };
 		DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */; };
 		DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */; };
@@ -134,6 +136,8 @@
 		DD2D91802530B7E20032779C /* DashboardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		DD2D91862530CA2A0032779C /* FilterItemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterItemData.swift; sourceTree = "<group>"; };
 		DD2D91912530EB430032779C /* ChecklistFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistFilter.swift; sourceTree = "<group>"; };
+		DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeAppDataSource.swift; sourceTree = "<group>"; };
+		DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailViewModel.swift; sourceTree = "<group>"; };
 		DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailView.swift; sourceTree = "<group>"; };
 		DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItemViewModel.swift; sourceTree = "<group>"; };
@@ -248,6 +252,7 @@
 				DD7AF2B324EDCED90051CD16 /* UIApplication+Extension.swift */,
 				DD72BA8C250787C300318F62 /* AnyView+Extension.swift */,
 				DDB298DA25114F4A00F326D2 /* String+Extension.swift */,
+				DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -422,9 +427,10 @@
 			children = (
 				DD52A66024E1C04A00A9A1FC /* Mock */,
 				DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */,
+				DD2BD1B024E96E76004B2060 /* DataSourceError.swift */,
 				DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */,
 				DD90241624FB7D590084CDDC /* TemplateDataSource.swift */,
-				DD2BD1B024E96E76004B2060 /* DataSourceError.swift */,
+				DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -792,6 +798,7 @@
 				DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */,
 				DD7AF2B024EDB8110051CD16 /* CreateChecklistView.swift in Sources */,
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
+				DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */,
 				DD2D91792530A9E90032779C /* FilterViewModel.swift in Sources */,
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
@@ -799,6 +806,7 @@
 				DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */,
 				DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */,
 				DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */,
+				DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */,
 				DD2D916F2530A6B20032779C /* FilterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

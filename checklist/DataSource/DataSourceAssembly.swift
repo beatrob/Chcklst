@@ -20,6 +20,7 @@ class DataSourceAssembly: Assembly {
         container
             .autoregister(TemplateDataSource.self, initializer: TemplateDataSourceImpl.init)
             .inObjectScope(.container)
+        container.autoregister(InitializeAppDataSource.self, initializer: InitializeAppDataSourceImpl.init)
     }
 }
 
@@ -33,6 +34,7 @@ class MockDataSourceAssembly: Assembly {
         container
             .autoregister(TemplateDataSource.self, initializer: MockTemplateDataSource.init)
             .inObjectScope(.container)
+        container.autoregister(InitializeAppDataSource.self, initializer: InitializeAppDataSourceImpl.init)
     }
 }
 

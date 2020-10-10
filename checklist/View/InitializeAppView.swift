@@ -28,7 +28,7 @@ struct InitializeAppView: View {
 struct InitializeAppView_Previews: PreviewProvider {
     static var previews: some View {
         InitializeAppView(
-            viewModel: .init(coreDataManager: MockCoreDataManager(), checklistDataSource: MockChecklistDataSource(), templateDataSource: MockTemplateDataSource())
+            viewModel: .init(coreDataManager: MockCoreDataManager(), checklistDataSource: MockChecklistDataSource(), templateDataSource: MockTemplateDataSource(), initializeAppDataSource: InitializeAppDataSourceImpl(coreDataManager: MockCoreDataManager()))
         )
     }
 }
