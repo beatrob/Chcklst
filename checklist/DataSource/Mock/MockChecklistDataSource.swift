@@ -104,4 +104,8 @@ class MockChecklistDataSource: ChecklistDataSource {
     func loadAllChecklists() -> Promise<[ChecklistDataModel]> {
         .value(_checkLists.value)
     }
+    
+    func getChecklist(withId id: String) -> ChecklistDataModel? {
+        _checkLists.value.first { $0.id == id }
+    }
 }

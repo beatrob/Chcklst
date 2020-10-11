@@ -131,7 +131,8 @@ struct DashboardView_Previews: PreviewProvider {
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
                 navigationHelper: NavigationHelper(),
-                checklistFilter: ChecklistFilterImpl(dataSource: MockChecklistDataSource())
+                checklistFilter: ChecklistFilterImpl(dataSource: MockChecklistDataSource()),
+                notificationManager: NotificationManager()
             )
         )
     }

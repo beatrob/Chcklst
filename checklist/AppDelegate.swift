@@ -14,6 +14,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let context: AppContext = AppContext.shared
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Logger.setup()
+        UNUserNotificationCenter.current().delegate = AppContext.resolver.resolve(NotificationManager.self)!
         return true
     }
 
