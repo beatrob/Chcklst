@@ -29,6 +29,7 @@ extension ChecklistMO {
     @NSManaged public var title: String
     @NSManaged public var notes: String?
     @NSManaged public var updateDate: Date
+    @NSManaged public var reminderDate: Date?
     @NSManaged public var items: ChecklistItemArrayTransformable?
     
     func toChecklistDataModel() -> ChecklistDataModel {
@@ -37,6 +38,7 @@ extension ChecklistMO {
             title: title,
             description: notes,
             updateDate: updateDate,
+            reminderDate: reminderDate,
             items: items?.getItemDataModels() ?? []
         )
     }
@@ -46,6 +48,7 @@ extension ChecklistMO {
         title = dataModel.title
         notes = dataModel.description
         updateDate = dataModel.updateDate
+        reminderDate = dataModel.reminderDate
         items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
     }
     

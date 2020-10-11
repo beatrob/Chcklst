@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import PromiseKit
 
 class DashboardViewModel: ObservableObject {
     
@@ -64,10 +65,27 @@ class DashboardViewModel: ObservableObject {
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         navigationHelper: NavigationHelper,
-        checklistFilter: ChecklistFilter
+        checklistFilter: ChecklistFilter,
+        notificationManager: NotificationManager
     ) {
         self.checklistDataSource = checklistDataSource
         self.checklistFilter = checklistFilter
+        
+        notificationManager.deeplinkChecklistId.sink { checklistId in
+            log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
+            guard let checklistId = checklistId else {
+                return
+            }
+            guard let checklist = checklistDataSource.getChecklist(withId: checklistId) else {
+                log(warning: "Checklist with id \(checklistId) not found")
+                return
+            }
+            log(debug: "Deeplinking to checklist: \(checklist)")
+            after(seconds: 1).done {
+                checklistDataSource.selectedCheckList.send(checklist)
+                notificationManager.clearDeeplinkcChecklistId()
+            }
+        }.store(in: &cancellables)
         
         checklistFilter.filteredCheckLists
             .sink { [weak self] data in

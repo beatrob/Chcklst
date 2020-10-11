@@ -61,7 +61,7 @@ class TemplateDataSourceImpl: TemplateDataSource {
                 self._templates.value.append(template)
                 self._templateCreated.send(template)
             }
-            .catch { print($0.localizedDescription) }
+            .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
         
         updateTemplate.sink { template in
@@ -71,13 +71,13 @@ class TemplateDataSourceImpl: TemplateDataSource {
                     self._templates.value[index] = template
                 }
             }
-            .catch { print($0.localizedDescription) }
+            .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
         
         deleteTemplate.sink { template in
             coreDataManager.delete(template: template)
             .done { self._templates.value.removeAll { $0.id == template.id } }
-            .catch { print($0.localizedDescription) }
+            .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
     }
     

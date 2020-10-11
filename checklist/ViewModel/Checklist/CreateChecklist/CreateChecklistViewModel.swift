@@ -85,65 +85,45 @@ class CreateChecklistViewModel: ObservableObject {
         
         viewModel.onCreate.sink { [weak self] in
             guard let self = self else { return }
-            self.createChecklistSubject
-                .send(
-                ChecklistDataModel(
-                    id: UUID().uuidString,
-                    title: self.checklistName,
-                    description: self.checklistDescription,
-                    updateDate: Date(),
-                    items: self.items.compactMap {
-                        guard let name = self.idToName[$0.id] else {
-                            return nil
-                        }
-                        return ChecklistItemDataModel(
-                            id: UUID().uuidString,
-                            name: name,
-                            isDone: false,
-                            updateDate: Date()
-                        )
+            let checklist = self.getChecklistFromUI(reminderDate: viewModel.isReminderOn ? viewModel.reminderDate : nil)
+            if viewModel.isReminderOn {
+                self.notificationManager.setupReminder(for: checklist)
+                    .done {
+                        self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+                        self.shouldDismissView = true
                     }
-                )
-            )
-            if viewModel.isCreateTemplateChecked {
-                self.createTemplateSubject.send(
-                    .init(
-                        id: UUID().uuidString,
-                        title: self.checklistName,
-                        description: self.checklistDescription,
-                        items: self.items.compactMap {
-                            guard let name = self.idToName[$0.id] else {
-                                return nil
-                            }
-                            return ChecklistItemDataModel(
-                                id: UUID().uuidString,
-                                name: name,
-                                isDone: false,
-                                updateDate: Date()
-                            )
-                        }
-                    )
-                )
+                    .catch {
+                        #warning("TODO: Add proper error handling")
+                        log(error: $0.localizedDescription)
+                    }
+            } else {
+                self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+                self.shouldDismissView = true
             }
-            self.shouldDismissView = true
         }.store(in: &cancellables)
         
-        viewModel.onReminderOnOff.sink { isOn in
+        viewModel.onReminderOnOff.sink { [weak self] isOn in
+            guard let self = self else { return }
             guard isOn else {
                 return
             }
-            self.notificationManager.registerPushNotifications() { granted in
-                guard granted else {
-                    viewModel.isReminderOn = false
-                    return
+            self.notificationManager.registerPushNotifications()
+                .done { granted  in
+                    if !granted {
+                        viewModel.isReminderOn = false
+                    }
                 }
-            }
+                .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
         
         return viewModel
     }
+}
+
+
+private extension CreateChecklistViewModel {
     
-    private func addNewItem(name: String? = nil) {
+    func addNewItem(name: String? = nil) {
         let id = UUID().uuidString
         let item = CreateChecklistItemVO(
             id: id,
@@ -164,10 +144,56 @@ class CreateChecklistViewModel: ObservableObject {
         self.objectWillChange.send()
     }
     
-    private func setupTemplate(_ template: TemplateDataModel) {
+    func setupTemplate(_ template: TemplateDataModel) {
         checklistName = template.title
         template.items.forEach { self.addNewItem(name: $0.name) }
         addNewItem()
         shouldCreateChecklistName = false
+    }
+    
+    func getChecklistFromUI(reminderDate: Date?) -> ChecklistDataModel {
+        ChecklistDataModel(
+            id: UUID().uuidString,
+            title: self.checklistName,
+            description: self.checklistDescription,
+            updateDate: Date(),
+            reminderDate: reminderDate,
+            items: self.items.compactMap {
+                guard let name = self.idToName[$0.id] else {
+                    return nil
+                }
+                return ChecklistItemDataModel(
+                    id: UUID().uuidString,
+                    name: name,
+                    isDone: false,
+                    updateDate: Date()
+                )
+            }
+        )
+    }
+    
+    func createChecklist(_ checklist: ChecklistDataModel, shouldCreateTemplate: Bool) {
+        self.createChecklistSubject.send(checklist)
+        guard shouldCreateTemplate else {
+            return
+        }
+        self.createTemplateSubject.send(
+            .init(
+                id: UUID().uuidString,
+                title: self.checklistName,
+                description: self.checklistDescription,
+                items: self.items.compactMap {
+                    guard let name = self.idToName[$0.id] else {
+                        return nil
+                    }
+                    return ChecklistItemDataModel(
+                        id: UUID().uuidString,
+                        name: name,
+                        isDone: false,
+                        updateDate: Date()
+                    )
+                }
+            )
+        )
     }
 }

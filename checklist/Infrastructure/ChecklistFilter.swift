@@ -50,7 +50,7 @@ class ChecklistFilterImpl: ChecklistFilter {
             let reminderOnly = filterReminders(checklists: checklists)
             return orderByLatest(checklists: reminderOnly)
         case .archive:
-            let archivedOnly = filterReminders(checklists: checklists)
+            let archivedOnly = filterArchived(checklists: checklists)
             return orderByLatest(checklists: archivedOnly)
         }
     }

@@ -21,6 +21,9 @@
 		DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */; };
 		DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A42531B9BA0032779C /* AppCenterCrashes */; };
 		DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A62531B9BA0032779C /* AppCenterAnalytics */; };
+		DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91B82532FD420032779C /* ObjcExceptionBridging */; };
+		DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91BA2532FD420032779C /* XCGLogger */; };
+		DD2D91C02532FDF80032779C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91BF2532FDF80032779C /* Logger.swift */; };
 		DD39A4272529B810003E73EA /* ChecklistDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */; };
 		DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */; };
 		DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */; };
@@ -140,6 +143,7 @@
 		DD2D91912530EB430032779C /* ChecklistFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistFilter.swift; sourceTree = "<group>"; };
 		DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitializeAppDataSource.swift; sourceTree = "<group>"; };
 		DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
+		DD2D91BF2532FDF80032779C /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailViewModel.swift; sourceTree = "<group>"; };
 		DD39A4292529B9B8003E73EA /* ChecklistDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistDetailView.swift; sourceTree = "<group>"; };
 		DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistItemViewModel.swift; sourceTree = "<group>"; };
@@ -225,8 +229,10 @@
 			files = (
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
+				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
 				DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */,
 				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
+				DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +418,7 @@
 				DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */,
 				DDB298DC2511623500F326D2 /* ViewVisibility.swift */,
 				DD2D91912530EB430032779C /* ChecklistFilter.swift */,
+				DD2D91BF2532FDF80032779C /* Logger.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -622,6 +629,8 @@
 				DD74DA6925213FA3004587FC /* PromiseKit */,
 				DD2D91A42531B9BA0032779C /* AppCenterCrashes */,
 				DD2D91A62531B9BA0032779C /* AppCenterAnalytics */,
+				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
+				DD2D91BA2532FD420032779C /* XCGLogger */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -697,6 +706,7 @@
 				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
 				DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
 				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
+				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -805,6 +815,7 @@
 				DD7AF2AE24EDB7280051CD16 /* NameYourChecklistView.swift in Sources */,
 				DD7AF2B024EDB8110051CD16 /* CreateChecklistView.swift in Sources */,
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
+				DD2D91C02532FDF80032779C /* Logger.swift in Sources */,
 				DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */,
 				DD2D91792530A9E90032779C /* FilterViewModel.swift in Sources */,
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
@@ -1160,6 +1171,14 @@
 				minimumVersion = 3.3.4;
 			};
 		};
+		DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/DaveWoodCom/XCGLogger";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.1;
+			};
+		};
 		DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Swinject/SwinjectAutoregistration";
@@ -1188,6 +1207,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */;
 			productName = AppCenterAnalytics;
+		};
+		DD2D91B82532FD420032779C /* ObjcExceptionBridging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = ObjcExceptionBridging;
+		};
+		DD2D91BA2532FD420032779C /* XCGLogger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */;
+			productName = XCGLogger;
 		};
 		DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */ = {
 			isa = XCSwiftPackageProductDependency;

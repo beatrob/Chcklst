@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Checklist" representedClassName="ChecklistMO" syncable="YES">
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
         <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String" defaultValueString=""/>
+        <attribute name="reminderDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="updateDate" attributeType="Date" defaultDateTimeInterval="622938540" usesScalarValueType="NO"/>
     </entity>
@@ -14,7 +15,7 @@
         <attribute name="title" attributeType="String" defaultValueString=""/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="Checklist" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="Template" positionX="-63" positionY="18" width="128" height="103"/>
     </elements>
 </model>

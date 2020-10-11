@@ -23,6 +23,7 @@ protocol ChecklistDataSource {
         for checkList: ChecklistDataModel,
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     )
+    func getChecklist(withId id: String) -> ChecklistDataModel?
 }
 
 
@@ -47,13 +48,13 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         createNewChecklist.sink { checklist in
             coreDataManager.save(checklist: checklist)
             .done { self._checklists.value.append(checklist) }
-            .catch { print($0.localizedDescription) }
+            .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
         
         deleteCheckList.sink { checklist in
             coreDataManager.delete(checklist: checklist)
             .done { self._checklists.value.removeAll { $0.id == checklist.id } }
-            .catch { print($0.localizedDescription) }
+            .catch { log(error: $0.localizedDescription) }
         }.store(in: &cancellables)
     }
     
@@ -85,5 +86,9 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>{
         coreDataManager.fetchAllChecklists()
             .get { self._checklists.value = $0 }
+    }
+    
+    func getChecklist(withId id: String) -> ChecklistDataModel? {
+        _checklists.value.first { $0.id == id }
     }
 }
