@@ -13,13 +13,20 @@ typealias ChecklistViewModelInput = CreateUpdateChecklistViewModel.Input
 
 extension CreateUpdateChecklistViewModel {
     
-    enum Input {
-        case updateChecklist(checklist: ChecklistDataModel)
-        case createFromTemplate(template: TemplateDataModel)
-        case none
+    struct Input {
+
+        enum Action {
+            case updateChecklist(checklist: ChecklistDataModel)
+            case createFromTemplate(template: TemplateDataModel)
+            case createNew
+        }
+        
+        let createChecklistSubject: ChecklistPassthroughSubject
+        let createTemplateSubject: TemplatePassthroughSubject
+        let action: Action
         
         var isUpdate: Bool {
-            switch self {
+            switch action {
             case .updateChecklist:
                 return true
             default:
@@ -28,7 +35,7 @@ extension CreateUpdateChecklistViewModel {
         }
         
         var isCreateFromTemplate: Bool {
-            switch self {
+            switch action {
             case .createFromTemplate:
                 return true
             default:
@@ -37,7 +44,7 @@ extension CreateUpdateChecklistViewModel {
         }
         
         var template: TemplateDataModel? {
-            switch self {
+            switch action {
             case .createFromTemplate(let template):
                 return template
             default:
@@ -46,7 +53,7 @@ extension CreateUpdateChecklistViewModel {
         }
         
         var checklistToUpdate: ChecklistDataModel? {
-            switch self {
+            switch action {
             case .updateChecklist(let checklist):
                 return checklist
             default:

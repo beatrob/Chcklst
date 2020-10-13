@@ -71,10 +71,12 @@ class NavigationHelper: ObservableObject {
     ) {
         let viewModel = AppContext.resolver.resolve(
             CreateUpdateChecklistViewModel.self,
-            arguments:
-                createChecklist,
-                createTemplate,
-                ChecklistViewModelInput.createFromTemplate(template: template)
+            argument:
+                ChecklistViewModelInput(
+                    createChecklistSubject: createChecklist,
+                    createTemplateSubject: createTemplate,
+                    action: .createFromTemplate(template: template)
+                )
         )!
         selectTemplateDestination = AnyView(CreateUpdateChecklistView(viewModel: viewModel))
         selectTemplateSelection = .createChecklist

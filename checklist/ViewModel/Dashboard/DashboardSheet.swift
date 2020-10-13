@@ -26,10 +26,12 @@ enum DashboardSheet {
                 CreateUpdateChecklistView(
                     viewModel: AppContext.resolver.resolve(
                         CreateUpdateChecklistViewModel.self,
-                        arguments:
-                            createNewChecklist,
-                            createNewTemplate,
-                            ChecklistViewModelInput.none
+                        argument:
+                            ChecklistViewModelInput(
+                                createChecklistSubject: createNewChecklist,
+                                createTemplateSubject: createNewTemplate,
+                                action: .createNew
+                            )
                         )!
                 )
             )

@@ -34,10 +34,8 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     let onAddItemsNext: EmptySubject = .init()
     let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never> = .init()
     
-    let createChecklistSubject: ChecklistPassthroughSubject
-    let createTemplateSubject: TemplatePassthroughSubject
-    let notificationManager: NotificationManager
     let input: Input
+    let notificationManager: NotificationManager
     
     var shouldDisplayNextAfterItems: Bool {
         !checklistName.isEmpty &&
@@ -48,15 +46,11 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     var idToName = [String: String]()
     
     init(
-        createChecklistSubject: ChecklistPassthroughSubject,
-        createTemplateSubject: TemplatePassthroughSubject,
-        notificationManager: NotificationManager,
-        input: Input
+        input: Input,
+        notificationManager: NotificationManager
     ) {
-        self.notificationManager = notificationManager
-        self.createChecklistSubject = createChecklistSubject
-        self.createTemplateSubject = createTemplateSubject
         self.input = input
+        self.notificationManager = notificationManager
         
         if let template = input.template {
             setupTemplate(template)
@@ -171,11 +165,11 @@ private extension CreateUpdateChecklistViewModel {
     }
     
     func createChecklist(_ checklist: ChecklistDataModel, shouldCreateTemplate: Bool) {
-        self.createChecklistSubject.send(checklist)
+        self.input.createChecklistSubject.send(checklist)
         guard shouldCreateTemplate else {
             return
         }
-        self.createTemplateSubject.send(
+        self.input.createTemplateSubject.send(
             .init(
                 id: UUID().uuidString,
                 title: self.checklistName,
