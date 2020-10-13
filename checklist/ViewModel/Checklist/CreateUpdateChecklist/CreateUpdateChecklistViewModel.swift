@@ -16,11 +16,7 @@ struct CreateChecklistItemVO {
     @Binding var name: String
 }
 
-class CreateChecklistViewModel: ObservableObject {
-    
-    enum Constants {
-        static let fromTemplate = "fromTemplate"
-    }
+class CreateUpdateChecklistViewModel: ObservableObject {
     
     @Published var shouldCreateChecklistName: Bool = true {
         didSet {
@@ -41,6 +37,7 @@ class CreateChecklistViewModel: ObservableObject {
     let createChecklistSubject: ChecklistPassthroughSubject
     let createTemplateSubject: TemplatePassthroughSubject
     let notificationManager: NotificationManager
+    let input: Input
     
     var shouldDisplayNextAfterItems: Bool {
         !checklistName.isEmpty &&
@@ -53,14 +50,15 @@ class CreateChecklistViewModel: ObservableObject {
     init(
         createChecklistSubject: ChecklistPassthroughSubject,
         createTemplateSubject: TemplatePassthroughSubject,
-        template: TemplateDataModel? = nil,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        input: Input
     ) {
         self.notificationManager = notificationManager
         self.createChecklistSubject = createChecklistSubject
         self.createTemplateSubject = createTemplateSubject
+        self.input = input
         
-        if let template = template {
+        if let template = input.template {
             setupTemplate(template)
         }
         
@@ -121,7 +119,7 @@ class CreateChecklistViewModel: ObservableObject {
 }
 
 
-private extension CreateChecklistViewModel {
+private extension CreateUpdateChecklistViewModel {
     
     func addNewItem(name: String? = nil) {
         let id = UUID().uuidString

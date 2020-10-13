@@ -8,10 +8,10 @@
 
 import SwiftUI
 
-struct CreateChecklistView: View {
+struct CreateUpdateChecklistView: View {
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: CreateChecklistViewModel
+    @ObservedObject var viewModel: CreateUpdateChecklistViewModel
     
     var body: some View {
         if viewModel.shouldDismissView {
@@ -51,11 +51,12 @@ struct CreateChecklistView: View {
 
 struct CreateChecklistView_Previews: PreviewProvider {
     static var previews: some View {
-        CreateChecklistView(
+        CreateUpdateChecklistView(
             viewModel: .init(
                 createChecklistSubject: .init(),
                 createTemplateSubject: .init(),
-                notificationManager: NotificationManager()
+                notificationManager: NotificationManager(),
+                input: .none
             )
         )
     }
