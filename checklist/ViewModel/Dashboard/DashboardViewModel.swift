@@ -17,6 +17,7 @@ class DashboardViewModel: ObservableObject {
         let title: String
         let counter: String
         let data: ChecklistDataModel
+        let isReminderSet: Bool
         var firstUndoneItem: ChecklistItemDataModel?
     }
     
@@ -102,11 +103,18 @@ class DashboardViewModel: ObservableObject {
             })
         }.store(in: &cancellables)
         
+        let createChecklist = ChecklistPassthroughSubject()
+        createChecklist.sink { checklist in
+            checklistDataSource.createChecklist(checklist)
+            .done { Logger.log.debug("Checklist created \(checklist)")}
+            .catch { $0.log(message: "Create checklist failed") }
+        }.store(in: &cancellables)
+        
         onCreateNewChecklist.sink { [weak self] in
             self?.actionSheet = .createChecklist(
                 onNewChecklist: {
                     self?.sheet = .createChecklist(
-                        createNewChecklist: checklistDataSource.createNewChecklist,
+                        createNewChecklist: createChecklist,
                         createNewTemplate: templateDataSource.createNewTemplate
                     )
             },
@@ -133,7 +141,9 @@ class DashboardViewModel: ObservableObject {
                 },
                 onDelete: { [weak self] in
                     self?.alert = .confirmDeleteChecklist(onDelete: {
-                        checklistDataSource.deleteCheckList.send(checklist.data)
+                        checklistDataSource.deleteChecklist(checklist.data)
+                        .done { Logger.log.debug("Checklist deleted with id: \(checklist.data.id)") }
+                        .catch { _ in Logger.log.error("Delete checklist failed") }
                     })
                 }
             )
@@ -151,6 +161,7 @@ class DashboardViewModel: ObservableObject {
                 title: $0.title,
                 counter: "\($0.items.filter(\.isDone).count)/\($0.items.count)",
                 data: $0,
+                isReminderSet: $0.isValidReminderSet,
                 firstUndoneItem: self.getFirstUndoneItem(form: $0.items)
             )
         }

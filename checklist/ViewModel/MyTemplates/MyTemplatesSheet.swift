@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 enum MyTemaplatesSheet {
-    case createChecklist(dataSource: ChecklistDataSource, template: TemplateDataModel)
+    case createChecklist(createChecklist: ChecklistPassthroughSubject, template: TemplateDataModel)
     case editTemplate(template: TemplateDataModel, update: TemplatePassthroughSubject)
     case none
     
@@ -23,11 +23,11 @@ enum MyTemaplatesSheet {
     
     var view: AnyView {
         switch self {
-        case .createChecklist(let dataSource, let template):
+        case .createChecklist(let createChecklist, let template):
             let viewModel = AppContext.resolver.resolve(
                 CreateChecklistViewModel.self,
                 name: CreateChecklistViewModel.Constants.fromTemplate,
-                arguments: dataSource.createNewChecklist, TemplatePassthroughSubject(), template
+                arguments: createChecklist, TemplatePassthroughSubject(), template
             )!
             return AnyView(CreateChecklistView(viewModel: viewModel))
         case .editTemplate(let template, let update):

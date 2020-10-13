@@ -63,13 +63,20 @@ class MyTemplatesViewModel: ObservableObject {
             )
         }.store(in: &cancellables)
         
+        let createChecklist = ChecklistPassthroughSubject()
+        createChecklist.sink { checklist in
+            checklistDataSource.createChecklist(checklist)
+            .done { Logger.log.debug("Create checklist success \(checklist)") }
+            .catch { $0.log(message: "Create checklist failed") }
+        }.store(in: &cancellables)
+        
         onTemplateTapped.sink { [weak self] template in
             self?.actionSheet = .templateActions(
                 template: template,
                 onCreateChecklist: {
                     guard let self = self else { return }
                     self.sheet = .createChecklist(
-                        dataSource: checklistDataSource,
+                        createChecklist: createChecklist,
                         template: template
                     )
                 },

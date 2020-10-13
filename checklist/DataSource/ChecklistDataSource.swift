@@ -13,8 +13,6 @@ import PromiseKit
 
 protocol ChecklistDataSource {
     
-    var createNewChecklist: ChecklistPassthroughSubject { get }
-    var deleteCheckList: ChecklistPassthroughSubject { get }
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
     var selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> { get }
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
@@ -24,6 +22,10 @@ protocol ChecklistDataSource {
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     )
     func getChecklist(withId id: String) -> ChecklistDataModel?
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
+    func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
+    func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
+    func deleteExpiredNotificationDates() -> Promise<Void>
 }
 
 
@@ -38,24 +40,10 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     }
     let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     
-    let createNewChecklist: ChecklistPassthroughSubject = .init()
-    let deleteCheckList: ChecklistPassthroughSubject = .init()
     let coreDataManager: CoreDataChecklistManager
     
     init(coreDataManager: CoreDataChecklistManager) {
         self.coreDataManager = coreDataManager
-        
-        createNewChecklist.sink { checklist in
-            coreDataManager.save(checklist: checklist)
-            .done { self._checklists.value.append(checklist) }
-            .catch { log(error: $0.localizedDescription) }
-        }.store(in: &cancellables)
-        
-        deleteCheckList.sink { checklist in
-            coreDataManager.delete(checklist: checklist)
-            .done { self._checklists.value.removeAll { $0.id == checklist.id } }
-            .catch { log(error: $0.localizedDescription) }
-        }.store(in: &cancellables)
     }
     
     func updateItem(
@@ -90,5 +78,45 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     
     func getChecklist(withId id: String) -> ChecklistDataModel? {
         _checklists.value.first { $0.id == id }
+    }
+    
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        coreDataManager.save(checklist: checklist)
+        .get { self._checklists.value.append(checklist) }
+    }
+    
+    func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        coreDataManager.delete(checklist: checklist)
+        .get { self._checklists.value.removeAll { $0.id == checklist.id } }
+    }
+    
+    func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        coreDataManager.update(checklist: checklist)
+        .get {
+            if !self._checklists.value.updateItem(checklist) {
+                throw DataSourceError.checklistUpdateInMemoryFailed
+            }
+        }
+    }
+    
+    func deleteExpiredNotificationDates() -> Promise<Void> {
+        let now =  Date()
+        var toUpdate = _checklists.value.filter {
+            if let reminder = $0.reminderDate, reminder <= now {
+                return true
+            }
+            return false
+        }
+        guard !toUpdate.isEmpty else {
+            return .value
+        }
+        for i in 0 ..< toUpdate.count {
+            toUpdate[i].removeReminderDate()
+        }
+        return when(
+            resolved: toUpdate.map {
+                updateChecklist($0)
+            }
+        ).asVoid()
     }
 }

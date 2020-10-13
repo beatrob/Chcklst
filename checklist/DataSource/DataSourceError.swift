@@ -11,6 +11,7 @@ import Foundation
 
 enum DataSourceError: Error {
     case checkListNotFound
+    case checklistUpdateInMemoryFailed
     case templateNotFound
     case checkListItemNotFound
     case persitentStorageError(error: Error)

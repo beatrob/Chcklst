@@ -27,10 +27,17 @@ class SelectTemplateViewModel: ObservableObject {
             self?.templates = templates
         }.store(in: &cancellables)
         
+        let createChecklist = ChecklistPassthroughSubject()
+        createChecklist.sink { checklist in
+            checklistDataSource.createChecklist(checklist)
+            .done { Logger.log.debug("Chekclist created \(checklist)")}
+            .catch { $0.log(message: "Failed to create checklist") }
+        }.store(in: &cancellables)
+        
         onTemplateTapped.sink { template in
             navigationHelper.navigateToCreateChecklist(
                 with: template,
-                createChecklist: checklistDataSource.createNewChecklist,
+                createChecklist: createChecklist,
                 createTemplate: templateDataSource.createNewTemplate
             )
         }.store(in: &cancellables)

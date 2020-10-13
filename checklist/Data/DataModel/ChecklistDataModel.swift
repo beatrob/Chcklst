@@ -22,6 +22,17 @@ struct ChecklistDataModel: Equatable {
     }
     var isArchived: Bool = false
     
+    var isValidReminderSet: Bool {
+        guard let reminderDate = reminderDate else {
+            return false
+        }
+        return reminderDate >= Date()
+    }
+    
+    mutating func removeReminderDate() {
+        reminderDate = nil
+    }
+    
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
     }

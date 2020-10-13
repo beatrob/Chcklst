@@ -29,6 +29,7 @@ class InitializeAppViewModel: ObservableObject {
             .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { templateDataSource.loadAllTemplates().asVoid() }
+            .then { checklistDataSource.deleteExpiredNotificationDates() }
             .then { after(seconds: 1) }
             .done { self.initializeDidFinish.send() }
             .ensure { self.isLoading = false }

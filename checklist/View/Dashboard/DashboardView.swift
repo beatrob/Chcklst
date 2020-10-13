@@ -65,6 +65,9 @@ struct DashboardView: View {
                             HStack {
                                 Text(checklist.title).font(.title)
                                 Spacer()
+                                if checklist.isReminderSet {
+                                    FilterItemData.reminder.image
+                                }
                                 Text(checklist.counter).foregroundColor(.gray)
                             }
                             checklist.firstUndoneItem.map { first in

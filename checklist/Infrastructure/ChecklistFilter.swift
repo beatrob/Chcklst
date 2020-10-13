@@ -72,7 +72,7 @@ class ChecklistFilterImpl: ChecklistFilter {
     }
     
     private func filterReminders(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
-        checklists.filter { $0.reminderDate != nil }
+        checklists.filter { $0.isValidReminderSet }
     }
     
     private func filterArchived(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {

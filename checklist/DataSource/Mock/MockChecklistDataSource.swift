@@ -58,8 +58,6 @@ class MockChecklistDataSource: ChecklistDataSource {
         )
     ])
     
-    let createNewChecklist: ChecklistPassthroughSubject = .init()
-    let deleteCheckList: ChecklistPassthroughSubject = .init()
     let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     var cancellables =  Set<AnyCancellable>()
     
@@ -73,16 +71,6 @@ class MockChecklistDataSource: ChecklistDataSource {
             guard var checklist = checklist else { return }
             checklist.updateDate = Date()
             _ = self._checkLists.value.updateItem(checklist)
-        }.store(in: &cancellables)
-        
-        createNewChecklist.sink { [weak self] checklist in
-            guard let self = self else { return }
-            self._checkLists.value.insert(checklist, at: 0)
-        }.store(in: &cancellables)
-        
-        deleteCheckList.sink { [weak self] checklist in
-            guard let self = self else { return }
-            self._checkLists.value.removeAll { $0.id == checklist.id }
         }.store(in: &cancellables)
     }
     
@@ -107,5 +95,23 @@ class MockChecklistDataSource: ChecklistDataSource {
     
     func getChecklist(withId id: String) -> ChecklistDataModel? {
         _checkLists.value.first { $0.id == id }
+    }
+    
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        _checkLists.value.insert(checklist, at: 0)
+        return .value
+    }
+    
+    func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        _checkLists.value.removeAll { $0.id == checklist.id }
+        return .value
+    }
+    
+    func deleteExpiredNotificationDates() -> Promise<Void> {
+        .value
+    }
+    
+    func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        .value
     }
 }
