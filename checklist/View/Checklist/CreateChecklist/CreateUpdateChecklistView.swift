@@ -44,7 +44,7 @@ struct CreateUpdateChecklistView: View {
                 }
             }
             .navigationBarTitle("Create checklist")
-        }
+        }.onTapGesture { self.hideKeyboard() }
     }
     
 }

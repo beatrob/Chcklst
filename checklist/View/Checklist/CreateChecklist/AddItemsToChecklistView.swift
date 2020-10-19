@@ -13,6 +13,7 @@ struct AddItemsToChecklistView: View {
     
     @Binding var shouldDisplayAddItems: Bool
     @State var deletableItemIDs: Set<String> = .init()
+    
     var shouldDisplayNextButton: Bool
     var items: [CreateChecklistItemVO]
     let onNext: EmptySubject
@@ -24,14 +25,7 @@ struct AddItemsToChecklistView: View {
                 VStack {
                     ForEach(items, id: \.id) { item in
                         HStack {
-                            Image(systemName: "circle")
-                            TextField("TODO", text: item.$name, onEditingChanged: { _ in
-                                if !item.name.isEmpty {
-                                    self.deletableItemIDs.insert(item.id)
-                                } else {
-                                    self.deletableItemIDs.remove(item.id)
-                                }
-                            })
+                            ChecklistItemView(viewModel: item.viewModel)
                             if self.deletableItemIDs.contains(item.id) {
                                 Image(systemName: "xmark")
                                     .onTapGesture {
@@ -62,9 +56,13 @@ struct AddItemsToChecklistView_Previews: PreviewProvider {
         AddItemsToChecklistView(
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
             shouldDisplayNextButton: true,
-            items: [.init(
-                id: "1",
-                name: .init(get: { "Item 1" }, set: { _ in }))],
+            items: [
+                .init(
+                    id: "1",
+                    viewModel: .init(name: "Something", isDone: false
+                    )
+                )
+            ],
             onNext: .init(),
             onDeleteItem: .init()
         )

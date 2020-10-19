@@ -35,7 +35,7 @@ struct FinalizeChecklistView: View {
             HStack {
                 Spacer()
                 Button("Create") {
-                    self.viewModel.onCreate.send()
+                    self.viewModel.onActionButton.send()
                 }.padding()
                 Spacer()
             }

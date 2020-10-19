@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD07A36F253BA62000CBE54C /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD07A36E253BA62000CBE54C /* MultilineTextView.swift */; };
+		DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08097225377D3F00F075D4 /* View+Extension.swift */; };
 		DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD25877D25067F2B00A503C9 /* MyTemplatesAlert.swift */; };
 		DD2BD1AA24E937B0004B2060 /* ChecklistItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */; };
 		DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2BD1AE24E96A60004B2060 /* Array+Extension.swift */; };
@@ -74,6 +76,7 @@
 		DD7AF2B024EDB8110051CD16 /* CreateUpdateChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AF24EDB8110051CD16 /* CreateUpdateChecklistView.swift */; };
 		DD7AF2B224EDC9C60051CD16 /* AddItemsToChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2B124EDC9C60051CD16 /* AddItemsToChecklistView.swift */; };
 		DD7AF2B424EDCED90051CD16 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2B324EDCED90051CD16 /* UIApplication+Extension.swift */; };
+		DD84DCAC253E1C5E00A39DBB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD84DCAB253E1C5E00A39DBB /* SnapKit */; };
 		DD8C44F92536074800F470C2 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C44F82536074800F470C2 /* Error+Extension.swift */; };
 		DD8C4504253631E700F470C2 /* CreateUpdateChecklistViewMode+Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C4503253631E700F470C2 /* CreateUpdateChecklistViewMode+Input.swift */; };
 		DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */; };
@@ -133,6 +136,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DD07A36E253BA62000CBE54C /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
+		DD08097225377D3F00F075D4 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		DD25877D25067F2B00A503C9 /* MyTemplatesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesAlert.swift; sourceTree = "<group>"; };
 		DD2BD1A924E937B0004B2060 /* ChecklistItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemView.swift; sourceTree = "<group>"; };
 		DD2BD1AE24E96A60004B2060 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
@@ -234,6 +239,7 @@
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
+				DD84DCAC253E1C5E00A39DBB /* SnapKit in Frameworks */,
 				DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */,
 				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
 				DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */,
@@ -268,6 +274,7 @@
 				DDB298DA25114F4A00F326D2 /* String+Extension.swift */,
 				DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */,
 				DD8C44F82536074800F470C2 /* Error+Extension.swift */,
+				DD08097225377D3F00F075D4 /* View+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -398,6 +405,7 @@
 				DD90241D24FB94E10084CDDC /* MyTemplates */,
 				DD727A4824F271E1004089B6 /* SettingsView.swift */,
 				DD74DA6F2521E2AA004587FC /* InitializeAppView.swift */,
+				DD07A36E253BA62000CBE54C /* MultilineTextView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -637,6 +645,7 @@
 				DD2D91A62531B9BA0032779C /* AppCenterAnalytics */,
 				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
 				DD2D91BA2532FD420032779C /* XCGLogger */,
+				DD84DCAB253E1C5E00A39DBB /* SnapKit */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -713,6 +722,7 @@
 				DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
 				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
+				DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -798,6 +808,7 @@
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
 				DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */,
 				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
+				DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */,
 				DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */,
 				DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */,
 				DD39A42A2529B9B8003E73EA /* ChecklistDetailView.swift in Sources */,
@@ -830,6 +841,7 @@
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
 				DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */,
 				DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */,
+				DD07A36F253BA62000CBE54C /* MultilineTextView.swift in Sources */,
 				DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */,
 				DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */,
 				DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */,
@@ -1006,6 +1018,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1028,6 +1041,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1203,6 +1217,14 @@
 				minimumVersion = 6.13.3;
 			};
 		};
+		DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1235,6 +1257,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */;
 			productName = PromiseKit;
+		};
+		DD84DCAB253E1C5E00A39DBB /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

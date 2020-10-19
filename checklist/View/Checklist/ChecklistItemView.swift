@@ -11,6 +11,8 @@ import SwiftUI
 struct ChecklistItemView: View {
     
     @ObservedObject var viewModel: ChecklistItemViewModel
+    @State var isEditing: Bool = false
+    @State var desiredHeight: CGFloat = 40
     
     var body: some View {
         HStack {
@@ -18,8 +20,11 @@ struct ChecklistItemView: View {
                 .onTapGesture {
                     self.viewModel.onCheckMarkTapped.send()
                 }
-            Text(viewModel.name)
-                .strikethrough(viewModel.isDone)
+            ChecklistItemTextView(text: $viewModel.name, isEditing: $isEditing, desiredHeight: $desiredHeight)
+                .frame(height: desiredHeight)
+                .onTapGesture {
+                    self.isEditing.toggle()
+                }
         }
         .gesture(
             DragGesture(minimumDistance: 100.0, coordinateSpace: .local).onEnded { value in
@@ -46,6 +51,6 @@ struct ChecklistItemView_Previews: PreviewProvider {
                     )
                 )
             )
-        )
+        ).previewLayout(.sizeThatFits)
     }
 }

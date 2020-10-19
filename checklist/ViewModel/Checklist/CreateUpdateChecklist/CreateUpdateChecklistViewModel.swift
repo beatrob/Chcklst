@@ -13,7 +13,7 @@ import SwiftUI
 struct CreateChecklistItemVO {
     
     let id: String
-    @Binding var name: String
+    let viewModel: ChecklistItemViewModel
 }
 
 class CreateUpdateChecklistViewModel: ObservableObject {
@@ -75,22 +75,12 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     func getFinalizeCheckistViewModel() -> FinalizeChecklistViewModel {
         let viewModel = AppContext.resolver.resolve(FinalizeChecklistViewModel.self)!
         
-        viewModel.onCreate.sink { [weak self] in
+        viewModel.onActionButton.sink { [weak self] in
             guard let self = self else { return }
-            let checklist = self.getChecklistFromUI(reminderDate: viewModel.isReminderOn ? viewModel.reminderDate : nil)
-            if viewModel.isReminderOn {
-                self.notificationManager.setupReminder(for: checklist)
-                    .done {
-                        self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
-                        self.shouldDismissView = true
-                    }
-                    .catch {
-                        #warning("TODO: Add proper error handling")
-                        log(error: $0.localizedDescription)
-                    }
+            if self.input.isUpdate {
+                
             } else {
-                self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
-                self.shouldDismissView = true
+                self.createChecklist(viewModel: viewModel)
             }
         }.store(in: &cancellables)
         
@@ -115,21 +105,36 @@ class CreateUpdateChecklistViewModel: ObservableObject {
 
 private extension CreateUpdateChecklistViewModel {
     
-    func addNewItem(name: String? = nil) {
+    func createChecklist(viewModel: FinalizeChecklistViewModel) {
+        let checklist = self.getChecklistFromUI(reminderDate: viewModel.isReminderOn ? viewModel.reminderDate : nil)
+        if viewModel.isReminderOn {
+            self.notificationManager.setupReminder(for: checklist)
+                .done {
+                    self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+                    self.shouldDismissView = true
+                }
+                .catch {
+                    log(error: $0.localizedDescription)
+                }
+        } else {
+            self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+            self.shouldDismissView = true
+        }
+    }
+    
+    func updateChecklist(viewModel: FinalizeChecklistViewModel) {
+        guard let checklist = input.checklistToUpdate else {
+            log(error: "Trying to update, but checklist not found")
+            return
+        }
+        
+    }
+    
+    func addNewItem(name: String? = nil, isDone: Bool = false) {
         let id = UUID().uuidString
         let item = CreateChecklistItemVO(
             id: id,
-            name: .init(
-                get: { self.idToName[id] ?? "" },
-                set: { [weak self] in
-                    guard let self = self else { return }
-                    self.idToName[id] = $0
-                    if self.items.last?.id == id && !$0.isEmpty {
-                        self.addNewItem()
-                    }
-                    self.objectWillChange.send()
-                }
-            )
+            viewModel: .init(name: name, isDone: isDone)
         )
         self.idToName[id] = name
         self.items.append(item)
@@ -143,9 +148,9 @@ private extension CreateUpdateChecklistViewModel {
         shouldCreateChecklistName = false
     }
     
-    func getChecklistFromUI(reminderDate: Date?) -> ChecklistDataModel {
+    func getChecklistFromUI(reminderDate: Date?, id: String? = nil) -> ChecklistDataModel {
         ChecklistDataModel(
-            id: UUID().uuidString,
+            id: id ?? UUID().uuidString,
             title: self.checklistName,
             description: self.checklistDescription,
             updateDate: Date(),
