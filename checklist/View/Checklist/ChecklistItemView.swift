@@ -20,7 +20,13 @@ struct ChecklistItemView: View {
                 .onTapGesture {
                     self.viewModel.onCheckMarkTapped.send()
                 }
-            ChecklistItemTextView(text: $viewModel.name, isEditing: $isEditing, desiredHeight: $desiredHeight)
+            MultilineTextView(
+                text: $viewModel.name,
+                placeholder: "Add task",
+                font: .checklistItem,
+                isEditing: $isEditing,
+                desiredHeight: $desiredHeight
+            )
                 .frame(height: desiredHeight)
                 .onTapGesture {
                     self.isEditing.toggle()

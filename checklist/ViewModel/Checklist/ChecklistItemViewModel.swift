@@ -11,30 +11,31 @@ import Combine
 import SwiftUI
 
 
-class ChecklistItemViewModel: ObservableObject {
+class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     
-    @Published var name: String = ""
+    let id: String
+    @Published var name: String = "" {
+        didSet {
+            onNameChanged.send(name)
+        }
+    }
     @Published var isDone: Bool = false
-    @Published var isEditModeActive: Bool = false
     
     let onSwipeRight: PassthroughSubject<Void, Never> = .init()
     let onSwipeLeft: PassthroughSubject<Void, Never> = .init()
     let onCheckMarkTapped: PassthroughSubject<Void, Never> = .init()
-    let onTextLongPressed = EmptySubject()
-    let onTextEditorLongPressed = EmptySubject()
+    let onNameChanged: PassthroughSubject<String, Never> = .init()
     
     var cancellables =  Set<AnyCancellable>()
     
-    init(name: String?, isDone: Bool) {
-        self.name = name ?? "TODO "
+    init(id: String, name: String?, isDone: Bool) {
+        self.id = id
+        self.name = name ?? ""
         self.isDone = isDone
-        self.isEditModeActive = name == nil
-        
-        setupObservers()
     }
     
     init(item: CurrentValueSubject<ChecklistItemDataModel, Never>) {
-        
+        self.id = item.value.id
         item.sink {
             self.name = $0.name
             self.isDone = $0.isDone
@@ -51,17 +52,9 @@ class ChecklistItemViewModel: ObservableObject {
         onCheckMarkTapped.sink {
             item.value.toggleDone()
         }.store(in: &cancellables)
-        
-        setupObservers()
     }
     
-    func setupObservers() {
-        onTextLongPressed.sink { [weak self] in
-            self?.isEditModeActive = true
-        }.store(in: &cancellables)
-        
-        onTextEditorLongPressed.sink { [weak self] in
-            self?.isEditModeActive = false
-        }.store(in: &cancellables)
+    static func == (lhs: ChecklistItemViewModel, rhs: ChecklistItemViewModel) -> Bool {
+        lhs.id == rhs.id
     }
 }

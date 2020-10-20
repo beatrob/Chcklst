@@ -10,11 +10,6 @@ import Foundation
 import Combine
 import SwiftUI
 
-struct CreateChecklistItemVO {
-    
-    let id: String
-    let viewModel: ChecklistItemViewModel
-}
 
 class CreateUpdateChecklistViewModel: ObservableObject {
     
@@ -28,22 +23,21 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     @Published var checklistDescription: String?
     @Published var shouldDismissView: Bool = false
     @Published var shouldDisplayFinalizeView: Bool = false
-    var items: [CreateChecklistItemVO] = []
+    var items: [ChecklistItemViewModel] = []
     
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
-    let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never> = .init()
+    let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
     
     let input: Input
     let notificationManager: NotificationManager
     
     var shouldDisplayNextAfterItems: Bool {
         !checklistName.isEmpty &&
-            !idToName.values.filter { !$0.isEmpty }.isEmpty &&
+            !items.filter { !$0.name.isEmpty }.isEmpty &&
             !shouldDisplayFinalizeView
     }
     var cancellables =  Set<AnyCancellable>()
-    var idToName = [String: String]()
     
     init(
         input: Input,
@@ -57,7 +51,7 @@ class CreateUpdateChecklistViewModel: ObservableObject {
         }
         
         onCreateTitleNext.sink { [weak self] in
-            self?.addNewItem()
+            self?.setupItemsAndFinalizeView()
             self?.shouldCreateChecklistName = false
         }.store(in: &cancellables)
         
@@ -66,7 +60,6 @@ class CreateUpdateChecklistViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onDeleteItem.sink { [weak self] item in
-            self?.idToName[item.id] = nil
             self?.items.removeAll { $0.id == item.id }
             self?.objectWillChange.send()
         }.store(in: &cancellables)
@@ -130,14 +123,26 @@ private extension CreateUpdateChecklistViewModel {
         
     }
     
+    func setupItemsAndFinalizeView() {
+        if items.isEmpty {
+            addNewItem()
+        } else if let lastItem = items.last, !lastItem.name.isEmpty {
+            addNewItem()
+        }
+        let emptyItems = items.filter{ $0.name.isEmpty && $0 != items.last }
+        emptyItems.forEach { emptyItem in
+            items.removeAll { emptyItem == $0 }
+        }
+        shouldDisplayFinalizeView = !items.filter({ !$0.name.isEmpty }).isEmpty
+    }
+    
     func addNewItem(name: String? = nil, isDone: Bool = false) {
         let id = UUID().uuidString
-        let item = CreateChecklistItemVO(
-            id: id,
-            viewModel: .init(name: name, isDone: isDone)
-        )
-        self.idToName[id] = name
-        self.items.append(item)
+        let viewModel = ChecklistItemViewModel(id: id, name: name, isDone: isDone)
+        viewModel.onNameChanged.sink { [weak self] name in
+            self?.setupItemsAndFinalizeView()
+        }.store(in: &cancellables)
+        self.items.append(viewModel)
         self.objectWillChange.send()
     }
     
@@ -156,12 +161,9 @@ private extension CreateUpdateChecklistViewModel {
             updateDate: Date(),
             reminderDate: reminderDate,
             items: self.items.compactMap {
-                guard let name = self.idToName[$0.id] else {
-                    return nil
-                }
                 return ChecklistItemDataModel(
-                    id: UUID().uuidString,
-                    name: name,
+                    id: $0.id,
+                    name: $0.name,
                     isDone: false,
                     updateDate: Date()
                 )
@@ -180,12 +182,9 @@ private extension CreateUpdateChecklistViewModel {
                 title: self.checklistName,
                 description: self.checklistDescription,
                 items: self.items.compactMap {
-                    guard let name = self.idToName[$0.id] else {
-                        return nil
-                    }
                     return ChecklistItemDataModel(
-                        id: UUID().uuidString,
-                        name: name,
+                        id: $0.id,
+                        name: $0.name,
                         isDone: false,
                         updateDate: Date()
                     )

@@ -12,12 +12,13 @@ import SwiftUI
 import SnapKit
 
 
-struct ChecklistItemTextView: UIViewRepresentable {
+struct MultilineTextView: UIViewRepresentable {
     
     class ChecklistItemUITextView: UIView {
          
         private let textView = UITextView()
         private let labelView = UILabel()
+        private let placeholder: String?
         
         var font: UIFont = .systemFont(ofSize: 16) {
             didSet {
@@ -34,13 +35,20 @@ struct ChecklistItemTextView: UIViewRepresentable {
         var text: String? {
             didSet {
                 textView.text = text
-                labelView.text = text
+                if text == nil || (text?.isEmpty ?? true) {
+                    labelView.text = placeholder
+                    labelView.alpha = 0.1
+                } else {
+                    labelView.text = text
+                    labelView.alpha = 1
+                }
             }
         }
         
         required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
         
-        init(isEditing: Bool) {
+        init(isEditing: Bool, placeholder: String?) {
+            self.placeholder = placeholder
             super.init(frame: .zero)
             
             setupSubviewsVisibility()
@@ -112,16 +120,21 @@ struct ChecklistItemTextView: UIViewRepresentable {
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
-            isEditing = false
+            DispatchQueue.main.async {
+                self.isEditing = false
+            }
         }
     }
     
     @Binding var text: String
+    let placeholder: String
+    let font: Font.AppFont
     @Binding var isEditing: Bool
     @Binding var desiredHeight: CGFloat
     
     func makeUIView(context: Context) -> ChecklistItemUITextView {
-        let textView = ChecklistItemUITextView(isEditing: isEditing)
+        let textView = ChecklistItemUITextView(isEditing: isEditing, placeholder: placeholder)
+        textView.font = font.uiFont
         textView.setDelegate(context.coordinator)
         return textView
     }
@@ -149,8 +162,8 @@ struct ChecklistItemTextView: UIViewRepresentable {
     }
 }
 
-struct ChecklistItemTextView_Previews: PreviewProvider {
+struct MultilineTextView_Previews: PreviewProvider {
     static var previews: some View {
-        ChecklistItemTextView(text: .constant("Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer imperdiet lectus quis justo. Vestibulum fermentum tortor id mi. Mauris tincidunt sem sed arcu. Maecenas aliquet accumsan leo. Cras elementum. In enim a arcu imperdiet malesuada. Aliquam ante. Sed convallis magna eu sem. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Curabitur bibendum justo non orci. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Aliquam erat volutpat. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Sed convallis magna eu sem."), isEditing: .constant(false), desiredHeight: .constant(20))
+        MultilineTextView(text: .constant(""), placeholder: "Add task", font: .checklistItem, isEditing: .constant(false), desiredHeight: .constant(20))
     }
 }

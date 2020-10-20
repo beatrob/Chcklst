@@ -15,11 +15,22 @@ struct NameYourChecklistView: View {
     @Binding var shouldCreateChecklistName: Bool
     let onNext: EmptySubject
     @State var textHeight: CGFloat = 150
+    @State var isEditing: Bool = false
+    @State var desiredHeight: CGFloat = 100
     
     var body: some View {
         VStack(alignment: .center) {
-            TextEditor(text: $checklistName)
-            .font(.system(size: 38))
+            MultilineTextView(
+                text: $checklistName,
+                placeholder: "Name your checklist",
+                font: .checklistTitle,
+                isEditing: $isEditing,
+                desiredHeight: $desiredHeight
+            )
+                .frame(height: desiredHeight)
+                .onTapGesture {
+                    self.isEditing.toggle()
+                }
             .padding()
             if shouldCreateChecklistName {
                 Button("Next") {

@@ -15,9 +15,9 @@ struct AddItemsToChecklistView: View {
     @State var deletableItemIDs: Set<String> = .init()
     
     var shouldDisplayNextButton: Bool
-    var items: [CreateChecklistItemVO]
+    var items: [ChecklistItemViewModel]
     let onNext: EmptySubject
-    let onDeleteItem: PassthroughSubject<CreateChecklistItemVO, Never>
+    let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never>
     
     var body: some View {
         VStack {
@@ -25,13 +25,7 @@ struct AddItemsToChecklistView: View {
                 VStack {
                     ForEach(items, id: \.id) { item in
                         HStack {
-                            ChecklistItemView(viewModel: item.viewModel)
-                            if self.deletableItemIDs.contains(item.id) {
-                                Image(systemName: "xmark")
-                                    .onTapGesture {
-                                        withAnimation { self.onDeleteItem.send(item) }
-                                }
-                            }
+                            ChecklistItemView(viewModel: item)
                         }
                     }
                     .padding()
@@ -57,11 +51,7 @@ struct AddItemsToChecklistView_Previews: PreviewProvider {
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
             shouldDisplayNextButton: true,
             items: [
-                .init(
-                    id: "1",
-                    viewModel: .init(name: "Something", isDone: false
-                    )
-                )
+                ChecklistItemViewModel(id: "1", name: "Something", isDone: false)
             ],
             onNext: .init(),
             onDeleteItem: .init()
