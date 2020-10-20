@@ -23,6 +23,7 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     @Published var checklistDescription: String?
     @Published var shouldDismissView: Bool = false
     @Published var shouldDisplayFinalizeView: Bool = false
+    @Published var isEditable: Bool
     var items: [ChecklistItemViewModel] = []
     
     let onCreateTitleNext: EmptySubject = .init()
@@ -31,12 +32,6 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     
     let input: Input
     let notificationManager: NotificationManager
-    
-    var shouldDisplayNextAfterItems: Bool {
-        !checklistName.isEmpty &&
-            !items.filter { !$0.name.isEmpty }.isEmpty &&
-            !shouldDisplayFinalizeView
-    }
     var cancellables =  Set<AnyCancellable>()
     
     init(
@@ -45,9 +40,12 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     ) {
         self.input = input
         self.notificationManager = notificationManager
+        self.isEditable = input.isEditable
         
         if let template = input.template {
             setupTemplate(template)
+        } else if input.isDisplay {
+            setupDisplayChecklist()
         }
         
         onCreateTitleNext.sink { [weak self] in
@@ -98,6 +96,25 @@ class CreateUpdateChecklistViewModel: ObservableObject {
 
 private extension CreateUpdateChecklistViewModel {
     
+    func setupDisplayChecklist() {
+        guard let checklistSubject = input.checklistSubject else {
+            return
+        }
+        shouldCreateChecklistName = false
+        checklistSubject.sink { [weak self] checklist in
+            guard
+                let self = self,
+                let checklist = checklist
+            else {
+                return
+            }
+            self.checklistName = checklist.title
+            checklist.items.forEach { item in
+                self.addNewItem(name: item.name, isDone: item.isDone, isEditable: false)
+            }
+        }.store(in: &cancellables)
+    }
+    
     func createChecklist(viewModel: FinalizeChecklistViewModel) {
         let checklist = self.getChecklistFromUI(reminderDate: viewModel.isReminderOn ? viewModel.reminderDate : nil)
         if viewModel.isReminderOn {
@@ -125,20 +142,20 @@ private extension CreateUpdateChecklistViewModel {
     
     func setupItemsAndFinalizeView() {
         if items.isEmpty {
-            addNewItem()
+            addNewItem(name: nil, isDone: false, isEditable: true)
         } else if let lastItem = items.last, !lastItem.name.isEmpty {
-            addNewItem()
+            addNewItem(name: nil, isDone: false, isEditable: true)
         }
         let emptyItems = items.filter{ $0.name.isEmpty && $0 != items.last }
         emptyItems.forEach { emptyItem in
             items.removeAll { emptyItem == $0 }
         }
-        shouldDisplayFinalizeView = !items.filter({ !$0.name.isEmpty }).isEmpty
+        shouldDisplayFinalizeView = !items.filter({ !$0.name.isEmpty }).isEmpty && isEditable
     }
     
-    func addNewItem(name: String? = nil, isDone: Bool = false) {
+    func addNewItem(name: String?, isDone: Bool, isEditable: Bool) {
         let id = UUID().uuidString
-        let viewModel = ChecklistItemViewModel(id: id, name: name, isDone: isDone)
+        let viewModel = ChecklistItemViewModel(id: id, name: name, isDone: isDone, isEditable: isEditable)
         viewModel.onNameChanged.sink { [weak self] name in
             self?.setupItemsAndFinalizeView()
         }.store(in: &cancellables)
@@ -148,8 +165,8 @@ private extension CreateUpdateChecklistViewModel {
     
     func setupTemplate(_ template: TemplateDataModel) {
         checklistName = template.title
-        template.items.forEach { self.addNewItem(name: $0.name) }
-        addNewItem()
+        template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }
+        addNewItem(name: nil, isDone: false, isEditable: true)
         shouldCreateChecklistName = false
     }
     

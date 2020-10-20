@@ -30,7 +30,8 @@ enum DashboardSheet {
                             ChecklistViewModelInput(
                                 createChecklistSubject: createNewChecklist,
                                 createTemplateSubject: createNewTemplate,
-                                action: .createNew
+                                action: .createNew,
+                                isEditable: true
                             )
                         )!
                 )

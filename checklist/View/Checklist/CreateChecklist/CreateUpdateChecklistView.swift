@@ -19,17 +19,17 @@ struct CreateUpdateChecklistView: View {
         }
         return ScrollView {
             VStack {
-                NameYourChecklistView(
+                ChecklistNameView(
                     checklistName: .init(
                         get: { self.viewModel.checklistName },
                         set: { self.viewModel.checklistName = $0 }
                     ),
                     shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
+                    isEditable: viewModel.isEditable,
                     onNext: viewModel.onCreateTitleNext
                 )
-                AddItemsToChecklistView(
+                ChecklistItemsView(
                     shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
-                    shouldDisplayNextButton: viewModel.shouldDisplayNextAfterItems,
                     items: viewModel.items,
                     onNext: viewModel.onAddItemsNext,
                     onDeleteItem: viewModel.onDeleteItem
@@ -56,7 +56,8 @@ struct CreateChecklistView_Previews: PreviewProvider {
                 input: .init(
                     createChecklistSubject: .init(),
                     createTemplateSubject: .init(),
-                    action: .createNew
+                    action: .createNew,
+                    isEditable: true
                 ),
                 notificationManager: NotificationManager()
             )

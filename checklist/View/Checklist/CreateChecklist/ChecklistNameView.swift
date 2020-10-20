@@ -9,10 +9,11 @@
 import SwiftUI
 import Combine
 
-struct NameYourChecklistView: View {
+struct ChecklistNameView: View {
     
     @Binding var checklistName: String
     @Binding var shouldCreateChecklistName: Bool
+    var isEditable: Bool
     let onNext: EmptySubject
     @State var textHeight: CGFloat = 150
     @State var isEditing: Bool = false
@@ -29,7 +30,9 @@ struct NameYourChecklistView: View {
             )
                 .frame(height: desiredHeight)
                 .onTapGesture {
-                    self.isEditing.toggle()
+                    if self.isEditable {
+                        self.isEditing.toggle()
+                    }
                 }
             .padding()
             if shouldCreateChecklistName {
@@ -47,9 +50,10 @@ struct NameYourChecklistView: View {
 struct NameYourChecklistView_Previews: PreviewProvider {
     @State var name: String
     static var previews: some View {
-        NameYourChecklistView(
-            checklistName: .init(get: { "" }, set: { _ = $0 }),
-            shouldCreateChecklistName: .init(get: { true }, set: { _ = $0 }),
+        ChecklistNameView(
+            checklistName: .constant(""),
+            shouldCreateChecklistName: .constant(true),
+            isEditable: true,
             onNext: .init()
         )
     }

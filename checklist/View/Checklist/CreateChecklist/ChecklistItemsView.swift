@@ -9,12 +9,11 @@
 import SwiftUI
 import Combine
 
-struct AddItemsToChecklistView: View {
+struct ChecklistItemsView: View {
     
     @Binding var shouldDisplayAddItems: Bool
     @State var deletableItemIDs: Set<String> = .init()
     
-    var shouldDisplayNextButton: Bool
     var items: [ChecklistItemViewModel]
     let onNext: EmptySubject
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never>
@@ -24,20 +23,8 @@ struct AddItemsToChecklistView: View {
             if shouldDisplayAddItems {
                 VStack {
                     ForEach(items, id: \.id) { item in
-                        HStack {
-                            ChecklistItemView(viewModel: item)
-                        }
-                    }
-                    .padding()
-                    if shouldDisplayNextButton {
-                        Button.init(action: {
-                            self.onNext.send()
-                        }) {
-                            HStack {
-                                Text("Next")
-                            }
-                        }
-                        .padding()
+                        ChecklistItemView(viewModel: item)
+                            .padding()
                     }
                 }
             }
@@ -47,11 +34,10 @@ struct AddItemsToChecklistView: View {
 
 struct AddItemsToChecklistView_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemsToChecklistView(
+        ChecklistItemsView(
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
-            shouldDisplayNextButton: true,
             items: [
-                ChecklistItemViewModel(id: "1", name: "Something", isDone: false)
+                ChecklistItemViewModel(id: "1", name: "Something", isDone: false, isEditable: true)
             ],
             onNext: .init(),
             onDeleteItem: .init()

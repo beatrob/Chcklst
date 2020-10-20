@@ -11,8 +11,8 @@ import SwiftUI
 struct ChecklistItemView: View {
     
     @ObservedObject var viewModel: ChecklistItemViewModel
-    @State var isEditing: Bool = false
-    @State var desiredHeight: CGFloat = 40
+    @State private var isEditing: Bool = false
+    @State private var desiredHeight: CGFloat = 40
     
     var body: some View {
         HStack {
@@ -29,7 +29,9 @@ struct ChecklistItemView: View {
             )
                 .frame(height: desiredHeight)
                 .onTapGesture {
-                    self.isEditing.toggle()
+                    if self.viewModel.isEditable {
+                        self.isEditing.toggle()
+                    }
                 }
         }
         .gesture(

@@ -16,7 +16,8 @@ extension CreateUpdateChecklistViewModel {
     struct Input {
 
         enum Action {
-            case updateChecklist(checklist: ChecklistDataModel)
+            case display(checklist: ChecklistCurrentValueSubject)
+            case update(checklist: ChecklistDataModel)
             case createFromTemplate(template: TemplateDataModel)
             case createNew
         }
@@ -24,10 +25,20 @@ extension CreateUpdateChecklistViewModel {
         let createChecklistSubject: ChecklistPassthroughSubject
         let createTemplateSubject: TemplatePassthroughSubject
         let action: Action
+        let isEditable: Bool
+        
+        var isDisplay: Bool {
+            switch action {
+            case .display:
+                return true
+            default:
+                return false
+            }
+        }
         
         var isUpdate: Bool {
             switch action {
-            case .updateChecklist:
+            case .update:
                 return true
             default:
                 return false
@@ -54,7 +65,16 @@ extension CreateUpdateChecklistViewModel {
         
         var checklistToUpdate: ChecklistDataModel? {
             switch action {
-            case .updateChecklist(let checklist):
+            case .update(let checklist):
+                return checklist
+            default:
+                return nil
+            }
+        }
+        
+        var checklistSubject: ChecklistCurrentValueSubject? {
+            switch action {
+            case .display(let checklist):
                 return checklist
             default:
                 return nil

@@ -57,10 +57,15 @@ class NavigationHelper: ObservableObject {
     
     func navigateToChecklistDetail(with checklist: ChecklistCurrentValueSubject) {
         let viewModel = AppContext.resolver.resolve(
-            ChecklistDetailViewModel.self,
-            argument: checklist
+            CreateUpdateChecklistViewModel.self,
+            argument: ChecklistViewModelInput(
+                createChecklistSubject: .init(),
+                createTemplateSubject: .init(),
+                action: .display(checklist: checklist),
+                isEditable: false
+            )
         )!
-        dashboardDestination = AnyView(ChecklistDetailView(viewModel: viewModel))
+        dashboardDestination = AnyView(CreateUpdateChecklistView(viewModel: viewModel))
         dashboardSelection = .checklistDetail
     }
     
@@ -75,7 +80,8 @@ class NavigationHelper: ObservableObject {
                 ChecklistViewModelInput(
                     createChecklistSubject: createChecklist,
                     createTemplateSubject: createTemplate,
-                    action: .createFromTemplate(template: template)
+                    action: .createFromTemplate(template: template),
+                    isEditable: true
                 )
         )!
         selectTemplateDestination = AnyView(CreateUpdateChecklistView(viewModel: viewModel))
