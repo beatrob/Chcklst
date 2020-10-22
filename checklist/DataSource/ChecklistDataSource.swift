@@ -16,11 +16,7 @@ protocol ChecklistDataSource {
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
     var selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> { get }
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
-    func updateItem(
-        _ item: ChecklistItemDataModel,
-        for checkList: ChecklistDataModel,
-        _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
-    )
+    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<Void>
     func getChecklist(withId id: String) -> ChecklistDataModel?
     func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
@@ -46,29 +42,22 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         self.coreDataManager = coreDataManager
     }
     
-    func updateItem(
-        _ item: ChecklistItemDataModel,
-        for checkList: ChecklistDataModel,
-        _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
-    ) {
+    func updateItem(_ item: ChecklistItemDataModel,in checkList: ChecklistDataModel) -> Promise<Void> {
         guard let index = _checklists.value.firstIndex(of: checkList) else {
-            completion(.failure(.checkListNotFound))
-            return
+            return .init(error: DataSourceError.checkListNotFound)
         }
         var checklist = _checklists.value[index]
         guard checklist.items.updateItem(item) else {
-            return
+            return .init(error: DataSourceError.checkListItemNotFound)
         }
-        coreDataManager.update(checklist: checklist)
-        .done {
+        return coreDataManager.update(checklist: checklist)
+        .get {
             if self._checklists.value[index].items.updateItem(item) {
                 if self.selectedCheckList.value == checklist {
                     _ = self.selectedCheckList.value?.items.updateItem(item)
                 }
-                completion(.success(()))
             }
         }
-        .catch { completion(.failure(.persitentStorageError(error: $0))) }
     }
     
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>{

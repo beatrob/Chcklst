@@ -45,6 +45,12 @@ struct MultilineTextView: UIViewRepresentable {
             }
         }
         
+        var attributedText: NSAttributedString? {
+            didSet {
+                labelView.attributedText = attributedText
+            }
+        }
+        
         required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
         
         init(isEditing: Bool, placeholder: String?) {
@@ -130,6 +136,7 @@ struct MultilineTextView: UIViewRepresentable {
     let placeholder: String
     let font: Font.AppFont
     @Binding var isEditing: Bool
+    @Binding var isDone: Bool
     @Binding var desiredHeight: CGFloat
     
     func makeUIView(context: Context) -> ChecklistItemUITextView {
@@ -140,7 +147,13 @@ struct MultilineTextView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: ChecklistItemUITextView, context: Context) {
+        uiView.attributedText = nil
         uiView.text = text
+        if isDone {
+            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: text)
+            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+            uiView.attributedText = attributeString
+        }
         uiView.isEditing = isEditing
         if isEditing && !context.coordinator.didBecomeFirstResponder {
             _ = uiView.becomeFirstResponder()
@@ -164,6 +177,13 @@ struct MultilineTextView: UIViewRepresentable {
 
 struct MultilineTextView_Previews: PreviewProvider {
     static var previews: some View {
-        MultilineTextView(text: .constant(""), placeholder: "Add task", font: .checklistItem, isEditing: .constant(false), desiredHeight: .constant(20))
+        MultilineTextView(
+            text: .constant(""),
+            placeholder: "Add task",
+            font: .checklistItem,
+            isEditing: .constant(false),
+            isDone: .constant(false),
+            desiredHeight: .constant(20)
+        )
     }
 }

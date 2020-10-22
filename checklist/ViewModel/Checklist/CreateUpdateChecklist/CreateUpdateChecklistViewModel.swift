@@ -31,14 +31,17 @@ class CreateUpdateChecklistViewModel: ObservableObject {
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
     
     let input: Input
+    let checklistDataSource: ChecklistDataSource
     let notificationManager: NotificationManager
     var cancellables =  Set<AnyCancellable>()
     
     init(
         input: Input,
+        checklistDataSource: ChecklistDataSource,
         notificationManager: NotificationManager
     ) {
         self.input = input
+        self.checklistDataSource = checklistDataSource
         self.notificationManager = notificationManager
         self.isEditable = input.isEditable
         
@@ -109,9 +112,7 @@ private extension CreateUpdateChecklistViewModel {
                 return
             }
             self.checklistName = checklist.title
-            checklist.items.forEach { item in
-                self.addNewItem(name: item.name, isDone: item.isDone, isEditable: false)
-            }
+            checklist.items.forEach { self.addNewItem($0) }
         }.store(in: &cancellables)
     }
     
@@ -163,6 +164,25 @@ private extension CreateUpdateChecklistViewModel {
         self.objectWillChange.send()
     }
     
+    func addNewItem(_ item: ChecklistItemDataModel) {
+        let subject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
+        let viewModel = ChecklistItemViewModel(item: subject)
+        
+        subject.dropFirst().sink { [weak self] item in
+            guard
+                let self = self,
+                let checklist = self.input.checklistSubject?.value
+            else {
+                return
+            }
+            self.checklistDataSource.updateItem(item, in: checklist)
+                .catch { $0.log(message: "Failed to update checklist item \(item)") }
+        }.store(in: &cancellables)
+        
+        self.items.append(viewModel)
+        self.objectWillChange.send()
+    }
+    
     func setupTemplate(_ template: TemplateDataModel) {
         checklistName = template.title
         template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }
@@ -178,6 +198,9 @@ private extension CreateUpdateChecklistViewModel {
             updateDate: Date(),
             reminderDate: reminderDate,
             items: self.items.compactMap {
+                guard !$0.name.isEmpty else {
+                    return nil
+                }
                 return ChecklistItemDataModel(
                     id: $0.id,
                     name: $0.name,
@@ -199,6 +222,9 @@ private extension CreateUpdateChecklistViewModel {
                 title: self.checklistName,
                 description: self.checklistDescription,
                 items: self.items.compactMap {
+                    guard !$0.name.isEmpty else {
+                        return nil
+                    }
                     return ChecklistItemDataModel(
                         id: $0.id,
                         name: $0.name,

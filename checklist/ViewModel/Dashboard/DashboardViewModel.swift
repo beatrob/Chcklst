@@ -174,12 +174,8 @@ class DashboardViewModel: ObservableObject {
         let itemSubject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
         itemSubject.dropFirst().sink { [weak self] item in
             guard let self = self else { return }
-            self.checklistDataSource.updateItem(item, for: checkList.data) { result in
-                switch result {
-                case .success: break
-                case .failure: break
-                }
-            }
+            self.checklistDataSource.updateItem(item, in: checkList.data)
+                .catch { $0.log(message: "Failed to update item \(item)") }
         }.store(in: &cancellables)
         return .init(item: itemSubject)
     }

@@ -59,6 +59,7 @@ struct CreateChecklistView_Previews: PreviewProvider {
                     action: .createNew,
                     isEditable: true
                 ),
+                checklistDataSource: MockChecklistDataSource(),
                 notificationManager: NotificationManager()
             )
         )

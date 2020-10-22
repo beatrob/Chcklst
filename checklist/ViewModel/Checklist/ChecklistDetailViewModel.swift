@@ -57,8 +57,8 @@ class ChecklistDetailViewModel: ObservableObject {
                 let self = self,
                 let checklist = self.checklist.value
             else { return }
-            self.checklistDataSource.updateItem(item, for: checklist) { result in
-                #warning("TODO(): Add error handling!")
+            self.checklistDataSource.updateItem(item, in: checklist).catch { _ in
+                
             }
         }.store(in: &cancellables)
         return .init(item: itemSubject)

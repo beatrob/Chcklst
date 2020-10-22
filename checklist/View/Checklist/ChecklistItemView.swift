@@ -25,6 +25,7 @@ struct ChecklistItemView: View {
                 placeholder: "Add task",
                 font: .checklistItem,
                 isEditing: $isEditing,
+                isDone: $viewModel.isDone,
                 desiredHeight: $desiredHeight
             )
                 .frame(height: desiredHeight)

@@ -74,19 +74,14 @@ class MockChecklistDataSource: ChecklistDataSource {
         }.store(in: &cancellables)
     }
     
-    func updateItem(
-        _ item: ChecklistItemDataModel,
-        for checkList: ChecklistDataModel,
-        _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
-    ) {
+    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<Void> {
         guard let index = _checkLists.value.firstIndex(of: checkList) else {
-            completion(.failure(.checkListNotFound))
-            return
+            return .init(error: DataSourceError.checkListNotFound)
         }
         if _checkLists.value[index].items.updateItem(item) {
-            completion(.success(()))
+            return .value
         }
-        completion(.failure(.checkListItemNotFound))
+        return .init(error: DataSourceError.checkListItemNotFound)
     }
     
     func loadAllChecklists() -> Promise<[ChecklistDataModel]> {
