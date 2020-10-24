@@ -40,10 +40,6 @@ class ViewModelAssembly: Assembly {
             arguments: TemplateDataModel.self, TemplatePassthroughSubject.self,
             initializer: EditTemplateViewModel.init
         )
-        container.autoregister(
-            FinalizeChecklistViewModel.self,
-            initializer: FinalizeChecklistViewModel.init
-        )
         container.autoregister(InitializeAppViewModel.self, initializer: InitializeAppViewModel.init)
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
         container.autoregister(

@@ -19,16 +19,41 @@ class ChecklistViewModel: ObservableObject {
         }
     }
     @Published var shouldDisplayAddItems: Bool = false
+    @Published var shouldDismissView: Bool = false
+    @Published var isReminderOn: Bool = false {
+        didSet {
+            guard isReminderOn else {
+                return
+            }
+            self.notificationManager.registerPushNotifications()
+                .done { granted  in
+                    if !granted {
+                        self.isReminderOn = false
+                    }
+                }
+                .catch { log(error: $0.localizedDescription) }
+        }
+    }
+    @Published var reminderDate: Date = Date()
+    @Published var isCreateTemplateChecked: Bool = false
+    var shouldDisplaySetReminder: Bool { viewState.isCreateFromTemplate || viewState.isCreateNew }
+    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew }
+    var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
+    var isEditable: Bool { viewState.isEditEnabled }
+    
     @Published var checklistName: String = ""
     @Published var checklistDescription: String?
-    @Published var shouldDismissView: Bool = false
-    @Published var shouldDisplayFinalizeView: Bool = false
-    @Published var isEditable: Bool
     var items: [ChecklistItemViewModel] = []
+    
+    
+    @Published var viewState: ChecklistViewState
     
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
+    let onEditTapped: EmptySubject = .init()
+    let onDoneTapped: EmptySubject = .init()
+    let onActionButtonTapped: EmptySubject = .init()
     
     let input: Input
     let checklistDataSource: ChecklistDataSource
@@ -43,11 +68,11 @@ class ChecklistViewModel: ObservableObject {
         self.input = input
         self.checklistDataSource = checklistDataSource
         self.notificationManager = notificationManager
-        self.isEditable = input.isEditable
+        self.viewState = input.state
         
         if let template = input.template {
             setupTemplate(template)
-        } else if input.isDisplay {
+        } else if input.state.isDisplay {
             setupDisplayChecklist()
         }
         
@@ -56,43 +81,39 @@ class ChecklistViewModel: ObservableObject {
             self?.shouldCreateChecklistName = false
         }.store(in: &cancellables)
         
-        onAddItemsNext.sink { [weak self] in
-            self?.shouldDisplayFinalizeView = true
-        }.store(in: &cancellables)
-        
         onDeleteItem.sink { [weak self] item in
             self?.items.removeAll { $0.id == item.id }
             self?.objectWillChange.send()
         }.store(in: &cancellables)
-    }
-    
-    func getFinalizeCheckistViewModel() -> FinalizeChecklistViewModel {
-        let viewModel = AppContext.resolver.resolve(FinalizeChecklistViewModel.self)!
         
-        viewModel.onActionButton.sink { [weak self] in
-            guard let self = self else { return }
-            if self.input.isUpdate {
-                
-            } else {
-                self.createChecklist(viewModel: viewModel)
-            }
-        }.store(in: &cancellables)
-        
-        viewModel.onReminderOnOff.sink { [weak self] isOn in
-            guard let self = self else { return }
-            guard isOn else {
+        onEditTapped.sink { [weak self] in
+            guard
+                let self = self,
+                let checklist = self.viewState.checklist
+            else {
                 return
             }
-            self.notificationManager.registerPushNotifications()
-                .done { granted  in
-                    if !granted {
-                        viewModel.isReminderOn = false
-                    }
-                }
-                .catch { log(error: $0.localizedDescription) }
+            self.viewState = .update(checklist: checklist)
         }.store(in: &cancellables)
         
-        return viewModel
+        onDoneTapped.sink { [weak self] in
+            guard
+                let self = self,
+                let checklist = self.viewState.checklist
+            else {
+                return
+            }
+            self.viewState = .display(checklist: checklist)
+        }.store(in: &cancellables)
+        
+        onActionButtonTapped.sink { [weak self] in
+            guard let self = self else { return }
+            if self.input.state.isUpdate {
+                
+            } else {
+                self.saveNewChecklist()
+            }
+        }.store(in: &cancellables)
     }
 }
 
@@ -100,45 +121,29 @@ class ChecklistViewModel: ObservableObject {
 private extension ChecklistViewModel {
     
     func setupDisplayChecklist() {
-        guard let checklistSubject = input.checklistSubject else {
+        guard let checklist = input.checklist else {
             return
         }
         shouldCreateChecklistName = false
-        checklistSubject.sink { [weak self] checklist in
-            guard
-                let self = self,
-                let checklist = checklist
-            else {
-                return
-            }
-            self.checklistName = checklist.title
-            checklist.items.forEach { self.addNewItem($0) }
-        }.store(in: &cancellables)
+        self.checklistName = checklist.title
+        checklist.items.forEach { self.addNewItem($0) }
     }
     
-    func createChecklist(viewModel: FinalizeChecklistViewModel) {
-        let checklist = self.getChecklistFromUI(reminderDate: viewModel.isReminderOn ? viewModel.reminderDate : nil)
-        if viewModel.isReminderOn {
+    func saveNewChecklist() {
+        let checklist = self.getChecklistFromUI()
+        if isReminderOn {
             self.notificationManager.setupReminder(for: checklist)
                 .done {
-                    self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+                    self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
                     self.shouldDismissView = true
                 }
                 .catch {
                     log(error: $0.localizedDescription)
                 }
         } else {
-            self.createChecklist(checklist, shouldCreateTemplate: viewModel.isCreateTemplateChecked)
+            self.createChecklist(checklist, shouldCreateTemplate: isCreateTemplateChecked)
             self.shouldDismissView = true
         }
-    }
-    
-    func updateChecklist(viewModel: FinalizeChecklistViewModel) {
-        guard let checklist = input.checklistToUpdate else {
-            log(error: "Trying to update, but checklist not found")
-            return
-        }
-        
     }
     
     func setupItemsAndFinalizeView() {
@@ -151,7 +156,6 @@ private extension ChecklistViewModel {
         emptyItems.forEach { emptyItem in
             items.removeAll { emptyItem == $0 }
         }
-        shouldDisplayFinalizeView = !items.filter({ !$0.name.isEmpty }).isEmpty && isEditable
     }
     
     func addNewItem(name: String?, isDone: Bool, isEditable: Bool) {
@@ -171,7 +175,7 @@ private extension ChecklistViewModel {
         subject.dropFirst().sink { [weak self] item in
             guard
                 let self = self,
-                let checklist = self.input.checklistSubject?.value
+                let checklist = self.input.checklist
             else {
                 return
             }
@@ -190,7 +194,7 @@ private extension ChecklistViewModel {
         shouldCreateChecklistName = false
     }
     
-    func getChecklistFromUI(reminderDate: Date?, id: String? = nil) -> ChecklistDataModel {
+    func getChecklistFromUI(id: String? = nil) -> ChecklistDataModel {
         ChecklistDataModel(
             id: id ?? UUID().uuidString,
             title: self.checklistName,

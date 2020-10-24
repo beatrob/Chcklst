@@ -26,7 +26,7 @@ struct ChecklistNameView: View {
                 placeholder: "Name your checklist",
                 font: .checklistTitle,
                 isEditing: $isEditing,
-                isDone: .constant(false),
+                isCrossedOut: .constant(false),
                 desiredHeight: $desiredHeight
             )
                 .frame(height: desiredHeight)

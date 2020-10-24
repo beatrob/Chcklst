@@ -34,19 +34,43 @@ struct ChecklistView: View {
                     onNext: viewModel.onAddItemsNext,
                     onDeleteItem: viewModel.onDeleteItem
                 )
-                if viewModel.shouldDisplayFinalizeView {
-                    FinalizeChecklistView(
-                        viewModel: viewModel.getFinalizeCheckistViewModel()
-                    )
+                if viewModel.shouldDisplaySetReminder {
+                    CheckboxView(
+                        title: "Remind me on this device",
+                        isChecked: $viewModel.isReminderOn.animation()
+                    ).padding()
+                    if viewModel.isReminderOn {
+                        HStack {
+                            Spacer()
+                            DatePicker("",
+                                       selection: $viewModel.reminderDate,
+                                       displayedComponents: [.date, .hourAndMinute]
+                            ).labelsHidden()
+                            Spacer()
+                        }
+                    }
                 }
-                if viewModel.shouldDisplayAddItems {
-                    Spacer()
+                if viewModel.shouldDisplaySaveAsTemplate {
+                    CheckboxView(
+                        title: "Also save as template",
+                        isChecked: $viewModel.isCreateTemplateChecked
+                    ).padding()
+                }
+                if viewModel.shouldDisplayActionButton {
+                    HStack {
+                        Spacer()
+                        Button("Create") {
+                            self.viewModel.onActionButtonTapped.send()
+                        }.padding()
+                        Spacer()
+                    }
                 }
             }
-            .navigationBarTitle("Create checklist")
-        }.onTapGesture { self.hideKeyboard() }
+            .navigationBarItems(trailing: viewModel.navigationBarTrailingItem)
+            .navigationBarTitle(viewModel.navigationBarTitle, displayMode: viewModel.titleDisplayMode)
+        }
+        .onTapGesture { self.hideKeyboard() }
     }
-    
 }
 
 struct CreateChecklistView_Previews: PreviewProvider {
@@ -56,7 +80,7 @@ struct CreateChecklistView_Previews: PreviewProvider {
                 input: .init(
                     createChecklistSubject: .init(),
                     createTemplateSubject: .init(),
-                    action: .createNew,
+                    state: .createNew,
                     isEditable: true
                 ),
                 checklistDataSource: MockChecklistDataSource(),

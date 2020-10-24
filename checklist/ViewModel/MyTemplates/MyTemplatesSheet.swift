@@ -30,7 +30,7 @@ enum MyTemaplatesSheet {
                     ChecklistViewModelInput(
                         createChecklistSubject: createChecklist,
                         createTemplateSubject: TemplatePassthroughSubject(),
-                        action: .createFromTemplate(template: template),
+                        state: .createFromTemplate(template: template),
                         isEditable: true
                     )
             )!

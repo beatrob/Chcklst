@@ -93,8 +93,11 @@ class DashboardViewModel: ObservableObject {
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
         
-        checklistDataSource.selectedCheckList.dropFirst().sink { _ in
-            navigationHelper.navigateToChecklistDetail(with: checklistDataSource.selectedCheckList)
+        checklistDataSource.selectedCheckList.dropFirst().sink { checklist in
+            guard let checklist = checklist else {
+                return
+            }
+            navigationHelper.navigateToChecklistDetail(with: checklist)
         }.store(in: &cancellables)
         
         templateDataSource.templateCreated.sink { [weak self] _ in

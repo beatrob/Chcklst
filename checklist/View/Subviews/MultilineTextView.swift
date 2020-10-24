@@ -136,7 +136,7 @@ struct MultilineTextView: UIViewRepresentable {
     let placeholder: String
     let font: Font.AppFont
     @Binding var isEditing: Bool
-    @Binding var isDone: Bool
+    @Binding var isCrossedOut: Bool
     @Binding var desiredHeight: CGFloat
     
     func makeUIView(context: Context) -> ChecklistItemUITextView {
@@ -149,7 +149,7 @@ struct MultilineTextView: UIViewRepresentable {
     func updateUIView(_ uiView: ChecklistItemUITextView, context: Context) {
         uiView.attributedText = nil
         uiView.text = text
-        if isDone {
+        if isCrossedOut {
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: text)
             attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
             uiView.attributedText = attributeString
@@ -182,7 +182,7 @@ struct MultilineTextView_Previews: PreviewProvider {
             placeholder: "Add task",
             font: .checklistItem,
             isEditing: .constant(false),
-            isDone: .constant(false),
+            isCrossedOut: .constant(false),
             desiredHeight: .constant(20)
         )
     }
