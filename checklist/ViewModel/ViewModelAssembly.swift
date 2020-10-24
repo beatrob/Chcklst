@@ -22,14 +22,14 @@ class ViewModelAssembly: Assembly {
             initializer: ChecklistDetailViewModel.init
         )
         container.autoregister(
-            CreateUpdateChecklistViewModel.self,
+            ChecklistViewModel.self,
             arguments: ChecklistPassthroughSubject.self, TemplateDataModel?.self,
-            initializer: CreateUpdateChecklistViewModel.init
+            initializer: ChecklistViewModel.init
         )
         container.autoregister(
-            CreateUpdateChecklistViewModel.self,
+            ChecklistViewModel.self,
             argument: ChecklistViewModelInput.self,
-            initializer: CreateUpdateChecklistViewModel.init
+            initializer: ChecklistViewModel.init
         )
         container.autoregister(
             MyTemplatesViewModel.self,

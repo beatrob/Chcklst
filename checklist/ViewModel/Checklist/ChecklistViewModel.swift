@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 
-class CreateUpdateChecklistViewModel: ObservableObject {
+class ChecklistViewModel: ObservableObject {
     
     @Published var shouldCreateChecklistName: Bool = true {
         didSet {
@@ -97,7 +97,7 @@ class CreateUpdateChecklistViewModel: ObservableObject {
 }
 
 
-private extension CreateUpdateChecklistViewModel {
+private extension ChecklistViewModel {
     
     func setupDisplayChecklist() {
         guard let checklistSubject = input.checklistSubject else {

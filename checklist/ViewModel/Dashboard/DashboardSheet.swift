@@ -23,9 +23,9 @@ enum DashboardSheet {
         switch self {
         case .createChecklist(let createNewChecklist, let createNewTemplate):
             return AnyView(
-                CreateUpdateChecklistView(
+                ChecklistView(
                     viewModel: AppContext.resolver.resolve(
-                        CreateUpdateChecklistViewModel.self,
+                        ChecklistViewModel.self,
                         argument:
                             ChecklistViewModelInput(
                                 createChecklistSubject: createNewChecklist,

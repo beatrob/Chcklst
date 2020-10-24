@@ -9,9 +9,9 @@
 import Foundation
 
 
-typealias ChecklistViewModelInput = CreateUpdateChecklistViewModel.Input
+typealias ChecklistViewModelInput = ChecklistViewModel.Input
 
-extension CreateUpdateChecklistViewModel {
+extension ChecklistViewModel {
     
     struct Input {
 
