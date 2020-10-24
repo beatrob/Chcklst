@@ -36,8 +36,6 @@ class MockTemplateDataSource: TemplateDataSource {
         ]
     )
     
-    var createNewTemplate: TemplatePassthroughSubject = .init()
-    
     var updateTemplate: TemplatePassthroughSubject = .init()
     
     var deleteTemplate: TemplatePassthroughSubject = .init()
@@ -67,11 +65,6 @@ class MockTemplateDataSource: TemplateDataSource {
                 self._templates.value[index] = template
             }
         }.store(in: &cancellables)
-        
-        createNewTemplate.sink { [weak self] template in
-            self?._templates.value.insert(template, at: 0)
-            self?._templateCreated.send(template)
-        }.store(in: &cancellables)
     }
     
     func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
@@ -80,5 +73,11 @@ class MockTemplateDataSource: TemplateDataSource {
     
     func loadAllTemplates() -> Promise<[TemplateDataModel]> {
         .value(_templates.value)
+    }
+    
+    func createTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        _templates.value.insert(template, at: 0)
+        _templateCreated.send(template)
+        return .value
     }
 }

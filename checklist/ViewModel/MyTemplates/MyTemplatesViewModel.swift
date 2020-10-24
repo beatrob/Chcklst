@@ -75,10 +75,7 @@ class MyTemplatesViewModel: ObservableObject {
                 template: template,
                 onCreateChecklist: {
                     guard let self = self else { return }
-                    self.sheet = .createChecklist(
-                        createChecklist: createChecklist,
-                        template: template
-                    )
+                    self.sheet = .createChecklist(template: template)
                 },
                 onEdit: { templateDataSource.selectedTemplate.send(template) },
                 onDelete: {

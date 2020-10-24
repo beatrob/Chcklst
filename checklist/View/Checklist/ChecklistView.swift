@@ -59,7 +59,7 @@ struct ChecklistView: View {
                 if viewModel.shouldDisplayActionButton {
                     HStack {
                         Spacer()
-                        Button("Create") {
+                        Button(viewModel.actionButtonTitle) {
                             self.viewModel.onActionButtonTapped.send()
                         }.padding()
                         Spacer()
@@ -77,13 +77,9 @@ struct CreateChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         ChecklistView(
             viewModel: ChecklistViewModel(
-                input: .init(
-                    createChecklistSubject: .init(),
-                    createTemplateSubject: .init(),
-                    state: .createNew,
-                    isEditable: true
-                ),
+                viewState: .createNew,
                 checklistDataSource: MockChecklistDataSource(),
+                templateDataSource: MockTemplateDataSource(),
                 notificationManager: NotificationManager()
             )
         )

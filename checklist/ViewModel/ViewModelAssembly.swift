@@ -28,7 +28,7 @@ class ViewModelAssembly: Assembly {
         )
         container.autoregister(
             ChecklistViewModel.self,
-            argument: ChecklistViewModelInput.self,
+            argument: ChecklistViewState.self,
             initializer: ChecklistViewModel.init
         )
         container.autoregister(

@@ -35,11 +35,7 @@ class SelectTemplateViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onTemplateTapped.sink { template in
-            navigationHelper.navigateToCreateChecklist(
-                with: template,
-                createChecklist: createChecklist,
-                createTemplate: templateDataSource.createNewTemplate
-            )
+            navigationHelper.navigateToCreateChecklist(with: template)
         }.store(in: &cancellables)
     }
 }

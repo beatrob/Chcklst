@@ -13,7 +13,6 @@ import PromiseKit
 
 protocol TemplateDataSource {
     
-    var createNewTemplate: TemplatePassthroughSubject { get }
     var updateTemplate: TemplatePassthroughSubject { get }
     var deleteTemplate: TemplatePassthroughSubject { get }
     var templates: AnyPublisher<[TemplateDataModel], Never> { get }
@@ -25,14 +24,13 @@ protocol TemplateDataSource {
         for template: TemplateDataModel,
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     )
+    func createTemplate(_ template: TemplateDataModel) -> Promise<Void>
 }
 
 
 class TemplateDataSourceImpl: TemplateDataSource {
     
     let coreDataManager: CoreDataTemplateManager
-    
-    var createNewTemplate: TemplatePassthroughSubject = .init()
     
     var updateTemplate: TemplatePassthroughSubject = .init()
     
@@ -54,15 +52,6 @@ class TemplateDataSourceImpl: TemplateDataSource {
     
     init(coreDataManager: CoreDataTemplateManager) {
         self.coreDataManager = coreDataManager
-        
-        createNewTemplate.sink { template in
-            coreDataManager.save(template: template)
-            .done {
-                self._templates.value.append(template)
-                self._templateCreated.send(template)
-            }
-            .catch { log(error: $0.localizedDescription) }
-        }.store(in: &cancellables)
         
         updateTemplate.sink { template in
             coreDataManager.update(template: template)
@@ -102,5 +91,13 @@ class TemplateDataSourceImpl: TemplateDataSource {
     func loadAllTemplates() -> Promise<[TemplateDataModel]> {
         coreDataManager.fetchAllTemplates()
         .get { self._templates.value = $0 }
+    }
+    
+    func createTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        coreDataManager.save(template: template)
+        .get {
+            self._templates.value.append(template)
+            self._templateCreated.send(template)
+        }
     }
 }

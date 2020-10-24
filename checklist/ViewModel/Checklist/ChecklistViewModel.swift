@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import PromiseKit
 
 
 class ChecklistViewModel: ObservableObject {
@@ -36,7 +37,7 @@ class ChecklistViewModel: ObservableObject {
     }
     @Published var reminderDate: Date = Date()
     @Published var isCreateTemplateChecked: Bool = false
-    var shouldDisplaySetReminder: Bool { viewState.isCreateFromTemplate || viewState.isCreateNew }
+    var shouldDisplaySetReminder: Bool { viewState.isEditEnabled }
     var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew }
     var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
     var isEditable: Bool { viewState.isEditEnabled }
@@ -44,7 +45,6 @@ class ChecklistViewModel: ObservableObject {
     @Published var checklistName: String = ""
     @Published var checklistDescription: String?
     var items: [ChecklistItemViewModel] = []
-    
     
     @Published var viewState: ChecklistViewState
     
@@ -55,24 +55,24 @@ class ChecklistViewModel: ObservableObject {
     let onDoneTapped: EmptySubject = .init()
     let onActionButtonTapped: EmptySubject = .init()
     
-    let input: Input
     let checklistDataSource: ChecklistDataSource
+    let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
     var cancellables =  Set<AnyCancellable>()
     
-    init(
-        input: Input,
+    init(viewState: ChecklistViewState,
         checklistDataSource: ChecklistDataSource,
+        templateDataSource: TemplateDataSource,
         notificationManager: NotificationManager
     ) {
-        self.input = input
         self.checklistDataSource = checklistDataSource
+        self.templateDataSource = templateDataSource
         self.notificationManager = notificationManager
-        self.viewState = input.state
+        self.viewState = viewState
         
-        if let template = input.template {
+        if let template = viewState.template {
             setupTemplate(template)
-        } else if input.state.isDisplay {
+        } else if viewState.isDisplay {
             setupDisplayChecklist()
         }
         
@@ -108,8 +108,11 @@ class ChecklistViewModel: ObservableObject {
         
         onActionButtonTapped.sink { [weak self] in
             guard let self = self else { return }
-            if self.input.state.isUpdate {
-                
+            if self.viewState.isUpdate {
+                guard let checklist = self.viewState.checklist else {
+                    return
+                }
+                self.viewState = .display(checklist: checklist)
             } else {
                 self.saveNewChecklist()
             }
@@ -121,7 +124,7 @@ class ChecklistViewModel: ObservableObject {
 private extension ChecklistViewModel {
     
     func setupDisplayChecklist() {
-        guard let checklist = input.checklist else {
+        guard let checklist = viewState.checklist else {
             return
         }
         shouldCreateChecklistName = false
@@ -175,7 +178,7 @@ private extension ChecklistViewModel {
         subject.dropFirst().sink { [weak self] item in
             guard
                 let self = self,
-                let checklist = self.input.checklist
+                let checklist = self.viewState.checklist
             else {
                 return
             }
@@ -216,27 +219,33 @@ private extension ChecklistViewModel {
     }
     
     func createChecklist(_ checklist: ChecklistDataModel, shouldCreateTemplate: Bool) {
-        self.input.createChecklistSubject.send(checklist)
-        guard shouldCreateTemplate else {
-            return
-        }
-        self.input.createTemplateSubject.send(
-            .init(
-                id: UUID().uuidString,
-                title: self.checklistName,
-                description: self.checklistDescription,
-                items: self.items.compactMap {
-                    guard !$0.name.isEmpty else {
-                        return nil
-                    }
-                    return ChecklistItemDataModel(
-                        id: $0.id,
-                        name: $0.name,
-                        isDone: false,
-                        updateDate: Date()
-                    )
+        checklistDataSource.createChecklist(checklist)
+            .then { _ -> Promise<Void> in
+                guard shouldCreateTemplate else {
+                    return .value
                 }
-            )
-        )
+                return self.templateDataSource.createTemplate(
+                    .init(
+                        id: UUID().uuidString,
+                        title: self.checklistName,
+                        description: self.checklistDescription,
+                        items: self.items.compactMap {
+                            guard !$0.name.isEmpty else {
+                                return nil
+                            }
+                            return ChecklistItemDataModel(
+                                id: $0.id,
+                                name: $0.name,
+                                isDone: false,
+                                updateDate: Date()
+                            )
+                        }
+                    )
+                )
+            }
+            .catch {
+                $0.log(message: "Failed to create template")
+                #warning("TODO(): Implement proper error handling")
+            }
     }
 }

@@ -17,7 +17,7 @@ extension ChecklistViewModel {
             return AnyView(
                 !isEditable ?
                     Button("Edit") { self.onEditTapped.send() } :
-                    Button("Done") { self.onDoneTapped.send() }
+                    Button("Save") { self.onDoneTapped.send() }
             )
         } else {
             return AnyView(EmptyView())
@@ -37,5 +37,16 @@ extension ChecklistViewModel {
     
     var titleDisplayMode: NavigationBarItem.TitleDisplayMode {
         return .inline
+    }
+    
+    var actionButtonTitle: LocalizedStringKey {
+        switch viewState {
+        case .createFromTemplate, .createNew:
+            return .init("Create")
+        case .update:
+            return .init("Save")
+        case .display:
+            return .init("")
+        }
     }
 }

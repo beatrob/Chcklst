@@ -116,11 +116,8 @@ class DashboardViewModel: ObservableObject {
         onCreateNewChecklist.sink { [weak self] in
             self?.actionSheet = .createChecklist(
                 onNewChecklist: {
-                    self?.sheet = .createChecklist(
-                        createNewChecklist: createChecklist,
-                        createNewTemplate: templateDataSource.createNewTemplate
-                    )
-            },
+                    self?.sheet = .createChecklist
+                },
                 onNewFromTemplate: {
                     self?.sheet = .selectTemplate
             })
@@ -138,9 +135,8 @@ class DashboardViewModel: ObservableObject {
                     #warning("TODO: implement edit checklist")
                 },
                 onCreateTemplate: {
-                    templateDataSource.createNewTemplate.send(
-                        TemplateDataModel(checklist: checklist.data)
-                    )
+                    templateDataSource.createTemplate(.init(checklist: checklist.data))
+                        .catch { $0.log(message: "Failed to create new template from checklist \(checklist.data)") }
                 },
                 onDelete: { [weak self] in
                     self?.alert = .confirmDeleteChecklist(onDelete: {
