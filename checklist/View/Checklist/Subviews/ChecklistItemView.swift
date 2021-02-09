@@ -8,7 +8,12 @@
 
 import SwiftUI
 
-struct ChecklistItemView: View {
+struct ChecklistItemView: View, Equatable {
+    
+    static func == (lhs: ChecklistItemView, rhs: ChecklistItemView) -> Bool {
+        lhs.viewModel === rhs.viewModel
+    }
+    
     
     @ObservedObject var viewModel: ChecklistItemViewModel
     @State private var isEditing: Bool = false

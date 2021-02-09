@@ -21,6 +21,7 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     }
     @Published var isDone: Bool = false
     @Published var isEditable: Bool
+    var updateDate: Date
     
     let onSwipeRight: PassthroughSubject<Void, Never> = .init()
     let onSwipeLeft: PassthroughSubject<Void, Never> = .init()
@@ -34,14 +35,17 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.name = name ?? ""
         self.isDone = isDone
         self.isEditable = isEditable
+        self.updateDate = Date()
     }
     
     init(item: CurrentValueSubject<ChecklistItemDataModel, Never>) {
         self.id = item.value.id
         self.isEditable = false
+        self.updateDate = item.value.updateDate
         item.sink {
             self.name = $0.name
             self.isDone = $0.isDone
+            self.updateDate = $0.updateDate
         }.store(in: &cancellables)
         
         onSwipeRight.sink {

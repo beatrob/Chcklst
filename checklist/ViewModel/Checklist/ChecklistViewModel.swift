@@ -93,26 +93,18 @@ class ChecklistViewModel: ObservableObject {
             else {
                 return
             }
+            self.items.forEach { $0.isEditable = true }
             self.viewState = .update(checklist: checklist)
         }.store(in: &cancellables)
         
         onDoneTapped.sink { [weak self] in
-            guard
-                let self = self,
-                let checklist = self.viewState.checklist
-            else {
-                return
-            }
-            self.viewState = .display(checklist: checklist)
+            self?.setEditDoneAndUpdateChecklist()
         }.store(in: &cancellables)
         
         onActionButtonTapped.sink { [weak self] in
             guard let self = self else { return }
             if self.viewState.isUpdate {
-                guard let checklist = self.viewState.checklist else {
-                    return
-                }
-                self.viewState = .display(checklist: checklist)
+                self.setEditDoneAndUpdateChecklist()
             } else {
                 self.saveNewChecklist()
             }
@@ -121,7 +113,19 @@ class ChecklistViewModel: ObservableObject {
 }
 
 
+// MARK: - Private methods
+
 private extension ChecklistViewModel {
+    
+    func setEditDoneAndUpdateChecklist() {
+        guard let checklist = self.viewState.checklist else {
+            return
+        }
+        self.items.forEach { $0.isEditable = false }
+        self.resignFirstResponder()
+        self.updateChecklist()
+        self.viewState = .display(checklist: checklist)
+    }
     
     func setupDisplayChecklist() {
         guard let checklist = viewState.checklist else {
@@ -146,6 +150,19 @@ private extension ChecklistViewModel {
         } else {
             self.createChecklist(checklist, shouldCreateTemplate: isCreateTemplateChecked)
             self.shouldDismissView = true
+        }
+    }
+    
+    func updateChecklist() {
+        guard let checklist = viewState.checklist else {
+            log(warning: "Can not update checklist: checklist not found")
+            return
+        }
+        let checklistToUpdate = getChecklistFromUI(id: checklist.id)
+        checklistDataSource.updateChecklist(checklistToUpdate).done {
+            log(debug: "Update checklist success. \(checklistToUpdate)")
+        }.catch { error in
+            log(error: "Update checklist failed. \(error.localizedDescription)")
         }
     }
     
@@ -211,8 +228,8 @@ private extension ChecklistViewModel {
                 return ChecklistItemDataModel(
                     id: $0.id,
                     name: $0.name,
-                    isDone: false,
-                    updateDate: Date()
+                    isDone: $0.isDone,
+                    updateDate: $0.updateDate
                 )
             }
         )
@@ -248,4 +265,10 @@ private extension ChecklistViewModel {
                 #warning("TODO(): Implement proper error handling")
             }
     }
+    
+    #if canImport(UIKit)
+    func resignFirstResponder() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    #endif
 }

@@ -164,6 +164,7 @@ class DashboardViewModel: ObservableObject {
                 firstUndoneItem: self.getFirstUndoneItem(form: $0.items)
             )
         }
+        print(self.checklists)
     }
     
     func getItemViewModel(
