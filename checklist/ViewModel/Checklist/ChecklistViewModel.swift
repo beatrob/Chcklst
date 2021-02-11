@@ -30,6 +30,7 @@ class ChecklistViewModel: ObservableObject {
                 .done { granted  in
                     if !granted {
                         self.isReminderOn = false
+                        self.alert = .notificationsDisabled
                     }
                 }
                 .catch { log(error: $0.localizedDescription) }
@@ -47,6 +48,12 @@ class ChecklistViewModel: ObservableObject {
     var items: [ChecklistItemViewModel] = []
     
     @Published var viewState: ChecklistViewState
+    @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
+    private var alert: ChecklistAlert = .none {
+        didSet {
+            alertVisibility.set(view: alert.view, isVisible: alert.isVisible)
+        }
+    }
     
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
@@ -94,6 +101,8 @@ class ChecklistViewModel: ObservableObject {
                 return
             }
             self.items.forEach { $0.isEditable = true }
+            self.isReminderOn = checklist.isValidReminderSet
+            self.reminderDate = checklist.reminderDate ?? Date()
             self.viewState = .update(checklist: checklist)
         }.store(in: &cancellables)
         
@@ -159,7 +168,19 @@ private extension ChecklistViewModel {
             return
         }
         let checklistToUpdate = getChecklistFromUI(id: checklist.id)
-        checklistDataSource.updateChecklist(checklistToUpdate).done {
+        if checklist.reminderDate != checklistToUpdate.reminderDate {
+            notificationManager.removeReminder(for: checklist)
+        }
+        firstly {
+            .value(checklistToUpdate.isValidReminderSet)
+        }.then { isReminderSet -> Promise<Void> in
+            guard isReminderSet else {
+                return .value
+            }
+            return self.notificationManager.setupReminder(for: checklistToUpdate)
+        }.then {
+            self.checklistDataSource.updateChecklist(checklistToUpdate)
+        }.done {
             log(debug: "Update checklist success. \(checklistToUpdate)")
         }.catch { error in
             log(error: "Update checklist failed. \(error.localizedDescription)")

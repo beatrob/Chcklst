@@ -32,7 +32,7 @@ enum DashboardAlert {
                 primaryButton: .default(Text("Delete"), action: onDelete),
                 secondaryButton: .cancel(Text("Cancel"))
             )
-        case .none: return Alert(title: Text(""))
+        case .none: return .empty
         }
     }
     

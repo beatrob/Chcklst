@@ -76,6 +76,8 @@
 		DD7AF2B424EDCED90051CD16 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2B324EDCED90051CD16 /* UIApplication+Extension.swift */; };
 		DD84DCAC253E1C5E00A39DBB /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD84DCAB253E1C5E00A39DBB /* SnapKit */; };
 		DD84DCB1253E407E00A39DBB /* Font+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD84DCB0253E407E00A39DBB /* Font+extension.swift */; };
+		DD85AD9425D595E200EB4B6A /* ChecklistAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85AD9325D595E200EB4B6A /* ChecklistAlert.swift */; };
+		DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */; };
 		DD8C44F92536074800F470C2 /* Error+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C44F82536074800F470C2 /* Error+Extension.swift */; };
 		DD8C4504253631E700F470C2 /* ChecklistViewModel+Input.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C4503253631E700F470C2 /* ChecklistViewModel+Input.swift */; };
 		DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */; };
@@ -201,6 +203,8 @@
 		DD7AF2B124EDC9C60051CD16 /* ChecklistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemsView.swift; sourceTree = "<group>"; };
 		DD7AF2B324EDCED90051CD16 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		DD84DCB0253E407E00A39DBB /* Font+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+extension.swift"; sourceTree = "<group>"; };
+		DD85AD9325D595E200EB4B6A /* ChecklistAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistAlert.swift; sourceTree = "<group>"; };
+		DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
 		DD8C44F82536074800F470C2 /* Error+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extension.swift"; sourceTree = "<group>"; };
 		DD8C4503253631E700F470C2 /* ChecklistViewModel+Input.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChecklistViewModel+Input.swift"; sourceTree = "<group>"; };
 		DD90241224FB7A4C0084CDDC /* MyTemplatesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesView.swift; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 				DD8C44F82536074800F470C2 /* Error+Extension.swift */,
 				DD08097225377D3F00F075D4 /* View+Extension.swift */,
 				DD84DCB0253E407E00A39DBB /* Font+extension.swift */,
+				DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -314,6 +319,7 @@
 				DD8C4503253631E700F470C2 /* ChecklistViewModel+Input.swift */,
 				DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */,
 				DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */,
+				DD85AD9325D595E200EB4B6A /* ChecklistAlert.swift */,
 			);
 			path = Checklist;
 			sourceTree = "<group>";
@@ -792,6 +798,7 @@
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
 				DD2D91922530EB430032779C /* ChecklistFilter.swift in Sources */,
+				DD85AD9425D595E200EB4B6A /* ChecklistAlert.swift in Sources */,
 				DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */,
 				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
 				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
@@ -804,6 +811,7 @@
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
 				DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */,
+				DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */,
 				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
 				DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */,
 				DD6C507124FC38050056C476 /* EditTemplateViewModel.swift in Sources */,

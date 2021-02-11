@@ -70,6 +70,9 @@ struct ChecklistView: View {
             .navigationBarTitle(viewModel.navigationBarTitle, displayMode: viewModel.titleDisplayMode)
         }
         .onTapGesture { self.hideKeyboard() }
+        .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
+            viewModel.alertVisibility.view
+        }
     }
 }
 

@@ -77,6 +77,10 @@ class NotificationManager: NSObject {
         }
     }
     
+    func removeReminder(for checklist: ChecklistDataModel) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [checklist.id])
+    }
+    
     func clearDeeplinkcChecklistId() {
         log(debug: "Clearing deeplink checklist ID")
         _deeplinkChecklistId.send(nil)

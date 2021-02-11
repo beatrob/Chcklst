@@ -25,7 +25,7 @@ enum MyTemplatesAlert {
                 secondaryButton: .cancel()
             )
         case .none:
-            return Alert(title: Text(""))
+            return .empty
         }
     }
     

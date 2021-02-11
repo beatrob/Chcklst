@@ -10,7 +10,9 @@ import Foundation
 import SwiftUI
 
 class ViewVisibility<SomeView> {
+    
     @Published var isVisible = false
+    
     var view: SomeView
     
     init(view: SomeView) {
