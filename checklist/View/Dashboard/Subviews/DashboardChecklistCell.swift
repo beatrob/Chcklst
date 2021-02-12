@@ -1,0 +1,63 @@
+//
+//  DashboardChecklistCell.swift
+//  checklist
+//
+//  Created by Róbert Konczi on 12.02.2021.
+//  Copyright © 2021 Róbert Konczi. All rights reserved.
+//
+
+import SwiftUI
+
+struct DashboardChecklistCell: View {
+    
+    @ObservedObject var viewModel: DashboardChecklistCellViewModel
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text(viewModel.title)
+                    .modifier(ChecklistTitle())
+                Spacer()
+                if viewModel.isReminderSet {
+                    FilterItemData.reminder.image
+                }
+                Text(viewModel.counter).foregroundColor(.gray)
+            }
+            .padding(.top)
+            .padding(.leading)
+            .padding(.trailing)
+            HStack {
+                viewModel.firstUndoneItem.map {
+                    ChecklistItemView(viewModel: $0)
+                }
+                Spacer()
+            }
+            .padding()
+        }
+        .frame(minWidth: 100, minHeight: 100)
+        .background(Color("dashboardChecklistBackground"))
+        .cornerRadius(20)
+        .shadow(radius: 10)
+    }
+}
+
+struct DashboardChecklistCell_Previews: PreviewProvider {
+    static var previews: some View {
+        DashboardChecklistCell(
+            viewModel: .init(
+                checklist: .init(
+                    id: "1234",
+                    title: "Some cool checklist",
+                    description: nil,
+                    updateDate: Date(),
+                    items: [
+                        .init(id: "1234", name: "Let's do the dishes", isDone: false, updateDate: Date())
+                    ]
+                )
+            )
+        )
+        .previewLayout(PreviewLayout.sizeThatFits)
+        .padding()
+        .previewDisplayName("Default preview")
+    }
+}

@@ -15,7 +15,8 @@ extension Font {
     
     enum AppFont {
         
-        static let name = "Helvetica"
+        static let name = "Avenir Next"
+        static let boldName = "Avenir Next Bold"
         
         case checklistTitle
         case checklistItem
@@ -23,18 +24,18 @@ extension Font {
         var font: Font {
             switch self {
             case .checklistItem:
-                return Font.custom(AppFont.name, size: 20)
+                return Font.custom(AppFont.name, size: 17)
             case .checklistTitle:
-                return Font.custom(AppFont.name, size: 36)
+                return Font.custom(AppFont.boldName, size: 30)
             }
         }
         
         var uiFont: UIFont {
             switch self {
             case .checklistItem:
-                return UIFont(name: AppFont.name, size: 20)!
+                return UIFont(name: AppFont.name, size: 17)!
             default:
-                return UIFont(name: AppFont.name, size: 36)!
+                return UIFont(name: AppFont.boldName, size: 30)!
             }
         }
     }

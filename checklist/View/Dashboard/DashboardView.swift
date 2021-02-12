@@ -15,104 +15,81 @@ struct DashboardView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    
-                    NavigationLink(
-                        destination: navigationHelper.dashboardDestination,
-                        tag: .settings,
-                        selection: $navigationHelper.dashboardSelection
-                    ) {
-                        EmptyView()
-                    }
-                    .isDetailLink(false)
-                    .hidden()
-                    
-                    NavigationLink(
-                        destination: navigationHelper.dashboardDestination,
-                        tag: .checklistDetail,
-                        selection: $navigationHelper.dashboardSelection
-                    ) {
-                        EmptyView()
-                    }
-                    .isDetailLink(false)
-                    .hidden()
-                    
-                    NavigationLink(
-                        destination: navigationHelper.dashboardDestination,
-                        tag: .myTemplates,
-                        selection: $navigationHelper.dashboardSelection
-                    ) {
-                        EmptyView()
-                    }
-                    .isDetailLink(false)
-                    .hidden()
-                    
-                    
+            ZStack {
+                Color("mainBackground")
+                    .ignoresSafeArea()
+                ScrollView {
                     VStack {
-                        Spacer().frame(height: 15.0)
-                        FilterView(viewModel: viewModel.filterViewModel)
-                        HStack {
-                            Text(viewModel.title)
-                                .font(.largeTitle)
-                                .foregroundColor(Color.white)
-                                .padding()
-                            Spacer()
+                        
+                        NavigationLink(
+                            destination: navigationHelper.dashboardDestination,
+                            tag: .settings,
+                            selection: $navigationHelper.dashboardSelection
+                        ) {
+                            EmptyView()
                         }
-                    }.background(Color.blue)
-                    ForEach(viewModel.checklists, id: \.id) { checklist in
+                        .isDetailLink(false)
+                        .hidden()
+                        
+                        NavigationLink(
+                            destination: navigationHelper.dashboardDestination,
+                            tag: .checklistDetail,
+                            selection: $navigationHelper.dashboardSelection
+                        ) {
+                            EmptyView()
+                        }
+                        .isDetailLink(false)
+                        .hidden()
+                        
+                        NavigationLink(
+                            destination: navigationHelper.dashboardDestination,
+                            tag: .myTemplates,
+                            selection: $navigationHelper.dashboardSelection
+                        ) {
+                            EmptyView()
+                        }
+                        .isDetailLink(false)
+                        .hidden()
+                        
+                        
                         VStack {
+                            Spacer().frame(height: 15.0)
+                            FilterView(viewModel: viewModel.filterViewModel)
                             HStack {
-                                Text(checklist.title).font(.title)
+                                Text(viewModel.title)
+                                    .font(.largeTitle)
+                                    .foregroundColor(Color.white)
+                                    .padding()
                                 Spacer()
-                                if checklist.isReminderSet {
-                                    FilterItemData.reminder.image
-                                }
-                                Text(checklist.counter).foregroundColor(.gray)
                             }
-                            checklist.firstUndoneItem.map { first in
-                                HStack {
-                                    ChecklistItemView(
-                                        viewModel: self.viewModel.getItemViewModel(
-                                            for: first,
-                                            in: checklist
-                                        )
-                                    )
-                                    Spacer()
-                                }
+                        }.background(Color.blue)
+                        ForEach(viewModel.checklistCells, id: \.id) { cell in
+                            DashboardChecklistCell(viewModel: cell)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+                        }
+                        Spacer()
+                    }
+                    .navigationBarTitle("C H C K ✓ L S T", displayMode: .inline)
+                    .navigationBarItems(
+                        leading: Button.init(
+                            action: { self.viewModel.onSettings.send() },
+                            label: {
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
                             }
-                            Rectangle().frame(height: 0.5).foregroundColor(.gray)
-                        }
-                        .frame(minWidth: 100, minHeight: 100)
-                        .padding(.horizontal)
-                        .onTapGesture {
-                            self.viewModel.onChecklistTapped.send(checklist)
-                        }
-                        .simultaneousGesture(LongPressGesture().onEnded({ _ in
-                            self.viewModel.onChecklistLongTapped.send(checklist)
-                        }))
-                    }
-                    Spacer()
-                }
-                .navigationBarTitle("C H C K ✓ L S T", displayMode: .inline)
-                .navigationBarItems(
-                    leading: Button.init(
-                        action: { self.viewModel.onSettings.send() },
-                        label: {
-                            Image(systemName: "gear")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                    }
-                    ),
-                    trailing: Button.init(
-                        action: { self.viewModel.onCreateNewChecklist.send()},
-                        label: {
-                            Image(systemName: "plus")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                    }
+                        ),
+                        trailing: Button.init(
+                            action: { self.viewModel.onCreateNewChecklist.send()},
+                            label: {
+                                Image(systemName: "plus")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                            }
+                        )
                     )
-                )
+                }
             }
         }
         .alert(isPresented: $viewModel.alertVisibility.isVisible) {

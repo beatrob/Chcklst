@@ -12,17 +12,8 @@ import PromiseKit
 
 class DashboardViewModel: ObservableObject {
     
-    struct ChecklistVO {
-        let id: String
-        let title: String
-        let counter: String
-        let data: ChecklistDataModel
-        let isReminderSet: Bool
-        var firstUndoneItem: ChecklistItemDataModel?
-    }
-    
     @Published var title: String = FilterItemData.initial.title
-    @Published var checklists: [ChecklistVO] = []
+    @Published var checklistCells: [DashboardChecklistCellViewModel] = []
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var sheetVisibility = ViewVisibility(view: DashboardSheet.none.view)
@@ -54,12 +45,11 @@ class DashboardViewModel: ObservableObject {
     
     let onCreateNewChecklist = EmptySubject()
     let onSettings = EmptySubject()
-    let onChecklistLongTapped = PassthroughSubject<ChecklistVO, Never>()
-    let onChecklistTapped = PassthroughSubject<ChecklistVO, Never>()
     var cancellables =  Set<AnyCancellable>()
     
-    private var checklistToEdit: ChecklistVO?
+    private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
+    private let templateDataSource: TemplateDataSource
     private let checklistFilter: ChecklistFilter
     
     init(
@@ -70,6 +60,7 @@ class DashboardViewModel: ObservableObject {
         notificationManager: NotificationManager
     ) {
         self.checklistDataSource = checklistDataSource
+        self.templateDataSource = templateDataSource
         self.checklistFilter = checklistFilter
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
@@ -126,64 +117,59 @@ class DashboardViewModel: ObservableObject {
         onSettings.sink {
             navigationHelper.navigateToSettings()
         }.store(in: &cancellables)
-        
-        onChecklistLongTapped.sink { [weak self] checklist in
+    }
+    
+    func handleChecklistData(_ checklists: [ChecklistDataModel]) {
+        if checklistCells.isEmpty {
+            checklistCells = checklists.map {
+                self.getChecklistCellViewModel(with: $0)
+            }
+            return
+        } else {
+            // update/insert
+            checklists.forEach { checklist in
+                if let cell = self.checklistCells.first(where: { $0.id == checklist.id }) {
+                    cell.update(with: checklist)
+                } else {
+                    self.checklistCells.insert(getChecklistCellViewModel(with: checklist), at: 0)
+                }
+            }
+            // delete
+        }
+    }
+    
+    func getChecklistCellViewModel(with checklist: ChecklistDataModel) -> DashboardChecklistCellViewModel {
+        let viewModel = DashboardChecklistCellViewModel(checklist: checklist)
+        viewModel.onTapped.sink { [weak self] checklist in
+            self?.checklistDataSource.selectedCheckList.send(checklist)
+        }.store(in: &cancellables)
+        viewModel.onLongTapped.sink { [weak self] checklist in
             guard let self = self else { return }
             self.actionSheet = .editChecklist(
-                checklist: checklist.data,
+                checklist: checklist,
                 onEdit: {
                     #warning("TODO: implement edit checklist")
                 },
                 onCreateTemplate: {
-                    templateDataSource.createTemplate(.init(checklist: checklist.data))
-                        .catch { $0.log(message: "Failed to create new template from checklist \(checklist.data)") }
+                    self.templateDataSource.createTemplate(.init(checklist: checklist))
+                        .catch { $0.log(message: "Failed to create new template from checklist \(checklist)") }
                 },
                 onDelete: { [weak self] in
                     self?.alert = .confirmDeleteChecklist(onDelete: {
-                        checklistDataSource.deleteChecklist(checklist.data)
-                        .done { Logger.log.debug("Checklist deleted with id: \(checklist.data.id)") }
+                        self?.checklistDataSource.deleteChecklist(checklist)
+                        .done { Logger.log.debug("Checklist deleted with id: \(checklist.id)") }
                         .catch { _ in Logger.log.error("Delete checklist failed") }
                     })
                 }
             )
         }.store(in: &cancellables)
-        
-        onChecklistTapped.sink { checklist in
-            checklistDataSource.selectedCheckList.send(checklist.data)
-        }.store(in: &cancellables)
-    }
-    
-    func handleChecklistData(_ checklists: [ChecklistDataModel]) {
-        self.checklists =  checklists.map {
-            ChecklistVO(
-                id: $0.id,
-                title: $0.title,
-                counter: "\($0.items.filter(\.isDone).count)/\($0.items.count)",
-                data: $0,
-                isReminderSet: $0.isValidReminderSet,
-                firstUndoneItem: self.getFirstUndoneItem(form: $0.items)
-            )
-        }
-        print(self.checklists)
-    }
-    
-    func getItemViewModel(
-        for item: ChecklistItemDataModel,
-        in checkList: ChecklistVO
-    ) -> ChecklistItemViewModel {
-        let itemSubject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
-        itemSubject.dropFirst().sink { [weak self] item in
+        viewModel.onUpdateItem.sink { [weak self] item in
             guard let self = self else { return }
-            self.checklistDataSource.updateItem(item, in: checkList.data)
-                .catch { $0.log(message: "Failed to update item \(item)") }
+            self.checklistDataSource.updateItem(item, in: checklist)
+                .catch {
+                    $0.log(message: "Failed to update item \(item)")
+                }
         }.store(in: &cancellables)
-        return .init(item: itemSubject)
-    }
-    
-    func getFirstUndoneItem(form items: [ChecklistItemDataModel]) -> ChecklistItemDataModel? {
-        items
-            .filter(\.isUndone)
-            .sorted { (left, right) -> Bool in right.updateDate > left.updateDate }
-            .first
+        return viewModel
     }
 }

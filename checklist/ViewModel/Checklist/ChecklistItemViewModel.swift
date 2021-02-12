@@ -30,6 +30,10 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     
     var cancellables =  Set<AnyCancellable>()
     
+    static var empty: ChecklistItemViewModel {
+        .init(id: "", name: nil, isDone: false, isEditable: false)
+    }
+    
     init(id: String, name: String?, isDone: Bool, isEditable: Bool) {
         self.id = id
         self.name = name ?? ""
