@@ -24,7 +24,7 @@ struct ChecklistNameView: View {
             MultilineTextView(
                 text: $checklistName,
                 placeholder: "Name your checklist",
-                font: .checklistTitle,
+                font: .title,
                 isEditing: $isEditing,
                 isCrossedOut: .constant(false),
                 desiredHeight: $desiredHeight

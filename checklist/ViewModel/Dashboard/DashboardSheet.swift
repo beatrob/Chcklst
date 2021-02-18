@@ -15,6 +15,7 @@ enum DashboardSheet {
     case none
     case createChecklist
     case selectTemplate
+    case menu
     
     var view: AnyView {
         switch self {
@@ -31,6 +32,10 @@ enum DashboardSheet {
             return AnyView(
                 SelectTemplateView(viewModel: AppContext.resolver.resolve(SelectTemplateViewModel.self)!)
                     .environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
+            )
+        case .menu:
+            return AnyView(
+                MenuView(viewModel: AppContext.resolver.resolve(MenuViewModel.self)!)
             )
         case .none: return AnyView.empty
         }

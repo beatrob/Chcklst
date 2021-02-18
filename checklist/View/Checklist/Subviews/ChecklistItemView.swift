@@ -28,7 +28,7 @@ struct ChecklistItemView: View, Equatable {
             MultilineTextView(
                 text: $viewModel.name,
                 placeholder: "Add task",
-                font: .checklistItem,
+                font: .item,
                 isEditing: $isEditing,
                 isCrossedOut: $viewModel.isDone,
                 desiredHeight: $desiredHeight

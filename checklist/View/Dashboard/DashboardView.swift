@@ -10,87 +10,30 @@ import SwiftUI
 
 struct DashboardView: View {
     
-    @ObservedObject var viewModel: DashboardViewModel
-    @EnvironmentObject var navigationHelper: NavigationHelper
+    @StateObject var viewModel: DashboardViewModel
     
     var body: some View {
         NavigationView {
             ZStack {
-                Color("mainBackground")
+                Color.mainBackground
                     .ignoresSafeArea()
-                ScrollView {
-                    VStack {
-                        
-                        NavigationLink(
-                            destination: navigationHelper.dashboardDestination,
-                            tag: .settings,
-                            selection: $navigationHelper.dashboardSelection
-                        ) {
-                            EmptyView()
-                        }
-                        .isDetailLink(false)
-                        .hidden()
-                        
-                        NavigationLink(
-                            destination: navigationHelper.dashboardDestination,
-                            tag: .checklistDetail,
-                            selection: $navigationHelper.dashboardSelection
-                        ) {
-                            EmptyView()
-                        }
-                        .isDetailLink(false)
-                        .hidden()
-                        
-                        NavigationLink(
-                            destination: navigationHelper.dashboardDestination,
-                            tag: .myTemplates,
-                            selection: $navigationHelper.dashboardSelection
-                        ) {
-                            EmptyView()
-                        }
-                        .isDetailLink(false)
-                        .hidden()
-                        
-                        
+                NavigationLinks()
+                VStack(spacing: 0) {
+                    DashboardNavBar(viewModel: .init())
+                        .frame(height: 90)
+                    ScrollView {
                         VStack {
-                            Spacer().frame(height: 15.0)
-                            FilterView(viewModel: viewModel.filterViewModel)
-                            HStack {
-                                Text(viewModel.title)
-                                    .font(.largeTitle)
-                                    .foregroundColor(Color.white)
-                                    .padding()
-                                Spacer()
+                            ForEach(viewModel.checklistCells, id: \.id) { cell in
+                                DashboardChecklistCell(viewModel: cell)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 7)
                             }
-                        }.background(Color.blue)
-                        ForEach(viewModel.checklistCells, id: \.id) { cell in
-                            DashboardChecklistCell(viewModel: cell)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
                         }
-                        Spacer()
+                        .padding(.vertical)
                     }
-                    .navigationBarTitle("C H C K ✓ L S T", displayMode: .inline)
-                    .navigationBarItems(
-                        leading: Button.init(
-                            action: { self.viewModel.onSettings.send() },
-                            label: {
-                                Image(systemName: "gear")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                            }
-                        ),
-                        trailing: Button.init(
-                            action: { self.viewModel.onCreateNewChecklist.send()},
-                            label: {
-                                Image(systemName: "plus")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                            }
-                        )
-                    )
-                }
+                }.ignoresSafeArea()
             }
+            .navigationBarHidden(true)
         }
         .alert(isPresented: $viewModel.alertVisibility.isVisible) {
             self.viewModel.alertVisibility.view
@@ -100,6 +43,48 @@ struct DashboardView: View {
         }
         .sheet(isPresented: $viewModel.sheetVisibility.isVisible) {
             self.viewModel.sheetVisibility.view
+        }
+    }
+}
+
+
+// MARK: - NavigationLinks
+
+private struct NavigationLinks: View {
+    
+    @EnvironmentObject var navigationHelper: NavigationHelper
+    
+    var body: some View {
+        VStack {
+            NavigationLink(
+                destination: navigationHelper.dashboardDestination,
+                tag: .settings,
+                selection: $navigationHelper.dashboardSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
+            
+            NavigationLink(
+                destination: navigationHelper.dashboardDestination,
+                tag: .checklistDetail,
+                selection: $navigationHelper.dashboardSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
+            
+            NavigationLink(
+                destination: navigationHelper.dashboardDestination,
+                tag: .myTemplates,
+                selection: $navigationHelper.dashboardSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
         }
     }
 }
@@ -114,6 +99,6 @@ struct DashboardView_Previews: PreviewProvider {
                 checklistFilter: ChecklistFilterImpl(dataSource: MockChecklistDataSource()),
                 notificationManager: NotificationManager()
             )
-        )
+        ).environmentObject(NavigationHelper())
     }
 }

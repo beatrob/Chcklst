@@ -16,12 +16,12 @@ struct DashboardChecklistCell: View {
         VStack {
             HStack {
                 Text(viewModel.title)
-                    .modifier(ChecklistTitle())
+                    .modifier(Modifiers.Checklist.Title())
                 Spacer()
                 if viewModel.isReminderSet {
                     FilterItemData.reminder.image
                 }
-                Text(viewModel.counter).foregroundColor(.gray)
+                Text(viewModel.counter).modifier(Modifiers.Checklist.Item())
             }
             .padding(.top)
             .padding(.leading)
@@ -32,12 +32,12 @@ struct DashboardChecklistCell: View {
                 }
                 Spacer()
             }
-            .padding()
+            .padding(.leading)
+            .padding(.trailing)
+            .padding(.bottom)
         }
-        .frame(minWidth: 100, minHeight: 100)
-        .background(Color("dashboardChecklistBackground"))
+        .background(Color.checklistBackground)
         .cornerRadius(20)
-        .shadow(radius: 10)
     }
 }
 

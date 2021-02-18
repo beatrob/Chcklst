@@ -47,5 +47,6 @@ class ViewModelAssembly: Assembly {
             argument: FilterPassthroughSubject.self,
             initializer: FilterViewModel.init
         )
+        container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)
     }
 }

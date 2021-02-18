@@ -79,7 +79,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewModel = AppContext.resolver.resolve(InitializeAppViewModel.self)!
         let contentView = InitializeAppView(viewModel: viewModel)
         
-        window.rootViewController = UIHostingController(rootView: contentView)
+        window.rootViewController = HostingController(rootView: contentView)
         
         viewModel.initializeDidFinish.sink {
             initializeDidFinish()

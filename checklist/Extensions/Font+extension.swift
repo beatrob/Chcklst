@@ -13,29 +13,34 @@ import UIKit
 
 extension Font {
     
-    enum AppFont {
+    enum Chcklst {
         
-        static let name = "Avenir Next"
-        static let boldName = "Avenir Next Bold"
+        static let regular = "Avenir Next"
+        static let bold = "Avenir Next Bold"
         
-        case checklistTitle
-        case checklistItem
+        case title
+        case item
+        case boldItem
         
         var font: Font {
             switch self {
-            case .checklistItem:
-                return Font.custom(AppFont.name, size: 17)
-            case .checklistTitle:
-                return Font.custom(AppFont.boldName, size: 30)
+            case .item:
+                return Font.custom(Chcklst.regular, size: 15)
+            case .boldItem:
+                return Font.custom(Chcklst.bold, size: 15)
+            case .title:
+                return Font.custom(Chcklst.bold, size: 20)
             }
         }
         
         var uiFont: UIFont {
             switch self {
-            case .checklistItem:
-                return UIFont(name: AppFont.name, size: 17)!
-            default:
-                return UIFont(name: AppFont.boldName, size: 30)!
+            case .item:
+                return UIFont(name: Chcklst.regular, size: 15)!
+            case .boldItem:
+                return UIFont(name: Chcklst.bold, size: 15)!
+            case .title:
+                return UIFont(name: Chcklst.bold, size: 20)!
             }
         }
     }

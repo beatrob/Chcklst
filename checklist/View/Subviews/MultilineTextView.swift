@@ -134,7 +134,7 @@ struct MultilineTextView: UIViewRepresentable {
     
     @Binding var text: String
     let placeholder: String
-    let font: Font.AppFont
+    let font: Font.Chcklst
     @Binding var isEditing: Bool
     @Binding var isCrossedOut: Bool
     @Binding var desiredHeight: CGFloat
@@ -180,7 +180,7 @@ struct MultilineTextView_Previews: PreviewProvider {
         MultilineTextView(
             text: .constant(""),
             placeholder: "Add task",
-            font: .checklistItem,
+            font: .item,
             isEditing: .constant(false),
             isCrossedOut: .constant(false),
             desiredHeight: .constant(20)

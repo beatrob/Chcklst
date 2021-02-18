@@ -8,7 +8,11 @@
 
 import Foundation
 
-enum FilterItemData: CaseIterable {
+enum FilterItemData: CaseIterable, Identifiable {
+    
+    var id: String {
+        title
+    }
     
     case latest
     case abc

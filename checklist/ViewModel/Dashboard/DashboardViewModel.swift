@@ -28,15 +28,7 @@ class DashboardViewModel: ObservableObject {
         didSet { sheetVisibility.set(view: sheet.view, isVisible: sheet.isVisible) }
     }
     
-    lazy var filterViewModel: FilterViewModel = {
-        let onSelectFilter = FilterPassthroughSubject()
-        onSelectFilter.sink { [weak self] filter in
-            guard let self = self else { return }
-            self.selectedFilter = filter
-        }.store(in: &cancellables)
-        return AppContext.resolver.resolve(FilterViewModel.self, argument: onSelectFilter)!
-    }()
-    var selectedFilter: FilterItemData = .initial {
+    var selectedFilter: FilterItemData {
         didSet {
             self.checklistFilter.filter = selectedFilter
             self.title = selectedFilter.title
@@ -44,7 +36,7 @@ class DashboardViewModel: ObservableObject {
     }
     
     let onCreateNewChecklist = EmptySubject()
-    let onSettings = EmptySubject()
+    let onMenu = EmptySubject()
     var cancellables =  Set<AnyCancellable>()
     
     private var checklistToEdit: DashboardChecklistCellViewModel?
@@ -62,6 +54,7 @@ class DashboardViewModel: ObservableObject {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
         self.checklistFilter = checklistFilter
+        self.selectedFilter = .initial
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
             log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
@@ -114,9 +107,12 @@ class DashboardViewModel: ObservableObject {
             })
         }.store(in: &cancellables)
         
-        onSettings.sink {
-            navigationHelper.navigateToSettings()
+        onMenu.sink { [weak self] in
+            self?.sheet = .menu
         }.store(in: &cancellables)
+        
+        self.checklistFilter.filter = .initial
+        self.title = selectedFilter.title
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
