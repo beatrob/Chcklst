@@ -22,7 +22,19 @@ class DashboardNavBarViewModel: ObservableObject {
         title: nil,
         icon: Image(systemName: "magnifyingglass")
     )
-    @Published var sortedByTitle: String = FilterItemData.initial.title
+    @Published var sortedByTitle: String = SortDataModel.initial.title
+    @Published var filterTitle: String = FilterDataModel.initial.title
+    @Published var isFilterVisible: Bool = FilterDataModel.initial.isVisibleInNavbar
+    
+    let onMenuTapped = EmptySubject()
+    let onSearchTapped = EmptySubject()
+    let onAddTapped = EmptySubject()
     
     private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        menuButtonViewModel.didTap.subscribe(onMenuTapped).store(in: &cancellables)
+        searchButtonViewModel.didTap.subscribe(onSearchTapped).store(in: &cancellables)
+        addButtonViewModel.didTap.subscribe(onAddTapped).store(in: &cancellables)
+    }
 }

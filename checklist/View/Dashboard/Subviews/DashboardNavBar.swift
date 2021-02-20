@@ -20,11 +20,21 @@ struct DashboardNavBar: View {
                 Spacer()
                 
                 HStack(spacing: 5) {
-                    Text("sorted by")
-                        .modifier(Modifiers.Checklist.Item())
+                    Image(systemName: "arrow.up.arrow.down")
+                        .modifier(Modifiers.Menu.Section())
                     Text(viewModel.sortedByTitle)
-                        .modifier(Modifiers.Menu.Item())
+                        .modifier(Modifiers.Menu.Section())
                 }
+                
+                if viewModel.isFilterVisible {
+                    HStack(spacing: 5) {
+                        Image(systemName: "eye")
+                            .modifier(Modifiers.Menu.Section())
+                        Text(viewModel.filterTitle)
+                            .modifier(Modifiers.Menu.Section())
+                    }
+                }
+                
                 DashboardChipButton(viewModel: viewModel.searchButtonViewModel)
                 DashboardChipButton(viewModel: viewModel.addButtonViewModel)
             }

@@ -9,14 +9,15 @@
 import Foundation
 import Combine
 import PromiseKit
+import SwiftUI
 
 class DashboardViewModel: ObservableObject {
     
-    @Published var title: String = FilterItemData.initial.title
     @Published var checklistCells: [DashboardChecklistCellViewModel] = []
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var sheetVisibility = ViewVisibility(view: DashboardSheet.none.view)
+    @Published var isSidemenuVisible = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -28,33 +29,29 @@ class DashboardViewModel: ObservableObject {
         didSet { sheetVisibility.set(view: sheet.view, isVisible: sheet.isVisible) }
     }
     
-    var selectedFilter: FilterItemData {
-        didSet {
-            self.checklistFilter.filter = selectedFilter
-            self.title = selectedFilter.title
-        }
-    }
-    
     let onCreateNewChecklist = EmptySubject()
     let onMenu = EmptySubject()
+    let onDarkOverlayTapped = EmptySubject()
+    let navBarViewModel = AppContext.resolver.resolve(DashboardNavBarViewModel.self)!
+    let menuViewModel = AppContext.resolver.resolve(MenuViewModel.self)!
+    
     var cancellables =  Set<AnyCancellable>()
     
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
-    private let checklistFilter: ChecklistFilter
+    private let checklistFilterAndSort: ChecklistFilterAndSort
     
     init(
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         navigationHelper: NavigationHelper,
-        checklistFilter: ChecklistFilter,
+        checklistFilterAndSort: ChecklistFilterAndSort,
         notificationManager: NotificationManager
     ) {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
-        self.checklistFilter = checklistFilter
-        self.selectedFilter = .initial
+        self.checklistFilterAndSort = checklistFilterAndSort
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
             log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
@@ -72,7 +69,7 @@ class DashboardViewModel: ObservableObject {
             }
         }.store(in: &cancellables)
         
-        checklistFilter.filteredCheckLists
+        checklistFilterAndSort.filteredAndSortedCheckLists
             .sink { [weak self] data in
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
@@ -111,8 +108,32 @@ class DashboardViewModel: ObservableObject {
             self?.sheet = .menu
         }.store(in: &cancellables)
         
-        self.checklistFilter.filter = .initial
-        self.title = selectedFilter.title
+        navBarViewModel.onMenuTapped.sink { [weak self] _ in
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        navBarViewModel.onAddTapped.subscribe(onCreateNewChecklist).store(in: &cancellables)
+        
+        menuViewModel.onSelectSort.sink { [weak self] sort in
+            self?.checklistCells.removeAll()
+            self?.navBarViewModel.sortedByTitle = sort.title
+            self?.checklistFilterAndSort.sort = sort
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        menuViewModel.onSelectFilter.sink { [weak self] filter in
+            self?.checklistCells.removeAll()
+            self?.navBarViewModel.filterTitle = filter.title
+            self?.navBarViewModel.isFilterVisible = filter.isVisibleInNavbar
+            self?.checklistFilterAndSort.filter = filter
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        onDarkOverlayTapped.sink { [weak self] in
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        checklistFilterAndSort.sort = .initial
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
@@ -167,5 +188,17 @@ class DashboardViewModel: ObservableObject {
                 }
         }.store(in: &cancellables)
         return viewModel
+    }
+}
+
+
+// MARK: - Private methods
+
+private extension DashboardViewModel {
+    
+    func toggleSidemenu() {
+        withAnimation(.easeOut(duration: 0.2)) {
+            self.isSidemenuVisible.toggle()
+        }
     }
 }

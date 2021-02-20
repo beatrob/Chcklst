@@ -10,50 +10,69 @@ import Foundation
 import Combine
 
 
-protocol ChecklistFilter: AnyObject {
-    var filteredCheckLists: AnyPublisher<[ChecklistDataModel], Never> { get }
-    var filter: FilterItemData { get set }
+protocol ChecklistFilterAndSort: AnyObject {
+    var filteredAndSortedCheckLists: AnyPublisher<[ChecklistDataModel], Never> { get }
+    var sort: SortDataModel { get set }
+    var filter: FilterDataModel? { get set }
 }
 
-class ChecklistFilterImpl: ChecklistFilter {
+class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     
     private let dataSource: ChecklistDataSource
     private let _filteredChecklists = PassthroughSubject<[ChecklistDataModel], Never>()
-    var filteredCheckLists: AnyPublisher<[ChecklistDataModel], Never> {
+    
+    var filteredAndSortedCheckLists: AnyPublisher<[ChecklistDataModel], Never> {
         _filteredChecklists.eraseToAnyPublisher()
     }
     
-    var filter: FilterItemData {
+    var sort: SortDataModel = .initial {
         didSet {
-            dataSource.checkLists.sink { [weak self] checklists in
-                guard let self = self else { return }
-                self._filteredChecklists.send(self.filter(checklists: checklists))
-            }.store(in: &cancellables)
+            updateFilterAndSort()
         }
     }
     
-    var cancellables = Set<AnyCancellable>()
+    var filter: FilterDataModel? {
+        didSet {
+            updateFilterAndSort()
+        }
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(dataSource: ChecklistDataSource) {
         self.dataSource = dataSource
-        self.filter = .initial
+    }
+    
+    private func updateFilterAndSort() {
+        cancellables.removeAll()
+        dataSource.checkLists.sink { [weak self] checklists  in
+            guard let self = self else { return }
+            let filtered = self.filter(checklists: checklists)
+            let sorted = self.sort(checklists: filtered)
+            self._filteredChecklists.send(sorted)
+        }.store(in: &cancellables)
     }
     
     private func filter(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
+        guard let filter = filter else {
+            return checklists
+        }
         switch filter {
-        case .latest: return orderByLatest(checklists: checklists)
-        case .abc: return orderByAlphabet(checklists: checklists)
-        case .done:
-            let doneOnly = filterDone(checklists: checklists)
-            return orderByLatest(checklists: doneOnly)
-        case .reminder:
-            let reminderOnly = filterReminders(checklists: checklists)
-            return orderByLatest(checklists: reminderOnly)
-        case .archive:
-            let archivedOnly = filterArchived(checklists: checklists)
-            return orderByLatest(checklists: archivedOnly)
+        case .none: return checklists
+        case .done: return filterDone(checklists: checklists)
+        case .withReminder: return filterReminders(checklists: checklists)
+        case .archived: return filterArchived(checklists: checklists)
         }
     }
+    
+    private func sort(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
+        switch sort {
+        case .latest: return orderByLatest(checklists: checklists)
+        case .oldest: return orderByLatest(checklists: checklists).reversed()
+        case .name: return orderByAlphabet(checklists: checklists)
+        }
+    }
+    
     
     private func orderByLatest(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
         checklists.sorted { (left, right) -> Bool in

@@ -14,6 +14,15 @@ extension Modifiers {
     
     enum Menu {
         
+        struct Section: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.item.font)
+                    .foregroundColor(.firstAccent)
+            }
+        }
+        
         struct Item: ViewModifier {
             
             func body(content: Content) -> some View {

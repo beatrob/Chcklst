@@ -19,7 +19,7 @@ struct DashboardChecklistCell: View {
                     .modifier(Modifiers.Checklist.Title())
                 Spacer()
                 if viewModel.isReminderSet {
-                    FilterItemData.reminder.image
+                    Image(systemName: "bell.badge")
                 }
                 Text(viewModel.counter).modifier(Modifiers.Checklist.Item())
             }

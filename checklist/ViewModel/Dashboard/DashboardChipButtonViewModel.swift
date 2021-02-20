@@ -16,6 +16,7 @@ class DashboardChipButtonViewModel: ObservableObject {
     @Published var title: String?
     @Published var icon: Image?
     private var cancellables = Set<AnyCancellable>()
+    let didTap = EmptySubject()
     
     init(title: String?, icon: Image?) {
         self.title = title

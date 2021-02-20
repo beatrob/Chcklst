@@ -24,6 +24,9 @@ struct DashboardChipButton: View {
                     
             }
         }
+        .onTapGesture {
+            viewModel.didTap.send()
+        }
         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
         .overlay(
             Capsule()

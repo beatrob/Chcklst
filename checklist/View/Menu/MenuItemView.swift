@@ -15,13 +15,16 @@ struct MenuItemView<Item: Identifiable>: View {
     var body: some View {
         Text(viewModel.title)
             .modifier(Modifiers.Menu.Item())
-            .padding()
+            .padding(5)
+            .onTapGesture {
+                viewModel.onSelect.send()
+            }
     }
 }
 
 struct MenuItemView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = MenuItemViewModel(dataModel: FilterItemData.latest)
+        let viewModel = MenuItemViewModel(dataModel: SortDataModel.latest)
         return MenuItemView(viewModel: viewModel)
             .previewLayout(.sizeThatFits)
     }

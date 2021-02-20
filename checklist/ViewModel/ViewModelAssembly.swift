@@ -42,11 +42,7 @@ class ViewModelAssembly: Assembly {
         )
         container.autoregister(InitializeAppViewModel.self, initializer: InitializeAppViewModel.init)
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
-        container.autoregister(
-            FilterViewModel.self,
-            argument: FilterPassthroughSubject.self,
-            initializer: FilterViewModel.init
-        )
         container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)
+        container.autoregister(DashboardNavBarViewModel.self, initializer: DashboardNavBarViewModel.init)
     }
 }

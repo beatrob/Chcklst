@@ -11,27 +11,44 @@ import SwiftUI
 struct DashboardView: View {
     
     @StateObject var viewModel: DashboardViewModel
+    private let sideMenuWidth: CGFloat = 200
     
     var body: some View {
         NavigationView {
-            ZStack {
+            ZStack(alignment: .leading) {
                 Color.mainBackground
                     .ignoresSafeArea()
+                MenuView(viewModel: viewModel.menuViewModel)
+                    .frame(width: sideMenuWidth)
+                    .ignoresSafeArea()
                 NavigationLinks()
-                VStack(spacing: 0) {
-                    DashboardNavBar(viewModel: .init())
-                        .frame(height: 90)
-                    ScrollView {
-                        VStack {
-                            ForEach(viewModel.checklistCells, id: \.id) { cell in
-                                DashboardChecklistCell(viewModel: cell)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 7)
+                
+                ZStack {
+                    VStack(spacing: 0) {
+                        DashboardNavBar(viewModel: viewModel.navBarViewModel)
+                            .frame(height: 90)
+                        ScrollView {
+                            VStack {
+                                ForEach(viewModel.checklistCells, id: \.id) { cell in
+                                    DashboardChecklistCell(viewModel: cell)
+                                        .padding(.horizontal, 20)
+                                        .padding(.vertical, 7)
+                                }
                             }
+                            .padding(.vertical)
                         }
-                        .padding(.vertical)
                     }
-                }.ignoresSafeArea()
+                    .background(Color.mainBackground)
+                    .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
+                    .ignoresSafeArea()
+                    
+                    Color.mainBackground.opacity(viewModel.isSidemenuVisible ? 0.6 : 0)
+                        .ignoresSafeArea()
+                        .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
+                        .onTapGesture {
+                            viewModel.onDarkOverlayTapped.send()
+                        }
+                }
             }
             .navigationBarHidden(true)
         }
@@ -96,7 +113,7 @@ struct DashboardView_Previews: PreviewProvider {
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
                 navigationHelper: NavigationHelper(),
-                checklistFilter: ChecklistFilterImpl(dataSource: MockChecklistDataSource()),
+                checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
                 notificationManager: NotificationManager()
             )
         ).environmentObject(NavigationHelper())
