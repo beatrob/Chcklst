@@ -13,18 +13,27 @@ struct MenuItemView<Item: Identifiable>: View {
     @ObservedObject var viewModel: MenuItemViewModel<Item>
     
     var body: some View {
-        Text(viewModel.title)
-            .modifier(Modifiers.Menu.Item())
-            .padding(5)
-            .onTapGesture {
-                viewModel.onSelect.send()
-            }
+        HStack {
+            Text(viewModel.title)
+                .modifier(
+                    Modifiers.Menu.Item(color: .firstAccent)
+                )
+                .padding(.horizontal, 10)
+                .padding(.vertical, 5)
+                .onTapGesture {
+                    viewModel.onSelect.send()
+                }
+            
+        }.background(
+            Capsule()
+                .fill(viewModel.isSelected ? Color.menuBackground : Color.clear)
+        )
     }
 }
 
 struct MenuItemView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = MenuItemViewModel(dataModel: SortDataModel.latest)
+        let viewModel = MenuItemViewModel(dataModel: SortDataModel.latest, isSelected: false)
         return MenuItemView(viewModel: viewModel)
             .previewLayout(.sizeThatFits)
     }

@@ -20,21 +20,57 @@ class MenuViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published var sortItems: [MenuItemViewModel<SortDataModel>]
     @Published var filterItems: [MenuItemViewModel<FilterDataModel>]
-    @Published var myTemplates = MenuItemViewModel<MenuItemDataModel>(dataModel: .init(title: "My Temlates"))
-    @Published var settings = MenuItemViewModel<MenuItemDataModel>(dataModel: .init(title: "Settings"))
-    @Published var about = MenuItemViewModel<MenuItemDataModel>(dataModel: .init(title: "About"))
+    @Published var myTemplates = MenuItemViewModel<MenuItemDataModel>(
+        dataModel: .init(title: "My Temlates"), isSelected: false
+    )
+    @Published var settings = MenuItemViewModel<MenuItemDataModel>(
+        dataModel: .init(title: "Settings"), isSelected: false
+    )
+    @Published var about = MenuItemViewModel<MenuItemDataModel>(
+        dataModel: .init(title: "About"), isSelected: false
+    )
+    @Published var selectedSort: SortDataModel = .initial {
+        didSet {
+            sortItems.forEach { item in
+                item.isSelected = item.data == selectedSort
+            }
+        }
+    }
+    @Published var selectedFilter: FilterDataModel = .initial {
+        didSet {
+            filterItems.forEach { item in
+                item.isSelected = item.data == selectedFilter
+            }
+        }
+    }
     
     let onSelectSort = PassthroughSubject<SortDataModel, Never>()
     let onSelectFilter = PassthroughSubject<FilterDataModel, Never>()
+    let onSelectMyTemplates = EmptySubject()
+    let onSelectSettings = EmptySubject()
+    let onSelectAbout = EmptySubject()
     
     init() {
-        sortItems = SortDataModel.allCases.map { MenuItemViewModel(dataModel: $0) }
-        filterItems = FilterDataModel.allCases.map { MenuItemViewModel(dataModel: $0) }
+        sortItems = SortDataModel.allCases.map {
+            MenuItemViewModel(dataModel: $0, isSelected: $0 == .initial )
+        }
+        filterItems = FilterDataModel.allCases.map {
+            MenuItemViewModel(dataModel: $0, isSelected: $0 == .initial)
+        }
         sortItems.forEach { viewModel in
-            viewModel.onSelectMenuItem.subscribe(onSelectSort).store(in: &cancellables)
+            viewModel.onSelectMenuItem.sink { [weak self] item in
+                self?.selectedSort = item
+                self?.onSelectSort.send(item)
+            }.store(in: &cancellables)
         }
         filterItems.forEach { viewModel in
-            viewModel.onSelectMenuItem.subscribe(onSelectFilter).store(in: &cancellables)
+            viewModel.onSelectMenuItem.sink { [weak self] item in
+                self?.selectedFilter = item
+                self?.onSelectFilter.send(item)
+            }.store(in: &cancellables)
         }
+        myTemplates.onSelect.subscribe(onSelectMyTemplates).store(in: &cancellables)
+        settings.onSelect.subscribe(onSelectSettings).store(in: &cancellables)
+        about.onSelect.subscribe(onSelectAbout).store(in: &cancellables)
     }
 }

@@ -36,6 +36,12 @@ struct DashboardChecklistCell: View {
             .padding(.trailing)
             .padding(.bottom)
         }
+        .onTapGesture {
+            viewModel.onTapped.send()
+        }
+        .onLongPressGesture {
+            viewModel.onLongTapped.send()
+        }
         .background(Color.checklistBackground)
         .cornerRadius(20)
     }

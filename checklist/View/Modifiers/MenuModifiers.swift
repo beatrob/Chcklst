@@ -25,10 +25,21 @@ extension Modifiers {
         
         struct Item: ViewModifier {
             
+            var color: Color
+            
             func body(content: Content) -> some View {
                 content
                     .font(Font.Chcklst.boldItem.font)
-                    .foregroundColor(.firstAccent)
+                    .foregroundColor(color)
+            }
+        }
+        
+        struct SelectedItem: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.boldItem.font)
+                    .foregroundColor(.menuBackground)
             }
         }
         

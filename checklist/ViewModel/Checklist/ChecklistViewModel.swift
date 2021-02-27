@@ -61,11 +61,21 @@ class ChecklistViewModel: ObservableObject {
     let onEditTapped: EmptySubject = .init()
     let onDoneTapped: EmptySubject = .init()
     let onActionButtonTapped: EmptySubject = .init()
+    let onDismissTapped: EmptySubject = .init()
     
     let checklistDataSource: ChecklistDataSource
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
+    lazy var navBarViewModel: ChecklistNavBarViewModel = {
+        let viewModel = AppContext.resolver.resolve(ChecklistNavBarViewModel.self)!
+        viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
+        return viewModel
+    }()
+    
     var cancellables =  Set<AnyCancellable>()
+    var onDismiss: EmptyPublisher {
+        onDismissTapped.eraseToAnyPublisher()
+    }
     
     init(viewState: ChecklistViewState,
         checklistDataSource: ChecklistDataSource,

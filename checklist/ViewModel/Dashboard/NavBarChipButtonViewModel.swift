@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 
-class DashboardChipButtonViewModel: ObservableObject {
+class NavBarChipButtonViewModel: ObservableObject {
     
     @Published var title: String?
     @Published var icon: Image?

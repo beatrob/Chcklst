@@ -26,7 +26,6 @@ struct DashboardView: View {
                 ZStack {
                     VStack(spacing: 0) {
                         DashboardNavBar(viewModel: viewModel.navBarViewModel)
-                            .frame(height: 90)
                         ScrollView {
                             VStack {
                                 ForEach(viewModel.checklistCells, id: \.id) { cell in

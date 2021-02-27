@@ -16,7 +16,7 @@ struct DashboardNavBar: View {
         VStack(alignment: .center) {
             Spacer()
             HStack(spacing: 15) {
-                DashboardChipButton(viewModel: viewModel.menuButtonViewModel)
+                NavBarChipButton(viewModel: viewModel.menuButtonViewModel)
                 Spacer()
                 
                 HStack(spacing: 5) {
@@ -35,13 +35,13 @@ struct DashboardNavBar: View {
                     }
                 }
                 
-                DashboardChipButton(viewModel: viewModel.searchButtonViewModel)
-                DashboardChipButton(viewModel: viewModel.addButtonViewModel)
+                NavBarChipButton(viewModel: viewModel.searchButtonViewModel)
+                NavBarChipButton(viewModel: viewModel.addButtonViewModel)
             }
             .padding(.horizontal)
             .padding(.bottom)
         }
-        .background(Color.menuBackground)
+        .modifier(Modifiers.NavBar())
     }
 }
 

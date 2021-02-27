@@ -29,9 +29,17 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     @Published var isReminderSet: Bool = false
     @Published var firstUndoneItem: ChecklistItemViewModel?
     
-    let onLongTapped = ChecklistPassthroughSubject()
-    let onTapped = ChecklistPassthroughSubject()
+    let onLongTapped = EmptySubject()
+    let onTapped = EmptySubject()
     let onUpdateItem = ChecklistItemPassthroughSubject()
+    
+    var onChecklistTapped: AnyPublisher<ChecklistDataModel, Never> {
+        onTapped.map { self.checklist }.eraseToAnyPublisher()
+    }
+    
+    var onChecklistLongTapped: AnyPublisher<ChecklistDataModel, Never> {
+        onLongTapped.map { self.checklist }.eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     

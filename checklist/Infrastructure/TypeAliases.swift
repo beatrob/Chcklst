@@ -21,3 +21,4 @@ typealias FilterPassthroughSubject = PassthroughSubject<SortDataModel, Never>
 
 typealias EmptySubject = PassthroughSubject<Void, Never>
 typealias EmptyCompletion = () -> Void
+typealias EmptyPublisher = AnyPublisher<Void, Never>

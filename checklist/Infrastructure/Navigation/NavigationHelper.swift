@@ -8,6 +8,8 @@
 
 import Foundation
 import SwiftUI
+import Combine
+
 
 class NavigationHelper: ObservableObject {
     
@@ -36,6 +38,7 @@ class NavigationHelper: ObservableObject {
     var dashboardDestination: AnyView = .empty
     var settingsDestination: AnyView = .empty
     var selectTemplateDestination: AnyView = .empty
+    var cancellables = Set<AnyCancellable>()
     
     func navigateToSettings() {
         let viewModel = AppContext.resolver.resolve(SettingsViewModel.self)!
@@ -60,6 +63,9 @@ class NavigationHelper: ObservableObject {
             ChecklistViewModel.self,
             argument: ChecklistViewState.display(checklist: checklist)
         )!
+        viewModel.onDismiss.sink { [weak self] in
+            self?.popToDashboard()
+        }.store(in: &cancellables)
         dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))
         dashboardSelection = .checklistDetail
     }

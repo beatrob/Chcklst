@@ -19,6 +19,7 @@ struct ChecklistView: View {
         }
         return ScrollView {
             VStack {
+                ChecklistNavBar(viewModel: viewModel.navBarViewModel)
                 ChecklistNameView(
                     checklistName: .init(
                         get: { self.viewModel.checklistName },
@@ -66,9 +67,9 @@ struct ChecklistView: View {
                     }
                 }
             }
-            .navigationBarItems(trailing: viewModel.navigationBarTrailingItem)
-            .navigationBarTitle(viewModel.navigationBarTitle, displayMode: viewModel.titleDisplayMode)
         }
+        .ignoresSafeArea()
+        .navigationBarHidden(true)
         .onTapGesture { self.hideKeyboard() }
         .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
             viewModel.alertVisibility.view

@@ -13,12 +13,12 @@ import SwiftUI
 
 class DashboardNavBarViewModel: ObservableObject {
     
-    @Published var menuButtonViewModel = DashboardChipButtonViewModel(
+    @Published var menuButtonViewModel = NavBarChipButtonViewModel(
         title: nil,
         icon: Image(systemName: "line.horizontal.3")
     )
-    @Published var addButtonViewModel = DashboardChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
-    @Published var searchButtonViewModel = DashboardChipButtonViewModel(
+    @Published var addButtonViewModel = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
+    @Published var searchButtonViewModel = NavBarChipButtonViewModel(
         title: nil,
         icon: Image(systemName: "magnifyingglass")
     )

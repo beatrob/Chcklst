@@ -129,6 +129,16 @@ class DashboardViewModel: ObservableObject {
             self?.toggleSidemenu()
         }.store(in: &cancellables)
         
+        menuViewModel.onSelectMyTemplates.sink { [weak self] _ in
+            navigationHelper.navigateToMyTemplates(source: .dashboard)
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        menuViewModel.onSelectSettings.sink { [weak self] _ in
+            navigationHelper.navigateToSettings()
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
         onDarkOverlayTapped.sink { [weak self] in
             self?.toggleSidemenu()
         }.store(in: &cancellables)
@@ -157,10 +167,10 @@ class DashboardViewModel: ObservableObject {
     
     func getChecklistCellViewModel(with checklist: ChecklistDataModel) -> DashboardChecklistCellViewModel {
         let viewModel = DashboardChecklistCellViewModel(checklist: checklist)
-        viewModel.onTapped.sink { [weak self] checklist in
+        viewModel.onChecklistTapped.sink { [weak self] checklist in
             self?.checklistDataSource.selectedCheckList.send(checklist)
         }.store(in: &cancellables)
-        viewModel.onLongTapped.sink { [weak self] checklist in
+        viewModel.onChecklistLongTapped.sink { [weak self] checklist in
             guard let self = self else { return }
             self.actionSheet = .editChecklist(
                 checklist: checklist,

@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct DashboardChipButton: View {
+struct NavBarChipButton: View {
     
-    @ObservedObject var viewModel: DashboardChipButtonViewModel
+    @ObservedObject var viewModel: NavBarChipButtonViewModel
     
     var body: some View {
         HStack(spacing: 10) {
@@ -41,10 +41,10 @@ struct DashboardChipButton: View {
 struct FilterItemView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            DashboardChipButton(
+            NavBarChipButton(
                 viewModel: .init(title: "Some chip button", icon: Image(systemName: "plus"))
             ).previewLayout(.sizeThatFits)
-            DashboardChipButton(
+            NavBarChipButton(
                 viewModel: .init(title: "Some chip button", icon: Image(systemName: "plus"))
             ).preferredColorScheme(.dark).previewLayout(.sizeThatFits)
         }
