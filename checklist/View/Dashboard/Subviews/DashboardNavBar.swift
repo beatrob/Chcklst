@@ -41,7 +41,7 @@ struct DashboardNavBar: View {
             .padding(.horizontal)
             .padding(.bottom)
         }
-        .modifier(Modifiers.NavBar())
+        .modifier(Modifiers.NavBar.NavBar())
     }
 }
 

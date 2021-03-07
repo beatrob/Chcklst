@@ -24,9 +24,10 @@ struct NavBarChipButton: View {
                     
             }
         }
-        .onTapGesture {
-            viewModel.didTap.send()
-        }
+        .frame(
+            width: viewModel.isOnlyIcon ? 20 : nil,
+            height: viewModel.isOnlyIcon ? 20 : nil
+        )
         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
         .overlay(
             Capsule()
@@ -35,6 +36,9 @@ struct NavBarChipButton: View {
             Capsule()
                 .fill(Color.firstAccent)
         )
+        .onTapGesture {
+            viewModel.didTap.send()
+        }
     }
 }
 

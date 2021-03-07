@@ -35,5 +35,9 @@ extension Color {
     static var firstAccent: Color {
         Color("firstAccent")
     }
+    
+    func toUIColor() -> UIColor {
+        UIColor(self)
+    }
 }
 

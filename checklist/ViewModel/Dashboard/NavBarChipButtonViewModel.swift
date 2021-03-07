@@ -16,6 +16,9 @@ class NavBarChipButtonViewModel: ObservableObject {
     @Published var title: String?
     @Published var icon: Image?
     private var cancellables = Set<AnyCancellable>()
+    var isOnlyIcon: Bool {
+        title == nil && icon != nil
+    }
     let didTap = EmptySubject()
     
     init(title: String?, icon: Image?) {

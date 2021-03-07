@@ -24,7 +24,8 @@ struct ChecklistNameView: View {
             MultilineTextView(
                 text: $checklistName,
                 placeholder: "Name your checklist",
-                font: .title,
+                font: Modifiers.Checklist.BigTitle.font,
+                color: Modifiers.Checklist.BigTitle.color,
                 isEditing: $isEditing,
                 isCrossedOut: .constant(false),
                 desiredHeight: $desiredHeight
@@ -35,7 +36,7 @@ struct ChecklistNameView: View {
                         self.isEditing.toggle()
                     }
                 }
-            .padding()
+                .padding()
             if shouldCreateChecklistName {
                 Button("Next") {
                     UIApplication.shared.endEditing()
@@ -43,6 +44,7 @@ struct ChecklistNameView: View {
                         self.onNext.send()
                     }
                 }
+                .modifier(Modifiers.Button.MainAction())
             }
         }
     }

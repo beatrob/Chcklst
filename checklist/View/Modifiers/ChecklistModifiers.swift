@@ -16,6 +16,9 @@ extension Modifiers {
 
         struct Item: ViewModifier {
             
+            static var color = Color.text
+            static var font = Font.Chcklst.item
+            
             func body(content: Content) -> some View {
                 content
                     .foregroundColor(.text)
@@ -23,12 +26,24 @@ extension Modifiers {
             }
         }
         
-        struct Title: ViewModifier {
+        struct SmallTitle: ViewModifier {
             
             func body(content: Content) -> some View {
                 content
                     .foregroundColor(.text)
-                    .font(Font.Chcklst.title.font)
+                    .font(Font.Chcklst.smallTitle.font)
+            }
+        }
+        
+        struct BigTitle: ViewModifier {
+            
+            static var color = Color.text
+            static var font = Font.Chcklst.bigTitle
+            
+            func body(content: Content) -> some View {
+                content
+                    .foregroundColor(Self.color)
+                    .font(Self.font.font)
             }
         }
     }

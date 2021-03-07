@@ -18,7 +18,8 @@ extension Font {
         static let regular = "Avenir Next"
         static let bold = "Avenir Next Bold"
         
-        case title
+        case smallTitle
+        case bigTitle
         case item
         case boldItem
         
@@ -28,8 +29,10 @@ extension Font {
                 return Font.custom(Chcklst.regular, size: 15)
             case .boldItem:
                 return Font.custom(Chcklst.bold, size: 15)
-            case .title:
+            case .smallTitle:
                 return Font.custom(Chcklst.bold, size: 20)
+            case .bigTitle:
+                return Font.custom(Chcklst.bold, size: 24)
             }
         }
         
@@ -39,8 +42,10 @@ extension Font {
                 return UIFont(name: Chcklst.regular, size: 15)!
             case .boldItem:
                 return UIFont(name: Chcklst.bold, size: 15)!
-            case .title:
+            case .smallTitle:
                 return UIFont(name: Chcklst.bold, size: 20)!
+            case .bigTitle:
+                return UIFont(name: Chcklst.bold, size: 24)!
             }
         }
     }

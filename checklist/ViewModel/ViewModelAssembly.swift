@@ -44,6 +44,10 @@ class ViewModelAssembly: Assembly {
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
         container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)
         container.autoregister(DashboardNavBarViewModel.self, initializer: DashboardNavBarViewModel.init)
-        container.autoregister(ChecklistNavBarViewModel.self, initializer: ChecklistNavBarViewModel.init)
+        container.autoregister(
+            ChecklistNavBarViewModel.self,
+            argument: ChecklistDataModel.self,
+            initializer: ChecklistNavBarViewModel.init
+        )
     }
 }

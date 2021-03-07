@@ -11,12 +11,25 @@ import SwiftUI
 
 extension Modifiers {
     
-    struct NavBar: ViewModifier {
-        func body(content: Content) -> some View {
-            content
-                .frame(height: 90)
-                .background(Color.menuBackground)
-                .ignoresSafeArea()
+    enum NavBar {
+        
+        struct NavBar: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .frame(height: 90)
+                    .background(Color.menuBackground)
+                    .ignoresSafeArea()
+            }
+        }
+        
+        struct Subtitle: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.item.font)
+                    .foregroundColor(.firstAccent)
+            }
         }
     }
 }

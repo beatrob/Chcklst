@@ -26,6 +26,13 @@ struct MultilineTextView: UIViewRepresentable {
             }
         }
         
+        var textColor: UIColor = .label {
+            didSet {
+                textView.textColor = textColor
+                labelView.textColor = textColor
+            }
+        }
+        
         var isEditing: Bool = false {
             didSet {
                 setupSubviewsVisibility()
@@ -135,6 +142,7 @@ struct MultilineTextView: UIViewRepresentable {
     @Binding var text: String
     let placeholder: String
     let font: Font.Chcklst
+    let color: Color
     @Binding var isEditing: Bool
     @Binding var isCrossedOut: Bool
     @Binding var desiredHeight: CGFloat
@@ -142,6 +150,7 @@ struct MultilineTextView: UIViewRepresentable {
     func makeUIView(context: Context) -> ChecklistItemUITextView {
         let textView = ChecklistItemUITextView(isEditing: isEditing, placeholder: placeholder)
         textView.font = font.uiFont
+        textView.textColor = color.toUIColor()
         textView.setDelegate(context.coordinator)
         return textView
     }
@@ -180,7 +189,8 @@ struct MultilineTextView_Previews: PreviewProvider {
         MultilineTextView(
             text: .constant(""),
             placeholder: "Add task",
-            font: .item,
+            font: Modifiers.Checklist.Item.font,
+            color: Modifiers.Checklist.Item.color,
             isEditing: .constant(false),
             isCrossedOut: .constant(false),
             desiredHeight: .constant(20)

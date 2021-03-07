@@ -49,9 +49,15 @@ class ChecklistViewModel: ObservableObject {
     
     @Published var viewState: ChecklistViewState
     @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
+    @Published var actionSheetVisibility = ViewVisibility(view: ChecklistActionSheet.none.view)
     private var alert: ChecklistAlert = .none {
         didSet {
             alertVisibility.set(view: alert.view, isVisible: alert.isVisible)
+        }
+    }
+    private var actionSheet: ChecklistActionSheet = .none {
+        didSet {
+            actionSheetVisibility.set(view: actionSheet.view, isVisible: actionSheet.isVisible)
         }
     }
     
@@ -67,8 +73,23 @@ class ChecklistViewModel: ObservableObject {
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
     lazy var navBarViewModel: ChecklistNavBarViewModel = {
-        let viewModel = AppContext.resolver.resolve(ChecklistNavBarViewModel.self)!
+        guard let checklist = viewState.checklist else {
+            preconditionFailure("NavBarViewModel should not be incialized without a checklist")
+        }
+        let viewModel = AppContext.resolver.resolve(
+            ChecklistNavBarViewModel.self,
+            argument: checklist
+        )!
         viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
+        viewModel.actionsButton.didTap.sink { [weak self] in
+            self?.actionSheet = .actionMenu(
+                onEdit: { self?.onEditTapped.send() },
+                onDelete: { /*TODO*/ },
+                onCancel: {  }
+            )
+            self?.objectWillChange.send()
+        }.store(in: &cancellables)
+        viewModel.doneButton.didTap.subscribe(onDoneTapped).store(in: &cancellables)
         return viewModel
     }()
     
@@ -76,8 +97,12 @@ class ChecklistViewModel: ObservableObject {
     var onDismiss: EmptyPublisher {
         onDismissTapped.eraseToAnyPublisher()
     }
+    var isNavBarVisible: Bool {
+        viewState.checklist != nil
+    }
     
-    init(viewState: ChecklistViewState,
+    init(
+        viewState: ChecklistViewState,
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         notificationManager: NotificationManager

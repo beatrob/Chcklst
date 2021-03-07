@@ -11,6 +11,7 @@ import Combine
 
 typealias ChecklistPassthroughSubject = PassthroughSubject<ChecklistDataModel, Never>
 typealias ChecklistCurrentValueSubject = CurrentValueSubject<ChecklistDataModel?, Never>
+typealias ChecklistPublisher = AnyPublisher<ChecklistDataModel, Never>
 
 typealias ChecklistItemPassthroughSubject = PassthroughSubject<ChecklistItemDataModel, Never>
 
