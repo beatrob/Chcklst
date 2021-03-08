@@ -38,13 +38,13 @@ class ChecklistViewModel: ObservableObject {
     }
     @Published var reminderDate: Date = Date()
     @Published var isCreateTemplateChecked: Bool = false
-    var shouldDisplaySetReminder: Bool { viewState.isEditEnabled }
-    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew }
-    var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
+    var shouldDisplaySetReminder: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
+    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew && !shouldCreateChecklistName }
+    var shouldDisplayActionButton: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
     var isEditable: Bool { viewState.isEditEnabled }
     
     @Published var checklistName: String = ""
-    @Published var checklistDescription: String?
+    @Published var checklistDescription: String = ""
     var items: [ChecklistItemViewModel] = []
     
     @Published var viewState: ChecklistViewState
@@ -177,6 +177,7 @@ private extension ChecklistViewModel {
         }
         shouldCreateChecklistName = false
         self.checklistName = checklist.title
+        self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { self.addNewItem($0) }
     }
     

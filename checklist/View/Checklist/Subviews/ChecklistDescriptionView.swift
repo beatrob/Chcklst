@@ -9,22 +9,21 @@
 import SwiftUI
 import Combine
 
-struct ChecklistNameView: View {
+struct ChecklistDescriptionView: View {
     
-    @Binding var checklistName: String
-    @Binding var shouldCreateChecklistName: Bool
+    @Binding var description: String
     var isEditable: Bool
-    @State var textHeight: CGFloat = 100
+    @State var textHeight: CGFloat = 150
     @State var isEditing: Bool = false
-    @State var desiredHeight: CGFloat = 50
+    @State var desiredHeight: CGFloat = 40
     
     var body: some View {
         VStack(alignment: .center) {
             MultilineTextView(
-                text: $checklistName,
-                placeholder: "Name your checklist",
-                font: Modifiers.Checklist.BigTitle.font,
-                color: Modifiers.Checklist.BigTitle.color,
+                text: $description,
+                placeholder: "Description (optional)",
+                font: Modifiers.Checklist.Description.font,
+                color: Modifiers.Checklist.Description.color,
                 isEditing: $isEditing,
                 isCrossedOut: .constant(false),
                 desiredHeight: $desiredHeight
@@ -40,13 +39,12 @@ struct ChecklistNameView: View {
     }
 }
 
-struct NameYourChecklistView_Previews: PreviewProvider {
+struct ChecklistDescriptionView_Previews: PreviewProvider {
     @State var name: String
     static var previews: some View {
-        ChecklistNameView(
-            checklistName: .constant(""),
-            shouldCreateChecklistName: .constant(true),
-            isEditable: true
+        ChecklistDescriptionView(
+            description: .constant("Some super description"),
+            isEditable: false
         )
     }
 }

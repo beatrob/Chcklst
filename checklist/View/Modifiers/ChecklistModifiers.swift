@@ -46,5 +46,29 @@ extension Modifiers {
                     .font(Self.font.font)
             }
         }
+        
+        struct Description: ViewModifier {
+            
+            static var color = Color.text
+            static var font = Font.Chcklst.description
+            
+            func body(content: Content) -> some View {
+                content
+                    .foregroundColor(Self.color)
+                    .font(Self.font.font)
+            }
+        }
+        
+        struct TextField: ViewModifier {
+            
+            let isEditable: Bool
+            
+            func body(content: Content) -> some View {
+                content
+                    .padding(5)
+                    .border(Color.text, width: isEditable ? 0.5 : 0)
+                    .padding()
+            }
+        }
     }
 }

@@ -22,31 +22,45 @@ extension Font {
         case bigTitle
         case item
         case boldItem
+        case description
+        
+        var size: CGFloat {
+            switch self {
+            case .item, .boldItem:
+                return 18
+            case .description:
+                return 15
+            case .smallTitle:
+                return 20
+            case .bigTitle:
+                return 36
+            }
+        }
         
         var font: Font {
             switch self {
-            case .item:
-                return Font.custom(Chcklst.regular, size: 15)
-            case .boldItem:
-                return Font.custom(Chcklst.bold, size: 15)
-            case .smallTitle:
-                return Font.custom(Chcklst.bold, size: 20)
-            case .bigTitle:
-                return Font.custom(Chcklst.bold, size: 24)
+            case .item, .description:
+                return getFont(name: Chcklst.regular)
+            case .boldItem, .smallTitle, .bigTitle:
+                return getFont(name: Chcklst.bold)
             }
         }
         
         var uiFont: UIFont {
             switch self {
-            case .item:
-                return UIFont(name: Chcklst.regular, size: 15)!
-            case .boldItem:
-                return UIFont(name: Chcklst.bold, size: 15)!
-            case .smallTitle:
-                return UIFont(name: Chcklst.bold, size: 20)!
-            case .bigTitle:
-                return UIFont(name: Chcklst.bold, size: 24)!
+            case .item, .description:
+                return getUIFont(name: Chcklst.regular)
+            case .boldItem, .smallTitle, .bigTitle:
+                return getUIFont(name: Chcklst.bold)
             }
+        }
+        
+        private func getFont(name: String) -> Font {
+            Font.custom(name, size: size)
+        }
+        
+        private func getUIFont(name: String) -> UIFont {
+            UIFont(name: name, size: size)!
         }
     }
 }

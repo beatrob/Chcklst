@@ -44,7 +44,7 @@ struct MultilineTextView: UIViewRepresentable {
                 textView.text = text
                 if text == nil || (text?.isEmpty ?? true) {
                     labelView.text = placeholder
-                    labelView.alpha = 0.1
+                    labelView.alpha = 0.5
                 } else {
                     labelView.text = text
                     labelView.alpha = 1
