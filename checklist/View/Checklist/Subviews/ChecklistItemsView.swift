@@ -24,7 +24,8 @@ struct ChecklistItemsView: View {
                 VStack {
                     ForEach(items, id: \.id) { item in
                         ChecklistItemView(viewModel: item)
-                            .padding()
+                            .padding(.horizontal)
+                            .padding(.vertical, 5)
                     }
                 }
             }

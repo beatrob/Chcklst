@@ -28,10 +28,10 @@ struct MenuView: View {
                 }
                 HStack {
                     Image(systemName: "arrow.up.arrow.down")
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                         .padding(.leading)
                     Text("Sort by")
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                     Spacer()
                 }
                 ForEach(viewModel.sortItems) { filterItem in
@@ -39,10 +39,10 @@ struct MenuView: View {
                 }
                 HStack {
                     Image(systemName: "eye")
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                         .padding(.leading)
                     Text("Filter by")
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                     Spacer()
                 }
                 .padding(.vertical)

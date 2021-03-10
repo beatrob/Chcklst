@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 
-extension Modifiers {
+extension Modifier {
     
     enum Menu {
         

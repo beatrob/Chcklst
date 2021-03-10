@@ -189,8 +189,8 @@ struct MultilineTextView_Previews: PreviewProvider {
         MultilineTextView(
             text: .constant(""),
             placeholder: "Add task",
-            font: Modifiers.Checklist.Item.font,
-            color: Modifiers.Checklist.Item.color,
+            font: Modifier.Checklist.Item.font,
+            color: Modifier.Checklist.Item.color,
             isEditing: .constant(false),
             isCrossedOut: .constant(false),
             desiredHeight: .constant(20)

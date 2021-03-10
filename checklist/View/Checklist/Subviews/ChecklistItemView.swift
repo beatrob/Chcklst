@@ -28,18 +28,19 @@ struct ChecklistItemView: View, Equatable {
             MultilineTextView(
                 text: $viewModel.name,
                 placeholder: "Add task",
-                font: Modifiers.Checklist.Item.font,
-                color: Modifiers.Checklist.Item.color,
+                font: Modifier.Checklist.Item.font,
+                color: Modifier.Checklist.Item.color,
                 isEditing: $isEditing,
                 isCrossedOut: $viewModel.isDone,
                 desiredHeight: $desiredHeight
             )
-                .frame(height: desiredHeight)
-                .onTapGesture {
-                    if self.viewModel.isEditable {
-                        self.isEditing.toggle()
-                    }
+            .frame(height: desiredHeight)
+            .modifier(Modifier.Checklist.TextField(isEditable: viewModel.isEditable))
+            .onTapGesture {
+                if self.viewModel.isEditable {
+                    self.isEditing.toggle()
                 }
+            }
         }
         .gesture(
             DragGesture(minimumDistance: 100.0, coordinateSpace: .local).onEnded { value in

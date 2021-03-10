@@ -21,17 +21,17 @@ struct DashboardNavBar: View {
                 
                 HStack(spacing: 5) {
                     Image(systemName: "arrow.up.arrow.down")
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                     Text(viewModel.sortedByTitle)
-                        .modifier(Modifiers.Menu.Section())
+                        .modifier(Modifier.Menu.Section())
                 }
                 
                 if viewModel.isFilterVisible {
                     HStack(spacing: 5) {
                         Image(systemName: "eye")
-                            .modifier(Modifiers.Menu.Section())
+                            .modifier(Modifier.Menu.Section())
                         Text(viewModel.filterTitle)
-                            .modifier(Modifiers.Menu.Section())
+                            .modifier(Modifier.Menu.Section())
                     }
                 }
                 
@@ -41,7 +41,7 @@ struct DashboardNavBar: View {
             .padding(.horizontal)
             .padding(.bottom)
         }
-        .modifier(Modifiers.NavBar.NavBar())
+        .modifier(Modifier.NavBar.NavBar())
     }
 }
 

@@ -16,11 +16,11 @@ struct NavBarChipButton: View {
         HStack(spacing: 10) {
             viewModel.icon.map { icon in
                 icon
-                    .modifier(Modifiers.Menu.LightItem())
+                    .modifier(Modifier.Menu.LightItem())
             }
             viewModel.title.map { title in
                 Text(title)
-                    .modifier(Modifiers.Menu.LightItem())
+                    .modifier(Modifier.Menu.LightItem())
                     
             }
         }

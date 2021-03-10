@@ -41,6 +41,7 @@ class ChecklistViewModel: ObservableObject {
     var shouldDisplaySetReminder: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
     var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew && !shouldCreateChecklistName }
     var shouldDisplayActionButton: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
+    var shouldDisplayDescription: Bool { viewState.isEditEnabled || !checklistDescription.isEmpty }
     var isEditable: Bool { viewState.isEditEnabled }
     
     @Published var checklistName: String = ""
@@ -83,7 +84,11 @@ class ChecklistViewModel: ObservableObject {
         viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
         viewModel.actionsButton.didTap.sink { [weak self] in
             self?.actionSheet = .actionMenu(
-                onEdit: { self?.onEditTapped.send() },
+                onEdit: {
+                    withAnimation {
+                        self?.onEditTapped.send()
+                    }
+                },
                 onDelete: { /*TODO*/ },
                 onCancel: {  }
             )

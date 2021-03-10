@@ -36,6 +36,10 @@ extension Color {
         Color("firstAccent")
     }
     
+    static var textfieldBackground: Color {
+        Color("textfieldBackground")
+    }
+    
     func toUIColor() -> UIColor {
         UIColor(self)
     }

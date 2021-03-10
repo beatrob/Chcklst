@@ -9,6 +9,6 @@
 import Foundation
 
 
-enum Modifiers {
+enum Modifier {
     
 }

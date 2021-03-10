@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 
-extension Modifiers {
+extension Modifier {
     
     enum Checklist {
 
@@ -67,7 +67,7 @@ extension Modifiers {
                 content
                     .padding(5)
                     .border(Color.text, width: isEditable ? 0.5 : 0)
-                    .padding()
+                    .background(isEditable ? Color.textfieldBackground : Color.clear)
             }
         }
     }

@@ -23,14 +23,15 @@ struct ChecklistNameView: View {
             MultilineTextView(
                 text: $checklistName,
                 placeholder: "Name your checklist",
-                font: Modifiers.Checklist.BigTitle.font,
-                color: Modifiers.Checklist.BigTitle.color,
+                font: Modifier.Checklist.BigTitle.font,
+                color: Modifier.Checklist.BigTitle.color,
                 isEditing: $isEditing,
                 isCrossedOut: .constant(false),
                 desiredHeight: $desiredHeight
             )
             .frame(height: desiredHeight)
-            .modifier(Modifiers.Checklist.TextField(isEditable: isEditable))
+            .modifier(Modifier.Checklist.TextField(isEditable: isEditable))
+            .padding()
             .onTapGesture {
                 if self.isEditable {
                     self.isEditing.toggle()

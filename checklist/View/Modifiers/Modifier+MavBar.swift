@@ -9,7 +9,7 @@
 import SwiftUI
 
 
-extension Modifiers {
+extension Modifier {
     
     enum NavBar {
         

@@ -16,12 +16,12 @@ struct DashboardChecklistCell: View {
         VStack {
             HStack {
                 Text(viewModel.title)
-                    .modifier(Modifiers.Checklist.SmallTitle())
+                    .modifier(Modifier.Checklist.SmallTitle())
                 Spacer()
                 if viewModel.isReminderSet {
                     Image(systemName: "bell.badge")
                 }
-                Text(viewModel.counter).modifier(Modifiers.Checklist.Item())
+                Text(viewModel.counter).modifier(Modifier.Checklist.Item())
             }
             .padding(.top)
             .padding(.leading)

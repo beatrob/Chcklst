@@ -17,98 +17,109 @@ struct ChecklistView: View {
         if viewModel.shouldDismissView {
             presentationMode.wrappedValue.dismiss()
         }
-        return ZStack {
-            Color.checklistBackground
-            VStack(spacing: 0) {
-                if viewModel.isNavBarVisible {
-                    ChecklistNavBar(viewModel: viewModel.navBarViewModel)
-                }
-                if viewModel.shouldCreateChecklistName {
-                    Spacer()
-                    ChecklistNameView(
-                        checklistName: .init(
-                            get: { self.viewModel.checklistName },
-                            set: { self.viewModel.checklistName = $0 }
-                        ),
-                        shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
-                        isEditable: viewModel.isEditable
-                    )
-                    ChecklistDescriptionView(
-                        description: self.$viewModel.checklistDescription,
-                        isEditable: viewModel.isEditable
-                    )
-                    Button("Next") {
-                        withAnimation {
-                            self.viewModel.onCreateTitleNext.send()
-                        }
-                    }.modifier(Modifiers.Button.MainAction())
-                    Spacer()
-                } else {
+        return GeometryReader { geometry in
+            ZStack {
+                viewModel.isEditable ? Color.checklistBackground : Color.mainBackground
+                VStack(spacing: 0) {
+                    if viewModel.isNavBarVisible {
+                        ChecklistNavBar(viewModel: viewModel.navBarViewModel)
+                    }
                     ScrollView {
                         VStack {
-                            ChecklistNameView(
-                                checklistName: .init(
-                                    get: { self.viewModel.checklistName },
-                                    set: { self.viewModel.checklistName = $0 }
-                                ),
-                                shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
-                                isEditable: viewModel.isEditable
-                            )
-                            ChecklistDescriptionView(
-                                description: self.$viewModel.checklistDescription,
-                                isEditable: viewModel.isEditable
-                            )
-                            ChecklistItemsView(
-                                shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
-                                items: viewModel.items,
-                                onNext: viewModel.onAddItemsNext,
-                                onDeleteItem: viewModel.onDeleteItem
-                            )
-                            .padding(.bottom)
-                            if viewModel.shouldDisplaySetReminder {
-                                CheckboxView(
-                                    title: "Remind me on this device",
-                                    isChecked: $viewModel.isReminderOn.animation()
-                                ).padding()
-                                if viewModel.isReminderOn {
-                                    HStack {
-                                        Spacer()
-                                        DatePicker("",
-                                                   selection: $viewModel.reminderDate,
-                                                   displayedComponents: [.date, .hourAndMinute]
-                                        ).labelsHidden()
-                                        Spacer()
+                            if viewModel.shouldCreateChecklistName {
+                                VStack {
+                                    ChecklistNameView(
+                                        checklistName: .init(
+                                            get: { self.viewModel.checklistName },
+                                            set: { self.viewModel.checklistName = $0 }
+                                        ),
+                                        shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
+                                        isEditable: viewModel.isEditable
+                                    )
+                                    ChecklistDescriptionView(
+                                        description: self.$viewModel.checklistDescription,
+                                        isEditable: viewModel.isEditable
+                                    )
+                                    Button("Next") {
+                                        withAnimation {
+                                            self.viewModel.onCreateTitleNext.send()
+                                        }
+                                    }.modifier(Modifier.Button.MainAction())
+                                    .padding(.vertical, 40)
+                                }
+                                .frame(width: geometry.size.width)
+                                .frame(minHeight: geometry.size.height)
+                            } else {
+                                ChecklistNameView(
+                                    checklistName: .init(
+                                        get: { self.viewModel.checklistName },
+                                        set: { self.viewModel.checklistName = $0 }
+                                    ),
+                                    shouldCreateChecklistName: $viewModel.shouldCreateChecklistName,
+                                    isEditable: viewModel.isEditable
+                                )
+                                if viewModel.shouldDisplayDescription {
+                                    ChecklistDescriptionView(
+                                        description: self.$viewModel.checklistDescription,
+                                        isEditable: viewModel.isEditable
+                                    )
+                                    .padding(.bottom, 20)
+                                }
+                                ChecklistItemsView(
+                                    shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
+                                    items: viewModel.items,
+                                    onNext: viewModel.onAddItemsNext,
+                                    onDeleteItem: viewModel.onDeleteItem
+                                )
+                                .padding(.bottom)
+                                if viewModel.shouldDisplaySetReminder {
+                                    CheckboxView(
+                                        title: "Remind me on this device",
+                                        isChecked: $viewModel.isReminderOn.animation()
+                                    ).padding()
+                                    if viewModel.isReminderOn {
+                                        HStack {
+                                            Spacer()
+                                            DatePicker("",
+                                                       selection: $viewModel.reminderDate,
+                                                       displayedComponents: [.date, .hourAndMinute]
+                                            )
+                                            .labelsHidden()
+                                            Spacer()
+                                        }
                                     }
                                 }
-                            }
-                            if viewModel.shouldDisplaySaveAsTemplate {
-                                CheckboxView(
-                                    title: "Also save as template",
-                                    isChecked: $viewModel.isCreateTemplateChecked
-                                ).padding()
-                            }
-                            if viewModel.shouldDisplayActionButton {
-                                HStack {
-                                    Spacer()
-                                    Button(viewModel.actionButtonTitle) {
-                                        self.viewModel.onActionButtonTapped.send()
-                                    }.modifier(Modifiers.Button.MainAction())
-                                    Spacer()
+                                if viewModel.shouldDisplaySaveAsTemplate {
+                                    CheckboxView(
+                                        title: "Also save as template",
+                                        isChecked: $viewModel.isCreateTemplateChecked
+                                    ).padding()
+                                }
+                                if viewModel.shouldDisplayActionButton {
+                                    HStack {
+                                        Spacer()
+                                        Button(viewModel.actionButtonTitle) {
+                                            self.viewModel.onActionButtonTapped.send()
+                                        }
+                                        .modifier(Modifier.Button.MainAction())
+                                        .padding(.vertical, 40)
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            .navigationBarHidden(true)
-            .onTapGesture { self.hideKeyboard() }
-            .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
-                viewModel.alertVisibility.view
-            }
-            .actionSheet(isPresented: self.$viewModel.actionSheetVisibility.isVisible, content: {
-                viewModel.actionSheetVisibility.view
-        })
-        }.ignoresSafeArea()
+                .navigationBarHidden(true)
+                .onTapGesture { self.hideKeyboard() }
+                .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
+                    viewModel.alertVisibility.view
+                }
+                .actionSheet(isPresented: self.$viewModel.actionSheetVisibility.isVisible, content: {
+                    viewModel.actionSheetVisibility.view
+                })
+            }.ignoresSafeArea()
+        }
     }
 }
 

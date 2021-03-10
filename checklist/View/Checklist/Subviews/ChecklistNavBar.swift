@@ -25,9 +25,9 @@ struct ChecklistNavBar: View {
                     HStack {
                         if viewModel.isEditVisible {
                             Image(systemName: "bell.badge.fill")
-                                .modifier(Modifiers.NavBar.Subtitle())
+                                .modifier(Modifier.NavBar.Subtitle())
                             Text(date)
-                                .modifier(Modifiers.NavBar.Subtitle())
+                                .modifier(Modifier.NavBar.Subtitle())
                         }
                     }
                 }
@@ -40,7 +40,7 @@ struct ChecklistNavBar: View {
                 }
             }
         }
-        .modifier(Modifiers.NavBar.NavBar())
+        .modifier(Modifier.NavBar.NavBar())
     }
 }
 

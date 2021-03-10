@@ -16,7 +16,7 @@ struct MenuItemView<Item: Identifiable>: View {
         HStack {
             Text(viewModel.title)
                 .modifier(
-                    Modifiers.Menu.Item(color: .firstAccent)
+                    Modifier.Menu.Item(color: .firstAccent)
                 )
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
