@@ -19,6 +19,7 @@ protocol CoreDataChecklistManager {
     func fetchAllChecklists() -> Promise<[ChecklistDataModel]>
     func save(checklist: ChecklistDataModel) -> Promise<Void>
     func update(checklist: ChecklistDataModel) ->  Promise<Void>
+    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<Void>
     func delete(checklist: ChecklistDataModel) -> Promise<Void>
 }
 

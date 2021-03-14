@@ -71,7 +71,6 @@ struct MultilineTextView: UIViewRepresentable {
             textView.isUserInteractionEnabled = true
             textView.textContainerInset = .zero
             textView.textContainer.lineFragmentPadding = 0
-            textView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
             labelView.lineBreakMode = .byWordWrapping
             labelView.numberOfLines = 0
             labelView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)

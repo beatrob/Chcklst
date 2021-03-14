@@ -80,6 +80,8 @@
 		DD84DCB1253E407E00A39DBB /* Font+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD84DCB0253E407E00A39DBB /* Font+extension.swift */; };
 		DD85AD9425D595E200EB4B6A /* ChecklistAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85AD9325D595E200EB4B6A /* ChecklistAlert.swift */; };
 		DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */; };
+		DD8A303025FAB7B300A6937E /* EditReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A302F25FAB7B300A6937E /* EditReminderView.swift */; };
+		DD8A303525FAB7C800A6937E /* EditReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8A303425FAB7C800A6937E /* EditReminderViewModel.swift */; };
 		DD8BFC6D25DF044300338624 /* DashboardNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8BFC6C25DF044300338624 /* DashboardNavBar.swift */; };
 		DD8BFC7525DF05B300338624 /* DashboardNavBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8BFC7425DF05B300338624 /* DashboardNavBarViewModel.swift */; };
 		DD8BFC8025DF091D00338624 /* NavBarChipButtonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8BFC7F25DF091C00338624 /* NavBarChipButtonViewModel.swift */; };
@@ -228,6 +230,8 @@
 		DD84DCB0253E407E00A39DBB /* Font+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+extension.swift"; sourceTree = "<group>"; };
 		DD85AD9325D595E200EB4B6A /* ChecklistAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistAlert.swift; sourceTree = "<group>"; };
 		DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
+		DD8A302F25FAB7B300A6937E /* EditReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditReminderView.swift; sourceTree = "<group>"; };
+		DD8A303425FAB7C800A6937E /* EditReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditReminderViewModel.swift; sourceTree = "<group>"; };
 		DD8BFC6C25DF044300338624 /* DashboardNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardNavBar.swift; sourceTree = "<group>"; };
 		DD8BFC7425DF05B300338624 /* DashboardNavBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardNavBarViewModel.swift; sourceTree = "<group>"; };
 		DD8BFC7F25DF091C00338624 /* NavBarChipButtonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarChipButtonViewModel.swift; sourceTree = "<group>"; };
@@ -357,6 +361,7 @@
 				DD39A42B2529BAC2003E73EA /* ChecklistItemViewModel.swift */,
 				DD39A4262529B810003E73EA /* ChecklistDetailViewModel.swift */,
 				DDD0054725EAED4A0098E27E /* ChecklistNavBarViewModel.swift */,
+				DD8A303425FAB7C800A6937E /* EditReminderViewModel.swift */,
 			);
 			path = Checklist;
 			sourceTree = "<group>";
@@ -594,6 +599,7 @@
 				DD5B725F25F69769001D8DA8 /* ChecklistDescriptionView.swift */,
 				DD7AF2B124EDC9C60051CD16 /* ChecklistItemsView.swift */,
 				DDD0053F25EAECBA0098E27E /* ChecklistNavBar.swift */,
+				DD8A302F25FAB7B300A6937E /* EditReminderView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -860,6 +866,7 @@
 			files = (
 				DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */,
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
+				DD8A303525FAB7C800A6937E /* EditReminderViewModel.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
 				DD84DCB1253E407E00A39DBB /* Font+extension.swift in Sources */,
 				DDDAED6625F578930077F6AA /* ChecklistActionSheet.swift in Sources */,
@@ -906,6 +913,7 @@
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
 				DD74DA7A25220027004587FC /* ChecklistItemTransformable.swift in Sources */,
 				DD74DA6525213C25004587FC /* CoreDataManagerImpl.swift in Sources */,
+				DD8A303025FAB7B300A6937E /* EditReminderView.swift in Sources */,
 				DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */,

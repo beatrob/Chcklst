@@ -13,24 +13,23 @@ import SwiftUI
 enum ChecklistAlert {
     
     case notificationsDisabled
+    case confirmDelete(onDelete: EmptyCompletion)
+    case confirmMarkAllDone(onConfirm: EmptyCompletion)
     case none
     
     var view: Alert {
         switch self {
         case .notificationsDisabled:
+            return .getEnablePushNotifications()
+        case .confirmDelete(let onDelete):
+            return .getConfirmDeleteChecklist(onDelete: onDelete)
+        case .confirmMarkAllDone(let onConfirm):
             return Alert(
-                title: Text("Please enable push notification in the Settings app."),
-                primaryButton: .default(
-                    Text("Go to Settings"),
-                    action: {
-                        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-                            return
-                        }
-                        UIApplication.shared.open(settingsUrl)
-                    }
-                ),
+                title: Text("Do you wish to mark all items done?"),
+                message: nil,
+                primaryButton: .default(Text("Mark all done"), action: onConfirm),
                 secondaryButton: .cancel()
-            )
+                )
         case .none:
             return .empty
         }

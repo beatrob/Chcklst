@@ -8,24 +8,44 @@
 
 import SwiftUI
 
+protocol ChecklistActionSheetDelegate {
+    func onEditAction()
+    func onMarkAllDoneAction()
+    func onSetReminderAction()
+    func onSaveAsTemplateAction()
+    func onDeleteAction()
+}
 
 enum ChecklistActionSheet {
     
     case none
-    case actionMenu(onEdit: EmptyCompletion, onDelete: EmptyCompletion, onCancel: EmptyCompletion)
+    case actionMenu(delegate: ChecklistActionSheetDelegate)
     
     var view: ActionSheet {
         switch self {
         case .none:
             return ActionSheet(title: Text(""))
-        case .actionMenu(let onEdit, let onDelete, let onCancel):
+        case .actionMenu(let delegate):
             return ActionSheet(
                 title: Text("Select na option"),
                 message: nil,
                 buttons: [
-                    .default(Text("Edit"), action: onEdit),
-                    .destructive(Text("Delete"), action: onDelete),
-                    .cancel(onCancel)
+                    .default(Text("Edit")) {
+                        delegate.onEditAction()
+                    },
+                    .default(Text("Edit reminder")) {
+                        delegate.onSetReminderAction()
+                    },
+                    .default(Text("Mark all done")) {
+                        delegate.onMarkAllDoneAction()
+                    },
+                    .default(Text("Save as template")) {
+                        delegate.onSaveAsTemplateAction()
+                    },
+                    .destructive(Text("Delete")) {
+                        delegate.onDeleteAction()
+                    },
+                    .cancel()
                 ]
             )
         }

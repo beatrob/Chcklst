@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class ViewVisibility<SomeView> {
+class ViewVisibility<SomeView>: ObservableObject {
     
     @Published var isVisible = false
     

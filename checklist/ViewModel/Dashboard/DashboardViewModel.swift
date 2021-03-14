@@ -162,6 +162,14 @@ class DashboardViewModel: ObservableObject {
                 }
             }
             // delete
+            if checklists.count < self.checklistCells.count {
+                let toDelete = self.checklistCells.enumerated().filter {
+                    !checklists.contains($0.element.checklist)
+                }
+                toDelete.map { $0.offset }.forEach {
+                    self.checklistCells.remove(at: $0)
+                }
+            }
         }
     }
     

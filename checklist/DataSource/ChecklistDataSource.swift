@@ -21,6 +21,7 @@ protocol ChecklistDataSource {
     func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void>
     func deleteExpiredNotificationDates() -> Promise<Void>
 }
 
@@ -57,6 +58,17 @@ class CheckListDataSourceImpl: ChecklistDataSource {
                     _ = self.selectedCheckList.value?.items.updateItem(item)
                 }
             }
+        }
+    }
+    
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {
+        guard let index = _checklists.value.firstIndex(of: checklist) else {
+            return .init(error: DataSourceError.checkListNotFound)
+        }
+        return firstly {
+            coreDataManager.updateReminderDate(date, forChecklistWithId: checklist.id)
+        }.get {
+            self._checklists.value[index].reminderDate = date
         }
     }
     

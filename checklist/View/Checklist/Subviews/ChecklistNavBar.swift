@@ -23,7 +23,7 @@ struct ChecklistNavBar: View {
                 Spacer()
                 viewModel.reminderDate.map { date in
                     HStack {
-                        if viewModel.isEditVisible {
+                        if !viewModel.shouldDisplayDoneButton {
                             Image(systemName: "bell.badge.fill")
                                 .modifier(Modifier.NavBar.Subtitle())
                             Text(date)
@@ -31,7 +31,7 @@ struct ChecklistNavBar: View {
                         }
                     }
                 }
-                if viewModel.isEditVisible {
+                if !viewModel.shouldDisplayDoneButton {
                     NavBarChipButton(viewModel: viewModel.actionsButton)
                         .padding()
                 } else {
@@ -49,15 +49,17 @@ struct ChecklistNavBar_Preview: PreviewProvider {
     
     static var previews: some View {
         let viewModel = ChecklistNavBarViewModel(
-            checklist: ChecklistDataModel(
-                id: "",
-                title: "",
-                description: nil,
-                updateDate: Date(),
-                reminderDate: Date().addingTimeInterval(1000),
-                items: [],
-                isArchived: false
-            )
+            checklist: Just(
+                ChecklistDataModel(
+                    id: "",
+                    title: "",
+                    description: nil,
+                    updateDate: Date(),
+                    reminderDate: Date().addingTimeInterval(1000),
+                    items: [],
+                    isArchived: false
+                )
+            ).eraseToAnyPublisher()
         )
         return ChecklistNavBar(viewModel: viewModel)
             .previewLayout(.sizeThatFits)

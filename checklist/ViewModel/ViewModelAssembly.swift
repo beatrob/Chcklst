@@ -46,8 +46,13 @@ class ViewModelAssembly: Assembly {
         container.autoregister(DashboardNavBarViewModel.self, initializer: DashboardNavBarViewModel.init)
         container.autoregister(
             ChecklistNavBarViewModel.self,
-            argument: ChecklistDataModel.self,
+            argument: AnyPublisher<ChecklistDataModel?, Never>.self,
             initializer: ChecklistNavBarViewModel.init
+        )
+        container.autoregister(
+            EditReminderViewModel.self,
+            argument: ChecklistDataModel.self,
+            initializer: EditReminderViewModel.init
         )
     }
 }

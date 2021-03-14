@@ -44,6 +44,20 @@ extension CoreDataManagerImpl: CoreDataChecklistManager {
         .then { self.saveContext() }
     }
     
+    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<Void> {
+        firstly {
+            getViewContext()
+        }.then { context -> Promise<Void> in
+            guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: id)).first else {
+                throw CoreDataError.fetchError
+            }
+            checklistMO.reminderDate = date
+            return .value
+        }.then {
+            self.saveContext()
+        }
+    }
+    
     func delete(checklist: ChecklistDataModel) -> Promise<Void> {
         firstly { getViewContext() }
         .then { context -> Promise<Void> in

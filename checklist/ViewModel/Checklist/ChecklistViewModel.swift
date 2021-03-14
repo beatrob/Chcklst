@@ -50,6 +50,7 @@ class ChecklistViewModel: ObservableObject {
     
     @Published var viewState: ChecklistViewState
     @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
+    @Published var sheetVisibility = ViewVisibility(view: AnyView(EmptyView()))
     @Published var actionSheetVisibility = ViewVisibility(view: ChecklistActionSheet.none.view)
     private var alert: ChecklistAlert = .none {
         didSet {
@@ -74,27 +75,22 @@ class ChecklistViewModel: ObservableObject {
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
     lazy var navBarViewModel: ChecklistNavBarViewModel = {
-        guard let checklist = viewState.checklist else {
-            preconditionFailure("NavBarViewModel should not be incialized without a checklist")
-        }
         let viewModel = AppContext.resolver.resolve(
             ChecklistNavBarViewModel.self,
-            argument: checklist
+            argument: currentChecklist.eraseToAnyPublisher()
         )!
         viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
         viewModel.actionsButton.didTap.sink { [weak self] in
-            self?.actionSheet = .actionMenu(
-                onEdit: {
-                    withAnimation {
-                        self?.onEditTapped.send()
-                    }
-                },
-                onDelete: { /*TODO*/ },
-                onCancel: {  }
-            )
-            self?.objectWillChange.send()
+            guard let self = self else { return }
+            self.actionSheet = .actionMenu(delegate: self)
+            self.objectWillChange.send()
         }.store(in: &cancellables)
-        viewModel.doneButton.didTap.subscribe(onDoneTapped).store(in: &cancellables)
+        viewModel.doneButton.didTap.sink { [weak self] in
+            withAnimation {
+                self?.navBarViewModel.shouldDisplayDoneButton = false
+                self?.onDoneTapped.send()
+            }
+        }.store(in: &cancellables)
         return viewModel
     }()
     
@@ -103,8 +99,9 @@ class ChecklistViewModel: ObservableObject {
         onDismissTapped.eraseToAnyPublisher()
     }
     var isNavBarVisible: Bool {
-        viewState.checklist != nil
+        currentChecklist.value != nil
     }
+    private var currentChecklist: ChecklistCurrentValueSubject
     
     init(
         viewState: ChecklistViewState,
@@ -116,6 +113,7 @@ class ChecklistViewModel: ObservableObject {
         self.templateDataSource = templateDataSource
         self.notificationManager = notificationManager
         self.viewState = viewState
+        self.currentChecklist = .init(viewState.checklist)
         
         if let template = viewState.template {
             setupTemplate(template)
@@ -136,7 +134,7 @@ class ChecklistViewModel: ObservableObject {
         onEditTapped.sink { [weak self] in
             guard
                 let self = self,
-                let checklist = self.viewState.checklist
+                let checklist = self.currentChecklist.value
             else {
                 return
             }
@@ -167,7 +165,7 @@ class ChecklistViewModel: ObservableObject {
 private extension ChecklistViewModel {
     
     func setEditDoneAndUpdateChecklist() {
-        guard let checklist = self.viewState.checklist else {
+        guard let checklist = self.currentChecklist.value else {
             return
         }
         self.items.forEach { $0.isEditable = false }
@@ -177,7 +175,7 @@ private extension ChecklistViewModel {
     }
     
     func setupDisplayChecklist() {
-        guard let checklist = viewState.checklist else {
+        guard let checklist = currentChecklist.value else {
             return
         }
         shouldCreateChecklistName = false
@@ -204,7 +202,7 @@ private extension ChecklistViewModel {
     }
     
     func updateChecklist() {
-        guard let checklist = viewState.checklist else {
+        guard let checklist = currentChecklist.value else {
             log(warning: "Can not update checklist: checklist not found")
             return
         }
@@ -257,7 +255,7 @@ private extension ChecklistViewModel {
         subject.dropFirst().sink { [weak self] item in
             guard
                 let self = self,
-                let checklist = self.viewState.checklist
+                let checklist = self.currentChecklist.value
             else {
                 return
             }
@@ -333,4 +331,80 @@ private extension ChecklistViewModel {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     #endif
+}
+
+
+extension ChecklistViewModel: ChecklistActionSheetDelegate {
+    
+    func onEditAction() {
+        withAnimation {
+            navBarViewModel.shouldDisplayDoneButton = true
+            onEditTapped.send()
+        }
+    }
+    
+    func onMarkAllDoneAction() {
+        alert = .confirmMarkAllDone(onConfirm: { [weak self] in
+            guard let self = self else { return }
+            self.items.forEach { item in
+                item.isDone = true
+            }
+            self.updateChecklist()
+        })
+    }
+    
+    func onSetReminderAction() {
+        guard let checklist = currentChecklist.value else {
+            return
+        }
+        let viewModel = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
+        viewModel.onDeleteReminder.sink { [weak self] in
+            self?.sheetVisibility.isVisible = false
+            self?.checklistDataSource.updateReminderDate(nil, for: checklist).done {
+                self?.notificationManager.removeReminder(for: checklist)
+                self?.currentChecklist.value?.reminderDate = nil
+            }.catch { error in
+                error.log(message: "Failed to delete reminder")
+                #warning("TODO: Add error hanling")
+            }
+            self?.objectWillChange.send()
+        }.store(in: &cancellables)
+        viewModel.onSaveReminder.sink { [weak self] date in
+            guard let self = self else { return }
+            self.sheetVisibility.isVisible = false
+            firstly {
+                self.checklistDataSource.updateReminderDate(date, for: checklist)
+            }.get {
+                self.currentChecklist.value?.reminderDate = date
+            }.then { _ -> Promise<Void> in
+                guard let checklist = self.currentChecklist.value else {
+                    throw DataSourceError.checkListNotFound
+                }
+                return self.notificationManager.setupReminder(for: checklist)
+            }.catch { error in
+                error.log(message: "Failed to save reminder")
+                #warning("TODO: Add error hanling")
+            }
+            self.objectWillChange.send()
+        }.store(in: &cancellables)
+        let view = EditReminderView(viewModel: viewModel)
+        sheetVisibility.set(view: AnyView(view), isVisible: true)
+    }
+    
+    func onSaveAsTemplateAction() {
+        
+    }
+    
+    func onDeleteAction() {
+        alert = .confirmDelete(onDelete: { [weak self] in
+            guard let checklist = self?.currentChecklist.value else {
+                return
+            }
+            self?.checklistDataSource.deleteChecklist(checklist)
+                .done { self?.onDismissTapped.send() }
+                .catch { error in
+                    #warning("TODO: Add error handling")
+                }
+        })
+    }
 }

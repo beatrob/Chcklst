@@ -118,6 +118,9 @@ struct ChecklistView: View {
                 .actionSheet(isPresented: self.$viewModel.actionSheetVisibility.isVisible, content: {
                     viewModel.actionSheetVisibility.view
                 })
+                .sheet(isPresented: self.$viewModel.sheetVisibility.isVisible) {
+                    viewModel.sheetVisibility.view
+                }
             }.ignoresSafeArea()
         }
     }

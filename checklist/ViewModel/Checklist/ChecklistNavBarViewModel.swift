@@ -15,29 +15,21 @@ class ChecklistNavBarViewModel: ObservableObject {
     let backButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "arrow.backward"))
     let actionsButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "ellipsis"))
     let doneButton = NavBarChipButtonViewModel(title: "Done", icon: Image(systemName: "checkmark"))
-    @Published var isEditVisible = true
+    @Published var shouldDisplayDoneButton = false
     var isReminderDateVisible: Bool {
-        reminderDate != nil && isEditVisible
+        reminderDate != nil && !shouldDisplayDoneButton
     }
     @Published var reminderDate: String?
     
     private var cancellables = Set<AnyCancellable>()
-    var checklist: ChecklistDataModel {
-        didSet {
-            setup()
-        }
-    }
     
-    init(checklist: ChecklistDataModel) {
-        self.checklist = checklist
-        setup()
-    }
-}
-
-
-private extension ChecklistNavBarViewModel {
-    
-    func setup() {
-        reminderDate = checklist.isValidReminderSet ? checklist.reminderDate?.formatedReminderDate() : nil
+    init(checklist: AnyPublisher<ChecklistDataModel?, Never>) {
+        checklist.sink { [weak self] checklist in
+            guard let checklist = checklist else {
+                self?.reminderDate = nil
+                return
+            }
+            self?.reminderDate = checklist.isValidReminderSet ? checklist.reminderDate?.formatedReminderDate() : nil
+        }.store(in: &cancellables)
     }
 }

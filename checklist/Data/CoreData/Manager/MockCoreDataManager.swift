@@ -18,6 +18,8 @@ class MockCoreDataManager: CoreDataManager, CoreDataChecklistManager {
     
     func update(checklist: ChecklistDataModel) -> Promise<Void> { .value }
     
+    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<Void> { .value }
+    
     func delete(checklist: ChecklistDataModel) -> Promise<Void> { .value }
     
     func initialize() -> Promise<Void> { .value }

@@ -25,10 +25,10 @@ struct NavBarChipButton: View {
             }
         }
         .frame(
-            width: viewModel.isOnlyIcon ? 20 : nil,
-            height: viewModel.isOnlyIcon ? 20 : nil
+            width: viewModel.isOnlyIcon ? 30 : nil,
+            height: 30
         )
-        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+        .padding(.horizontal, viewModel.isOnlyIcon ? 0 : 5 )
         .overlay(
             Capsule()
                 .stroke(Color.firstAccent)
@@ -50,6 +50,9 @@ struct FilterItemView_Previews: PreviewProvider {
             ).previewLayout(.sizeThatFits)
             NavBarChipButton(
                 viewModel: .init(title: "Some chip button", icon: Image(systemName: "plus"))
+            ).preferredColorScheme(.dark).previewLayout(.sizeThatFits)
+            NavBarChipButton(
+                viewModel: .init(title: nil, icon: Image(systemName: "plus"))
             ).preferredColorScheme(.dark).previewLayout(.sizeThatFits)
         }
     }

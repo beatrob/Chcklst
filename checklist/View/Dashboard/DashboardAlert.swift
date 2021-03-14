@@ -26,12 +26,7 @@ enum DashboardAlert {
                 secondaryButton: .cancel(Text("No"))
             )
         case .confirmDeleteChecklist(let onDelete):
-            return Alert(
-                title: Text("Delete"),
-                message: Text("Do you really want to delete this checklist?"),
-                primaryButton: .default(Text("Delete"), action: onDelete),
-                secondaryButton: .cancel(Text("Cancel"))
-            )
+            return .getConfirmDeleteChecklist(onDelete: onDelete)
         case .none: return .empty
         }
     }

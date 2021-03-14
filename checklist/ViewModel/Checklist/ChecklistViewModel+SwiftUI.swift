@@ -12,33 +12,6 @@ import SwiftUI
 
 extension ChecklistViewModel {
     
-    var navigationBarTrailingItem: AnyView {
-        if viewState.isDisplay || viewState.isUpdate {
-            return AnyView(
-                !isEditable ?
-                    Button("Edit") { self.onEditTapped.send() } :
-                    Button("Save") { self.onDoneTapped.send() }
-            )
-        } else {
-            return AnyView(EmptyView())
-        }
-    }
-    
-    var navigationBarTitle: LocalizedStringKey {
-        switch viewState {
-        case .display:
-            return LocalizedStringKey("")
-        case .createFromTemplate, .createNew:
-            return "Create checklist"
-        case .update:
-            return "Edit checklist"
-        }
-    }
-    
-    var titleDisplayMode: NavigationBarItem.TitleDisplayMode {
-        return .inline
-    }
-    
     var actionButtonTitle: LocalizedStringKey {
         switch viewState {
         case .createFromTemplate, .createNew:

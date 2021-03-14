@@ -84,6 +84,14 @@ class MockChecklistDataSource: ChecklistDataSource {
         return .init(error: DataSourceError.checkListItemNotFound)
     }
     
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {
+        guard let index = _checkLists.value.firstIndex(of: checklist) else {
+            return .init(error: DataSourceError.checkListNotFound)
+        }
+        _checkLists.value[index].reminderDate = date
+        return .value
+    }
+    
     func loadAllChecklists() -> Promise<[ChecklistDataModel]> {
         .value(_checkLists.value)
     }
