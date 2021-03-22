@@ -41,6 +41,7 @@ class DashboardViewModel: ObservableObject {
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
     private let checklistFilterAndSort: ChecklistFilterAndSort
+    private let navigationHelper: NavigationHelper
     
     init(
         checklistDataSource: ChecklistDataSource,
@@ -52,6 +53,7 @@ class DashboardViewModel: ObservableObject {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
         self.checklistFilterAndSort = checklistFilterAndSort
+        self.navigationHelper = navigationHelper
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
             log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
@@ -81,12 +83,6 @@ class DashboardViewModel: ObservableObject {
             navigationHelper.navigateToChecklistDetail(with: checklist)
         }.store(in: &cancellables)
         
-        templateDataSource.templateCreated.sink { [weak self] _ in
-            self?.alert = .templateCreated(gotoTemplates: {
-                navigationHelper.navigateToMyTemplates(source: .dashboard)
-            })
-        }.store(in: &cancellables)
-        
         let createChecklist = ChecklistPassthroughSubject()
         createChecklist.sink { checklist in
             checklistDataSource.createChecklist(checklist)
@@ -97,7 +93,7 @@ class DashboardViewModel: ObservableObject {
         onCreateNewChecklist.sink { [weak self] in
             self?.actionSheet = .createChecklist(
                 onNewChecklist: {
-                    self?.sheet = .createChecklist
+                    self?.showCreateNewChecklist()
                 },
                 onNewFromTemplate: {
                     self?.sheet = .selectTemplate
@@ -218,5 +214,18 @@ private extension DashboardViewModel {
         withAnimation(.easeOut(duration: 0.2)) {
             self.isSidemenuVisible.toggle()
         }
+    }
+    
+    func showCreateNewChecklist() {
+        let viewModel = AppContext.resolver.resolve(
+            ChecklistViewModel.self,
+            argument:ChecklistViewState.createNew
+        )!
+        viewModel.onDidCreateTemplate.sink { [weak self] in
+            self?.alert = .templateCreated(
+                gotoTemplates: { self?.navigationHelper.navigateToMyTemplates(source: .dashboard) }
+            )
+        }.store(in: &self.cancellables)
+        self.sheet = .createChecklist(viewModel: viewModel)
     }
 }

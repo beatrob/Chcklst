@@ -13,6 +13,7 @@ enum ChecklistViewState {
     case display(checklist: ChecklistDataModel)
     case update(checklist: ChecklistDataModel)
     case createFromTemplate(template: TemplateDataModel)
+    case createTemplate(checklist: ChecklistDataModel)
     case createNew
     
     var isDisplay: Bool {
@@ -51,6 +52,15 @@ enum ChecklistViewState {
         }
     }
     
+    var isCreateTemplate: Bool {
+        switch self {
+        case .createTemplate:
+            return true
+        default:
+            return false
+        }
+    }
+    
     var template: TemplateDataModel? {
         switch self {
         case .createFromTemplate(let template):
@@ -62,7 +72,7 @@ enum ChecklistViewState {
     
     var checklist: ChecklistDataModel? {
         switch self {
-        case .update(let checklist), .display(let checklist):
+        case .update(let checklist), .display(let checklist), .createTemplate(let checklist):
             return checklist
         default:
             return nil

@@ -44,4 +44,13 @@ extension Alert {
             secondaryButton: .cancel()
         )
     }
+    
+    static func getTemplateCreated(onGoToTemplates: @escaping EmptyCompletion) -> Alert {
+        Alert(
+            title: Text("Template created"),
+            message: Text("Do you want to see your templates?"),
+            primaryButton: .default(Text("Yes"), action: onGoToTemplates),
+            secondaryButton: .cancel(Text("No"))
+        )
+    }
 }

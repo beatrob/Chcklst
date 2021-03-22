@@ -15,6 +15,7 @@ enum ChecklistAlert {
     case notificationsDisabled
     case confirmDelete(onDelete: EmptyCompletion)
     case confirmMarkAllDone(onConfirm: EmptyCompletion)
+    case templateCreated(onGoToTemplates: EmptyCompletion)
     case none
     
     var view: Alert {
@@ -30,6 +31,10 @@ enum ChecklistAlert {
                 primaryButton: .default(Text("Mark all done"), action: onConfirm),
                 secondaryButton: .cancel()
                 )
+        case .templateCreated(let onGoToTemplates):
+            return .getTemplateCreated {
+                onGoToTemplates()
+            }
         case .none:
             return .empty
         }

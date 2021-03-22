@@ -18,6 +18,8 @@ extension ChecklistViewModel {
             return .init("Create")
         case .update:
             return .init("Save")
+        case .createTemplate:
+            return .init("Create template")
         case .display:
             return .init("")
         }

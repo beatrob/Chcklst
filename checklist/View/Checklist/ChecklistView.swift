@@ -19,6 +19,11 @@ struct ChecklistView: View {
         }
         return GeometryReader { geometry in
             ZStack {
+                NavigationLink(
+                    destination: viewModel.navigationDestinationView,
+                    isActive: $viewModel.isNavigationLinkActive,
+                    label: { EmptyView() }
+                )
                 viewModel.isEditable ? Color.checklistBackground : Color.mainBackground
                 VStack(spacing: 0) {
                     if viewModel.isNavBarVisible {

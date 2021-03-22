@@ -40,10 +40,6 @@ class MockTemplateDataSource: TemplateDataSource {
     
     var deleteTemplate: TemplatePassthroughSubject = .init()
     
-    var templateCreated: AnyPublisher<TemplateDataModel, Never> {
-        _templateCreated.eraseToAnyPublisher()
-    }
-    
     var templates: AnyPublisher<[TemplateDataModel], Never> {
         _templates.eraseToAnyPublisher()
     }
@@ -51,8 +47,6 @@ class MockTemplateDataSource: TemplateDataSource {
     var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> = .init(nil)
     
     var cancellables =  Set<AnyCancellable>()
-    
-    private let _templateCreated: TemplatePassthroughSubject = .init()
     
     init() {
         deleteTemplate.sink { [weak self] template in
@@ -77,7 +71,6 @@ class MockTemplateDataSource: TemplateDataSource {
     
     func createTemplate(_ template: TemplateDataModel) -> Promise<Void> {
         _templates.value.insert(template, at: 0)
-        _templateCreated.send(template)
         return .value
     }
 }

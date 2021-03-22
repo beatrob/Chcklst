@@ -13,21 +13,14 @@ import Combine
 enum DashboardSheet {
     
     case none
-    case createChecklist
+    case createChecklist(viewModel: ChecklistViewModel)
     case selectTemplate
     case menu
     
     var view: AnyView {
         switch self {
-        case .createChecklist:
-            return AnyView(
-                ChecklistView(
-                    viewModel: AppContext.resolver.resolve(
-                        ChecklistViewModel.self,
-                        argument:ChecklistViewState.createNew
-                    )!
-                )
-            )
+        case .createChecklist(let viewModel):
+            return AnyView(ChecklistView(viewModel: viewModel))
         case .selectTemplate:
             return AnyView(
                 SelectTemplateView(viewModel: AppContext.resolver.resolve(SelectTemplateViewModel.self)!)

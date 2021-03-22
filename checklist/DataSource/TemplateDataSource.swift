@@ -16,7 +16,6 @@ protocol TemplateDataSource {
     var updateTemplate: TemplatePassthroughSubject { get }
     var deleteTemplate: TemplatePassthroughSubject { get }
     var templates: AnyPublisher<[TemplateDataModel], Never> { get }
-    var templateCreated: AnyPublisher<TemplateDataModel, Never> { get }
     var selectedTemplate: TemplateCurrentValueSubject { get }
     func loadAllTemplates() -> Promise<[TemplateDataModel]>
     func updateItem(
@@ -39,11 +38,6 @@ class TemplateDataSourceImpl: TemplateDataSource {
     var _templates = CurrentValueSubject<[TemplateDataModel], Never>([])
     var templates: AnyPublisher<[TemplateDataModel], Never> {
         _templates.eraseToAnyPublisher()
-    }
-    
-    private let _templateCreated: TemplatePassthroughSubject = .init()
-    var templateCreated: AnyPublisher<TemplateDataModel, Never> {
-        _templateCreated.eraseToAnyPublisher()
     }
     
     var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> = .init(nil)
@@ -97,7 +91,6 @@ class TemplateDataSourceImpl: TemplateDataSource {
         coreDataManager.save(template: template)
         .get {
             self._templates.value.append(template)
-            self._templateCreated.send(template)
         }
     }
 }
