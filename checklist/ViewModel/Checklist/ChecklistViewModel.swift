@@ -439,9 +439,13 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             )!
         viewModel.onDidCreateTemplate.sink { [weak self] in
             self?.alert = .templateCreated(onGoToTemplates: {
+                guard let self = self else { return }
                 let viewModel = AppContext.resolver.resolve(MyTemplatesViewModel.self)!
-                self?.navigationDestinationView = AnyView(MyTemplatesView(viewModel: viewModel))
-                self?.isNavigationLinkActive = true
+                self.navigationDestinationView = AnyView(MyTemplatesView(viewModel: viewModel))
+                self.isNavigationLinkActive = true
+                viewModel.onBackTapped.sink { [weak self] in
+                    self?.isNavigationLinkActive = false
+                }.store(in: &self.cancellables)
             })
             self?.objectWillChange.send()
         }.store(in: &cancellables)

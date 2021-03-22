@@ -26,3 +26,11 @@ class NavBarChipButtonViewModel: ObservableObject {
         self.icon = icon
     }
 }
+
+
+extension NavBarChipButtonViewModel {
+    
+    static func getBackButton() -> NavBarChipButtonViewModel {
+        NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "arrow.backward"))
+    }
+}

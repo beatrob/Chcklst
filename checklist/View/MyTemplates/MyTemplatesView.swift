@@ -14,22 +14,31 @@ struct MyTemplatesView: View {
     @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
-        VStack {
-            ForEach(
-                viewModel.templates,
-                id: \.id) { template in
-                    MyTemplateItemView(
-                        name: template.title,
-                        description: template.description,
-                        displayRightArrow: false
-                    )
-                    .onTapGesture {
-                        self.viewModel.onTemplateTapped.send(template)
+        ZStack {
+            Color.checklistBackground
+            VStack(spacing: 0) {
+                TemplatesNavBar(viewModel: viewModel.navBarViewModel)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        ForEach(
+                            viewModel.templates,
+                            id: \.id) { template in
+                            MyTemplateItemView(
+                                name: template.title,
+                                description: template.description,
+                                displayRightArrow: false
+                            )
+                            .onTapGesture {
+                                self.viewModel.onTemplateTapped.send(template)
+                            }
+                        }
+                        Spacer()
                     }
+                }
             }
-            Spacer()
         }
-        .navigationBarTitle("My templates", displayMode: .large)
+        .ignoresSafeArea()
+        .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.isSheetVisible) {
             self.viewModel.sheetView
         }

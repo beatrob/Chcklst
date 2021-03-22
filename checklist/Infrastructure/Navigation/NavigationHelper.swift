@@ -48,6 +48,9 @@ class NavigationHelper: ObservableObject {
     
     func navigateToMyTemplates(source: Source) {
         let viewModel = AppContext.resolver.resolve(MyTemplatesViewModel.self)!
+        viewModel.onBackTapped.sink { [weak self] in
+            self?.dashboardSelection = .none
+        }.store(in: &cancellables)
         switch source {
         case .dashboard:
             dashboardDestination = AnyView(MyTemplatesView(viewModel: viewModel))

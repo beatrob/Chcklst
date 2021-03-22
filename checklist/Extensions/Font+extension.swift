@@ -29,7 +29,7 @@ extension Font {
             case .item, .boldItem:
                 return 18
             case .description:
-                return 15
+                return 18
             case .smallTitle:
                 return 20
             case .bigTitle:

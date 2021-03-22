@@ -12,7 +12,7 @@ import Combine
 
 class ChecklistNavBarViewModel: ObservableObject {
     
-    let backButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "arrow.backward"))
+    let backButton = NavBarChipButtonViewModel.getBackButton()
     let actionsButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "ellipsis"))
     let doneButton = NavBarChipButtonViewModel(title: "Done", icon: Image(systemName: "checkmark"))
     @Published var shouldDisplayDoneButton = false
