@@ -16,7 +16,7 @@ extension ChecklistViewModel {
         switch viewState {
         case .createFromTemplate, .createNew:
             return .init("Create")
-        case .update:
+        case .update, .updateTemplate:
             return .init("Save")
         case .createTemplate:
             return .init("Create template")

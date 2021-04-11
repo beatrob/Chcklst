@@ -35,11 +35,6 @@ class ViewModelAssembly: Assembly {
             MyTemplatesViewModel.self,
             initializer: MyTemplatesViewModel.init
         )
-        container.autoregister(
-            EditTemplateViewModel.self,
-            arguments: TemplateDataModel.self, TemplatePassthroughSubject.self,
-            initializer: EditTemplateViewModel.init
-        )
         container.autoregister(InitializeAppViewModel.self, initializer: InitializeAppViewModel.init)
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
         container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)

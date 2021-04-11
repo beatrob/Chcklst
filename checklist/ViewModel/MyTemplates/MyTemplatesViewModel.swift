@@ -61,10 +61,7 @@ class MyTemplatesViewModel: ObservableObject {
             guard let template = template else {
                 return
             }
-            self?.sheet = .editTemplate(
-                template: template,
-                update: templateDataSource.updateTemplate
-            )
+            self?.sheet = .editTemplate(template: template)
         }.store(in: &cancellables)
         
         let createChecklist = ChecklistPassthroughSubject()

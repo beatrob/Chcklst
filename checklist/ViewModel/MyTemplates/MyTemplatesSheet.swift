@@ -10,8 +10,9 @@ import Foundation
 import SwiftUI
 
 enum MyTemaplatesSheet {
+    
     case createChecklist(template: TemplateDataModel)
-    case editTemplate(template: TemplateDataModel, update: TemplatePassthroughSubject)
+    case editTemplate(template: TemplateDataModel)
     case none
     
     var isVisible: Bool {
@@ -29,12 +30,12 @@ enum MyTemaplatesSheet {
                 argument: ChecklistViewState.createFromTemplate(template: template)
             )!
             return AnyView(ChecklistView(viewModel: viewModel))
-        case .editTemplate(let template, let update):
+        case .editTemplate(let template):
             let viewModel = AppContext.resolver.resolve(
-                EditTemplateViewModel.self,
-                arguments: template, update
+                ChecklistViewModel.self,
+                argument: ChecklistViewState.updateTemplate(template: template)
             )!
-            return AnyView(EditTemplateView(viewModel: viewModel))
+            return AnyView(ChecklistView(viewModel: viewModel))
         case .none: return AnyView(EmptyView())
         }
     }
