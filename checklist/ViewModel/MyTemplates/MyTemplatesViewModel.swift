@@ -24,11 +24,7 @@ class MyTemplatesViewModel: ObservableObject {
             self.isActionSheetVisible = actionSheet.isActionSheetVisible
         }
     }
-    private var sheet: MyTemaplatesSheet = .none {
-        didSet {
-            self.isSheetVisible = sheet.isVisible
-        }
-    }
+
     private var alert: MyTemplatesAlert = .none {
         didSet {
             self.isAlertVisible = alert.isVisible
@@ -37,7 +33,7 @@ class MyTemplatesViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     
     var actionSheetView: ActionSheet { actionSheet.actionSheet }
-    var sheetView: AnyView { sheet.view }
+    var sheetView = AnyView(EmptyView())
     var alertView: Alert { alert.alert }
     
     let onTemplateTapped = TemplatePassthroughSubject()
@@ -61,7 +57,7 @@ class MyTemplatesViewModel: ObservableObject {
             guard let template = template else {
                 return
             }
-            self?.sheet = .editTemplate(template: template)
+            self?.displayEditTemplate(template)
         }.store(in: &cancellables)
         
         let createChecklist = ChecklistPassthroughSubject()
@@ -75,13 +71,14 @@ class MyTemplatesViewModel: ObservableObject {
             self?.actionSheet = .templateActions(
                 template: template,
                 onCreateChecklist: {
-                    guard let self = self else { return }
-                    self.sheet = .createChecklist(template: template)
+                    self?.displayCreateChecklist(template)
                 },
-                onEdit: { templateDataSource.selectedTemplate.send(template) },
+                onEdit: {
+                    templateDataSource.selectedTemplate.send(template)
+                },
                 onDelete: {
-                    withAnimation {
-                        templateDataSource.deleteTemplate.send(template)
+                    templateDataSource.deleteTemplate(template).catch { error in
+                        error.log(message: "Failed to delete template")
                     }
                 }
             )
@@ -94,5 +91,30 @@ class MyTemplatesViewModel: ObservableObject {
                     }
                 )
         }.store(in: &self.cancellables)
+    }
+}
+
+
+private extension MyTemplatesViewModel {
+    
+    func displayEditTemplate(_ template: TemplateDataModel) {
+        let viewModel = AppContext.resolver.resolve(
+            ChecklistViewModel.self,
+            argument: ChecklistViewState.updateTemplate(template: template)
+        )!
+        viewModel.onDidUpdateTemplate.sink { [weak self] in
+            self?.isSheetVisible = false
+        }.store(in: &cancellables)
+        sheetView = AnyView(ChecklistView(viewModel: viewModel))
+        isSheetVisible = true
+    }
+    
+    func displayCreateChecklist(_ template: TemplateDataModel) {
+        let viewModel = AppContext.resolver.resolve(
+            ChecklistViewModel.self,
+            argument: ChecklistViewState.createFromTemplate(template: template)
+        )!
+        sheetView = AnyView(ChecklistView(viewModel: viewModel))
+        isSheetVisible = true
     }
 }

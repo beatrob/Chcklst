@@ -13,8 +13,6 @@ import PromiseKit
 
 protocol TemplateDataSource {
     
-    var updateTemplate: TemplatePassthroughSubject { get }
-    var deleteTemplate: TemplatePassthroughSubject { get }
     var templates: AnyPublisher<[TemplateDataModel], Never> { get }
     var selectedTemplate: TemplateCurrentValueSubject { get }
     func loadAllTemplates() -> Promise<[TemplateDataModel]>
@@ -24,16 +22,14 @@ protocol TemplateDataSource {
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     )
     func createTemplate(_ template: TemplateDataModel) -> Promise<Void>
+    func updateTemplate(_ template: TemplateDataModel) -> Promise<Void>
+    func deleteTemplate(_ template: TemplateDataModel) -> Promise<Void>
 }
 
 
 class TemplateDataSourceImpl: TemplateDataSource {
     
     let coreDataManager: CoreDataTemplateManager
-    
-    var updateTemplate: TemplatePassthroughSubject = .init()
-    
-    var deleteTemplate: TemplatePassthroughSubject = .init()
     
     var _templates = CurrentValueSubject<[TemplateDataModel], Never>([])
     var templates: AnyPublisher<[TemplateDataModel], Never> {
@@ -46,22 +42,6 @@ class TemplateDataSourceImpl: TemplateDataSource {
     
     init(coreDataManager: CoreDataTemplateManager) {
         self.coreDataManager = coreDataManager
-        
-        updateTemplate.sink { template in
-            coreDataManager.update(template: template)
-            .done {
-                if let index = self._templates.value.firstIndex(where: { $0 == template }) {
-                    self._templates.value[index] = template
-                }
-            }
-            .catch { log(error: $0.localizedDescription) }
-        }.store(in: &cancellables)
-        
-        deleteTemplate.sink { template in
-            coreDataManager.delete(template: template)
-            .done { self._templates.value.removeAll { $0.id == template.id } }
-            .catch { log(error: $0.localizedDescription) }
-        }.store(in: &cancellables)
     }
     
     func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
@@ -92,5 +72,34 @@ class TemplateDataSourceImpl: TemplateDataSource {
         .get {
             self._templates.value.append(template)
         }
+    }
+    
+    func deleteTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        firstly {
+            coreDataManager.delete(template: template)
+        }.get {
+            let index = try self.getIndex(of: template)
+            self._templates.value.remove(at: index)
+        }
+    }
+    
+    func updateTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        firstly {
+            coreDataManager.update(template: template)
+        }.get {
+            let index = try self.getIndex(of: template)
+            self._templates.value[index] = template
+        }
+    }
+}
+
+
+private extension TemplateDataSourceImpl {
+    
+    func getIndex(of template: TemplateDataModel) throws -> Int {
+        guard let index = _templates.value.firstIndex(of: template) else {
+            throw DataSourceError.templateNotFound
+        }
+        return index
     }
 }

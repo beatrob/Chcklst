@@ -36,10 +36,6 @@ class MockTemplateDataSource: TemplateDataSource {
         ]
     )
     
-    var updateTemplate: TemplatePassthroughSubject = .init()
-    
-    var deleteTemplate: TemplatePassthroughSubject = .init()
-    
     var templates: AnyPublisher<[TemplateDataModel], Never> {
         _templates.eraseToAnyPublisher()
     }
@@ -47,19 +43,6 @@ class MockTemplateDataSource: TemplateDataSource {
     var selectedTemplate: CurrentValueSubject<TemplateDataModel?, Never> = .init(nil)
     
     var cancellables =  Set<AnyCancellable>()
-    
-    init() {
-        deleteTemplate.sink { [weak self] template in
-            self?._templates.value.removeAll { $0.id == template.id }
-        }.store(in: &cancellables)
-        
-        updateTemplate.sink { [weak self] template in
-            guard let self = self else { return }
-            if let index = self._templates.value.firstIndex(where: { $0 == template }) {
-                self._templates.value[index] = template
-            }
-        }.store(in: &cancellables)
-    }
     
     func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
         
@@ -71,6 +54,18 @@ class MockTemplateDataSource: TemplateDataSource {
     
     func createTemplate(_ template: TemplateDataModel) -> Promise<Void> {
         _templates.value.insert(template, at: 0)
+        return .value
+    }
+    
+    func deleteTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        _templates.value.removeAll { $0.id == template.id }
+        return .value
+    }
+    
+    func updateTemplate(_ template: TemplateDataModel) -> Promise<Void> {
+        if let index = self._templates.value.firstIndex(where: { $0 == template }) {
+            self._templates.value[index] = template
+        }
         return .value
     }
 }

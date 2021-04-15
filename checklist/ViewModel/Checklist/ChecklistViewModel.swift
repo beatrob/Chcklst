@@ -39,7 +39,7 @@ class ChecklistViewModel: ObservableObject {
     @Published var reminderDate: Date = Date()
     @Published var isCreateTemplateChecked: Bool = false
     var shouldDisplaySetReminder: Bool {
-        viewState.isEditEnabled && !viewState.isCreateTemplate && !shouldCreateChecklistName
+        viewState.isEditEnabled && !viewState.isCreateTemplate && !shouldCreateChecklistName && !viewState.isUpdateTemplate
     }
     var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew && !shouldCreateChecklistName }
     var shouldDisplayActionButton: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
@@ -67,6 +67,7 @@ class ChecklistViewModel: ObservableObject {
         }
     }
     private let didCreateTemplateSubject = EmptySubject()
+    private let didUpdateTemplate = EmptySubject()
     
     let onCreateTitleNext: EmptySubject = .init()
     let onAddItemsNext: EmptySubject = .init()
@@ -77,6 +78,9 @@ class ChecklistViewModel: ObservableObject {
     let onDismissTapped: EmptySubject = .init()
     var onDidCreateTemplate: EmptyPublisher {
         didCreateTemplateSubject.eraseToAnyPublisher()
+    }
+    var onDidUpdateTemplate: EmptyPublisher {
+        didUpdateTemplate.eraseToAnyPublisher()
     }
     
     let checklistDataSource: ChecklistDataSource
@@ -169,6 +173,8 @@ class ChecklistViewModel: ObservableObject {
                 self.saveNewChecklist()
             case .createTemplate:
                 self.createTemplate(self.getChecklistFromUI())
+            case .updateTemplate:
+                self.updateTemplate()
             default:
                 break
             }
@@ -361,6 +367,25 @@ private extension ChecklistViewModel {
         }.catch { error in
             error.log(message: "Failed to create template")
             #warning("TODO(): Implement proper error handling")
+        }
+    }
+    
+    func updateTemplate() {
+        guard let template = viewState.template else {
+            log(warning: "Template not available")
+            return
+        }
+        let checklist = getChecklistFromUI()
+        let templateToUpdate = TemplateDataModel(
+            id: template.id,
+            title: checklist.title,
+            description: checklist.description,
+            items: checklist.items
+        )
+        templateDataSource.updateTemplate(templateToUpdate).get {
+            self.didUpdateTemplate.send()
+        }.catch { error in
+            error.log(message: "Failed to update template")
         }
     }
     

@@ -10,6 +10,7 @@ import Foundation
 
 
 enum DataSourceError: Error {
+    
     case checkListNotFound
     case checklistUpdateInMemoryFailed
     case templateNotFound

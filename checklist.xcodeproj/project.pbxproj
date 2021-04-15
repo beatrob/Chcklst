@@ -95,7 +95,6 @@
 		DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DA25114F4A00F326D2 /* String+Extension.swift */; };
 		DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DC2511623500F326D2 /* ViewVisibility.swift */; };
 		DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DE2511626000F326D2 /* DashboardSheet.swift */; };
-		DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */; };
 		DDC4C0F0252A63A500F223D3 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC4C0EF252A63A500F223D3 /* WidgetKit.framework */; };
 		DDC4C0F2252A63A500F223D3 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC4C0F1252A63A500F223D3 /* SwiftUI.framework */; };
 		DDC4C0F5252A63A500F223D3 /* ChecklistWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC4C0F4252A63A500F223D3 /* ChecklistWidget.swift */; };
@@ -246,7 +245,6 @@
 		DDB298DA25114F4A00F326D2 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		DDB298DC2511623500F326D2 /* ViewVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewVisibility.swift; sourceTree = "<group>"; };
 		DDB298DE2511626000F326D2 /* DashboardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSheet.swift; sourceTree = "<group>"; };
-		DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTemplatesSheet.swift; sourceTree = "<group>"; };
 		DDC4C0ED252A63A500F223D3 /* ChecklistWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ChecklistWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC4C0EF252A63A500F223D3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DDC4C0F1252A63A500F223D3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -521,7 +519,6 @@
 			isa = PBXGroup;
 			children = (
 				DDD223132526751B00C18BF9 /* SelectTemplate */,
-				DDB427D0250181C100D615CC /* MyTemplatesSheet.swift */,
 				DD6C506C24FC35610056C476 /* MyTemplatesActionSheet.swift */,
 				DD25877D25067F2B00A503C9 /* MyTemplatesAlert.swift */,
 				DD90241424FB7A6F0084CDDC /* MyTemplatesViewModel.swift */,
@@ -875,7 +872,6 @@
 				DDDAED6625F578930077F6AA /* ChecklistActionSheet.swift in Sources */,
 				DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */,
 				DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */,
-				DDB427D1250181C100D615CC /* MyTemplatesSheet.swift in Sources */,
 				DD2D91872530CA2A0032779C /* SortDataModel.swift in Sources */,
 				DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */,
 				DD8BFC8025DF091D00338624 /* NavBarChipButtonViewModel.swift in Sources */,
