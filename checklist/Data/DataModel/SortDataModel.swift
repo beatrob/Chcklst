@@ -16,13 +16,15 @@ enum SortDataModel: CaseIterable, Identifiable {
     
     case latest
     case oldest
-    case name
+    case nameAsc
+    case nameDesc
     
     var title: String {
         switch self {
         case .latest: return "Latest"
         case .oldest: return "Oldest"
-        case .name: return "Name"
+        case .nameAsc: return "A...Z"
+        case .nameDesc: return "Z...A"
         }
     }
     

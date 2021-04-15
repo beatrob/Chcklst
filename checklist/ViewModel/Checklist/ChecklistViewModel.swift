@@ -304,6 +304,7 @@ private extension ChecklistViewModel {
     
     func setupTemplate(_ template: TemplateDataModel) {
         checklistName = template.title
+        checklistDescription = template.description ?? ""
         template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }
         addNewItem(name: nil, isDone: false, isEditable: true)
         shouldCreateChecklistName = false

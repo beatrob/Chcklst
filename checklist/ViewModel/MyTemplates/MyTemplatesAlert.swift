@@ -14,6 +14,7 @@ import SwiftUI
 enum MyTemplatesAlert {
     
     case createChecklistSucess(onGotoDashboard: EmptyCompletion)
+    case confirmDelete(onConfirm: EmptyCompletion)
     case none
     
     var alert: Alert {
@@ -22,6 +23,12 @@ enum MyTemplatesAlert {
             return Alert(
                 title: Text("New checklist created"),
                 primaryButton: .default(Text("Go to Dashboard"), action: onGotoDashboard),
+                secondaryButton: .cancel()
+            )
+        case .confirmDelete(let onConfirm):
+            return Alert(
+                title: Text("Do you really want to delete this template?"),
+                primaryButton: .destructive(Text("Delete"), action: onConfirm),
                 secondaryButton: .cancel()
             )
         case .none:

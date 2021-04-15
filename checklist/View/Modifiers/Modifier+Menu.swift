@@ -18,6 +18,7 @@ extension Modifier {
             
             func body(content: Content) -> some View {
                 content
+                    .lineLimit(1)
                     .font(Font.Chcklst.item.font)
                     .foregroundColor(.firstAccent)
             }

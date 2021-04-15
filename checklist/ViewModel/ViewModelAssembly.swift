@@ -49,5 +49,6 @@ class ViewModelAssembly: Assembly {
             argument: ChecklistDataModel.self,
             initializer: EditReminderViewModel.init
         )
+        container.autoregister(SettingsNavBarViewModel.self, initializer: SettingsNavBarViewModel.init)
     }
 }

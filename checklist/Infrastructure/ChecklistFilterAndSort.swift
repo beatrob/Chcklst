@@ -69,7 +69,8 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         switch sort {
         case .latest: return orderByLatest(checklists: checklists)
         case .oldest: return orderByLatest(checklists: checklists).reversed()
-        case .name: return orderByAlphabet(checklists: checklists)
+        case .nameAsc: return orderByAlphabet(checklists: checklists, ascending: true)
+        case .nameDesc: return orderByAlphabet(checklists: checklists, ascending: false)
         }
     }
     
@@ -80,9 +81,9 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         }
     }
     
-    private func orderByAlphabet(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
+    private func orderByAlphabet(checklists: [ChecklistDataModel], ascending: Bool) -> [ChecklistDataModel] {
         checklists.sorted { (left, right) -> Bool in
-            left.title.localizedCaseInsensitiveCompare(right.title) == .orderedAscending
+            left.title.localizedCaseInsensitiveCompare(right.title) ==  (ascending ? .orderedAscending : .orderedDescending)
         }
     }
     

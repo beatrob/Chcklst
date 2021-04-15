@@ -77,9 +77,14 @@ class MyTemplatesViewModel: ObservableObject {
                     templateDataSource.selectedTemplate.send(template)
                 },
                 onDelete: {
-                    templateDataSource.deleteTemplate(template).catch { error in
-                        error.log(message: "Failed to delete template")
+                    guard let self = self else {
+                        return
                     }
+                    self.alert = .confirmDelete(onConfirm: {
+                        templateDataSource.deleteTemplate(template).catch { error in
+                            error.log(message: "Failed to delete template")
+                        }
+                    })
                 }
             )
         }.store(in: &cancellables)

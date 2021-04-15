@@ -11,19 +11,16 @@ import SwiftUI
 struct SelectTemplateView: View {
     
     @ObservedObject var viewModel: SelectTemplateViewModel
-    @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
         NavigationView {
             VStack {
-                
                 NavigationLink(
-                    destination: navigationHelper.selectTemplateDestination,
-                    tag: .createChecklist,
-                    selection: $navigationHelper.selectTemplateSelection
-                ) {
-                    EmptyView()
-                }
+                    destination: viewModel.desitnationView,
+                    isActive: $viewModel.isDestionationViewVisible,
+                    label: {
+                        EmptyView()
+                    })
                 .isDetailLink(false)
                 .hidden()
                 
@@ -41,7 +38,7 @@ struct SelectTemplateView: View {
                 }
                 Spacer()
             }
-            .navigationBarTitle("Select template", displayMode: .large)
+            .navigationBarHidden(true)
         }
     }
 }
@@ -51,8 +48,7 @@ struct SelectTemplateView_Previews: PreviewProvider {
         SelectTemplateView(
             viewModel: .init(
                 checklistDataSource: MockChecklistDataSource(),
-                templateDataSource: MockTemplateDataSource(),
-                navigationHelper: NavigationHelper()
+                templateDataSource: MockTemplateDataSource()
             )
         )
     }

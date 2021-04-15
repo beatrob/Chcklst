@@ -13,9 +13,13 @@ import SwiftUI
 
 class SettingsViewModel: ObservableObject {
     
-    
+    let navBarViewModel = AppContext.resolver.resolve(SettingsNavBarViewModel.self)!
     let onMyTemplates = EmptySubject()
     var cancellables =  Set<AnyCancellable>()
+    
+    var onBackTapped: EmptyPublisher {
+        navBarViewModel.backButton.didTap.eraseToAnyPublisher()
+    }
     
     init(navigationHelper: NavigationHelper) {
         onMyTemplates.sink {

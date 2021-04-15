@@ -14,14 +14,15 @@ import SwiftUI
 class SelectTemplateViewModel: ObservableObject {
     
     @Published var templates: [TemplateDataModel] = []
+    @Published var isDestionationViewVisible = false
     let onTemplateTapped = TemplatePassthroughSubject()
-    
+    var desitnationView = AnyView(EmptyView())
     var cancellables =  Set<AnyCancellable>()
+    
     
     init(
         checklistDataSource: ChecklistDataSource,
-        templateDataSource: TemplateDataSource,
-        navigationHelper: NavigationHelper
+        templateDataSource: TemplateDataSource
     ) {
         templateDataSource.templates.sink { [weak self] templates in
             self?.templates = templates
@@ -34,8 +35,16 @@ class SelectTemplateViewModel: ObservableObject {
             .catch { $0.log(message: "Failed to create checklist") }
         }.store(in: &cancellables)
         
-        onTemplateTapped.sink { template in
-            navigationHelper.navigateToCreateChecklist(with: template)
+        onTemplateTapped.sink { [weak self] template in
+            guard let self = self else {
+                return
+            }
+            let viewModel = AppContext.resolver.resolve(
+                ChecklistViewModel.self,
+                argument: ChecklistViewState.createFromTemplate(template: template)
+            )!
+            self.desitnationView = AnyView(ChecklistView(viewModel: viewModel))
+            self.isDestionationViewVisible = true
         }.store(in: &cancellables)
     }
 }
