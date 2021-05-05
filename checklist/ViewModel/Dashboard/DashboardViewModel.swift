@@ -76,6 +76,15 @@ class DashboardViewModel: ObservableObject {
             self?.handleChecklistData(data)
         }.store(in: &cancellables)
         
+        checklistFilterAndSort.searchResults.sink { [weak self] results in
+            guard let self = self else {
+                return
+            }
+            self.checklistCells = results.map {
+                self.getChecklistCellViewModel(with: $0)
+            }
+        }.store(in: &cancellables)
+        
         checklistDataSource.selectedCheckList.dropFirst().sink { checklist in
             guard let checklist = checklist else {
                 return
@@ -108,6 +117,10 @@ class DashboardViewModel: ObservableObject {
             self?.toggleSidemenu()
         }.store(in: &cancellables)
         
+        navBarViewModel.search.sink { searchText in
+            checklistFilterAndSort.search = searchText
+        }.store(in: &cancellables)
+        
         navBarViewModel.onAddTapped.subscribe(onCreateNewChecklist).store(in: &cancellables)
         
         menuViewModel.onSelectSort.sink { [weak self] sort in
@@ -132,6 +145,11 @@ class DashboardViewModel: ObservableObject {
         
         menuViewModel.onSelectSettings.sink { [weak self] _ in
             navigationHelper.navigateToSettings()
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
+        menuViewModel.onSelectSchedules.sink { [weak self] _ in
+            navigationHelper.navigateToSchedules()
             self?.toggleSidemenu()
         }.store(in: &cancellables)
         

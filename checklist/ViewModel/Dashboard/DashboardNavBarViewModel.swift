@@ -22,19 +22,44 @@ class DashboardNavBarViewModel: ObservableObject {
         title: nil,
         icon: Image(systemName: "magnifyingglass")
     )
+    let  closeSearchButtonViewModel = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "xmark"))
     @Published var sortedByTitle: String = SortDataModel.initial.title
     @Published var filterTitle: String = FilterDataModel.initial.title
     @Published var isFilterVisible: Bool = FilterDataModel.initial.isVisibleInNavbar
+    @Published var isSearchBarVisible: Bool = false
+    @Published var searchText: String = ""
+    @Published var isSearchTitleVisible = true
     
     let onMenuTapped = EmptySubject()
-    let onSearchTapped = EmptySubject()
     let onAddTapped = EmptySubject()
+    var search: AnyPublisher<String?, Never> {
+        $searchText
+            .map { text -> String? in
+                guard text.count > 2 else {
+                    return nil
+                }
+                return text
+            }
+            .eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
+    
     init() {
         menuButtonViewModel.didTap.subscribe(onMenuTapped).store(in: &cancellables)
-        searchButtonViewModel.didTap.subscribe(onSearchTapped).store(in: &cancellables)
         addButtonViewModel.didTap.subscribe(onAddTapped).store(in: &cancellables)
+        searchButtonViewModel.didTap.sink { [weak self] in
+            withAnimation {
+                self?.isSearchBarVisible = true
+            }
+        }.store(in: &cancellables)
+        closeSearchButtonViewModel.didTap.sink { [weak self] in
+            self?.searchText = ""
+            self?.isSearchTitleVisible = true
+            withAnimation {
+                self?.isSearchBarVisible = false
+            }
+        }.store(in: &cancellables)
     }
 }

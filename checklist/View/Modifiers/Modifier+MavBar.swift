@@ -15,9 +15,16 @@ extension Modifier {
         
         struct NavBar: ViewModifier {
             
+            let isExpanded: Bool
+            
+            enum Height: CGFloat {
+                case normal = 90
+                case expanded = 145
+            }
+            
             func body(content: Content) -> some View {
                 content
-                    .frame(height: 90)
+                    .frame(height: isExpanded ? Height.expanded.rawValue : Height.normal.rawValue)
                     .background(Color.menuBackground)
                     .ignoresSafeArea()
             }
@@ -28,6 +35,15 @@ extension Modifier {
             func body(content: Content) -> some View {
                 content
                     .font(Font.Chcklst.item.font)
+                    .foregroundColor(.firstAccent)
+            }
+        }
+        
+        struct Title: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.smallTitle.font)
                     .foregroundColor(.firstAccent)
             }
         }

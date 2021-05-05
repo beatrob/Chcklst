@@ -40,7 +40,7 @@ struct ChecklistNavBar: View {
                 }
             }
         }
-        .modifier(Modifier.NavBar.NavBar())
+        .modifier(Modifier.NavBar.NavBar(isExpanded: false))
     }
 }
 

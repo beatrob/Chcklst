@@ -39,6 +39,7 @@ class ViewModelAssembly: Assembly {
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
         container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)
         container.autoregister(DashboardNavBarViewModel.self, initializer: DashboardNavBarViewModel.init)
+        container.autoregister(SchedulesViewModel.self, initializer: SchedulesViewModel.init)
         container.autoregister(
             ChecklistNavBarViewModel.self,
             argument: AnyPublisher<ChecklistDataModel?, Never>.self,
@@ -49,6 +50,10 @@ class ViewModelAssembly: Assembly {
             argument: ChecklistDataModel.self,
             initializer: EditReminderViewModel.init
         )
-        container.autoregister(SettingsNavBarViewModel.self, initializer: SettingsNavBarViewModel.init)
+        container.autoregister(
+            BackButtonNavBarViewModel.self,
+            argument: String.self,
+            initializer: BackButtonNavBarViewModel.init
+        )
     }
 }

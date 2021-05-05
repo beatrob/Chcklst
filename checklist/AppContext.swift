@@ -21,7 +21,7 @@ class AppContext {
     
     private let assembler = Assembler(
         [
-            DataSourceAssembly(),
+            MockDataSourceAssembly(),
             ViewModelAssembly(),
             InfrastructureAssembly(),
             CoreDataAssembly()
@@ -33,7 +33,10 @@ class AppContext {
     }
     
     init() {
-        MSAppCenter.start("2e52e116-6ccb-40e4-a8d9-e91aa19173b4", withServices: [MSAnalytics.self, MSCrashes.self])
+        AppCenter.start(
+            withAppSecret: "2e52e116-6ccb-40e4-a8d9-e91aa19173b4",
+            services: [Analytics.self, Crashes.self]
+        )
     }
     
     func configure() { }

@@ -1,16 +1,16 @@
 //
-//  SettingsNavBar.swift
+//  BackButtonNavBar.swift
 //  checklist
 //
-//  Created by Robert Konczi on 4/15/21.
+//  Created by Robert Konczi on 5/5/21.
 //  Copyright © 2021 Róbert Konczi. All rights reserved.
 //
 
 import SwiftUI
 
-struct SettingsNavBar: View {
+struct BackButtonNavBar: View {
     
-    @StateObject var viewModel: SettingsNavBarViewModel
+    @StateObject var viewModel: BackButtonNavBarViewModel
     
     var body: some View {
         VStack(alignment: .center) {
@@ -20,17 +20,17 @@ struct SettingsNavBar: View {
                     NavBarChipButton(viewModel: viewModel.backButton)
                     Spacer()
                 }
-                Text("Settings").modifier(Modifier.Menu.Section())
+                Text(viewModel.title).modifier(Modifier.Menu.Section())
             }
             .padding(.horizontal)
             .padding(.bottom)
         }
-        .modifier(Modifier.NavBar.NavBar())
+        .modifier(Modifier.NavBar.NavBar(isExpanded: false))
     }
 }
 
-struct SettingsNavBar_Previews: PreviewProvider {
+struct BackButtonNavBar_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsNavBar(viewModel: .init())
+        BackButtonNavBar(viewModel: .init(title: "Nav bar with back button"))
     }
 }

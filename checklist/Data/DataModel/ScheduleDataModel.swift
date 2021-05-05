@@ -1,0 +1,51 @@
+//
+//  ScheduleDataModel.swift
+//  checklist
+//
+//  Created by Robert Konczi on 5/4/21.
+//  Copyright © 2021 Róbert Konczi. All rights reserved.
+//
+
+import Foundation
+
+struct ScheduleDataModel: Equatable {
+    
+    enum RepeatFrequency {
+        case never
+        case daily
+        case customDays(days: [DayDataModel])
+        case weekly
+        case fortnightly
+        case monthly
+        case yearly
+        
+        var intValues: [Int] {
+            switch self {
+            case .never:
+                return [0]
+            case .daily:
+                return [1]
+            case .weekly:
+                return [2]
+            case .fortnightly:
+                return [3]
+            case .monthly:
+                return [4]
+            case .yearly:
+                return [5]
+            case .customDays(let days):
+                return days.map(\.rawValue)
+            }
+        }
+    }
+    
+    let id: String
+    let title: String
+    let template: TemplateDataModel
+    let scheduleDate: Date
+    let repeatFrequency: RepeatFrequency
+    
+    static func == (lhs: ScheduleDataModel, rhs: ScheduleDataModel) -> Bool {
+        lhs.id ==  rhs.id
+    }
+}

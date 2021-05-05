@@ -12,17 +12,24 @@ import Combine
 
 protocol ChecklistFilterAndSort: AnyObject {
     var filteredAndSortedCheckLists: AnyPublisher<[ChecklistDataModel], Never> { get }
+    var searchResults: AnyPublisher<[ChecklistDataModel], Never> { get }
     var sort: SortDataModel { get set }
     var filter: FilterDataModel? { get set }
+    var search: String? { get set }
 }
 
 class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     
     private let dataSource: ChecklistDataSource
     private let _filteredChecklists = PassthroughSubject<[ChecklistDataModel], Never>()
+    private let _searchResults = PassthroughSubject<[ChecklistDataModel], Never>()
     
     var filteredAndSortedCheckLists: AnyPublisher<[ChecklistDataModel], Never> {
         _filteredChecklists.eraseToAnyPublisher()
+    }
+    
+    var searchResults: AnyPublisher<[ChecklistDataModel], Never> {
+        _searchResults.eraseToAnyPublisher()
     }
     
     var sort: SortDataModel = .initial {
@@ -32,6 +39,12 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     }
     
     var filter: FilterDataModel? {
+        didSet {
+            updateFilterAndSort()
+        }
+    }
+    
+    var search: String? {
         didSet {
             updateFilterAndSort()
         }
@@ -47,10 +60,25 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         cancellables.removeAll()
         dataSource.checkLists.sink { [weak self] checklists  in
             guard let self = self else { return }
+            if let searchResults = self.search(checklists: checklists) {
+                self._searchResults.send(searchResults)
+                return
+            }
             let filtered = self.filter(checklists: checklists)
             let sorted = self.sort(checklists: filtered)
             self._filteredChecklists.send(sorted)
         }.store(in: &cancellables)
+    }
+    
+    private func search(checklists: [ChecklistDataModel]) -> [ChecklistDataModel]? {
+        guard let searchText = self.search?.lowercased() else {
+            return nil
+        }
+        return checklists.filter { checklist -> Bool in
+            checklist.title.lowercased().contains(searchText) ||
+                checklist.description?.lowercased().contains(searchText) ?? false ||
+                checklist.items.contains(where: { $0.name.lowercased().contains(searchText)})
+        }
     }
     
     private func filter(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {

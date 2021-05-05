@@ -20,6 +20,9 @@ class MenuViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published var sortItems: [MenuItemViewModel<SortDataModel>]
     @Published var filterItems: [MenuItemViewModel<FilterDataModel>]
+    @Published var schedules = MenuItemViewModel<MenuItemDataModel>(
+        dataModel: .init(title: "Schedules"), isSelected: false
+    )
     @Published var myTemplates = MenuItemViewModel<MenuItemDataModel>(
         dataModel: .init(title: "My Temlates"), isSelected: false
     )
@@ -46,6 +49,7 @@ class MenuViewModel: ObservableObject {
     
     let onSelectSort = PassthroughSubject<SortDataModel, Never>()
     let onSelectFilter = PassthroughSubject<FilterDataModel, Never>()
+    let onSelectSchedules = EmptySubject()
     let onSelectMyTemplates = EmptySubject()
     let onSelectSettings = EmptySubject()
     let onSelectAbout = EmptySubject()
@@ -69,6 +73,7 @@ class MenuViewModel: ObservableObject {
                 self?.onSelectFilter.send(item)
             }.store(in: &cancellables)
         }
+        schedules.onSelect.subscribe(onSelectSchedules).store(in: &cancellables)
         myTemplates.onSelect.subscribe(onSelectMyTemplates).store(in: &cancellables)
         settings.onSelect.subscribe(onSelectSettings).store(in: &cancellables)
         about.onSelect.subscribe(onSelectAbout).store(in: &cancellables)

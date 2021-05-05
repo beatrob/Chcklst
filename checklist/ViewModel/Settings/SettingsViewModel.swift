@@ -13,7 +13,7 @@ import SwiftUI
 
 class SettingsViewModel: ObservableObject {
     
-    let navBarViewModel = AppContext.resolver.resolve(SettingsNavBarViewModel.self)!
+    let navBarViewModel = AppContext.resolver.resolve(BackButtonNavBarViewModel.self, argument: "Settings")!
     let onMyTemplates = EmptySubject()
     var cancellables =  Set<AnyCancellable>()
     

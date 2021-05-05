@@ -51,6 +51,11 @@ struct MenuView: View {
                 }
                 Spacer()
                 HStack {
+                    MenuItemView(viewModel: viewModel.schedules)
+                        .padding(.leading)
+                    Spacer()
+                }
+                HStack {
                     MenuItemView(viewModel: viewModel.myTemplates)
                         .padding(.leading)
                     Spacer()

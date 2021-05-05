@@ -11,7 +11,12 @@ import Combine
 import SwiftUI
 
 
-class TemplatesNavBarViewModel: ObservableObject {
+class BackButtonNavBarViewModel: ObservableObject {
     
+    @Published var title: String
     let backButton = NavBarChipButtonViewModel.getBackButton()
+    
+    init(title: String) {
+        self.title = title
+    }
 }

@@ -12,6 +12,7 @@ struct DashboardView: View {
     
     @StateObject var viewModel: DashboardViewModel
     private let sideMenuWidth: CGFloat = 200
+    @State var text: String = ""
     
     var body: some View {
         NavigationView {
@@ -22,7 +23,7 @@ struct DashboardView: View {
                     .frame(width: sideMenuWidth)
                     .ignoresSafeArea()
                 NavigationLinks()
-                
+
                 ZStack {
                     VStack(spacing: 0) {
                         DashboardNavBar(viewModel: viewModel.navBarViewModel)
@@ -41,16 +42,20 @@ struct DashboardView: View {
                     .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
                     .ignoresSafeArea()
                     
-                    Color.mainBackground.opacity(viewModel.isSidemenuVisible ? 0.6 : 0)
-                        .ignoresSafeArea()
-                        .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
-                        .onTapGesture {
-                            viewModel.onDarkOverlayTapped.send()
-                        }
+                    if viewModel.isSidemenuVisible {
+                        Color.mainBackground.opacity(viewModel.isSidemenuVisible ? 0.6 : 0)
+                            .ignoresSafeArea()
+                            .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
+                            .onTapGesture {
+                                viewModel.onDarkOverlayTapped.send()
+                            }
+                    }
+                    
                 }
             }
             .navigationBarHidden(true)
         }
+
         .alert(isPresented: $viewModel.alertVisibility.isVisible) {
             self.viewModel.alertVisibility.view
         }
@@ -95,6 +100,16 @@ private struct NavigationLinks: View {
             NavigationLink(
                 destination: navigationHelper.dashboardDestination,
                 tag: .myTemplates,
+                selection: $navigationHelper.dashboardSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
+            
+            NavigationLink(
+                destination: navigationHelper.dashboardDestination,
+                tag: .schedules,
                 selection: $navigationHelper.dashboardSelection
             ) {
                 EmptyView()

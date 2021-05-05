@@ -22,6 +22,7 @@ class NavigationHelper: ObservableObject {
         case settings
         case checklistDetail
         case myTemplates
+        case schedules
     }
     
     enum SettingsSelection: String {
@@ -41,6 +42,15 @@ class NavigationHelper: ObservableObject {
         }.store(in: &cancellables)
         dashboardDestination = AnyView(SettingsView(viewModel: viewModel))
         dashboardSelection = .settings
+    }
+    
+    func navigateToSchedules() {
+        let viewModel = AppContext.resolver.resolve(SchedulesViewModel.self)!
+        viewModel.onBackTapped.sink { [weak self] in
+            self?.dashboardSelection = .none
+        }.store(in: &cancellables)
+        dashboardDestination = AnyView(SchedulesView(viewModel: viewModel))
+        dashboardSelection = .schedules
     }
     
     func navigateToMyTemplates(source: Source) {

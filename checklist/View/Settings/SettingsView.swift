@@ -14,7 +14,7 @@ struct SettingsView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            SettingsNavBar(viewModel: viewModel.navBarViewModel)
+            BackButtonNavBar(viewModel: viewModel.navBarViewModel)
 //            NavigationLink(
 //                destination: navigationHelper.settingsDestination,
 //                tag: .myTemplates,

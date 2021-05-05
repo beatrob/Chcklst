@@ -12,47 +12,85 @@ struct DashboardNavBar: View {
     
     @StateObject var viewModel: DashboardNavBarViewModel
     
+    var navBar: some View {
+        HStack(spacing: 15) {
+            NavBarChipButton(viewModel: viewModel.menuButtonViewModel)
+            Spacer()
+            
+            HStack(spacing: 5) {
+                Image(systemName: "arrow.up.arrow.down")
+                    .modifier(Modifier.Menu.Section())
+                Text(viewModel.sortedByTitle)
+                    .modifier(Modifier.Menu.Section())
+            }
+            
+            if viewModel.isFilterVisible {
+                HStack(spacing: 5) {
+                    Image(systemName: "eye")
+                        .modifier(Modifier.Menu.Section())
+                    Text(viewModel.filterTitle)
+                        .modifier(Modifier.Menu.Section())
+                }
+            }
+            
+            NavBarChipButton(viewModel: viewModel.searchButtonViewModel)
+            NavBarChipButton(viewModel: viewModel.addButtonViewModel)
+        }
+    }
+    
+    var searchBar: some View {
+        VStack(alignment: .leading) {
+            Spacer()
+            if viewModel.isSearchTitleVisible {
+                Text("Search for checklists")
+                    .modifier(Modifier.NavBar.Title())
+            }
+            HStack {
+                TextField(
+                    "Title, description or item",
+                    text: $viewModel.searchText) { didBegin in
+                    viewModel.isSearchTitleVisible = !didBegin
+                }
+                .modifier(Modifier.NavBar.Subtitle())
+                Spacer()
+                NavBarChipButton(viewModel: viewModel.closeSearchButtonViewModel)
+            }
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .center) {
             Spacer()
-            HStack(spacing: 15) {
-                NavBarChipButton(viewModel: viewModel.menuButtonViewModel)
-                Spacer()
-                
-                HStack(spacing: 5) {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .modifier(Modifier.Menu.Section())
-                    Text(viewModel.sortedByTitle)
-                        .modifier(Modifier.Menu.Section())
+            HStack {
+                if viewModel.isSearchBarVisible {
+                    searchBar
+                } else {
+                    navBar
                 }
-                
-                if viewModel.isFilterVisible {
-                    HStack(spacing: 5) {
-                        Image(systemName: "eye")
-                            .modifier(Modifier.Menu.Section())
-                        Text(viewModel.filterTitle)
-                            .modifier(Modifier.Menu.Section())
-                    }
-                }
-                
-                NavBarChipButton(viewModel: viewModel.searchButtonViewModel)
-                NavBarChipButton(viewModel: viewModel.addButtonViewModel)
             }
             .padding(.horizontal)
             .padding(.bottom)
         }
-        .modifier(Modifier.NavBar.NavBar())
+        .modifier(Modifier.NavBar.NavBar(isExpanded: viewModel.isSearchBarVisible)
+        )
     }
 }
 
 struct DashboardNavigationBar_Previews: PreviewProvider {
+    
+    static let viewModel: DashboardNavBarViewModel = {
+        let viewModel = DashboardNavBarViewModel()
+        viewModel.isSearchBarVisible = true
+        return viewModel
+    }()
+    
     static var previews: some View {
         Group {
             DashboardNavBar(
-                viewModel: .init()
+                viewModel: viewModel
             ).previewLayout(.fixed(width: 800, height: 80))
             DashboardNavBar(
-                viewModel: .init()
+                viewModel: viewModel
             ).preferredColorScheme(.dark).previewLayout(.fixed(width: 800, height: 100))
         }
     }

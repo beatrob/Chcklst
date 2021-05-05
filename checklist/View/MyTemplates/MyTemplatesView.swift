@@ -17,7 +17,7 @@ struct MyTemplatesView: View {
         ZStack {
             Color.checklistBackground
             VStack(spacing: 0) {
-                TemplatesNavBar(viewModel: viewModel.navBarViewModel)
+                BackButtonNavBar(viewModel: viewModel.navBarViewModel)
                 ScrollView {
                     VStack(spacing: 0) {
                         ForEach(
