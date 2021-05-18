@@ -16,4 +16,23 @@ enum DayDataModel: Int, CaseIterable {
     case friday = 104
     case saturday = 105
     case sunday = 106
+    
+    var title: String {
+        switch self {
+        case .monday:
+            return "Mo"
+        case .tuesday:
+            return "Tue"
+        case .wednesday:
+            return "Wed"
+        case .thursday:
+            return "Thu"
+        case .friday:
+            return "Fri"
+        case .saturday:
+            return "Sat"
+        case .sunday:
+            return "Sun"
+        }
+    }
 }

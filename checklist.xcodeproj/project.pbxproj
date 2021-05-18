@@ -133,6 +133,7 @@
 		FE559A54264341B800ACF179 /* ScheduleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A53264341B800ACF179 /* ScheduleCellView.swift */; };
 		FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A552643426D00ACF179 /* BackButtonNavBar.swift */; };
 		FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */; };
+		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
 		FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A70F2263CA678001B81E7 /* MyTextField.swift */; };
 		FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */; };
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
@@ -296,6 +297,7 @@
 		FE559A53264341B800ACF179 /* ScheduleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellView.swift; sourceTree = "<group>"; };
 		FE559A552643426D00ACF179 /* BackButtonNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonNavBar.swift; sourceTree = "<group>"; };
 		FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+TextField.swift"; sourceTree = "<group>"; };
+		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
 		FE9A70F2263CA678001B81E7 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
 		FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Settings.swift"; sourceTree = "<group>"; };
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -730,6 +732,7 @@
 			children = (
 				DDE08AA525DB1BBD00F00D5A /* Modifier.swift */,
 				DDE08AAA25DB1BE100F00D5A /* Modifier+Checklist.swift */,
+				FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */,
 				DDE08AB225DB1D0600F00D5A /* Modifier+Menu.swift */,
 				DDD0053A25EAEBAA0098E27E /* Modifier+MavBar.swift */,
 				DD5B724425F58888001D8DA8 /* Modifier+Button.swift */,
@@ -977,6 +980,7 @@
 				FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */,
 				DD179BC025F69E710006629F /* ChecklistDataModel+Welcome.swift in Sources */,
 				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
+				FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */,
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
 				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,

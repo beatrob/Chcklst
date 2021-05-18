@@ -23,12 +23,14 @@ class InitializeAppViewModel: ObservableObject {
         coreDataManager: CoreDataManager,
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
+        scheduleDataSource: ScheduleDataSource,
         initializeAppDataSource: InitializeAppDataSource
     ) {
         coreDataManager.initialize()
             .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { templateDataSource.loadAllTemplates().asVoid() }
+            .then { scheduleDataSource.loadAllSchedules().asVoid() }
             .then { checklistDataSource.deleteExpiredNotificationDates() }
             .then { after(seconds: 1) }
             .done { self.initializeDidFinish.send() }

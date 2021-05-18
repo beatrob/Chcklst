@@ -37,10 +37,34 @@ struct ScheduleDataModel: Equatable {
                 return days.map(\.rawValue)
             }
         }
+        
+        var title: String? {
+            switch self {
+            case .daily:
+                return "Daily"
+            case .never:
+                return nil
+            case .weekly:
+                return "Weekly"
+            case .fortnightly:
+                return "Fortnightly"
+            case .monthly:
+                return "Monthly"
+            case .yearly:
+                return "Yearly"
+            case .customDays(let days):
+                return "Every \(days.map { $0.title}.joined(separator: ", "))"
+            }
+        }
+        
+        static func == (lhs: RepeatFrequency, rhs: RepeatFrequency) -> Bool {
+            lhs == rhs
+        }
     }
     
     let id: String
     let title: String
+    let description: String?
     let template: TemplateDataModel
     let scheduleDate: Date
     let repeatFrequency: RepeatFrequency

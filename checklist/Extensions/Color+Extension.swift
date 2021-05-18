@@ -28,6 +28,10 @@ extension Color {
         Color("checklistBackground")
     }
     
+    static var scheduleBackground: Color {
+        Color("scheduleBackground")
+    }
+    
     static var menuBackground: Color {
         Color("menu")
     }

@@ -13,17 +13,33 @@ struct SchedulesView: View {
     @StateObject var viewModel: SchedulesViewModel
     
     var body: some View {
-        VStack {
-            BackButtonNavBar(viewModel: viewModel.navBarViewModel)
-            Spacer()
+        ZStack {
+            Color.checklistBackground
+            VStack(spacing: 0) {
+                BackButtonNavBar(viewModel: viewModel.navBarViewModel)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        ForEach(viewModel.cells) { cell in
+                            ScheduleCellView(viewModel: cell)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 7)
+                        }
+                    }
+                    .padding(.vertical)
+                }
+            }
         }
-        .navigationBarHidden(true)
         .ignoresSafeArea()
+        .navigationBarHidden(true)
     }
 }
 
 struct SchedulesView_Previews: PreviewProvider {
     static var previews: some View {
-        SchedulesView(viewModel: .init())
+        let viewModel = SchedulesViewModel(scheduleDataSource: MockScheduleDataSource())
+        viewModel.cells = MockScheduleDataSource.mockData.map {
+            ScheduleCellViewModel(schedule: $0)
+        }
+        return SchedulesView( viewModel: viewModel)
     }
 }

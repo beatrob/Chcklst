@@ -17,4 +17,8 @@ extension Date {
         formatter.timeStyle = .short
         return formatter.string(from: self)
     }
+    
+    func formatedScheduleDate() -> String {
+        formatedReminderDate()
+    }
 }

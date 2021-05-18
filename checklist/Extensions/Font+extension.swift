@@ -17,18 +17,21 @@ extension Font {
         
         static let regular = "Avenir Next"
         static let bold = "Avenir Next Bold"
+        static let italic = "Avenir Next Italic"
+        static let boldItalic = "Avenir Next Medium Italic"
         
         case smallTitle
         case bigTitle
         case item
         case boldItem
         case description
+        case italicDescription
         
         var size: CGFloat {
             switch self {
             case .item, .boldItem:
                 return 18
-            case .description:
+            case .description, .italicDescription:
                 return 18
             case .smallTitle:
                 return 20
@@ -43,6 +46,8 @@ extension Font {
                 return getFont(name: Chcklst.regular)
             case .boldItem, .smallTitle, .bigTitle:
                 return getFont(name: Chcklst.bold)
+            case .italicDescription:
+                return getFont(name: Chcklst.boldItalic)
             }
         }
         
@@ -52,6 +57,8 @@ extension Font {
                 return getUIFont(name: Chcklst.regular)
             case .boldItem, .smallTitle, .bigTitle:
                 return getUIFont(name: Chcklst.bold)
+            case .italicDescription:
+                return getUIFont(name: Chcklst.boldItalic)
             }
         }
         

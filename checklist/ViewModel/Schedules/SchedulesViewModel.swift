@@ -18,4 +18,15 @@ class SchedulesViewModel: ObservableObject {
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
+    private let scheduleDataSource: ScheduleDataSource
+    @Published var cells: [ScheduleCellViewModel] = []
+    
+    init(scheduleDataSource: ScheduleDataSource) {
+        self.scheduleDataSource = scheduleDataSource
+        scheduleDataSource.schedules.sink { [weak self] schedules in
+            self?.cells = schedules.map {
+                ScheduleCellViewModel(schedule: $0)
+            }
+        }.store(in: &cancellables)
+    }
 }

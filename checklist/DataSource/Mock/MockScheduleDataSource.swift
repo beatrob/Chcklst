@@ -13,37 +13,41 @@ import PromiseKit
 
 class MockScheduleDataSource: ScheduleDataSource {
     
+    static let mockData: [ScheduleDataModel] = [
+        ScheduleDataModel(
+            id: "1",
+            title: "My first schedule",
+            description: "This is my first schedule to do stuff regularly and improve productivity.",
+            template: .init(checklist: .getWelcomeChecklist()),
+            scheduleDate: Date().addingTimeInterval(60 * 60 * 24),
+            repeatFrequency: .weekly
+        ),
+        ScheduleDataModel(
+            id: "2",
+            title: "My second schedule",
+            description: nil,
+            template: .init(checklist: .getWelcomeChecklist()),
+            scheduleDate: Date().addingTimeInterval(60 * 60 * 24 * 3),
+            repeatFrequency: .daily
+        ),
+        ScheduleDataModel(
+            id: "3",
+            title: "My third schedule",
+            description: nil,
+            template: .init(checklist: .getWelcomeChecklist()),
+            scheduleDate: Date().addingTimeInterval(60 * 60 * 24 * 4),
+            repeatFrequency: .customDays(days: [.monday, .thursday, .saturday])
+        ),
+    ]
+    
     private let _schedules = CurrentValueSubject<[ScheduleDataModel], Never>([])
     var schedules: AnyPublisher<[ScheduleDataModel], Never> {
         _schedules.eraseToAnyPublisher()
     }
     
     func loadAllSchedules() -> Promise<[ScheduleDataModel]> {
-        let schedules: [ScheduleDataModel] = [
-            ScheduleDataModel(
-                id: "1",
-                title: "My first schedule",
-                template: .init(checklist: .getWelcomeChecklist()),
-                scheduleDate: Date().addingTimeInterval(60 * 60 * 24),
-                repeatFrequency: .weekly
-            ),
-            ScheduleDataModel(
-                id: "2",
-                title: "My second schedule",
-                template: .init(checklist: .getWelcomeChecklist()),
-                scheduleDate: Date().addingTimeInterval(60 * 60 * 24 * 3),
-                repeatFrequency: .daily
-            ),
-            ScheduleDataModel(
-                id: "3",
-                title: "My third schedule",
-                template: .init(checklist: .getWelcomeChecklist()),
-                scheduleDate: Date().addingTimeInterval(60 * 60 * 24 * 4),
-                repeatFrequency: .customDays(days: [.monday, .thursday, .saturday])
-            ),
-        ]
-        _schedules.value = schedules
-        return .value(schedules)
+        _schedules.value = Self.mockData
+        return .value(Self.mockData)
     }
     
     func createSchedule(_ schedule: ScheduleDataModel) -> Promise<Void> {

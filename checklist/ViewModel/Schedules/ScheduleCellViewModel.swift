@@ -11,7 +11,20 @@ import Combine
 import SwiftUI
 
 
-class ScheduleCellViewModel: ObservableObject {
+class ScheduleCellViewModel: ObservableObject, Identifiable {
     
+    @Published var title: String
+    @Published var description: String?
+    @Published var scheduleDate: String
+    @Published var repeatFrequency: String?
     var cancellables = Set<AnyCancellable>()
+    let id: String
+    
+    init(schedule: ScheduleDataModel) {
+        self.id = schedule.id
+        self.title = schedule.title
+        self.description = schedule.description
+        self.scheduleDate = schedule.scheduleDate.formatedScheduleDate()
+        self.repeatFrequency = schedule.repeatFrequency.title
+    }
 }
