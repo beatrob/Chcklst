@@ -139,6 +139,9 @@
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
 		FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A32641DEB300594478 /* ScheduleDataModel.swift */; };
 		FEA913A62641E4D700594478 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A52641E4D700594478 /* DayDataModel.swift */; };
+		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
+		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
+		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -303,6 +306,9 @@
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		FEA913A32641DEB300594478 /* ScheduleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataModel.swift; sourceTree = "<group>"; };
 		FEA913A52641E4D700594478 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
+		FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailView.swift; sourceTree = "<group>"; };
+		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
+		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -758,6 +764,7 @@
 			children = (
 				FE559A4F26433FEB00ACF179 /* SchedulesView.swift */,
 				FE559A53264341B800ACF179 /* ScheduleCellView.swift */,
+				FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */,
 			);
 			path = Schedules;
 			sourceTree = "<group>";
@@ -767,6 +774,8 @@
 			children = (
 				FE559A4D26433F8200ACF179 /* SchedulesViewModel.swift */,
 				FE559A512643415400ACF179 /* ScheduleCellViewModel.swift */,
+				FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */,
+				FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */,
 			);
 			path = Schedules;
 			sourceTree = "<group>";
@@ -983,6 +992,7 @@
 				FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */,
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
 				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
+				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
 				DDD0054825EAED4A0098E27E /* ChecklistNavBarViewModel.swift in Sources */,
 				DDE08A9C25DB1A4B00F00D5A /* MenuItemView.swift in Sources */,
@@ -993,6 +1003,7 @@
 				DD8A303025FAB7B300A6937E /* EditReminderView.swift in Sources */,
 				DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
+				FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */,
 				FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */,
 				DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
@@ -1037,6 +1048,7 @@
 				DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */,
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
+				FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */,
 				DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */,
 				DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */,
 				DD07A36F253BA62000CBE54C /* MultilineTextView.swift in Sources */,

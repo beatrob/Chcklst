@@ -16,8 +16,9 @@ class SelectTemplateViewModel: ObservableObject {
     @Published var templates: [TemplateDataModel] = []
     @Published var isDestionationViewVisible = false
     let onTemplateTapped = TemplatePassthroughSubject()
-    var desitnationView = AnyView(EmptyView())
+    var desitnationView = AnyView.empty
     var cancellables =  Set<AnyCancellable>()
+    var templateTappedCancellable: AnyCancellable?
     
     
     init(
@@ -28,14 +29,7 @@ class SelectTemplateViewModel: ObservableObject {
             self?.templates = templates
         }.store(in: &cancellables)
         
-        let createChecklist = ChecklistPassthroughSubject()
-        createChecklist.sink { checklist in
-            checklistDataSource.createChecklist(checklist)
-            .done { Logger.log.debug("Chekclist created \(checklist)")}
-            .catch { $0.log(message: "Failed to create checklist") }
-        }.store(in: &cancellables)
-        
-        onTemplateTapped.sink { [weak self] template in
+        templateTappedCancellable = onTemplateTapped.sink { [weak self] template in
             guard let self = self else {
                 return
             }
@@ -45,6 +39,18 @@ class SelectTemplateViewModel: ObservableObject {
             )!
             self.desitnationView = AnyView(ChecklistView(viewModel: viewModel))
             self.isDestionationViewVisible = true
+        }
+    }
+    
+    func set(
+        onTemplateTappedSubscriber: AnySubscriber<TemplateDataModel, Never>,
+        destinationPublisher: AnyPublisher<AnyView, Never>
+    ) {
+        templateTappedCancellable?.cancel()
+        onTemplateTapped.subscribe(onTemplateTappedSubscriber)
+        destinationPublisher.sink { [weak self] in
+            self?.desitnationView = $0
+            self?.isDestionationViewVisible = true
         }.store(in: &cancellables)
     }
 }

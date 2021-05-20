@@ -14,9 +14,15 @@ import SwiftUI
 class BackButtonNavBarViewModel: ObservableObject {
     
     @Published var title: String
+    @Published var rightButton: NavBarChipButtonViewModel?
     let backButton = NavBarChipButtonViewModel.getBackButton()
     
-    init(title: String) {
+    init(title: String, rightButton: NavBarChipButtonViewModel? = nil) {
         self.title = title
+        self.rightButton = rightButton
+    }
+    
+    func setRightButton(_ rightButton: NavBarChipButtonViewModel) {
+        self.rightButton = rightButton
     }
 }

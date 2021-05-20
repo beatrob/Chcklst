@@ -55,5 +55,10 @@ class ViewModelAssembly: Assembly {
             argument: String.self,
             initializer: BackButtonNavBarViewModel.init
         )
+        container.autoregister(
+            ScheduleDetailViewModel.self,
+            argument: ScheduleDetailViewState.self,
+            initializer: ScheduleDetailViewModel.init
+        )
     }
 }

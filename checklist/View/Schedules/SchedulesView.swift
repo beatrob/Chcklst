@@ -31,6 +31,9 @@ struct SchedulesView: View {
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
+        .sheet(isPresented: $viewModel.isSheetPresented) {
+            viewModel.sheet
+        }
     }
 }
 

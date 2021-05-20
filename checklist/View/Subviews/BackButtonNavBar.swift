@@ -19,6 +19,9 @@ struct BackButtonNavBar: View {
                 HStack(spacing: 15) {
                     NavBarChipButton(viewModel: viewModel.backButton)
                     Spacer()
+                    viewModel.rightButton.map {
+                        NavBarChipButton(viewModel: $0)
+                    }
                 }
                 Text(viewModel.title).modifier(Modifier.Menu.Section())
             }
