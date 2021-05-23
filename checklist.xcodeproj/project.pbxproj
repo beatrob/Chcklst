@@ -142,6 +142,7 @@
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
+		FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE7E308265924B900FED76C /* CheckboxViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -309,6 +310,7 @@
 		FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailView.swift; sourceTree = "<group>"; };
 		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
 		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
+		FEE7E308265924B900FED76C /* CheckboxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -784,6 +786,7 @@
 			isa = PBXGroup;
 			children = (
 				DDFF95D7260938A30084DBF4 /* BackButtonNavBarViewModel.swift */,
+				FEE7E308265924B900FED76C /* CheckboxViewModel.swift */,
 			);
 			path = SubViewModels;
 			sourceTree = "<group>";
@@ -995,6 +998,7 @@
 				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
 				DDD0054825EAED4A0098E27E /* ChecklistNavBarViewModel.swift in Sources */,
+				FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */,
 				DDE08A9C25DB1A4B00F00D5A /* MenuItemView.swift in Sources */,
 				DD5B724525F58888001D8DA8 /* Modifier+Button.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,

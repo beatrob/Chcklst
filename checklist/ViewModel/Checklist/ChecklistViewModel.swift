@@ -83,6 +83,8 @@ class ChecklistViewModel: ObservableObject {
         didUpdateTemplate.eraseToAnyPublisher()
     }
     
+    let reminderCheckboxViewModel: CheckboxViewModel
+    let saveAsTemplateCheckboxViewModel: CheckboxViewModel
     let checklistDataSource: ChecklistDataSource
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
@@ -128,6 +130,23 @@ class ChecklistViewModel: ObservableObject {
         self.notificationManager = notificationManager
         self.viewState = viewState
         self.currentChecklist = .init(viewState.checklist)
+        self.reminderCheckboxViewModel = .init(
+            title: "Remind me on this device",
+            isChecked: viewState.checklist?.isValidReminderSet ?? false
+        )
+        self.saveAsTemplateCheckboxViewModel = .init(title: "Also save as template", isChecked: false)
+        
+        reminderCheckboxViewModel.checked.sink { [weak self] isChecked in
+            withAnimation {
+                self?.isReminderOn = isChecked
+            }
+        }.store(in: &cancellables)
+        
+        saveAsTemplateCheckboxViewModel.checked.sink { [weak self] isChecked in
+            withAnimation {
+                self?.isCreateTemplateChecked = isChecked
+            }
+        }.store(in: &cancellables)
         
         if let template = viewState.template {
             setupTemplate(template)

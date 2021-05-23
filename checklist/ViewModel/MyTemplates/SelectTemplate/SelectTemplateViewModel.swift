@@ -44,12 +44,16 @@ class SelectTemplateViewModel: ObservableObject {
     
     func set(
         onTemplateTappedSubscriber: AnySubscriber<TemplateDataModel, Never>,
-        destinationPublisher: AnyPublisher<AnyView, Never>
+        destinationPublisher: AnyPublisher<AnyView?, Never>
     ) {
         templateTappedCancellable?.cancel()
         onTemplateTapped.subscribe(onTemplateTappedSubscriber)
         destinationPublisher.sink { [weak self] in
-            self?.desitnationView = $0
+            guard let destination = $0 else {
+                self?.isDestionationViewVisible = false
+                return
+            }
+            self?.desitnationView = destination
             self?.isDestionationViewVisible = true
         }.store(in: &cancellables)
     }

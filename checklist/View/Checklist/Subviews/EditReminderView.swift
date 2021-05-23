@@ -23,10 +23,8 @@ struct EditReminderView: View {
                     .scaledToFit()
                     .frame(width: 100, height: 100)
                     .foregroundColor(.firstAccent)
-                CheckboxView(
-                    title: "Remind me on this device",
-                    isChecked: $viewModel.isReminderOn.animation()
-                ).padding()
+                CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
+                    .padding()
                 if viewModel.isReminderOn {
                     HStack {
                         Spacer()

@@ -15,6 +15,7 @@ class SchedulesViewModel: ObservableObject {
     
     var cancellables = Set<AnyCancellable>()
     var templateCancellable: AnyCancellable?
+    var scheduleDetailCancellable: AnyCancellable?
     let navBarViewModel = AppContext.resolver.resolve(BackButtonNavBarViewModel.self, argument: "Schedules")!
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
@@ -43,7 +44,7 @@ class SchedulesViewModel: ObservableObject {
         let viewModel = AppContext.resolver.resolve(SelectTemplateViewModel.self)!
         sheet = AnyView(SelectTemplateView(viewModel: viewModel))
         
-        let presenterSubject = PassthroughSubject<AnyView, Never>()
+        let presenterSubject = PassthroughSubject<AnyView?, Never>()
         
         let templateSubject = TemplatePassthroughSubject()
         templateCancellable?.cancel()
@@ -60,12 +61,16 @@ class SchedulesViewModel: ObservableObject {
     
     private func presentScheduleDetail(
         template: TemplateDataModel,
-        presenterSubject: PassthroughSubject<AnyView, Never>
+        presenterSubject: PassthroughSubject<AnyView?, Never>
     ) {
         let viewModel = AppContext.resolver.resolve(
             ScheduleDetailViewModel.self,
             argument: ScheduleDetailViewState.create(template: template)
         )!
+        scheduleDetailCancellable?.cancel()
+        scheduleDetailCancellable = viewModel.backButtonViewModel.didTap.sink {
+            presenterSubject.send(nil)
+        }
         presenterSubject.send(AnyView(ScheduleDetailView(viewModel: viewModel)))
     }
 }

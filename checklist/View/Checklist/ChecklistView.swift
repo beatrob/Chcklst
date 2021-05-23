@@ -78,10 +78,8 @@ struct ChecklistView: View {
                                 )
                                 .padding(.bottom)
                                 if viewModel.shouldDisplaySetReminder {
-                                    CheckboxView(
-                                        title: "Remind me on this device",
-                                        isChecked: $viewModel.isReminderOn.animation()
-                                    ).padding()
+                                    CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
+                                        .padding()
                                     if viewModel.isReminderOn {
                                         HStack {
                                             Spacer()
@@ -95,10 +93,8 @@ struct ChecklistView: View {
                                     }
                                 }
                                 if viewModel.shouldDisplaySaveAsTemplate {
-                                    CheckboxView(
-                                        title: "Also save as template",
-                                        isChecked: $viewModel.isCreateTemplateChecked
-                                    ).padding()
+                                    CheckboxView(viewModel: viewModel.saveAsTemplateCheckboxViewModel)
+                                        .padding()
                                 }
                                 if viewModel.shouldDisplayActionButton {
                                     HStack {

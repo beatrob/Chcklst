@@ -10,7 +10,8 @@ import Foundation
 
 struct ScheduleDataModel: Equatable {
     
-    enum RepeatFrequency {
+    enum RepeatFrequency: CaseIterable, Identifiable {
+        
         case never
         case daily
         case customDays(days: [DayDataModel])
@@ -18,6 +19,29 @@ struct ScheduleDataModel: Equatable {
         case fortnightly
         case monthly
         case yearly
+        
+        static var allCases: [ScheduleDataModel.RepeatFrequency] {
+            return [.daily, .weekly, .fortnightly, .monthly, .yearly, .customDays(days: [])]
+        }
+        
+        var id: Int {
+            switch self {
+            case .never:
+                return 0
+            case .daily:
+                return 1
+            case .weekly:
+                return 2
+            case .fortnightly:
+                return 3
+            case .monthly:
+                return 4
+            case .yearly:
+                return 5
+            case .customDays:
+                return 6
+            }
+        }
         
         var intValues: [Int] {
             switch self {
@@ -57,8 +81,35 @@ struct ScheduleDataModel: Equatable {
             }
         }
         
+        var name: String? {
+            switch self {
+            case .customDays:
+                return "Custom"
+            default:
+                return self.title
+            }
+        }
+        
+        var allCustomDays: [DayDataModel] {
+            switch self {
+            case .customDays:
+                return DayDataModel.allCases
+            default:
+                return []
+            }
+        }
+        
+        var isCustomDays: Bool {
+            switch self {
+            case .customDays:
+                return true
+            default:
+                return false
+            }
+        }
+        
         static func == (lhs: RepeatFrequency, rhs: RepeatFrequency) -> Bool {
-            lhs == rhs
+            lhs.id == rhs.id
         }
     }
     

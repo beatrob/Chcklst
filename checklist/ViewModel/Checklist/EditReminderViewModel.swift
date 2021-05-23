@@ -38,6 +38,7 @@ class EditReminderViewModel: ObservableObject {
     let onSave = EmptySubject()
     private var cancellables = Set<AnyCancellable>()
     private let notificationManager: NotificationManager
+    let reminderCheckboxViewModel: CheckboxViewModel
     
     init(checklist: ChecklistDataModel, notificationManager: NotificationManager) {
         self.title = checklist.title
@@ -46,6 +47,15 @@ class EditReminderViewModel: ObservableObject {
         if checklist.isValidReminderSet, let date = checklist.reminderDate {
             reminderDate = date
         }
+        reminderCheckboxViewModel = CheckboxViewModel(
+            title: "Remind me on this device",
+            isChecked: checklist.isValidReminderSet
+        )
+        reminderCheckboxViewModel.checked.sink { [weak self] isChecked in
+            withAnimation {
+                self?.isReminderOn = isChecked
+            }
+        }.store(in: &cancellables)
         onSave.sink { [weak self] in
             guard let self = self else { return }
             if !self.isReminderOn {
