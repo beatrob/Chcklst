@@ -58,4 +58,49 @@ enum ScheduleDetailViewState {
             }
         }
     }
+    
+    var actionButtonTitle: String {
+        switch self {
+        case .create:
+            return "Create"
+        case .update:
+            return "Update"
+        }
+    }
+    
+    var isCreate: Bool {
+        switch self {
+        case .create:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var isUpdate: Bool {
+        switch self {
+        case .update:
+            return true
+        default:
+            return false
+        }
+    }
+    
+    var template: TemplateDataModel? {
+        switch self {
+        case .create(let template):
+            return template
+        default:
+            return nil
+        }
+    }
+    
+    var schedule: ScheduleDataModel? {
+        switch self {
+        case .update(let schedule):
+            return schedule
+        default:
+            return nil
+        }
+    }
 }

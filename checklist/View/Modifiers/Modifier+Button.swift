@@ -29,5 +29,14 @@ extension Modifier {
                     )
             }
         }
+        
+        struct DestructiveAction: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.description.font)
+                    .foregroundColor(.red)
+            }
+        }
     }
 }

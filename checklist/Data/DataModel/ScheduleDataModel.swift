@@ -108,6 +108,33 @@ struct ScheduleDataModel: Equatable {
             }
         }
         
+        var getCustomDaysIfAvailable: [DayDataModel] {
+            switch self {
+            case .customDays(let days):
+                return days
+            default:
+                return []
+            }
+        }
+        
+        var isValid: Bool {
+            switch self {
+            case .customDays(let days):
+                return !days.isEmpty
+            default:
+                return true
+            }
+        }
+        
+        var isNever: Bool {
+            switch self {
+            case .never:
+                return true
+            default:
+                return false
+            }
+        }
+        
         static func == (lhs: RepeatFrequency, rhs: RepeatFrequency) -> Bool {
             lhs.id == rhs.id
         }

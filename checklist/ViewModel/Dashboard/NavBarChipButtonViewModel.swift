@@ -19,7 +19,10 @@ class NavBarChipButtonViewModel: ObservableObject {
     var isOnlyIcon: Bool {
         title == nil && icon != nil
     }
-    let didTap = EmptySubject()
+    let didTapSubject = EmptySubject()
+    var didTap: EmptyPublisher {
+        didTapSubject.eraseToAnyPublisher()
+    }
     
     init(title: String?, icon: Image?) {
         self.title = title

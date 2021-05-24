@@ -23,6 +23,9 @@ struct SchedulesView: View {
                             ScheduleCellView(viewModel: cell)
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 7)
+                                .onTapGesture {
+                                    viewModel.didSelectSchedule.send(cell)
+                                }
                         }
                     }
                     .padding(.vertical)

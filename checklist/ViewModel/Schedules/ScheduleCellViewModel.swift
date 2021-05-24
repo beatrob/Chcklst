@@ -18,10 +18,13 @@ class ScheduleCellViewModel: ObservableObject, Identifiable {
     @Published var scheduleDate: String
     @Published var repeatFrequency: String?
     var cancellables = Set<AnyCancellable>()
-    let id: String
+    var id: String {
+        schedule.id
+    }
+    let schedule: ScheduleDataModel
     
     init(schedule: ScheduleDataModel) {
-        self.id = schedule.id
+        self.schedule = schedule
         self.title = schedule.title
         self.description = schedule.description
         self.scheduleDate = schedule.scheduleDate.formatedScheduleDate()

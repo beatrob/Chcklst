@@ -94,17 +94,32 @@ struct ScheduleDetailView: View {
                 
                 HStack {
                     Spacer()
-                    Button("Create") {
-                        
+                    Button(viewModel.actionButtonTitle) {
+                        viewModel.onActionButtonTapped.send()
                     }
                     .modifier(Modifier.Button.MainAction())
                     .padding()
                     Spacer()
+                }.padding(.bottom)
+                
+                if viewModel.isDeleteButtonVisible {
+                    HStack {
+                        Spacer()
+                        Button("Delete") {
+                            viewModel.onDeleteButtonTapped.send()
+                        }
+                        .modifier(Modifier.Button.DestructiveAction())
+                        .padding()
+                        Spacer()
+                    }.padding(.bottom)
                 }
                 Spacer()
                 
                 
             }
+        }
+        .alert(isPresented: $viewModel.isAlertPresented) {
+            viewModel.alert
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
@@ -126,7 +141,8 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                             .init(id: "3", name: "Item 3", isDone: false, updateDate: Date())
                         ]
                     )
-                )
+                ),
+                scheduleDataSource: MockScheduleDataSource()
             )
         )
     }
