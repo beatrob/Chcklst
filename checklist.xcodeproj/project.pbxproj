@@ -139,6 +139,7 @@
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
 		FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A32641DEB300594478 /* ScheduleDataModel.swift */; };
 		FEA913A62641E4D700594478 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A52641E4D700594478 /* DayDataModel.swift */; };
+		FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */; };
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
@@ -307,6 +308,7 @@
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		FEA913A32641DEB300594478 /* ScheduleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataModel.swift; sourceTree = "<group>"; };
 		FEA913A52641E4D700594478 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
+		FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateScheduleViewModel.swift; sourceTree = "<group>"; };
 		FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailView.swift; sourceTree = "<group>"; };
 		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
 		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
@@ -778,6 +780,7 @@
 				FE559A512643415400ACF179 /* ScheduleCellViewModel.swift */,
 				FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */,
 				FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */,
+				FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */,
 			);
 			path = Schedules;
 			sourceTree = "<group>";
@@ -952,6 +955,7 @@
 				DD8A303525FAB7C800A6937E /* EditReminderViewModel.swift in Sources */,
 				FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
+				FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */,
 				DD84DCB1253E407E00A39DBB /* Font+extension.swift in Sources */,
 				DDDAED6625F578930077F6AA /* ChecklistActionSheet.swift in Sources */,
 				DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */,

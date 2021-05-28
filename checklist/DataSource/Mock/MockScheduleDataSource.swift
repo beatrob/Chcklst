@@ -57,7 +57,7 @@ class MockScheduleDataSource: ScheduleDataSource {
     
     func updateSchedule(_ schedule: ScheduleDataModel) -> Promise<Void> {
         if let i = _schedules.value.firstIndex(of: schedule) {
-            _schedules.value.replaceSubrange(.init(uncheckedBounds: (i, i)), with: [schedule])
+            _schedules.value.replaceSubrange(i...i, with: [schedule])
         }
         return .value
     }

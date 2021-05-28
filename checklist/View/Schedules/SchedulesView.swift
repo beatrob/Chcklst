@@ -14,6 +14,13 @@ struct SchedulesView: View {
     
     var body: some View {
         ZStack {
+            
+            NavigationLink(
+                destination: viewModel.navigationDestination,
+                isActive: $viewModel.isNavigationActive,
+                label: { EmptyView() }
+            ).hidden()
+            
             Color.checklistBackground
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)

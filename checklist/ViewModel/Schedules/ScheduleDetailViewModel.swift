@@ -16,8 +16,10 @@ class ScheduleDetailViewModel: ObservableObject {
     @Published var items: [ChecklistItemViewModel]
     @Published var isRepeatOn: Bool = false {
         didSet {
-            repeatFrequencyCheckboxes.forEach { $0.isChecked = false }
-            customDaysCheckboxes.forEach { $0.isChecked = false }
+            if !isRepeatOn {
+                repeatFrequencyCheckboxes.forEach { $0.isChecked = false }
+                customDaysCheckboxes.forEach { $0.isChecked = false }
+            }
         }
     }
     @Published var shouldDisplayDays: Bool = false {
@@ -28,7 +30,6 @@ class ScheduleDetailViewModel: ObservableObject {
     @Published var date: Date
     @Published var isAlertPresented = false
     @Published var alert: Alert = .empty
-    @Published var isDeleteButtonVisible = false
     
     private let referenceDate = Date()
     private let state: ScheduleDetailViewState
@@ -50,7 +51,11 @@ class ScheduleDetailViewModel: ObservableObject {
     let customDaysCheckboxes: [CheckboxViewModel]
     let actionButtonTitle: String
     let onActionButtonTapped = EmptySubject()
-    let onDeleteButtonTapped = EmptySubject()
+    let navbarViewModel = BackButtonNavBarViewModel(
+        title: "Edit Schedule",
+        rightButton: .init(title: nil, icon: .init(systemName: "trash"))
+    )
+    
     var cancellables = Set<AnyCancellable>()
     var didCreateSchedule: EmptyPublisher {
         didCreateSheduleSubject.eraseToAnyPublisher()
@@ -61,6 +66,7 @@ class ScheduleDetailViewModel: ObservableObject {
     var didDeleteSchedule: EmptyPublisher {
         didDeleteSheduleSubject.eraseToAnyPublisher()
     }
+    var isNavbarVisible: Bool { state.isUpdate }
     
     init(state: ScheduleDetailViewState, scheduleDataSource: ScheduleDataSource) {
         self.scheduleDataSource = scheduleDataSource
@@ -77,10 +83,13 @@ class ScheduleDetailViewModel: ObservableObject {
             self.date = schedule.scheduleDate
             self.repeatFrequency = schedule.repeatFrequency
             self.isRepeatOn = !schedule.repeatFrequency.isNever
-            self.isDeleteButtonVisible = true
         } else {
             self.date = referenceDate
         }
+        
+        self.navbarViewModel.backButton.didTap
+            .subscribe(backButtonViewModel.didTapSubject)
+            .store(in: &cancellables)
         
         repeatFrequencyCheckboxes = ScheduleDataModel.RepeatFrequency.allCases
             .map { freq -> CheckboxViewModel? in
@@ -120,20 +129,29 @@ class ScheduleDetailViewModel: ObservableObject {
             let freq = self.repeatFrequency ?? .never
             if state.isCreate, let template = state.template {
                 self.createSchedule(from: template, repeatFreq: freq)
-            } else if state.isUpdate {
-                
+            } else if state.isUpdate, let schedule = state.schedule {
+                self.updateSchedule(schedule, repeatFreq: freq)
             }
         }.store(in: &cancellables)
         
-        self.onDeleteButtonTapped.sink { [weak self] in
+        self.navbarViewModel.rightButton?.didTap.sink { [weak self] in
             guard let self = self, let schedule = state.schedule else {
                 return
             }
-            scheduleDataSource.deleteSchedule(schedule).done {
-                self.didDeleteSheduleSubject.send()
-            }.catch {
-                $0.log(message: "Failed to delete schedule")
-            }
+            let alert = Alert(
+                title: Text("Do you really want to delete this schedule?"),
+                message: nil,
+                primaryButton: .destructive(Text("Delete"), action: {
+                    scheduleDataSource.deleteSchedule(schedule).done {
+                        self.didDeleteSheduleSubject.send()
+                    }.catch {
+                        $0.log(message: "Failed to delete schedule")
+                    }
+                }),
+                secondaryButton: .cancel()
+            )
+            self.alert = alert
+            self.isAlertPresented = true
         }.store(in: &cancellables)
     }
 }

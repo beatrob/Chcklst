@@ -60,5 +60,10 @@ class ViewModelAssembly: Assembly {
             argument: ScheduleDetailViewState.self,
             initializer: ScheduleDetailViewModel.init
         )
+        container.autoregister(
+            CreateScheduleViewModel.self,
+            argument: EmptyPublisher.self,
+            initializer: CreateScheduleViewModel.init
+        )
     }
 }

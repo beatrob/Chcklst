@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 
-class ScheduleCellViewModel: ObservableObject, Identifiable {
+class ScheduleCellViewModel: ObservableObject, Identifiable, Equatable {
     
     @Published var title: String
     @Published var description: String?
@@ -21,7 +21,7 @@ class ScheduleCellViewModel: ObservableObject, Identifiable {
     var id: String {
         schedule.id
     }
-    let schedule: ScheduleDataModel
+    private(set) var schedule: ScheduleDataModel
     
     init(schedule: ScheduleDataModel) {
         self.schedule = schedule
@@ -29,5 +29,17 @@ class ScheduleCellViewModel: ObservableObject, Identifiable {
         self.description = schedule.description
         self.scheduleDate = schedule.scheduleDate.formatedScheduleDate()
         self.repeatFrequency = schedule.repeatFrequency.title
+    }
+    
+    func update(with schedule: ScheduleDataModel) {
+        self.schedule = schedule
+        self.title = schedule.title
+        self.description = schedule.description
+        self.scheduleDate = schedule.scheduleDate.formatedScheduleDate()
+        self.repeatFrequency = schedule.repeatFrequency.title
+    }
+    
+    static func == (lhs: ScheduleCellViewModel, rhs: ScheduleCellViewModel) -> Bool {
+        lhs.schedule == rhs.schedule
     }
 }

@@ -21,25 +21,53 @@ class SchedulesViewModel: ObservableObject {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
     private let scheduleDataSource: ScheduleDataSource
+    private let createScheduleViewModel: CreateScheduleViewModel
     let didSelectSchedule = PassthroughSubject<ScheduleCellViewModel, Never>()
     @Published var cells: [ScheduleCellViewModel] = []
     @Published var isSheetPresented = false
     @Published var sheet = AnyView.empty
+    @Published var navigationDestination = AnyView.empty
+    @Published var isNavigationActive = false
     
     init(scheduleDataSource: ScheduleDataSource) {
-        self.scheduleDataSource = scheduleDataSource
-        scheduleDataSource.schedules.sink { [weak self] schedules in
-            self?.cells = schedules.map {
-                ScheduleCellViewModel(schedule: $0)
-            }.sorted { left, right in
-                left.scheduleDate < right.scheduleDate
-            }
-        }.store(in: &cancellables)
         
         let rightButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
-        rightButton.didTap.sink { [weak self] in
-            self?.presentSelectTemplate()
+        self.scheduleDataSource = scheduleDataSource
+        self.createScheduleViewModel = AppContext.resolver.resolve(
+            CreateScheduleViewModel.self,
+            argument: rightButton.didTap
+        )!
+        scheduleDataSource.schedules.sink { [weak self] schedules in
+            guard let self = self else {
+                return
+            }
+            if !schedules.isEmpty && schedules.count == self.cells.count {
+                schedules.enumerated().forEach {
+                    self.cells[$0.offset].update(with: $0.element)
+                }
+            } else {
+                self.cells = schedules.map {
+                    ScheduleCellViewModel(schedule: $0)
+                }
+            }
+            self.cells.sort { left, right in
+                left.scheduleDate < right.scheduleDate
+            }
+            
         }.store(in: &cancellables)
+        
+        createScheduleViewModel.presentViewPublisher.sink { [weak self] in
+            self?.sheet = $0
+            self?.isSheetPresented = true
+        }.store(in: &cancellables)
+        
+        createScheduleViewModel
+            .didCreateSchedulePublisher
+            .sink { [weak self] in
+                self?.isSheetPresented = false
+                self?.sheet = .empty
+            }.store(in: &cancellables)
+        
         navBarViewModel.setRightButton(rightButton)
         
         didSelectSchedule.sink { [weak self] scheduleCell in
@@ -54,52 +82,12 @@ class SchedulesViewModel: ObservableObject {
             
             viewModel.backButtonViewModel.didTap
                 .merge(with: viewModel.didUpdateSchedule)
-                .merge(with: viewModel.didDeleteSchedule).sink {
-                    #warning("TODO: Pop view")
+                .merge(with: viewModel.didDeleteSchedule).sink { [weak self] in
+                    self?.isNavigationActive = false
                 }.store(in: &self.scheduleDetailCancellables)
             
-            #warning("TODO: Push view")
+            self.navigationDestination = AnyView(ScheduleDetailView(viewModel: viewModel))
+            self.isNavigationActive = true
         }.store(in: &cancellables)
-    }
-    
-    private func presentSelectTemplate() {
-        let viewModel = AppContext.resolver.resolve(SelectTemplateViewModel.self)!
-        sheet = AnyView(SelectTemplateView(viewModel: viewModel))
-        
-        let presenterSubject = PassthroughSubject<AnyView?, Never>()
-        
-        let templateSubject = TemplatePassthroughSubject()
-        templateCancellable?.cancel()
-        templateCancellable = templateSubject.sink { [weak self] temaplate in
-            self?.presentScheduleDetail(template: temaplate, presenterSubject: presenterSubject)
-        }
-       
-        viewModel.set(
-            onTemplateTappedSubscriber: AnySubscriber(templateSubject),
-            destinationPublisher: presenterSubject.eraseToAnyPublisher()
-        )
-        self.isSheetPresented = true
-    }
-    
-    private func presentScheduleDetail(
-        template: TemplateDataModel,
-        presenterSubject: PassthroughSubject<AnyView?, Never>
-    ) {
-        let viewModel = AppContext.resolver.resolve(
-            ScheduleDetailViewModel.self,
-            argument: ScheduleDetailViewState.create(template: template)
-        )!
-        scheduleDetailCancellables.removeAll()
-        
-        viewModel.backButtonViewModel.didTap.sink {
-            presenterSubject.send(nil)
-        }.store(in: &scheduleDetailCancellables)
-        
-        viewModel.didCreateSchedule.sink { [weak self] in
-            self?.isSheetPresented = false
-            self?.sheet = .empty
-        }.store(in: &scheduleDetailCancellables)
-        
-        presenterSubject.send(AnyView(ScheduleDetailView(viewModel: viewModel)))
     }
 }

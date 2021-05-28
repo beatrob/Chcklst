@@ -37,7 +37,7 @@ struct NavBarChipButton: View {
                 .fill(Color.firstAccent)
         )
         .onTapGesture {
-            viewModel.didTap.send()
+            viewModel.didTapSubject.send()
         }
     }
 }
