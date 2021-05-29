@@ -62,8 +62,8 @@ struct DashboardView: View {
         .actionSheet(isPresented: $viewModel.actionSheetVisibility.isVisible) {
             self.viewModel.actionSheetVisibility.view
         }
-        .sheet(isPresented: $viewModel.sheetVisibility.isVisible) {
-            self.viewModel.sheetVisibility.view
+        .sheet(isPresented: $viewModel.isSheetVisible) {
+            self.viewModel.sheetView
         }
     }
 }

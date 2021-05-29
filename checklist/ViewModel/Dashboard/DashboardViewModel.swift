@@ -16,8 +16,8 @@ class DashboardViewModel: ObservableObject {
     @Published var checklistCells: [DashboardChecklistCellViewModel] = []
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
-    @Published var sheetVisibility = ViewVisibility(view: DashboardSheet.none.view)
     @Published var isSidemenuVisible = false
+    @Published var isSheetVisible = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -26,7 +26,10 @@ class DashboardViewModel: ObservableObject {
         didSet { alertVisibility.set(view: alert.view, isVisible: alert.isVisible) }
     }
     @Published var sheet: DashboardSheet = .none {
-        didSet { sheetVisibility.set(view: sheet.view, isVisible: sheet.isVisible) }
+        didSet {
+            isSheetVisible = sheet.isVisible
+            sheetView = sheet.view
+        }
     }
     
     let onCreateNewChecklist = EmptySubject()
@@ -36,12 +39,15 @@ class DashboardViewModel: ObservableObject {
     let menuViewModel = AppContext.resolver.resolve(MenuViewModel.self)!
     
     var cancellables =  Set<AnyCancellable>()
+    var sheetView = AnyView.empty
     
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
     private let checklistFilterAndSort: ChecklistFilterAndSort
     private let navigationHelper: NavigationHelper
+    private let createScheduleSubject = EmptySubject()
+    private let createScheduleViewModel: CreateScheduleViewModel
     
     init(
         checklistDataSource: ChecklistDataSource,
@@ -54,6 +60,12 @@ class DashboardViewModel: ObservableObject {
         self.templateDataSource = templateDataSource
         self.checklistFilterAndSort = checklistFilterAndSort
         self.navigationHelper = navigationHelper
+        self.createScheduleViewModel = AppContext.resolver.resolve(
+            CreateScheduleViewModel.self,
+            argument: createScheduleSubject.eraseToAnyPublisher()
+        )!
+        
+        setupCreateScheduleHandling()
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
             log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
@@ -100,13 +112,18 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
-            self?.actionSheet = .createChecklist(
+            guard let self = self else {
+                return
+            }
+            self.actionSheet = .createChecklist(
                 onNewChecklist: {
-                    self?.showCreateNewChecklist()
+                    self.showCreateNewChecklist()
                 },
                 onNewFromTemplate: {
-                    self?.sheet = .selectTemplate
-            })
+                    self.sheet = .selectTemplate
+                },
+                onCreateSchedule: self.createScheduleSubject
+            )
         }.store(in: &cancellables)
         
         onMenu.sink { [weak self] in
@@ -245,5 +262,22 @@ private extension DashboardViewModel {
             )
         }.store(in: &self.cancellables)
         self.sheet = .createChecklist(viewModel: viewModel)
+    }
+    
+    func setupCreateScheduleHandling() {
+        createScheduleViewModel.didCreateSchedulePublisher.sink { [weak self] in
+            self?.sheetView = .empty
+            self?.isSheetVisible = false
+            DispatchQueue.main.async {
+                self?.alert = .scheduleCreated(gotoSchedules: {
+                    self?.navigationHelper.navigateToSchedules()
+                })
+            }
+        }.store(in: &cancellables)
+        
+        createScheduleViewModel.presentViewPublisher.sink { [weak self] anyView in
+            self?.sheetView = anyView
+            self?.isSheetVisible = true
+        }.store(in: &cancellables)
     }
 }

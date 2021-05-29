@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-class ViewVisibility<SomeView>: ObservableObject {
+class ViewVisibility<SomeView>: ObservableObject, Equatable {
     
     @Published var isVisible = false
     
@@ -22,5 +22,9 @@ class ViewVisibility<SomeView>: ObservableObject {
     func set(view: SomeView, isVisible: Bool) {
         self.view = view
         self.isVisible = isVisible
+    }
+    
+    static func == (lhs: ViewVisibility<SomeView>, rhs: ViewVisibility<SomeView>) -> Bool {
+        lhs.isVisible == rhs.isVisible
     }
 }
