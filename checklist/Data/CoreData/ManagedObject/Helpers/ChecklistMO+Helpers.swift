@@ -1,10 +1,9 @@
 //
-//  Checklist+CoreDataProperties.swift
+//  ChecklitsMO.swift
 //  checklist
 //
-//  Created by Róbert Konczi on 27/09/2020.
-//  Copyright © 2020 Róbert Konczi. All rights reserved.
-//
+//  Created by Robert Konczi on 5/30/21.
+//  Copyright © 2021 Róbert Konczi. All rights reserved.
 //
 
 import Foundation
@@ -24,13 +23,6 @@ extension ChecklistMO {
         request.fetchLimit = 1
         return request
     }
-
-    @NSManaged public var identifier: String
-    @NSManaged public var title: String
-    @NSManaged public var notes: String?
-    @NSManaged public var updateDate: Date
-    @NSManaged public var reminderDate: Date?
-    @NSManaged public var items: ChecklistItemArrayTransformable?
     
     func toChecklistDataModel() -> ChecklistDataModel {
         .init(

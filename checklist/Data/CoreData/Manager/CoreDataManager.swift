@@ -30,3 +30,11 @@ protocol CoreDataTemplateManager {
     func update(template: TemplateDataModel) ->  Promise<Void>
     func delete(template: TemplateDataModel) -> Promise<Void>
 }
+
+protocol CoreDataSchedulesManager {
+    
+    func fetchAllSchedules() -> Promise<[ScheduleDataModel]>
+    func save(schedule: ScheduleDataModel) -> Promise<Void>
+    func update(schedule: ScheduleDataModel) ->  Promise<Void>
+    func delete(schedule: ScheduleDataModel) -> Promise<Void>
+}

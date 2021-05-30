@@ -58,7 +58,6 @@
 		DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA85250686AE00318F62 /* NavigationHelper.swift */; };
 		DD72BA882506CCC200318F62 /* InfrastructureAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */; };
 		DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD72BA8C250787C300318F62 /* AnyView+Extension.swift */; };
-		DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */; };
 		DD74DA6525213C25004587FC /* CoreDataManagerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */; };
 		DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA6625213CF3004587FC /* CoreDataAssembly.swift */; };
 		DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */ = {isa = PBXBuildFile; productRef = DD74DA6925213FA3004587FC /* PromiseKit */; };
@@ -69,7 +68,6 @@
 		DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA742521E63A004587FC /* CoreDataManager.swift */; };
 		DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA762521E705004587FC /* MockCoreDataManager.swift */; };
 		DD74DA7A25220027004587FC /* ChecklistItemTransformable.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA7925220027004587FC /* ChecklistItemTransformable.swift */; };
-		DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */; };
 		DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */; };
 		DD7AF2AE24EDB7280051CD16 /* ChecklistNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2AD24EDB7280051CD16 /* ChecklistNameView.swift */; };
 		DD7AF2B224EDC9C60051CD16 /* ChecklistItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7AF2B124EDC9C60051CD16 /* ChecklistItemsView.swift */; };
@@ -110,8 +108,6 @@
 		DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */; };
 		DDDAED6125F4FFF20077F6AA /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAED6025F4FFF20077F6AA /* Date+Extension.swift */; };
 		DDDAED6625F578930077F6AA /* ChecklistActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAED6525F578930077F6AA /* ChecklistActionSheet.swift */; };
-		DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */; };
-		DDDFBE1E2525172100BFBE9D /* Template+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */; };
 		DDDFBE20252518AC00BFBE9D /* CoreDataManager+Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */; };
 		DDE08A8D25DB18CB00F00D5A /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE08A8C25DB18CB00F00D5A /* MenuView.swift */; };
 		DDE08A9425DB191500F00D5A /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDE08A9325DB191500F00D5A /* MenuViewModel.swift */; };
@@ -140,6 +136,15 @@
 		FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A32641DEB300594478 /* ScheduleDataModel.swift */; };
 		FEA913A62641E4D700594478 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A52641E4D700594478 /* DayDataModel.swift */; };
 		FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */; };
+		FEBE21422664260600CC001E /* CoreDataManager+Schedules.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21412664260600CC001E /* CoreDataManager+Schedules.swift */; };
+		FEBE21442664331C00CC001E /* ChecklitsMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21432664331C00CC001E /* ChecklitsMO.swift */; };
+		FEBE21472664336900CC001E /* ChecklistMO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21462664336900CC001E /* ChecklistMO+Helpers.swift */; };
+		FEBE2149266433C700CC001E /* TemplateMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE2148266433C700CC001E /* TemplateMO.swift */; };
+		FEBE214B266433F700CC001E /* TemplateMO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE214A266433F700CC001E /* TemplateMO+Helpers.swift */; };
+		FEBE214D2664346B00CC001E /* ScheduleMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE214C2664346B00CC001E /* ScheduleMO.swift */; };
+		FEBE214F266434A800CC001E /* ScheduleMO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE214E266434A800CC001E /* ScheduleMO+Helpers.swift */; };
+		FEBE21512664350200CC001E /* RepeatFrequencyMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21502664350200CC001E /* RepeatFrequencyMO.swift */; };
+		FEBE21532664353300CC001E /* RepeatFrequency+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21522664353300CC001E /* RepeatFrequency+Helpers.swift */; };
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
@@ -228,7 +233,6 @@
 		DD72BA85250686AE00318F62 /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
 		DD72BA872506CCC200318F62 /* InfrastructureAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfrastructureAssembly.swift; sourceTree = "<group>"; };
 		DD72BA8C250787C300318F62 /* AnyView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyView+Extension.swift"; sourceTree = "<group>"; };
-		DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Checklist+CoreDataClass.swift"; sourceTree = "<group>"; };
 		DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManagerImpl.swift; sourceTree = "<group>"; };
 		DD74DA6625213CF3004587FC /* CoreDataAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataAssembly.swift; sourceTree = "<group>"; };
 		DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Checklists.swift"; sourceTree = "<group>"; };
@@ -238,7 +242,6 @@
 		DD74DA742521E63A004587FC /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		DD74DA762521E705004587FC /* MockCoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCoreDataManager.swift; sourceTree = "<group>"; };
 		DD74DA7925220027004587FC /* ChecklistItemTransformable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemTransformable.swift; sourceTree = "<group>"; };
-		DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Checklist+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeAliases.swift; sourceTree = "<group>"; };
 		DD7AF2AD24EDB7280051CD16 /* ChecklistNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistNameView.swift; sourceTree = "<group>"; };
 		DD7AF2B124EDC9C60051CD16 /* ChecklistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemsView.swift; sourceTree = "<group>"; };
@@ -279,8 +282,6 @@
 		DDD4FBDE2516610C002B7F50 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		DDDAED6025F4FFF20077F6AA /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		DDDAED6525F578930077F6AA /* ChecklistActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistActionSheet.swift; sourceTree = "<group>"; };
-		DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Template+CoreDataClass.swift"; sourceTree = "<group>"; };
-		DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Template+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Templates.swift"; sourceTree = "<group>"; };
 		DDE08A8C25DB18CB00F00D5A /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		DDE08A9325DB191500F00D5A /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
@@ -309,6 +310,15 @@
 		FEA913A32641DEB300594478 /* ScheduleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataModel.swift; sourceTree = "<group>"; };
 		FEA913A52641E4D700594478 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
 		FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateScheduleViewModel.swift; sourceTree = "<group>"; };
+		FEBE21412664260600CC001E /* CoreDataManager+Schedules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Schedules.swift"; sourceTree = "<group>"; };
+		FEBE21432664331C00CC001E /* ChecklitsMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklitsMO.swift; sourceTree = "<group>"; };
+		FEBE21462664336900CC001E /* ChecklistMO+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChecklistMO+Helpers.swift"; sourceTree = "<group>"; };
+		FEBE2148266433C700CC001E /* TemplateMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateMO.swift; sourceTree = "<group>"; };
+		FEBE214A266433F700CC001E /* TemplateMO+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TemplateMO+Helpers.swift"; sourceTree = "<group>"; };
+		FEBE214C2664346B00CC001E /* ScheduleMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleMO.swift; sourceTree = "<group>"; };
+		FEBE214E266434A800CC001E /* ScheduleMO+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleMO+Helpers.swift"; sourceTree = "<group>"; };
+		FEBE21502664350200CC001E /* RepeatFrequencyMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatFrequencyMO.swift; sourceTree = "<group>"; };
+		FEBE21522664353300CC001E /* RepeatFrequency+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepeatFrequency+Helpers.swift"; sourceTree = "<group>"; };
 		FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailView.swift; sourceTree = "<group>"; };
 		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
 		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
@@ -608,6 +618,7 @@
 				DD74DA6425213C25004587FC /* CoreDataManagerImpl.swift */,
 				DD74DA6B25213FCB004587FC /* CoreDataManager+Checklists.swift */,
 				DDDFBE1F252518AC00BFBE9D /* CoreDataManager+Templates.swift */,
+				FEBE21412664260600CC001E /* CoreDataManager+Schedules.swift */,
 				DD74DA762521E705004587FC /* MockCoreDataManager.swift */,
 			);
 			path = Manager;
@@ -624,10 +635,11 @@
 		DD74DA7B25220EA9004587FC /* ManagedObject */ = {
 			isa = PBXGroup;
 			children = (
-				DDDFBE1B2525172100BFBE9D /* Template+CoreDataClass.swift */,
-				DDDFBE1C2525172100BFBE9D /* Template+CoreDataProperties.swift */,
-				DD74DA7C2522122C004587FC /* Checklist+CoreDataProperties.swift */,
-				DD74DA6025213A82004587FC /* Checklist+CoreDataClass.swift */,
+				FEBE21452664335800CC001E /* Helpers */,
+				FEBE21432664331C00CC001E /* ChecklitsMO.swift */,
+				FEBE2148266433C700CC001E /* TemplateMO.swift */,
+				FEBE214C2664346B00CC001E /* ScheduleMO.swift */,
+				FEBE21502664350200CC001E /* RepeatFrequencyMO.swift */,
 			);
 			path = ManagedObject;
 			sourceTree = "<group>";
@@ -802,6 +814,17 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		FEBE21452664335800CC001E /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				FEBE21462664336900CC001E /* ChecklistMO+Helpers.swift */,
+				FEBE214A266433F700CC001E /* TemplateMO+Helpers.swift */,
+				FEBE214E266434A800CC001E /* ScheduleMO+Helpers.swift */,
+				FEBE21522664353300CC001E /* RepeatFrequency+Helpers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -953,6 +976,7 @@
 				DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */,
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
 				DD8A303525FAB7C800A6937E /* EditReminderViewModel.swift in Sources */,
+				FEBE21512664350200CC001E /* RepeatFrequencyMO.swift in Sources */,
 				FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
 				FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */,
@@ -965,7 +989,6 @@
 				DD8BFC8025DF091D00338624 /* NavBarChipButtonViewModel.swift in Sources */,
 				DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */,
 				DDD0054025EAECBA0098E27E /* ChecklistNavBar.swift in Sources */,
-				DDDFBE1E2525172100BFBE9D /* Template+CoreDataProperties.swift in Sources */,
 				DDE08AA625DB1BBD00F00D5A /* Modifier.swift in Sources */,
 				DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
@@ -981,6 +1004,7 @@
 				DD5B726025F69769001D8DA8 /* ChecklistDescriptionView.swift in Sources */,
 				FE559A522643415400ACF179 /* ScheduleCellViewModel.swift in Sources */,
 				DD52A62724E19EF000A9A1FC /* SceneDelegate.swift in Sources */,
+				FEBE214D2664346B00CC001E /* ScheduleMO.swift in Sources */,
 				DD8BFC7525DF05B300338624 /* DashboardNavBarViewModel.swift in Sources */,
 				DDD0053B25EAEBAA0098E27E /* Modifier+MavBar.swift in Sources */,
 				DD08D94E254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift in Sources */,
@@ -992,7 +1016,9 @@
 				DD85AD9425D595E200EB4B6A /* ChecklistAlert.swift in Sources */,
 				DDFF95D8260938A30084DBF4 /* BackButtonNavBarViewModel.swift in Sources */,
 				FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */,
+				FEBE21442664331C00CC001E /* ChecklitsMO.swift in Sources */,
 				DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */,
+				FEBE21532664353300CC001E /* RepeatFrequency+Helpers.swift in Sources */,
 				FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */,
 				DD179BC025F69E710006629F /* ChecklistDataModel+Welcome.swift in Sources */,
 				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
@@ -1004,6 +1030,7 @@
 				DDD0054825EAED4A0098E27E /* ChecklistNavBarViewModel.swift in Sources */,
 				FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */,
 				DDE08A9C25DB1A4B00F00D5A /* MenuItemView.swift in Sources */,
+				FEBE214B266433F700CC001E /* TemplateMO+Helpers.swift in Sources */,
 				DD5B724525F58888001D8DA8 /* Modifier+Button.swift in Sources */,
 				DD7AF2AB24EDB5D00051CD16 /* TypeAliases.swift in Sources */,
 				DD74DA7A25220027004587FC /* ChecklistItemTransformable.swift in Sources */,
@@ -1016,7 +1043,6 @@
 				DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
-				DD74DA6225213A82004587FC /* Checklist+CoreDataClass.swift in Sources */,
 				DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */,
 				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
 				DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */,
@@ -1031,6 +1057,7 @@
 				DDE08A8D25DB18CB00F00D5A /* MenuView.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */,
+				FEBE214F266434A800CC001E /* ScheduleMO+Helpers.swift in Sources */,
 				DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */,
 				DD8C44F92536074800F470C2 /* Error+Extension.swift in Sources */,
 				DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */,
@@ -1041,6 +1068,7 @@
 				FE559A4E26433F8200ACF179 /* SchedulesViewModel.swift in Sources */,
 				DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */,
 				DD74DA6E252147D0004587FC /* CoreDataError.swift in Sources */,
+				FEBE21422664260600CC001E /* CoreDataManager+Schedules.swift in Sources */,
 				DD90241524FB7A6F0084CDDC /* MyTemplatesViewModel.swift in Sources */,
 				DDFCC42F25D7262E00627DB9 /* DashboardChecklistCellViewModel.swift in Sources */,
 				DD39A4272529B810003E73EA /* ChecklistDetailViewModel.swift in Sources */,
@@ -1053,6 +1081,7 @@
 				DD52A62A24E19EF000A9A1FC /* checklist.xcdatamodeld in Sources */,
 				DD2D91C02532FDF80032779C /* Logger.swift in Sources */,
 				DDFCC42725D7228500627DB9 /* DashboardChecklistCell.swift in Sources */,
+				FEBE21472664336900CC001E /* ChecklistMO+Helpers.swift in Sources */,
 				DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */,
 				DD90241924FB7DCD0084CDDC /* TemplateDataModel.swift in Sources */,
 				DD727A5424F2730F004089B6 /* DashboardAlert.swift in Sources */,
@@ -1062,10 +1091,9 @@
 				DD07A36F253BA62000CBE54C /* MultilineTextView.swift in Sources */,
 				DD36F56125E0611B0041E3B6 /* FilterDataModel.swift in Sources */,
 				FE559A4A2643358900ACF179 /* MockScheduleDataSource.swift in Sources */,
-				DD74DA7D2522122C004587FC /* Checklist+CoreDataProperties.swift in Sources */,
 				FE559A54264341B800ACF179 /* ScheduleCellView.swift in Sources */,
 				DDFF95DD260949390084DBF4 /* Modifier+Template.swift in Sources */,
-				DDDFBE1D2525172100BFBE9D /* Template+CoreDataClass.swift in Sources */,
+				FEBE2149266433C700CC001E /* TemplateMO.swift in Sources */,
 				DD08D9492544125B00A5BFF2 /* ChecklistView.swift in Sources */,
 				DDE08AB325DB1D0600F00D5A /* Modifier+Menu.swift in Sources */,
 				DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */,

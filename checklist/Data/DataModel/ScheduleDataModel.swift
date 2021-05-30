@@ -135,6 +135,27 @@ struct ScheduleDataModel: Equatable {
             }
         }
         
+        init?(rawValue: Int) {
+            switch rawValue {
+            case 0:
+                self = .never
+            case 1:
+                self = .daily
+            case 2:
+                self = .weekly
+            case 3:
+                self = .fortnightly
+            case 4:
+                self = .monthly
+            case 5:
+                self = .yearly
+            case 6:
+                self = .customDays(days: [])
+            default:
+                return nil
+            }
+        }
+        
         static func == (lhs: RepeatFrequency, rhs: RepeatFrequency) -> Bool {
             lhs.id == rhs.id
         }
