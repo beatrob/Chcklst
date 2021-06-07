@@ -21,7 +21,7 @@ class DataSourceAssembly: Assembly {
             .autoregister(TemplateDataSource.self, initializer: TemplateDataSourceImpl.init)
             .inObjectScope(.container)
         container
-            .autoregister(ScheduleDataSourceImpl.self, initializer: ScheduleDataSourceImpl.init)
+            .autoregister(ScheduleDataSource.self, initializer: ScheduleDataSourceImpl.init)
             .inObjectScope(.container)
         container.autoregister(InitializeAppDataSource.self, initializer: InitializeAppDataSourceImpl.init)
     }

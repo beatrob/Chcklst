@@ -34,6 +34,7 @@ protocol CoreDataTemplateManager {
 protocol CoreDataSchedulesManager {
     
     func fetchAllSchedules() -> Promise<[ScheduleDataModel]>
+    func fetchSchedule(with id: String) -> Promise<ScheduleDataModel>
     func save(schedule: ScheduleDataModel) -> Promise<Void>
     func update(schedule: ScheduleDataModel) ->  Promise<Void>
     func delete(schedule: ScheduleDataModel) -> Promise<Void>

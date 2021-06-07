@@ -138,7 +138,8 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                             ]
                         )
                     ),
-                    scheduleDataSource: MockScheduleDataSource()
+                    scheduleDataSource: MockScheduleDataSource(),
+                    notificationManager: NotificationManager()
                 )
             )
             ScheduleDetailView(
@@ -171,7 +172,8 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                             repeatFrequency: .customDays(days: [.monday, .wednesday])
                         )
                     ),
-                    scheduleDataSource: MockScheduleDataSource()
+                    scheduleDataSource: MockScheduleDataSource(),
+                    notificationManager: NotificationManager()
                 )
             )
         }

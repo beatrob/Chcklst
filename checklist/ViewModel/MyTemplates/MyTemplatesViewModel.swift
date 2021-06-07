@@ -66,7 +66,7 @@ class MyTemplatesViewModel: ObservableObject {
         let createChecklist = ChecklistPassthroughSubject()
         createChecklist.sink { checklist in
             checklistDataSource.createChecklist(checklist)
-            .done { Logger.log.debug("Create checklist success \(checklist)") }
+            .done { _ in Logger.log.debug("Create checklist success \(checklist)") }
             .catch { $0.log(message: "Create checklist failed") }
         }.store(in: &cancellables)
         

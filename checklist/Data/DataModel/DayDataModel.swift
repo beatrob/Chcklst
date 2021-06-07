@@ -20,7 +20,7 @@ enum DayDataModel: Int, CaseIterable {
     var title: String {
         switch self {
         case .monday:
-            return "Mo"
+            return "Mon"
         case .tuesday:
             return "Tue"
         case .wednesday:
@@ -34,5 +34,15 @@ enum DayDataModel: Int, CaseIterable {
         case .sunday:
             return "Sun"
         }
+    }
+    
+    var weakdayOffset: Int {
+        self.rawValue - 100
+    }
+    
+    static var allCases: [DayDataModel] {
+        Calendar.current.firstWeekday == 1 ?
+            [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday] :
+            [.sunday, .monday, tuesday, .wednesday, .thursday, .friday, saturday, .sunday]
     }
 }

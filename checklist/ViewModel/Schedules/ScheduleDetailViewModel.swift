@@ -8,6 +8,7 @@
 
 import Combine
 import SwiftUI
+import PromiseKit
 
 class ScheduleDetailViewModel: ObservableObject {
     
@@ -42,6 +43,7 @@ class ScheduleDetailViewModel: ObservableObject {
     private let didUpdateSheduleSubject = EmptySubject()
     private let didDeleteSheduleSubject = EmptySubject()
     private let scheduleDataSource: ScheduleDataSource
+    private let notificationManager: NotificationManager
     let backButtonViewModel = NavBarChipButtonViewModel.getBackButton()
     let repeatCheckboxViewModel: CheckboxViewModel
     var isActionButtonDisabled: Bool {
@@ -68,8 +70,13 @@ class ScheduleDetailViewModel: ObservableObject {
     }
     var isNavbarVisible: Bool { state.isUpdate }
     
-    init(state: ScheduleDetailViewState, scheduleDataSource: ScheduleDataSource) {
+    init(
+        state: ScheduleDetailViewState,
+        scheduleDataSource: ScheduleDataSource,
+        notificationManager: NotificationManager
+    ) {
         self.scheduleDataSource = scheduleDataSource
+        self.notificationManager = notificationManager
         self.state = state
         self.title = state.title
         self.description = state.description ?? ""
@@ -126,11 +133,18 @@ class ScheduleDetailViewModel: ObservableObject {
             guard let self = self, self.checkMandatoryFormData() else {
                 return
             }
-            let freq = self.repeatFrequency ?? .never
-            if state.isCreate, let template = state.template {
-                self.createSchedule(from: template, repeatFreq: freq)
-            } else if state.isUpdate, let schedule = state.schedule {
-                self.updateSchedule(schedule, repeatFreq: freq)
+            notificationManager.registerPushNotifications().done { success in
+                if success {
+                    let freq = self.repeatFrequency ?? .never
+                    if state.isCreate, let template = state.template {
+                        self.createSchedule(from: template, repeatFreq: freq)
+                    } else if state.isUpdate, let schedule = state.schedule {
+                        self.updateSchedule(schedule, repeatFreq: freq)
+                    }
+                } else {
+                    self.alert = .getEnablePushNotifications()
+                    self.isAlertPresented = true
+                }
             }
         }.store(in: &cancellables)
         
@@ -219,16 +233,20 @@ private extension ScheduleDetailViewModel {
     }
     
     func createSchedule(from template: TemplateDataModel, repeatFreq: ScheduleDataModel.RepeatFrequency) {
-        scheduleDataSource.createSchedule(
-            .init(
-                id: UUID().uuidString,
-                title: self.title,
-                description: self.description,
-                template: template,
-                scheduleDate: self.date,
-                repeatFrequency: repeatFreq
+        firstly {
+            scheduleDataSource.createSchedule(
+                .init(
+                    id: UUID().uuidString,
+                    title: self.title,
+                    description: self.description,
+                    template: template,
+                    scheduleDate: self.date,
+                    repeatFrequency: repeatFreq
+                )
             )
-        ).done {
+        }.then { schedule in
+            self.notificationManager.setupScheduleNotification(for: schedule)
+        }.get { _ in
             self.didCreateSheduleSubject.send()
         }.catch {
             $0.log(message: "Failed to create schedule")

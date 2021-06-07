@@ -550,10 +550,10 @@
 				DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */,
 				DD2BD1B024E96E76004B2060 /* DataSourceError.swift */,
 				DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */,
+				FE559A472643335300ACF179 /* ScheduleDataSource.swift */,
 				DD90241624FB7D590084CDDC /* TemplateDataSource.swift */,
 				DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */,
 				DD179BBF25F69E710006629F /* ChecklistDataModel+Welcome.swift */,
-				FE559A472643335300ACF179 /* ScheduleDataSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";

@@ -38,26 +38,34 @@ extension ScheduleMO {
         )
     }
     
-    func setup(with dataModel: ScheduleDataModel) {
+    func setup(with dataModel: ScheduleDataModel, freqMOs: [RepeatFrequencyMO], templateMO: TemplateMO?) {
         identifier = dataModel.id
         title = dataModel.title
         notes = dataModel.description
         scheduleDate = dataModel.scheduleDate
-        repeatFrequencies = NSSet(array: dataModel.repeatFrequency.intValues.map { Int32($0) })
-        template = TemplateMO()
-        template?.setup(with: dataModel.template)
+        if let templateMO = templateMO {
+            template = templateMO
+        }
+        repeatFrequencies = NSSet(array: freqMOs)
     }
     
     static func createEntity(
         from dataModel: ScheduleDataModel,
         andSaveToContext context: NSManagedObjectContext
-    ) -> Promise<Void> {
-        guard let entity = NSEntityDescription.entity(forEntityName: "Schedule", in: context) else {
-            return .init(error: CoreDataError.createEntityError)
+    ) -> Promise<ScheduleMO> {
+        firstly { () -> Promise<[RepeatFrequencyMO]> in
+            RepeatFrequencyMO.getRepeatFrequencyMOs(for: dataModel.repeatFrequency, context: context)
+        }.then { freqMO -> Promise<([RepeatFrequencyMO], TemplateMO)> in
+            TemplateMO.createEntity(from: dataModel.template, andSaveToContext: context)
+                .map { templateMO -> ([RepeatFrequencyMO], TemplateMO) in (freqMO, templateMO) }
+        }.then { freqAndTemplate -> Promise<ScheduleMO> in
+            guard let entity = NSEntityDescription.entity(forEntityName: "Schedule", in: context) else {
+                return .init(error: CoreDataError.createEntityError)
+            }
+            let scheduleMO = ScheduleMO(entity: entity, insertInto: context)
+            scheduleMO.setup(with: dataModel, freqMOs: freqAndTemplate.0, templateMO: freqAndTemplate.1)
+            return .value(scheduleMO)
         }
-        let scheduleMO = ScheduleMO(entity: entity, insertInto: context)
-        scheduleMO.setup(with: dataModel)
-        return .value
     }
     
     private func getRepeatFrequncy() -> ScheduleDataModel.RepeatFrequency {

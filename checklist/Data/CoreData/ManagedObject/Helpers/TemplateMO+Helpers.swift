@@ -40,13 +40,16 @@ extension TemplateMO {
         items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
     }
     
-    static func createEntity(from dataModel: TemplateDataModel, andSaveToContext context: NSManagedObjectContext) -> Promise<Void> {
+    static func createEntity(
+        from dataModel: TemplateDataModel,
+        andSaveToContext context: NSManagedObjectContext
+    ) -> Promise<TemplateMO> {
         guard let entity = NSEntityDescription.entity(forEntityName: entityName, in: context) else {
             return .init(error: CoreDataError.createEntityError)
         }
         let templateMO = TemplateMO(entity: entity, insertInto: context)
         templateMO.setup(with: dataModel)
-        return .value
+        return .value(templateMO)
     }
 }
 

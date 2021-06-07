@@ -16,12 +16,11 @@ struct ScheduleDataModel: Equatable {
         case daily
         case customDays(days: [DayDataModel])
         case weekly
-        case fortnightly
         case monthly
         case yearly
         
         static var allCases: [ScheduleDataModel.RepeatFrequency] {
-            return [.daily, .weekly, .fortnightly, .monthly, .yearly, .customDays(days: [])]
+            return [.daily, .weekly, .monthly, .yearly, .customDays(days: [])]
         }
         
         var id: Int {
@@ -32,8 +31,6 @@ struct ScheduleDataModel: Equatable {
                 return 1
             case .weekly:
                 return 2
-            case .fortnightly:
-                return 3
             case .monthly:
                 return 4
             case .yearly:
@@ -51,8 +48,6 @@ struct ScheduleDataModel: Equatable {
                 return [1]
             case .weekly:
                 return [2]
-            case .fortnightly:
-                return [3]
             case .monthly:
                 return [4]
             case .yearly:
@@ -70,8 +65,6 @@ struct ScheduleDataModel: Equatable {
                 return nil
             case .weekly:
                 return "Weekly"
-            case .fortnightly:
-                return "Fortnightly"
             case .monthly:
                 return "Monthly"
             case .yearly:
@@ -143,8 +136,6 @@ struct ScheduleDataModel: Equatable {
                 self = .daily
             case 2:
                 self = .weekly
-            case 3:
-                self = .fortnightly
             case 4:
                 self = .monthly
             case 5:

@@ -352,7 +352,7 @@ private extension ChecklistViewModel {
     
     func createChecklist(_ checklist: ChecklistDataModel, shouldCreateTemplate: Bool) {
         checklistDataSource.createChecklist(checklist)
-            .get {
+            .get { _ in
                 if shouldCreateTemplate {
                     self.createTemplate(checklist)
                 }

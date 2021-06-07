@@ -126,6 +126,7 @@ struct DashboardView_Previews: PreviewProvider {
             viewModel: DashboardViewModel(
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
+                scheduleDataSource: MockScheduleDataSource(),
                 navigationHelper: NavigationHelper(),
                 checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
                 notificationManager: NotificationManager()

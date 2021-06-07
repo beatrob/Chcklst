@@ -18,7 +18,7 @@ protocol ChecklistDataSource {
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
     func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<Void>
     func getChecklist(withId id: String) -> ChecklistDataModel?
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void>
@@ -81,9 +81,11 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         _checklists.value.first { $0.id == id }
     }
     
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
-        coreDataManager.save(checklist: checklist)
-        .get { self._checklists.value.append(checklist) }
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+        coreDataManager
+            .save(checklist: checklist)
+            .get { self._checklists.value.append(checklist) }
+            .map { checklist }
     }
     
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {

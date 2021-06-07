@@ -50,9 +50,9 @@ class MockScheduleDataSource: ScheduleDataSource {
         return .value(Self.mockData)
     }
     
-    func createSchedule(_ schedule: ScheduleDataModel) -> Promise<Void> {
+    func createSchedule(_ schedule: ScheduleDataModel) -> Promise<ScheduleDataModel> {
         _schedules.value.append(schedule)
-        return .value
+        return .value(schedule)
     }
     
     func updateSchedule(_ schedule: ScheduleDataModel) -> Promise<Void> {
@@ -65,5 +65,12 @@ class MockScheduleDataSource: ScheduleDataSource {
     func deleteSchedule(_ schedule: ScheduleDataModel) -> Promise<Void> {
         _schedules.value.removeAll { $0 == schedule }
         return .value
+    }
+    
+    func getSchedule(with identifier: String) -> Promise<ScheduleDataModel> {
+        if let schedule = _schedules.value.first(where: { $0.id == identifier }) {
+            return .value(schedule)
+        }
+        return .init(error: DataSourceError.scheduleNotFound)
     }
 }

@@ -44,6 +44,8 @@ class DashboardViewModel: ObservableObject {
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
+    private let scheduleDataSource: ScheduleDataSource
+    private let notificationManager: NotificationManager
     private let checklistFilterAndSort: ChecklistFilterAndSort
     private let navigationHelper: NavigationHelper
     private let createScheduleSubject = EmptySubject()
@@ -52,6 +54,7 @@ class DashboardViewModel: ObservableObject {
     init(
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
+        scheduleDataSource: ScheduleDataSource,
         navigationHelper: NavigationHelper,
         checklistFilterAndSort: ChecklistFilterAndSort,
         notificationManager: NotificationManager
@@ -59,6 +62,8 @@ class DashboardViewModel: ObservableObject {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
         self.checklistFilterAndSort = checklistFilterAndSort
+        self.scheduleDataSource = scheduleDataSource
+        self.notificationManager = notificationManager
         self.navigationHelper = navigationHelper
         self.createScheduleViewModel = AppContext.resolver.resolve(
             CreateScheduleViewModel.self,
@@ -68,8 +73,8 @@ class DashboardViewModel: ObservableObject {
         setupCreateScheduleHandling()
         
         notificationManager.deeplinkChecklistId.sink { checklistId in
-            log(debug: "Did receive deepling cheklistId \(String(describing: checklistId))")
-            guard let checklistId = checklistId else {
+            log(debug: "Did receive deepling cheklistId \(checklistId)")
+            guard !checklistId.isEmpty else {
                 return
             }
             guard let checklist = checklistDataSource.getChecklist(withId: checklistId) else {
@@ -81,6 +86,13 @@ class DashboardViewModel: ObservableObject {
                 checklistDataSource.selectedCheckList.send(checklist)
                 notificationManager.clearDeeplinkcChecklistId()
             }
+        }.store(in: &cancellables)
+        
+        notificationManager.deeplinkScheduleId.sink { [weak self] scheduleId in
+            guard !scheduleId.isEmpty else {
+                return
+            }
+            self?.createChecklist(for: scheduleId)
         }.store(in: &cancellables)
         
         checklistFilterAndSort.filteredAndSortedCheckLists
@@ -107,7 +119,7 @@ class DashboardViewModel: ObservableObject {
         let createChecklist = ChecklistPassthroughSubject()
         createChecklist.sink { checklist in
             checklistDataSource.createChecklist(checklist)
-            .done { Logger.log.debug("Checklist created \(checklist)")}
+            .done { _ in Logger.log.debug("Checklist created \(checklist)")}
             .catch { $0.log(message: "Create checklist failed") }
         }.store(in: &cancellables)
         
@@ -279,5 +291,28 @@ private extension DashboardViewModel {
             self?.sheetView = anyView
             self?.isSheetVisible = true
         }.store(in: &cancellables)
+    }
+    
+    func createChecklist(for scheduleId: String) {
+        firstly {
+            scheduleDataSource.getSchedule(with: scheduleId)
+        }.then { schedule in
+            self.checklistDataSource.createChecklist(
+                .init(
+                    id: UUID().uuidString,
+                    title: schedule.title,
+                    description: schedule.description,
+                    updateDate: Date(),
+                    items: schedule.template.items
+                )
+            )
+        }.get { checklist in
+            after(seconds: 1).done {
+                self.checklistDataSource.selectedCheckList.send(checklist)
+                self.notificationManager.clearDeeplinkcChecklistId()
+            }
+        }.catch { error in
+            #warning("TODO: Add error handling")
+        }
     }
 }

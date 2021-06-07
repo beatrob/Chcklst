@@ -12,6 +12,7 @@ import PromiseKit
 
 
 class MockChecklistDataSource: ChecklistDataSource {
+    
 
     var _checkLists: CurrentValueSubject<[ChecklistDataModel], Never> = .init([
         .init(
@@ -100,9 +101,9 @@ class MockChecklistDataSource: ChecklistDataSource {
         _checkLists.value.first { $0.id == id }
     }
     
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         _checkLists.value.insert(checklist, at: 0)
-        return .value
+        return .value(checklist)
     }
     
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {

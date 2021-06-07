@@ -27,7 +27,7 @@ extension CoreDataManagerImpl: CoreDataTemplateManager {
     func save(template: TemplateDataModel) -> Promise<Void> {
         firstly { getViewContext() }
         .then { context -> Promise<Void> in
-            TemplateMO.createEntity(from: template, andSaveToContext: context)
+            TemplateMO.createEntity(from: template, andSaveToContext: context).asVoid()
         }
         .then { self.saveContext() }
     }

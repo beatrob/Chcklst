@@ -9,8 +9,13 @@
         <attribute name="updateDate" attributeType="Date" defaultDateTimeInterval="622938540" usesScalarValueType="NO"/>
     </entity>
     <entity name="RepeatFrequency" representedClassName="RepeatFrequencyMO" syncable="YES">
-        <attribute name="identifier" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="identifier" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Schedule" inverseName="repeatFrequencies" inverseEntity="Schedule"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="identifier"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Schedule" representedClassName="ScheduleMO" syncable="YES">
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
@@ -29,7 +34,7 @@
     </entity>
     <elements>
         <element name="Checklist" positionX="-239.1010131835938" positionY="-200.6466369628906" width="128" height="133"/>
-        <element name="RepeatFrequency" positionX="325.5234375" positionY="-91.17114257812506" width="128" height="73"/>
+        <element name="RepeatFrequency" positionX="325.5234375" positionY="-91.17114257812506" width="128" height="59"/>
         <element name="Schedule" positionX="159.217529296875" positionY="-114.6210021972656" width="144.5001220703125" height="133"/>
         <element name="Template" positionX="-43.0924072265625" positionY="6.325714111328125" width="128" height="118"/>
     </elements>

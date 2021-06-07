@@ -16,4 +16,5 @@ enum DataSourceError: Error {
     case templateNotFound
     case checkListItemNotFound
     case persitentStorageError(error: Error)
+    case scheduleNotFound
 }
