@@ -18,21 +18,29 @@ struct MyTemplatesView: View {
             Color.checklistBackground
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)
-                ScrollView {
-                    VStack(spacing: 0) {
-                        ForEach(
-                            viewModel.templates,
-                            id: \.id) { template in
-                            MyTemplateItemView(
-                                name: template.title,
-                                description: template.description,
-                                displayRightArrow: false
-                            )
-                            .onTapGesture {
-                                self.viewModel.onTemplateTapped.send(template)
+                if viewModel.isEmptyViewVisible {
+                    EmptyListView(
+                        message: "Your template list is empty.\nYou can create new templates from the Dashboard.",
+                        actionTitle: "Go to Dasahboard",
+                        onActionTappedSubject: viewModel.onGotoDashboard
+                    )
+                } else {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            ForEach(
+                                viewModel.templates,
+                                id: \.id) { template in
+                                MyTemplateItemView(
+                                    name: template.title,
+                                    description: template.description,
+                                    displayRightArrow: false
+                                )
+                                .onTapGesture {
+                                    self.viewModel.onTemplateTapped.send(template)
+                                }
                             }
+                            Spacer()
                         }
-                        Spacer()
                     }
                 }
             }

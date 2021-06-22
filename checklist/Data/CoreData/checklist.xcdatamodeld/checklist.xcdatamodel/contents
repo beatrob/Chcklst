@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Checklist" representedClassName="ChecklistMO" syncable="YES">
+        <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="645052500" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
         <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String" defaultValueString=""/>
@@ -33,7 +34,7 @@
         <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Schedule" inverseName="template" inverseEntity="Schedule"/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-239.1010131835938" positionY="-200.6466369628906" width="128" height="133"/>
+        <element name="Checklist" positionX="-239.1010131835938" positionY="-200.6466369628906" width="128" height="134"/>
         <element name="RepeatFrequency" positionX="325.5234375" positionY="-91.17114257812506" width="128" height="59"/>
         <element name="Schedule" positionX="159.217529296875" positionY="-114.6210021972656" width="144.5001220703125" height="133"/>
         <element name="Template" positionX="-43.0924072265625" positionY="6.325714111328125" width="128" height="118"/>

@@ -27,6 +27,7 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     @Published var title: String = ""
     @Published var counter: String = ""
     @Published var isReminderSet: Bool = false
+    @Published var shouldShowNewBadge: Bool = false
     @Published var firstUndoneItem: ChecklistItemViewModel?
     
     let onLongTapped = EmptySubject()
@@ -63,6 +64,7 @@ private extension DashboardChecklistCellViewModel {
         counter = "\(checklist.items.filter(\.isDone).count)/\(checklist.items.count)"
         isReminderSet = checklist.isValidReminderSet
         firstUndoneItem = getItemViewModel(for: getFirstUndoneItem())
+        shouldShowNewBadge = checklist.creationDate == checklist.updateDate
     }
     
     func getItemViewModel(for item: ChecklistItemDataModel?) -> ChecklistItemViewModel? {

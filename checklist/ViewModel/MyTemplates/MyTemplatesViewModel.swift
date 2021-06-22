@@ -13,11 +13,16 @@ import SwiftUI
 
 class MyTemplatesViewModel: ObservableObject {
     
-    @Published var templates: [TemplateDataModel] = []
+    @Published var templates: [TemplateDataModel] = [] {
+        didSet {
+            isEmptyViewVisible = templates.isEmpty
+        }
+    }
     @Published var isActionSheetVisible = false
     @Published var isViewToNavigateVisible = false
     @Published var isSheetVisible = false
     @Published var isAlertVisible = false
+    @Published var isEmptyViewVisible = false
     
     private var actionSheet: MyTemplatesActionSheet = .none {
         didSet {
@@ -36,6 +41,7 @@ class MyTemplatesViewModel: ObservableObject {
     var sheetView = AnyView(EmptyView())
     var alertView: Alert { alert.alert }
     
+    let onGotoDashboard = EmptySubject()
     let onTemplateTapped = TemplatePassthroughSubject()
     let navigationHelper: NavigationHelper
     let navBarViewModel = AppContext.resolver.resolve(
@@ -99,6 +105,8 @@ class MyTemplatesViewModel: ObservableObject {
                     }
                 )
         }.store(in: &self.cancellables)
+        
+        onGotoDashboard.subscribe(navBarViewModel.backButton.didTapSubject).store(in: &cancellables)
     }
 }
 

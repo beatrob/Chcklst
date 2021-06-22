@@ -54,6 +54,7 @@ struct ChecklistNavBar_Preview: PreviewProvider {
                     id: "",
                     title: "",
                     description: nil,
+                    creationDate: Date(),
                     updateDate: Date(),
                     reminderDate: Date().addingTimeInterval(1000),
                     items: [],

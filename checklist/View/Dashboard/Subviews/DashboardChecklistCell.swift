@@ -13,50 +13,71 @@ struct DashboardChecklistCell: View {
     @ObservedObject var viewModel: DashboardChecklistCellViewModel
     
     var body: some View {
-        VStack {
-            HStack {
-                Text(viewModel.title)
-                    .modifier(Modifier.Checklist.SmallTitle())
-                    .onTapGesture {
-                        viewModel.onTapped.send()
+        
+        ZStack(alignment: .topTrailing) {
+            VStack {
+                HStack {
+                    Text(viewModel.title)
+                        .modifier(Modifier.Checklist.SmallTitle())
+                        .onTapGesture {
+                            viewModel.onTapped.send()
+                        }
+                        .onLongPressGesture {
+                            viewModel.onLongTapped.send()
+                        }
+                    Spacer()
+                    if viewModel.isReminderSet {
+                        Image(systemName: "bell.badge")
                     }
-                    .onLongPressGesture {
-                        viewModel.onLongTapped.send()
+                    Text(viewModel.counter).modifier(Modifier.Checklist.Item())
+                }
+                .padding(.top)
+                .padding(.leading)
+                .padding(.trailing)
+                HStack {
+                    viewModel.firstUndoneItem.map {
+                        ChecklistItemView(viewModel: $0)
                     }
-                Spacer()
-                if viewModel.isReminderSet {
-                    Image(systemName: "bell.badge")
+                    Spacer()
                 }
-                Text(viewModel.counter).modifier(Modifier.Checklist.Item())
+                .padding(.leading)
+                .padding(.trailing)
+                .padding(.bottom)
             }
-            .padding(.top)
-            .padding(.leading)
-            .padding(.trailing)
-            HStack {
-                viewModel.firstUndoneItem.map {
-                    ChecklistItemView(viewModel: $0)
-                }
-                Spacer()
+            .background(Color.checklistBackground)
+            .cornerRadius(20)
+            .contentShape(Rectangle())
+            
+            if viewModel.shouldShowNewBadge {
+                Text("New")
+                    .padding(.horizontal, 8)
+                    .font(Font.Chcklst.description.font)
+                    .foregroundColor(.lightText)
+                    .frame(height: 25)
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.alert)
+                    ).background(
+                        Capsule()
+                            .fill(Color.alert)
+                    )
+                    .offset(CGSize(width: 10.0, height: -13.0))
             }
-            .padding(.leading)
-            .padding(.trailing)
-            .padding(.bottom)
         }
-        .background(Color.checklistBackground)
-        .cornerRadius(20)
-        .contentShape(Rectangle())
     }
 }
 
 struct DashboardChecklistCell_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardChecklistCell(
+        let now = Date()
+        return DashboardChecklistCell(
             viewModel: .init(
                 checklist: .init(
                     id: "1234",
                     title: "Some cool checklist",
                     description: nil,
-                    updateDate: Date(),
+                    creationDate: now,
+                    updateDate: now,
                     items: [
                         .init(id: "1234", name: "Let's do the dishes", isDone: false, updateDate: Date())
                     ]

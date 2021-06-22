@@ -225,6 +225,11 @@ private extension ChecklistViewModel {
         self.checklistName = checklist.title
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { self.addNewItem($0) }
+        checklistDataSource.updateChecklist(
+            checklist.getWithCurrentUpdateDate()
+        ).catch { error in
+            error.log(message: "Failed to update checklist")
+        }
     }
     
     func setupCreateTemplate() {
@@ -330,11 +335,13 @@ private extension ChecklistViewModel {
     }
     
     func getChecklistFromUI(id: String? = nil) -> ChecklistDataModel {
-        ChecklistDataModel(
+        let now = Date()
+        return ChecklistDataModel(
             id: id ?? UUID().uuidString,
             title: self.checklistName,
             description: self.checklistDescription,
-            updateDate: Date(),
+            creationDate: self.currentChecklist.value?.creationDate ?? now,
+            updateDate: now,
             reminderDate: reminderDate,
             items: self.items.compactMap {
                 guard !$0.name.isEmpty else {

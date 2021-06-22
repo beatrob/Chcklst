@@ -140,6 +140,21 @@ class NotificationManager: NSObject {
         _deeplinkChecklistId.send("")
     }
     
+    func getPendingSchedules() -> Guarantee<[String]> {
+        Guarantee { resolver in
+            UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
+                let ids = notifications
+                    .map { $0.request.identifier }
+                    .filter { $0.hasPrefix(Prefix.schedule.rawValue) }
+                    .map { self.getScheduleId(fromNotificationId: $0) }
+                    .compactMap { $0 }
+                resolver(ids)
+            }
+        }.get { _ in
+            UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        }
+    }
+    
     private func registerPushNotification(
         prefix: Prefix,
         identifier: String,
@@ -186,6 +201,16 @@ class NotificationManager: NSObject {
             .compactMap { $0 }
             .map { Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: date) }
     }
+    
+    private func getScheduleId(fromNotificationId notfId: String) -> String? {
+        let id = notfId.replacingOccurrences(of: Prefix.schedule.rawValue, with: "")
+        let split = id.split(separator: "_")
+        if !split.isEmpty {
+           return String(split[0])
+        } else {
+            return nil
+        }
+    }
 }
 
 
@@ -198,12 +223,9 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
             _deeplinkChecklistId.send(
                 identifier.replacingOccurrences(of: Prefix.checklist.rawValue, with: "")
             )
-        } else if identifier.hasPrefix(Prefix.schedule.rawValue) {
-            let id = identifier.replacingOccurrences(of: Prefix.schedule.rawValue, with: "")
-            let split = id.split(separator: "_")
-            if !split.isEmpty {
-                _deeplickScheduleId.send(String(split[0]))
-            }
+        } else if identifier.hasPrefix(Prefix.schedule.rawValue),
+                  let scheduleId = getScheduleId(fromNotificationId: identifier) {
+            _deeplickScheduleId.send(scheduleId)
         }
     }
 }

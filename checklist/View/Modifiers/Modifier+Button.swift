@@ -19,7 +19,8 @@ extension Modifier {
                 content
                     .font(Font.Chcklst.boldItem.font)
                     .foregroundColor(.lightText)
-                    .frame(width: 150, height: 40)
+                    .frame(minWidth: 150)
+                    .frame(height: 40)
                     .overlay(
                         Capsule()
                             .stroke(Color.firstAccent)

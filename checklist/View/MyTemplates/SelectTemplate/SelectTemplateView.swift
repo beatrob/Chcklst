@@ -14,31 +14,42 @@ struct SelectTemplateView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                NavigationLink(
-                    destination: viewModel.desitnationView,
-                    isActive: $viewModel.isDestionationViewVisible,
-                    label: {
-                        EmptyView()
-                    })
-                .isDetailLink(false)
-                .hidden()
-                
-                ForEach(
-                    viewModel.templates,
-                    id: \.id) { template in
-                        MyTemplateItemView(
-                            name: template.title,
-                            description: template.description,
-                            displayRightArrow: true
-                        )
-                            .onTapGesture {
-                                self.viewModel.onTemplateTapped.send(template)
-                        }
+            if viewModel.isEmptyListViewVisible {
+                EmptyListView(
+                    message: """
+                        Your template list empty.
+                        Go to Dashboard to create a template from a new or an existing checklist
+                        """,
+                    actionTitle: "Go to Dashboard",
+                    onActionTappedSubject: viewModel.onGotoDashboard
+                )
+            } else {
+                VStack {
+                    NavigationLink(
+                        destination: viewModel.desitnationView,
+                        isActive: $viewModel.isDestionationViewVisible,
+                        label: {
+                            EmptyView()
+                        })
+                    .isDetailLink(false)
+                    .hidden()
+                    
+                    ForEach(
+                        viewModel.templates,
+                        id: \.id) { template in
+                            MyTemplateItemView(
+                                name: template.title,
+                                description: template.description,
+                                displayRightArrow: true
+                            )
+                                .onTapGesture {
+                                    self.viewModel.onTemplateTapped.send(template)
+                            }
+                    }
+                    Spacer()
                 }
-                Spacer()
+                .navigationBarHidden(true)
             }
-            .navigationBarHidden(true)
         }
     }
 }

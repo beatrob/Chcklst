@@ -29,6 +29,7 @@ extension ChecklistMO {
             id: identifier,
             title: title,
             description: notes,
+            creationDate: creationDate,
             updateDate: updateDate,
             reminderDate: reminderDate,
             items: items?.getItemDataModels() ?? []
@@ -40,6 +41,7 @@ extension ChecklistMO {
         title = dataModel.title
         notes = dataModel.description
         updateDate = dataModel.updateDate
+        creationDate = dataModel.creationDate
         reminderDate = dataModel.reminderDate
         items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
     }

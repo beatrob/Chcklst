@@ -14,6 +14,7 @@ struct ChecklistDataModel: Equatable {
     let id: String
     let title: String
     let description: String?
+    var creationDate: Date
     var updateDate: Date
     var reminderDate: Date?
     var items: [ChecklistItemDataModel]
@@ -31,6 +32,23 @@ struct ChecklistDataModel: Equatable {
     
     mutating func removeReminderDate() {
         reminderDate = nil
+    }
+    
+    mutating func updateToCurrentDate() {
+        updateDate = Date()
+    }
+    
+    func getWithCurrentUpdateDate() -> ChecklistDataModel {
+        .init(
+            id: id,
+            title: title,
+            description: description,
+            creationDate: creationDate,
+            updateDate: Date(),
+            reminderDate: reminderDate,
+            items: items,
+            isArchived: isArchived
+        )
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {

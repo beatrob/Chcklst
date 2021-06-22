@@ -13,13 +13,15 @@ import PromiseKit
 
 class MockChecklistDataSource: ChecklistDataSource {
     
+    static let now = Date()
 
     var _checkLists: CurrentValueSubject<[ChecklistDataModel], Never> = .init([
         .init(
             id: "1",
             title: "My first check-list",
             description: "My first super cool checklist to do stuff efficiently",
-            updateDate: Date(),
+            creationDate: MockChecklistDataSource.now,
+            updateDate: MockChecklistDataSource.now,
             items: [
                 .init(id: "1", name: "Do this for the first.", isDone: false, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -33,7 +35,8 @@ class MockChecklistDataSource: ChecklistDataSource {
             id: "2",
             title: "My second check-list",
             description: "My second super cool checklist to do stuff efficiently",
-            updateDate: Date(),
+            creationDate: MockChecklistDataSource.now,
+            updateDate: MockChecklistDataSource.now,
             items: [
                 .init(id: "1", name: "Something something something.", isDone: true, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -47,7 +50,8 @@ class MockChecklistDataSource: ChecklistDataSource {
             id: "3",
             title: "My third check-list",
             description: "My first super cool checklist to do stuff efficiently",
-            updateDate: Date(),
+            creationDate: MockChecklistDataSource.now,
+            updateDate: MockChecklistDataSource.now,
             items: [
                 .init(id: "1", name: "Lala blah blah blah.", isDone: false, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -75,12 +79,14 @@ class MockChecklistDataSource: ChecklistDataSource {
         }.store(in: &cancellables)
     }
     
-    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<Void> {
+    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checkLists.value.firstIndex(of: checkList) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
-        if _checkLists.value[index].items.updateItem(item) {
-            return .value
+        var checklist = _checkLists.value[index]
+        if checklist.items.updateItem(item) {
+            checklist.updateToCurrentDate()
+            return .value(checklist)
         }
         return .init(error: DataSourceError.checkListItemNotFound)
     }

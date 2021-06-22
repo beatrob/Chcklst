@@ -41,6 +41,14 @@ class DashboardViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     var sheetView = AnyView.empty
     
+    private lazy var selectTemplateVM: SelectTemplateViewModel = {
+        let selectTemplateVM = AppContext.resolver.resolve(SelectTemplateViewModel.self)!
+        selectTemplateVM.onGotoDashboard
+            .map { false }
+            .assign(to: \.isSheetVisible, on: self)
+            .store(in: &self.cancellables)
+        return selectTemplateVM
+    }()
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
@@ -92,7 +100,7 @@ class DashboardViewModel: ObservableObject {
             guard !scheduleId.isEmpty else {
                 return
             }
-            self?.createChecklist(for: scheduleId)
+            self?.createChecklist(for: scheduleId, openAfterCreated: true)
         }.store(in: &cancellables)
         
         checklistFilterAndSort.filteredAndSortedCheckLists
@@ -132,7 +140,7 @@ class DashboardViewModel: ObservableObject {
                     self.showCreateNewChecklist()
                 },
                 onNewFromTemplate: {
-                    self.sheet = .selectTemplate
+                    self.sheet = .selectTemplate(viewModel: self.selectTemplateVM)
                 },
                 onCreateSchedule: self.createScheduleSubject
             )
@@ -187,6 +195,11 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         checklistFilterAndSort.sort = .initial
+        loadPendingSchedules()
+        
+        AppContext.didEnterForeground.delay(for: .seconds(1), scheduler: RunLoop.main).sink { [weak self] in
+            self?.loadPendingSchedules()
+        }.store(in: &cancellables)
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
@@ -244,6 +257,7 @@ class DashboardViewModel: ObservableObject {
         viewModel.onUpdateItem.sink { [weak self] item in
             guard let self = self else { return }
             self.checklistDataSource.updateItem(item, in: checklist)
+                .done { viewModel.update(with: $0) }
                 .catch {
                     $0.log(message: "Failed to update item \(item)")
                 }
@@ -293,26 +307,42 @@ private extension DashboardViewModel {
         }.store(in: &cancellables)
     }
     
-    func createChecklist(for scheduleId: String) {
+    func createChecklist(for scheduleId: String, openAfterCreated: Bool) {
         firstly {
             scheduleDataSource.getSchedule(with: scheduleId)
-        }.then { schedule in
-            self.checklistDataSource.createChecklist(
+        }.get { schedule in
+            self.scheduleDataSource.deleteSchedule(schedule).catch {
+                $0.log(message: "Failed to delete schedule")
+            }
+        }.then { schedule -> Promise<ChecklistDataModel> in
+            let now = Date()
+            return self.checklistDataSource.createChecklist(
                 .init(
                     id: UUID().uuidString,
                     title: schedule.title,
                     description: schedule.description,
-                    updateDate: Date(),
+                    creationDate: now,
+                    updateDate: now,
                     items: schedule.template.items
                 )
             )
         }.get { checklist in
             after(seconds: 1).done {
-                self.checklistDataSource.selectedCheckList.send(checklist)
+                if openAfterCreated {
+                    self.checklistDataSource.selectedCheckList.send(checklist)
+                }
                 self.notificationManager.clearDeeplinkcChecklistId()
             }
         }.catch { error in
-            #warning("TODO: Add error handling")
+            error.log(message: "Failed to create checklist for schedule ID: \(scheduleId)")
+        }
+    }
+    
+    func loadPendingSchedules() {
+        notificationManager.getPendingSchedules().done { scheduleIds in
+            scheduleIds.forEach {
+                self.createChecklist(for: $0, openAfterCreated: false)
+            }
         }
     }
 }

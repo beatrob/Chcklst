@@ -21,6 +21,7 @@ extension ChecklistMO {
     @NSManaged public var title: String
     @NSManaged public var notes: String?
     @NSManaged public var updateDate: Date
+    @NSManaged public var creationDate: Date
     @NSManaged public var reminderDate: Date?
     @NSManaged public var items: ChecklistItemArrayTransformable?
 }

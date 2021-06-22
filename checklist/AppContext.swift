@@ -11,9 +11,11 @@ import Swinject
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
+import Combine
 
 class AppContext {
     
+    static let didEnterForeground = PassthroughSubject<Void, Never>()
     static let shared = AppContext()
     static var resolver: Resolver {
         shared.resolver

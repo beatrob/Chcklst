@@ -16,7 +16,7 @@ protocol ChecklistDataSource {
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
     var selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> { get }
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
-    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<Void>
+    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func getChecklist(withId id: String) -> ChecklistDataModel?
     func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
@@ -43,7 +43,7 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         self.coreDataManager = coreDataManager
     }
     
-    func updateItem(_ item: ChecklistItemDataModel,in checkList: ChecklistDataModel) -> Promise<Void> {
+    func updateItem(_ item: ChecklistItemDataModel,in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checklists.value.firstIndex(of: checkList) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
@@ -51,6 +51,7 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         guard checklist.items.updateItem(item) else {
             return .init(error: DataSourceError.checkListItemNotFound)
         }
+        checklist.updateToCurrentDate()
         return coreDataManager.update(checklist: checklist)
         .get {
             if self._checklists.value[index].items.updateItem(item) {
@@ -58,7 +59,7 @@ class CheckListDataSourceImpl: ChecklistDataSource {
                     _ = self.selectedCheckList.value?.items.updateItem(item)
                 }
             }
-        }
+        }.map { checklist }
     }
     
     func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {

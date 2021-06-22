@@ -130,6 +130,7 @@
 		FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A552643426D00ACF179 /* BackButtonNavBar.swift */; };
 		FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */; };
 		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
+		FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */; };
 		FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A70F2263CA678001B81E7 /* MyTextField.swift */; };
 		FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */; };
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
@@ -304,6 +305,7 @@
 		FE559A552643426D00ACF179 /* BackButtonNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonNavBar.swift; sourceTree = "<group>"; };
 		FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+TextField.swift"; sourceTree = "<group>"; };
 		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
+		FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyListView.swift; sourceTree = "<group>"; };
 		FE9A70F2263CA678001B81E7 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
 		FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Settings.swift"; sourceTree = "<group>"; };
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -703,6 +705,7 @@
 				FEA8B5192628E4900084909E /* SeparatorView.swift */,
 				FE9A70F2263CA678001B81E7 /* MyTextField.swift */,
 				FE559A552643426D00ACF179 /* BackButtonNavBar.swift */,
+				FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -1017,6 +1020,7 @@
 				DDFF95D8260938A30084DBF4 /* BackButtonNavBarViewModel.swift in Sources */,
 				FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */,
 				FEBE21442664331C00CC001E /* ChecklitsMO.swift in Sources */,
+				FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */,
 				DD6C506D24FC35610056C476 /* MyTemplatesActionSheet.swift in Sources */,
 				FEBE21532664353300CC001E /* RepeatFrequency+Helpers.swift in Sources */,
 				FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */,

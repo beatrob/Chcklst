@@ -44,6 +44,10 @@ extension Color {
         Color("textfieldBackground")
     }
     
+    static var alert: Color {
+        Color("alertColor")
+    }
+    
     func toUIColor() -> UIColor {
         UIColor(self)
     }

@@ -13,9 +13,15 @@ import SwiftUI
 
 class SelectTemplateViewModel: ObservableObject {
     
-    @Published var templates: [TemplateDataModel] = []
+    @Published var templates: [TemplateDataModel] = [] {
+        didSet {
+            isEmptyListViewVisible = templates.isEmpty
+        }
+    }
     @Published var isDestionationViewVisible = false
+    @Published var isEmptyListViewVisible = false
     let onTemplateTapped = TemplatePassthroughSubject()
+    let onGotoDashboard = EmptySubject()
     var desitnationView = AnyView.empty
     var cancellables =  Set<AnyCancellable>()
     var templateTappedCancellable: AnyCancellable?
