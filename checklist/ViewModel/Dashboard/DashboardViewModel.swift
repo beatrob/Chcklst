@@ -13,11 +13,16 @@ import SwiftUI
 
 class DashboardViewModel: ObservableObject {
     
-    @Published var checklistCells: [DashboardChecklistCellViewModel] = []
+    @Published var checklistCells: [DashboardChecklistCellViewModel] = [] {
+        didSet {
+            isEmptyListViewVisible = checklistCells.isEmpty
+        }
+    }
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var isSidemenuVisible = false
     @Published var isSheetVisible = false
+    @Published var isEmptyListViewVisible = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -42,12 +47,7 @@ class DashboardViewModel: ObservableObject {
     var sheetView = AnyView.empty
     
     private lazy var selectTemplateVM: SelectTemplateViewModel = {
-        let selectTemplateVM = AppContext.resolver.resolve(SelectTemplateViewModel.self)!
-        selectTemplateVM.onGotoDashboard
-            .map { false }
-            .assign(to: \.isSheetVisible, on: self)
-            .store(in: &self.cancellables)
-        return selectTemplateVM
+        AppContext.resolver.resolve(SelectTemplateViewModel.self)!
     }()
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
@@ -305,6 +305,12 @@ private extension DashboardViewModel {
             self?.sheetView = anyView
             self?.isSheetVisible = true
         }.store(in: &cancellables)
+        
+        createScheduleViewModel.onGotoDashboard
+            .merge(with: selectTemplateVM.onGotoDashboard)
+            .map { false }
+            .assign(to: \.isSheetVisible, on: self)
+            .store(in: &self.cancellables)
     }
     
     func createChecklist(for scheduleId: String, openAfterCreated: Bool) {

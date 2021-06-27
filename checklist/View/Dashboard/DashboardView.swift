@@ -27,15 +27,23 @@ struct DashboardView: View {
                 ZStack {
                     VStack(spacing: 0) {
                         DashboardNavBar(viewModel: viewModel.navBarViewModel)
-                        ScrollView {
-                            VStack {
-                                ForEach(viewModel.checklistCells, id: \.id) { cell in
-                                    DashboardChecklistCell(viewModel: cell)
-                                        .padding(.horizontal, 20)
-                                        .padding(.vertical, 7)
+                        if viewModel.isEmptyListViewVisible {
+                            EmptyListView(
+                                message: "Your checklist is empty",
+                                actionTitle: "Create new",
+                                onActionTappedSubject: viewModel.onCreateNewChecklist
+                            )
+                        } else {
+                            ScrollView {
+                                VStack {
+                                    ForEach(viewModel.checklistCells, id: \.id) { cell in
+                                        DashboardChecklistCell(viewModel: cell)
+                                            .padding(.horizontal, 20)
+                                            .padding(.vertical, 7)
+                                    }
                                 }
+                                .padding(.vertical)
                             }
-                            .padding(.vertical)
                         }
                     }
                     .background(Color.mainBackground)

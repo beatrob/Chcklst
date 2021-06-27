@@ -14,6 +14,11 @@ class CreateScheduleViewModel: ObservableObject {
     
     let presentViewPublisher: AnyPublisher<AnyView, Never>
     let didCreateSchedulePublisher: EmptyPublisher
+    var onGotoDashboard: EmptyPublisher {
+        onGotoDashboardSubject.eraseToAnyPublisher()
+    }
+    
+    private let onGotoDashboardSubject = EmptySubject()
     
     private let createScheduleBackButtonSubject = EmptySubject()
     private let didCreateScheduleSubject = EmptySubject()
@@ -30,6 +35,7 @@ class CreateScheduleViewModel: ObservableObject {
             onTemplateTappedSubscriber: AnySubscriber(onTemplateTappedSubject),
             destinationPublisher: presenterSubject.eraseToAnyPublisher()
         )
+        selectTemplateViewModel.onGotoDashboard.subscribe(onGotoDashboardSubject).store(in: &cancellables)
         
         createScheduleBackButtonSubject
             .map { _ -> AnyView? in nil }

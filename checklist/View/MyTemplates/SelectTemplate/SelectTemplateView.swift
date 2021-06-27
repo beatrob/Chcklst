@@ -17,7 +17,7 @@ struct SelectTemplateView: View {
             if viewModel.isEmptyListViewVisible {
                 EmptyListView(
                     message: """
-                        Your template list empty.
+                        Your template list is empty.
                         Go to Dashboard to create a template from a new or an existing checklist
                         """,
                     actionTitle: "Go to Dashboard",

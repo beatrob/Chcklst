@@ -22,20 +22,32 @@ struct SchedulesView: View {
             ).hidden()
             
             Color.checklistBackground
+            
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ForEach(viewModel.cells) { cell in
-                            ScheduleCellView(viewModel: cell)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 7)
-                                .onTapGesture {
-                                    viewModel.didSelectSchedule.send(cell)
-                                }
+                if viewModel.isEmptyListViewVisible {
+                    EmptyListView(
+                        message: """
+                            Your schedule list is empty
+                            To plan your checklists ahead start creating schedules from templates
+                            """,
+                        actionTitle: "Create schedule",
+                        onActionTappedSubject: viewModel.onCreateSchedule
+                    )
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ForEach(viewModel.cells) { cell in
+                                ScheduleCellView(viewModel: cell)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 7)
+                                    .onTapGesture {
+                                        viewModel.didSelectSchedule.send(cell)
+                                    }
+                            }
                         }
+                        .padding(.vertical)
                     }
-                    .padding(.vertical)
                 }
             }
         }

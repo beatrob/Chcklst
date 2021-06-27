@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import PromiseKit
 
 
 class SchedulesViewModel: ObservableObject {
@@ -20,18 +21,26 @@ class SchedulesViewModel: ObservableObject {
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
+    let onCreateSchedule = EmptySubject()
     private let scheduleDataSource: ScheduleDataSource
     private let createScheduleViewModel: CreateScheduleViewModel
     let didSelectSchedule = PassthroughSubject<ScheduleCellViewModel, Never>()
-    @Published var cells: [ScheduleCellViewModel] = []
+    @Published var cells: [ScheduleCellViewModel] = [] {
+        didSet {
+            isEmptyListViewVisible = cells.isEmpty
+        }
+    }
     @Published var isSheetPresented = false
     @Published var sheet = AnyView.empty
     @Published var navigationDestination = AnyView.empty
     @Published var isNavigationActive = false
+    @Published var isEmptyListViewVisible = false
     
     init(scheduleDataSource: ScheduleDataSource) {
         
         let rightButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
+        onCreateSchedule.subscribe(rightButton.didTapSubject).store(in: &cancellables)
+        
         self.scheduleDataSource = scheduleDataSource
         self.createScheduleViewModel = AppContext.resolver.resolve(
             CreateScheduleViewModel.self,
@@ -67,6 +76,13 @@ class SchedulesViewModel: ObservableObject {
                 self?.isSheetPresented = false
                 self?.sheet = .empty
             }.store(in: &cancellables)
+        
+        createScheduleViewModel.onGotoDashboard.sink { [weak self] in
+            self?.isSheetPresented = false
+            after(seconds: 0.5).done {
+                self?.navBarViewModel.backButton.didTapSubject.send()
+            }
+        }.store(in: &cancellables)
         
         navBarViewModel.setRightButton(rightButton)
         
