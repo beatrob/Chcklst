@@ -146,6 +146,10 @@
 		FEBE214F266434A800CC001E /* ScheduleMO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE214E266434A800CC001E /* ScheduleMO+Helpers.swift */; };
 		FEBE21512664350200CC001E /* RepeatFrequencyMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21502664350200CC001E /* RepeatFrequencyMO.swift */; };
 		FEBE21532664353300CC001E /* RepeatFrequency+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21522664353300CC001E /* RepeatFrequency+Helpers.swift */; };
+		FED2DA59268923130023E525 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA58268923130023E525 /* Bundle+Extension.swift */; };
+		FED2DA5B268924580023E525 /* RestrictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA5A268924580023E525 /* RestrictionManager.swift */; };
+		FED2DA5E2689266B0023E525 /* MockRestrictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA5D2689266B0023E525 /* MockRestrictionManager.swift */; };
+		FED2DA6126892DF00023E525 /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = FED2DA6026892DF00023E525 /* SwiftyStoreKit */; };
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
@@ -321,6 +325,9 @@
 		FEBE214E266434A800CC001E /* ScheduleMO+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScheduleMO+Helpers.swift"; sourceTree = "<group>"; };
 		FEBE21502664350200CC001E /* RepeatFrequencyMO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatFrequencyMO.swift; sourceTree = "<group>"; };
 		FEBE21522664353300CC001E /* RepeatFrequency+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepeatFrequency+Helpers.swift"; sourceTree = "<group>"; };
+		FED2DA58268923130023E525 /* Bundle+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extension.swift"; sourceTree = "<group>"; };
+		FED2DA5A268924580023E525 /* RestrictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictionManager.swift; sourceTree = "<group>"; };
+		FED2DA5D2689266B0023E525 /* MockRestrictionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRestrictionManager.swift; sourceTree = "<group>"; };
 		FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailView.swift; sourceTree = "<group>"; };
 		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
 		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
@@ -333,6 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
+				FED2DA6126892DF00023E525 /* SwiftyStoreKit in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
 				DD84DCAC253E1C5E00A39DBB /* SnapKit in Frameworks */,
@@ -375,6 +383,7 @@
 				DD85AD9825D597A400EB4B6A /* Alert+Extension.swift */,
 				DDE08AB725DB1DD900F00D5A /* Color+Extension.swift */,
 				DDDAED6025F4FFF20077F6AA /* Date+Extension.swift */,
+				FED2DA58268923130023E525 /* Bundle+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -520,6 +529,7 @@
 		DD52A65024E1A1E200A9A1FC /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				FED2DA5C268926540023E525 /* Restrictions */,
 				DDD4FBDD251660F4002B7F50 /* Notifications */,
 				DD72BA892507782800318F62 /* Navigation */,
 				DD7AF2AA24EDB5D00051CD16 /* TypeAliases.swift */,
@@ -828,6 +838,15 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		FED2DA5C268926540023E525 /* Restrictions */ = {
+			isa = PBXGroup;
+			children = (
+				FED2DA5A268924580023E525 /* RestrictionManager.swift */,
+				FED2DA5D2689266B0023E525 /* MockRestrictionManager.swift */,
+			);
+			path = Restrictions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -854,6 +873,7 @@
 				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
 				DD2D91BA2532FD420032779C /* XCGLogger */,
 				DD84DCAB253E1C5E00A39DBB /* SnapKit */,
+				FED2DA6026892DF00023E525 /* SwiftyStoreKit */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -931,6 +951,7 @@
 				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */,
+				FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -1015,6 +1036,8 @@
 				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
+				FED2DA59268923130023E525 /* Bundle+Extension.swift in Sources */,
+				FED2DA5E2689266B0023E525 /* MockRestrictionManager.swift in Sources */,
 				DD2D91922530EB430032779C /* ChecklistFilterAndSort.swift in Sources */,
 				DD85AD9425D595E200EB4B6A /* ChecklistAlert.swift in Sources */,
 				DDFF95D8260938A30084DBF4 /* BackButtonNavBarViewModel.swift in Sources */,
@@ -1043,6 +1066,7 @@
 				DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */,
 				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
 				FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */,
+				FED2DA5B268924580023E525 /* RestrictionManager.swift in Sources */,
 				FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */,
 				DD25877E25067F2B00A503C9 /* MyTemplatesAlert.swift in Sources */,
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
@@ -1281,6 +1305,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RESTRICTIONS_ENABLED = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1304,6 +1329,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RESTRICTIONS_ENABLED = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1399,6 +1425,135 @@
 			};
 			name = Release;
 		};
+		FED2DA54268921060023E525 /* Debug-no-restrictions */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = "Debug-no-restrictions";
+		};
+		FED2DA55268921060023E525 /* Debug-no-restrictions */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"checklist/Preview Content\"";
+				DEVELOPMENT_TEAM = N3HE852DA3;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = checklist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				RESTRICTIONS_ENABLED = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-no-restrictions";
+		};
+		FED2DA56268921060023E525 /* Debug-no-restrictions */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3HE852DA3;
+				INFOPLIST_FILE = checklistTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist.checklistTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/checklist.app/checklist";
+			};
+			name = "Debug-no-restrictions";
+		};
+		FED2DA57268921060023E525 /* Debug-no-restrictions */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = N3HE852DA3;
+				INFOPLIST_FILE = ChecklistWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist.ChecklistWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug-no-restrictions";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1406,6 +1561,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD52A64124E19EF100A9A1FC /* Debug */,
+				FED2DA54268921060023E525 /* Debug-no-restrictions */,
 				DD52A64224E19EF100A9A1FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1415,6 +1571,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD52A64424E19EF100A9A1FC /* Debug */,
+				FED2DA55268921060023E525 /* Debug-no-restrictions */,
 				DD52A64524E19EF100A9A1FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1424,6 +1581,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD52A64724E19EF100A9A1FC /* Debug */,
+				FED2DA56268921060023E525 /* Debug-no-restrictions */,
 				DD52A64824E19EF100A9A1FC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1433,6 +1591,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDC4C100252A63A700F223D3 /* Debug */,
+				FED2DA57268921060023E525 /* Debug-no-restrictions */,
 				DDC4C101252A63A700F223D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1481,6 +1640,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.16.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1518,6 +1685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		FED2DA6026892DF00023E525 /* SwiftyStoreKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
+			productName = SwiftyStoreKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

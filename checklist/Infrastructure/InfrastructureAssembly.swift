@@ -17,5 +17,6 @@ class InfrastructureAssembly: Assembly {
         container.autoregister(NavigationHelper.self, initializer: NavigationHelper.init).inObjectScope(.container)
         container.autoregister(NotificationManager.self, initializer: NotificationManager.init).inObjectScope(.container)
         container.autoregister(ChecklistFilterAndSort.self, initializer: ChecklistFilterAndSortImpl.init)
+        container.autoregister(RestrictionManager.self, initializer: RestrictionManagerImpl.init).inObjectScope(.container)
     }
 }

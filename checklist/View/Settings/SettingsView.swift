@@ -27,23 +27,23 @@ struct SettingsView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("CHCKLST+").modifier(Modifier.Settings.ItemTitle())
-                        .padding()
-                    HStack {
-                        Spacer()
-                        Button("Upgrade") {
-                            
-                        }.modifier(Modifier.Button.MainAction())
-                        Spacer()
-                    }
-                    .padding(.bottom)
-                    Text("Upgrade to CHCKLST+ to get unlimited checklists, templates & schedules.")
-
-                        .modifier(Modifier.Settings.ItemDescription())
-                        .padding(.horizontal)
-
                     
-                    SeparatorView()
+                    if viewModel.isInAppEnabled {
+                        Text("CHCKLST+").modifier(Modifier.Settings.ItemTitle())
+                            .padding()
+                        HStack {
+                            Spacer()
+                            Button("Upgrade") {
+                                
+                            }.modifier(Modifier.Button.MainAction())
+                            Spacer()
+                        }
+                        .padding(.bottom)
+                        Text("Upgrade to CHCKLST+ to get unlimited checklists, templates & schedules.")
+                            .modifier(Modifier.Settings.ItemDescription())
+                            .padding(.horizontal)
+                        SeparatorView()
+                    }
                     
                     HStack {
                         Text("Appearance").modifier(Modifier.Settings.ItemTitle())
@@ -82,8 +82,18 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SettingsView(viewModel: SettingsViewModel(navigationHelper: NavigationHelper()))
-            SettingsView(viewModel: SettingsViewModel(navigationHelper: NavigationHelper()))
+            SettingsView(
+                viewModel: SettingsViewModel(
+                    navigationHelper: NavigationHelper(),
+                    restrictionManager: MockRestrictionManager()
+                )
+            )
+            SettingsView(
+                viewModel: SettingsViewModel(
+                    navigationHelper: NavigationHelper(),
+                    restrictionManager: MockRestrictionManager()
+                )
+            )
                 .preferredColorScheme(.dark)
         }
     }
