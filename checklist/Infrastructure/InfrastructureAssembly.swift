@@ -18,5 +18,10 @@ class InfrastructureAssembly: Assembly {
         container.autoregister(NotificationManager.self, initializer: NotificationManager.init).inObjectScope(.container)
         container.autoregister(ChecklistFilterAndSort.self, initializer: ChecklistFilterAndSortImpl.init)
         container.autoregister(RestrictionManager.self, initializer: RestrictionManagerImpl.init).inObjectScope(.container)
+        if Bundle.main.restrictionsEnabled {
+            container.autoregister(PurchaseManager.self, initializer: PurchaseManagerImpl.init).inObjectScope(.container)
+        } else {
+            container.autoregister(PurchaseManager.self, initializer: DisabledPurchaseManager.init).inObjectScope(.container)
+        }
     }
 }

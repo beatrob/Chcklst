@@ -129,6 +129,10 @@
 		FE559A54264341B800ACF179 /* ScheduleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A53264341B800ACF179 /* ScheduleCellView.swift */; };
 		FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A552643426D00ACF179 /* BackButtonNavBar.swift */; };
 		FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */; };
+		FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE77268E5417004A11DE /* PurchaseManager.swift */; };
+		FE7CFE7A268E5472004A11DE /* MockPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */; };
+		FE7CFE7C268E54AE004A11DE /* DisabledPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */; };
+		FE7CFE7E268E59D3004A11DE /* ProductDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */; };
 		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
 		FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */; };
 		FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A70F2263CA678001B81E7 /* MyTextField.swift */; };
@@ -308,6 +312,10 @@
 		FE559A53264341B800ACF179 /* ScheduleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellView.swift; sourceTree = "<group>"; };
 		FE559A552643426D00ACF179 /* BackButtonNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonNavBar.swift; sourceTree = "<group>"; };
 		FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+TextField.swift"; sourceTree = "<group>"; };
+		FE7CFE77268E5417004A11DE /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPurchaseManager.swift; sourceTree = "<group>"; };
+		FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledPurchaseManager.swift; sourceTree = "<group>"; };
+		FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDataModel.swift; sourceTree = "<group>"; };
 		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
 		FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyListView.swift; sourceTree = "<group>"; };
 		FE9A70F2263CA678001B81E7 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
@@ -529,6 +537,7 @@
 		DD52A65024E1A1E200A9A1FC /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				FE7CFE76268E540C004A11DE /* Purchase */,
 				FED2DA5C268926540023E525 /* Restrictions */,
 				DDD4FBDD251660F4002B7F50 /* Notifications */,
 				DD72BA892507782800318F62 /* Navigation */,
@@ -551,6 +560,7 @@
 				DD90241824FB7DCD0084CDDC /* TemplateDataModel.swift */,
 				FEA913A32641DEB300594478 /* ScheduleDataModel.swift */,
 				FEA913A52641E4D700594478 /* DayDataModel.swift */,
+				FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -827,6 +837,16 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		FE7CFE76268E540C004A11DE /* Purchase */ = {
+			isa = PBXGroup;
+			children = (
+				FE7CFE77268E5417004A11DE /* PurchaseManager.swift */,
+				FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */,
+				FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */,
+			);
+			path = Purchase;
+			sourceTree = "<group>";
+		};
 		FEBE21452664335800CC001E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1010,6 +1030,7 @@
 				DD90241724FB7D590084CDDC /* TemplateDataSource.swift in Sources */,
 				DD2D91872530CA2A0032779C /* SortDataModel.swift in Sources */,
 				DD74DA772521E705004587FC /* MockCoreDataManager.swift in Sources */,
+				FE7CFE7E268E59D3004A11DE /* ProductDataModel.swift in Sources */,
 				DD8BFC8025DF091D00338624 /* NavBarChipButtonViewModel.swift in Sources */,
 				DDD4FBDF2516610C002B7F50 /* NotificationManager.swift in Sources */,
 				DDD0054025EAECBA0098E27E /* ChecklistNavBar.swift in Sources */,
@@ -1051,9 +1072,11 @@
 				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
 				FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */,
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
+				FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */,
 				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
 				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
+				FE7CFE7C268E54AE004A11DE /* DisabledPurchaseManager.swift in Sources */,
 				DDD0054825EAED4A0098E27E /* ChecklistNavBarViewModel.swift in Sources */,
 				FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */,
 				DDE08A9C25DB1A4B00F00D5A /* MenuItemView.swift in Sources */,
@@ -1093,6 +1116,7 @@
 				DD8C4504253631E700F470C2 /* ChecklistViewModel+Input.swift in Sources */,
 				DDD22312252672A700C18BF9 /* SelectTemplateView.swift in Sources */,
 				DD727A5024F272D7004089B6 /* DashboardActionSheet.swift in Sources */,
+				FE7CFE7A268E5472004A11DE /* MockPurchaseManager.swift in Sources */,
 				FE559A4E26433F8200ACF179 /* SchedulesViewModel.swift in Sources */,
 				DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */,
 				DD74DA6E252147D0004587FC /* CoreDataError.swift in Sources */,
@@ -1303,11 +1327,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RESTRICTIONS_ENABLED = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1327,11 +1352,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RESTRICTIONS_ENABLED = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -1501,11 +1527,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RESTRICTIONS_ENABLED = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Debug-no-restrictions";
 		};
