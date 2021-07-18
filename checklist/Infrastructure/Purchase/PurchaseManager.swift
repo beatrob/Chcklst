@@ -16,6 +16,7 @@ protocol PurchaseManager {
     func completeTransactions()
     func getMainProduct() -> Promise<ProductDataModel>
     func purchaseProduct(_ product: ProductDataModel) -> Promise<Void>
+    func restorePurchase() -> Promise<Void>
 }
 
 class PurchaseManagerImpl: PurchaseManager {
@@ -25,6 +26,8 @@ class PurchaseManagerImpl: PurchaseManager {
         case retrieveFailed
         case productError
         case purchaseFailed
+        case restoreFailed
+        case nothingToRestore
         
         var errorDescription: String? {
             switch self {
@@ -34,6 +37,10 @@ class PurchaseManagerImpl: PurchaseManager {
                 return "Something went wrong, try again later"
             case .purchaseFailed:
                 return "Purchase failed, try again later"
+            case .restoreFailed:
+                return "Restore purchase failed, try again later"
+            case .nothingToRestore:
+                return "No previous purchase found"
             }
         }
     }
@@ -95,6 +102,20 @@ class PurchaseManagerImpl: PurchaseManager {
                 case .error(let error):
                     error.log(message: "Puchase failed")
                     resolver.reject(PurchaseError.purchaseFailed)
+                }
+            }
+        }
+    }
+    
+    func restorePurchase() -> Promise<Void> {
+        Promise { resolver in
+            SwiftyStoreKit.restorePurchases { results in
+                if !results.restoreFailedPurchases.isEmpty {
+                    resolver.reject(PurchaseError.restoreFailed)
+                } else if !results.restoredPurchases.isEmpty {
+                    resolver.fulfill(())
+                } else {
+                    resolver.reject(PurchaseError.nothingToRestore)
                 }
             }
         }

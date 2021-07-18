@@ -28,4 +28,8 @@ class DisabledPurchaseManager: PurchaseManager {
     func purchaseProduct(_ product: ProductDataModel) -> Promise<Void> {
         .init(error: NSError())
     }
+    
+    func restorePurchase() -> Promise<Void> {
+        .init(error: NSError())
+    }
 }

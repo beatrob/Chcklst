@@ -54,7 +54,19 @@ class UpgradeViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onRestoreTapped.sink { [weak self] in
-            
+            withAnimation {
+                self?.isLoading = true
+            }
+            purchaseManager.restorePurchase().done {
+                withAnimation {
+                    self?.isLoading = false
+                    self?.isPurchaseSuccessVisible = true
+                }
+            }.catch { error in
+                error.log(message: "Failed to restore purchase")
+                self?.showAlert(error: error)
+                self?.isLoading = false
+            }
         }.store(in: &cancellables)
     }
     

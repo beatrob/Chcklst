@@ -28,4 +28,8 @@ class MockPurchaseManager: PurchaseManager {
     func purchaseProduct(_ product: ProductDataModel) -> Promise<Void> {
         .value
     }
+    
+    func restorePurchase() -> Promise<Void> {
+        .value
+    }
 }
