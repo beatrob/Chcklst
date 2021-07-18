@@ -26,9 +26,50 @@ struct UpgradeView: View {
         VStack {
             if viewModel.isLoading {
                activityIndicatiorView
-            } else {
-                Text(viewModel.productTitle)
+            } else if viewModel.isPurchaseSuccessVisible {
+                Spacer()
+                Text("Upgrade complete")
                     .modifier(Modifier.Upgrade.Title())
+                    .padding()
+                Text("Thank you for your purchase!\nEnjoy unlimited access to checklilsts, templates & schedules!🙂")
+                    .modifier(Modifier.Upgrade.Description())
+                    .multilineTextAlignment(.center)
+                    .padding()
+                Spacer()
+                Button("Close") { viewModel.onCancelTapped.send() }
+                    .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                    .padding()
+            } else {
+                ZStack {
+                    Color.menuBackground
+                    VStack {
+                        Spacer()
+                        Text(viewModel.productTitle)
+                            .modifier(Modifier.Upgrade.Title())
+                            .padding()
+                        Text(viewModel.price)
+                            .modifier(Modifier.Upgrade.Price())
+                        Spacer()
+                        Text("By upgrading you can unlock\nUNLIMITED ACCESS to")
+                            .modifier(Modifier.Upgrade.Description())
+                            .multilineTextAlignment(.center)
+                            .padding()
+                        getDescriptionItem(title: "Checklists")
+                        getDescriptionItem(title: "Templates")
+                        getDescriptionItem(title: "Schedules")
+                        Spacer()
+                    }
+                }.ignoresSafeArea()
+                Spacer()
+                Button("Purchase") { viewModel.onPurchaseTapped.send() }
+                    .modifier(Modifier.Button.MainAction(minWidth: 200))
+                    .padding(.top)
+                Button("Restore Purchase") { viewModel.onRestoreTapped.send() }
+                    .modifier(Modifier.Button.MainAction(minWidth: 200))
+                    .padding(.top)
+                Button("Cancel") { viewModel.onCancelTapped.send() }
+                    .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                    .padding()
             }
         }
         .onAppear {
@@ -38,10 +79,22 @@ struct UpgradeView: View {
             viewModel.alert
         }
     }
+    
+    private func getDescriptionItem(title: String) -> some View {
+        HStack {
+            Image(systemName: "checkmark.circle.fill")
+            Text(title)
+        }
+        .modifier(Modifier.Upgrade.Description())
+        .padding(.top)
+    }
 }
 
 struct UpgradeView_Previews: PreviewProvider {
     static var previews: some View {
-        UpgradeView(viewModel: .init(purchaseManager: MockPurchaseManager()))
+        let viewModel = UpgradeViewModel(purchaseManager: MockPurchaseManager())
+        viewModel.isLoading = false
+        viewModel.loadMainProduct()
+        return UpgradeView(viewModel: viewModel)
     }
 }

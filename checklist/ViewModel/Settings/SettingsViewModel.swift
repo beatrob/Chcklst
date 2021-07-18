@@ -19,6 +19,13 @@ class SettingsViewModel: ObservableObject {
     let isInAppEnabled: Bool
     var cancellables =  Set<AnyCancellable>()
     var sheet: AnyView = .empty
+    lazy var upgradeViewModel: UpgradeViewModel = {
+        let viewModel = AppContext.resolver.resolve(UpgradeViewModel.self)!
+        viewModel.onCancelTapped.sink { [weak self] in
+            self?.isSheetVisible = false
+        }.store(in: &self.cancellables)
+        return viewModel
+    }()
     @Published var isSheetVisible = false
     
     var onBackTapped: EmptyPublisher {
@@ -32,8 +39,11 @@ class SettingsViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onUpgradeTapped.sink { [weak self] in
-            self?.sheet = AnyView(UpgradeView(viewModel: AppContext.resolver.resolve(UpgradeViewModel.self)!))
-            self?.isSheetVisible = true
+            guard let self = self else {
+                return
+            }
+            self.sheet = AnyView(UpgradeView(viewModel: self.upgradeViewModel))
+            self.isSheetVisible = true
         }.store(in: &cancellables)
     }
 }

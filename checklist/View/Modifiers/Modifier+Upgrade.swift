@@ -18,7 +18,25 @@ extension Modifier {
             func body(content: Content) -> some View {
                 content
                     .foregroundColor(.firstAccent)
-                    .font(.largeTitle)
+                    .font(Font.Chcklst.bigTitle.font)
+            }
+        }
+        
+        struct Price: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .foregroundColor(.firstAccent)
+                    .font(Font.Chcklst.italicDescription.font)
+            }
+        }
+        
+        struct Description: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .foregroundColor(.text)
+                    .font(Font.Chcklst.description.font)
             }
         }
     }

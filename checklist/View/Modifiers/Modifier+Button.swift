@@ -13,13 +13,24 @@ extension Modifier {
     
     enum Button {
         
+        //MARK:-
         struct MainAction: ViewModifier {
+            
+            let minWidth: CGFloat
+            
+            init() {
+                self.minWidth = 150
+            }
+            
+            init(minWidth: CGFloat) {
+                self.minWidth = minWidth
+            }
             
             func body(content: Content) -> some View {
                 content
                     .font(Font.Chcklst.boldItem.font)
                     .foregroundColor(.lightText)
-                    .frame(minWidth: 150)
+                    .frame(minWidth: minWidth)
                     .frame(height: 40)
                     .overlay(
                         Capsule()
@@ -31,6 +42,36 @@ extension Modifier {
             }
         }
         
+        //MARK:-
+        struct SecondaryAction: ViewModifier {
+            
+            let minWidth: CGFloat
+            
+            init() {
+                self.minWidth = 150
+            }
+            
+            init(minWidth: CGFloat) {
+                self.minWidth = minWidth
+            }
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.boldItem.font)
+                    .foregroundColor(.lightText)
+                    .frame(minWidth: minWidth)
+                    .frame(height: 40)
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.text)
+                    ).background(
+                        Capsule()
+                            .fill(Color.text)
+                    )
+            }
+        }
+        
+        //MARK:-
         struct DestructiveAction: ViewModifier {
             
             func body(content: Content) -> some View {
