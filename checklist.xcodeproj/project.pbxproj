@@ -136,6 +136,9 @@
 		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
 		FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */; };
 		FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A70F2263CA678001B81E7 /* MyTextField.swift */; };
+		FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = FEA82FC426A377FB0008F34A /* ActivityIndicatorView */; };
+		FEA82FC726A37CAB0008F34A /* UpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA82FC626A37CAB0008F34A /* UpgradeView.swift */; };
+		FEA82FC926A37D500008F34A /* UpgradeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA82FC826A37D500008F34A /* UpgradeViewModel.swift */; };
 		FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */; };
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
 		FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A32641DEB300594478 /* ScheduleDataModel.swift */; };
@@ -158,6 +161,7 @@
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
 		FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE7E308265924B900FED76C /* CheckboxViewModel.swift */; };
+		FEF4034526A4159F00AC2C7A /* Modifier+Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEF4034426A4159F00AC2C7A /* Modifier+Upgrade.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -319,6 +323,9 @@
 		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
 		FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyListView.swift; sourceTree = "<group>"; };
 		FE9A70F2263CA678001B81E7 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
+		FEA82FC226A2D1A50008F34A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		FEA82FC626A37CAB0008F34A /* UpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeView.swift; sourceTree = "<group>"; };
+		FEA82FC826A37D500008F34A /* UpgradeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeViewModel.swift; sourceTree = "<group>"; };
 		FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Settings.swift"; sourceTree = "<group>"; };
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		FEA913A32641DEB300594478 /* ScheduleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataModel.swift; sourceTree = "<group>"; };
@@ -340,6 +347,7 @@
 		FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewModel.swift; sourceTree = "<group>"; };
 		FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewState.swift; sourceTree = "<group>"; };
 		FEE7E308265924B900FED76C /* CheckboxViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxViewModel.swift; sourceTree = "<group>"; };
+		FEF4034426A4159F00AC2C7A /* Modifier+Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Upgrade.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +356,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
+				FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */,
 				FED2DA6126892DF00023E525 /* SwiftyStoreKit in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
@@ -683,6 +692,7 @@
 			isa = PBXGroup;
 			children = (
 				DD727A4C24F2722A004089B6 /* SettingsViewModel.swift */,
+				FEA82FC826A37D500008F34A /* UpgradeViewModel.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -784,6 +794,7 @@
 				DDFF95DC260949390084DBF4 /* Modifier+Template.swift */,
 				FEA8B5142628DF4C0084909E /* Modifier+Settings.swift */,
 				FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */,
+				FEF4034426A4159F00AC2C7A /* Modifier+Upgrade.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -833,6 +844,7 @@
 			isa = PBXGroup;
 			children = (
 				DD727A4824F271E1004089B6 /* SettingsView.swift */,
+				FEA82FC626A37CAB0008F34A /* UpgradeView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -894,6 +906,7 @@
 				DD2D91BA2532FD420032779C /* XCGLogger */,
 				DD84DCAB253E1C5E00A39DBB /* SnapKit */,
 				FED2DA6026892DF00023E525 /* SwiftyStoreKit */,
+				FEA82FC426A377FB0008F34A /* ActivityIndicatorView */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -972,6 +985,7 @@
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */,
 				FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
+				FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -1040,8 +1054,10 @@
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
 				DD2D91742530A7260032779C /* NavBarChipButton.swift in Sources */,
 				DD74DA6C25213FCB004587FC /* CoreDataManager+Checklists.swift in Sources */,
+				FEF4034526A4159F00AC2C7A /* Modifier+Upgrade.swift in Sources */,
 				DD52A64C24E1A00200A9A1FC /* DashboardViewModel.swift in Sources */,
 				DD7AF2B224EDC9C60051CD16 /* ChecklistItemsView.swift in Sources */,
+				FEA82FC726A37CAB0008F34A /* UpgradeView.swift in Sources */,
 				DDE08AB825DB1DD900F00D5A /* Color+Extension.swift in Sources */,
 				DD8BFC8825DF1C0700338624 /* HostingController.swift in Sources */,
 				DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */,
@@ -1074,6 +1090,7 @@
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
 				FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */,
 				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
+				FEA82FC926A37D500008F34A /* UpgradeViewModel.swift in Sources */,
 				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
 				FE7CFE7C268E54AE004A11DE /* DisabledPurchaseManager.swift in Sources */,
@@ -1190,6 +1207,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				DD52A63324E19EF100A9A1FC /* Base */,
+				FEA82FC226A2D1A50008F34A /* en */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1667,6 +1685,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.7;
+			};
+		};
 		FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
@@ -1712,6 +1738,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		FEA82FC426A377FB0008F34A /* ActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
+			productName = ActivityIndicatorView;
 		};
 		FED2DA6026892DF00023E525 /* SwiftyStoreKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -34,7 +34,7 @@ struct SettingsView: View {
                         HStack {
                             Spacer()
                             Button("Upgrade") {
-                                
+                                viewModel.onUpgradeTapped.send()
                             }.modifier(Modifier.Button.MainAction())
                             Spacer()
                         }
@@ -76,6 +76,9 @@ struct SettingsView: View {
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
+        .sheet(isPresented: $viewModel.isSheetVisible) {
+            viewModel.sheet
+        }
     }
 }
 

@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "ActivityIndicatorView",
+        "repositoryURL": "https://github.com/exyte/ActivityIndicatorView.git",
+        "state": {
+          "branch": null,
+          "revision": "04be6321d482f6bce9e3c9412e419831d88a5327",
+          "version": "0.0.7"
+        }
+      },
+      {
         "package": "AppCenter",
         "repositoryURL": "https://github.com/microsoft/appcenter-sdk-apple.git",
         "state": {

@@ -7,10 +7,11 @@
 //
 
 import SwiftUI
+import ActivityIndicatorView
 
 struct InitializeAppView: View {
     
-    let viewModel: InitializeAppViewModel
+    @StateObject var viewModel: InitializeAppViewModel
     
     var body: some View {
         VStack {
@@ -19,7 +20,10 @@ struct InitializeAppView: View {
                     .foregroundColor(.red)
             }
             if viewModel.isLoading {
+                ActivityIndicatorView(isVisible: self.$viewModel.isLoading, type: .growingArc(.firstAccent))
+                    .frame(width: 50, height: 50, alignment: .center)
                 Text("Loading ...")
+                    .padding(.top)
             }
         }
     }

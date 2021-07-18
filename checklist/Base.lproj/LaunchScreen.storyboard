@@ -1,51 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="XRv-A4-q1W">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
-        <scene sceneID="EHf-IW-A2E">
+        <scene sceneID="npI-oX-9VQ">
             <objects>
-                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                <viewController id="XRv-A4-q1W" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Kdo-EF-Tpu">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="rLw-eG-HyI">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chcklst-logo" translatesAutoresizingMaskIntoConstraints="NO" id="ZMM-Fm-Ehu">
+                                <rect key="frame" x="41.5" y="280.5" width="331" height="345"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="TEST" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="50N-Jb-Kk1">
-                                <rect key="frame" x="175" y="594" width="64" height="33"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                <color key="textColor" systemColor="systemRedColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="9bQ-yX-jzb"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="0WV-M9-oee"/>
+                        <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="rLw-eG-HyI" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="1M7-Sh-ECf"/>
-                            <constraint firstItem="9bQ-yX-jzb" firstAttribute="trailing" secondItem="rLw-eG-HyI" secondAttribute="trailing" id="Irm-Y6-K7l"/>
-                            <constraint firstItem="rLw-eG-HyI" firstAttribute="leading" secondItem="9bQ-yX-jzb" secondAttribute="leading" id="VqC-mS-gfo"/>
-                            <constraint firstAttribute="bottom" secondItem="rLw-eG-HyI" secondAttribute="bottom" id="t8O-sI-zWV"/>
+                            <constraint firstItem="ZMM-Fm-Ehu" firstAttribute="centerX" secondItem="0WV-M9-oee" secondAttribute="centerX" id="MkK-Ol-Ub4"/>
+                            <constraint firstItem="ZMM-Fm-Ehu" firstAttribute="centerY" secondItem="0WV-M9-oee" secondAttribute="centerY" id="Zkd-O2-4ze"/>
+                            <constraint firstItem="ZMM-Fm-Ehu" firstAttribute="width" secondItem="Kdo-EF-Tpu" secondAttribute="width" multiplier="0.8" id="ddg-E2-kjw"/>
                         </constraints>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3R6-F4-PVr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="36" y="560"/>
+            <point key="canvasLocation" x="-332" y="158"/>
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="1125" height="2436"/>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
+        <image name="chcklst-logo" width="459" height="345"/>
     </resources>
 </document>

@@ -12,6 +12,7 @@ import StoreKit
 struct ProductDataModel: Identifiable {
     
     let id: String
+    let title: String
     let localizedPrice: String
     
     init?(product: SKProduct) {
@@ -19,11 +20,13 @@ struct ProductDataModel: Identifiable {
             return nil
         }
         self.id = product.productIdentifier
+        self.title = product.localizedTitle
         self.localizedPrice = price
     }
     
-    init(id: String, localizedPrice: String) {
+    init(id: String, title: String, localizedPrice: String) {
         self.id = id
+        self.title = title
         self.localizedPrice = localizedPrice
     }
 }

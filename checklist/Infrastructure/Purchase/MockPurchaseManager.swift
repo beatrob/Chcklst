@@ -22,7 +22,7 @@ class MockPurchaseManager: PurchaseManager {
     func completeTransactions() { }
     
     func getMainProduct() -> Promise<ProductDataModel> {
-        .value(.init(id: "1234", localizedPrice: "3.99$"))
+        .value(.init(id: "1234", title: "Chcklist Plus", localizedPrice: "3.99$"))
     }
     
     func purchaseProduct(_ product: ProductDataModel) -> Promise<Void> {
