@@ -9,10 +9,11 @@
 import Foundation
 import SwiftyStoreKit
 import PromiseKit
+import Combine
 
 protocol PurchaseManager {
     var isPurchaseEnabled: Bool { get }
-    var isMainProductPurchased: Bool { get }
+    var mainProductPurchasedPublisher: AnyPublisher<Bool, Never> { get }
     func completeTransactions()
     func getMainProduct() -> Promise<ProductDataModel>
     func purchaseProduct(_ product: ProductDataModel) -> Promise<Void>
@@ -45,15 +46,24 @@ class PurchaseManagerImpl: PurchaseManager {
         }
     }
     
-    private let mainProductId = "com.robertkonczi.checklist.plus"
-    private let purchaseKey = "kPurchaseKey"
+    private static let mainProductId = "com.robertkonczi.checklist.plus"
+    private static let purchaseKey = "kPurchaseKey"
+    private let mainProductPuchasedSubject = CurrentValueSubject<Bool, Never>(
+        UserDefaults.standard.bool(forKey: PurchaseManagerImpl.purchaseKey)
+    )
+    private var cancellables = Set<AnyCancellable>()
     
     var isPurchaseEnabled: Bool {
         Bundle.main.restrictionsEnabled
     }
     
-    var isMainProductPurchased: Bool {
-        UserDefaults.standard.bool(forKey: purchaseKey)
+    let mainProductPurchasedPublisher: AnyPublisher<Bool, Never>
+    
+    init() {
+        mainProductPurchasedPublisher = mainProductPuchasedSubject.eraseToAnyPublisher()
+        mainProductPurchasedPublisher.dropFirst().sink { isPurchased in
+            UserDefaults.standard.set(isPurchased, forKey: Self.purchaseKey)
+        }.store(in: &cancellables)
     }
     
     func completeTransactions() {
@@ -73,13 +83,13 @@ class PurchaseManagerImpl: PurchaseManager {
     
     func getMainProduct() -> Promise<ProductDataModel> {
         Promise { resolver in
-            SwiftyStoreKit.retrieveProductsInfo([mainProductId]) { result in
+            SwiftyStoreKit.retrieveProductsInfo([Self.mainProductId]) { result in
                 guard
                     let product = result.retrievedProducts.first,
                     result.error == nil,
                     result.invalidProductIDs.isEmpty
                 else {
-                    result.error?.log(message: "Failed to retrieve product \(self.mainProductId)")
+                    result.error?.log(message: "Failed to retrieve product \(Self.mainProductId)")
                     resolver.reject(PurchaseError.retrieveFailed)
                     return
                 }
@@ -97,7 +107,7 @@ class PurchaseManagerImpl: PurchaseManager {
             SwiftyStoreKit.purchaseProduct(product.id) { result in
                 switch result {
                 case .success:
-                    UserDefaults.standard.set(true, forKey: self.purchaseKey)
+                    self.mainProductPuchasedSubject.send(true)
                     resolver.fulfill(())
                 case .error(let error):
                     error.log(message: "Puchase failed")

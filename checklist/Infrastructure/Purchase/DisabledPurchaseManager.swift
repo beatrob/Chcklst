@@ -8,11 +8,12 @@
 
 import Foundation
 import PromiseKit
+import Combine
 
 class DisabledPurchaseManager: PurchaseManager {
     
-    var isMainProductPurchased: Bool {
-        false
+    var mainProductPurchasedPublisher: AnyPublisher<Bool, Never> {
+        CurrentValueSubject<Bool, Never>(false).eraseToAnyPublisher()
     }
     
     var isPurchaseEnabled: Bool {

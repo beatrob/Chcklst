@@ -8,8 +8,13 @@
 
 import Foundation
 import PromiseKit
+import Combine
 
 class MockPurchaseManager: PurchaseManager {
+    
+    var mainProductPurchasedPublisher: AnyPublisher<Bool, Never> {
+        CurrentValueSubject<Bool, Never>(false).eraseToAnyPublisher()
+    }
     
     var isMainProductPurchased: Bool {
         false

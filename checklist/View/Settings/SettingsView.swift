@@ -29,19 +29,29 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 0) {
                     
                     if viewModel.isInAppEnabled {
-                        Text("CHCKLST+").modifier(Modifier.Settings.ItemTitle())
+                        Text("Chcklst+").modifier(Modifier.Settings.ItemTitle())
                             .padding()
-                        HStack {
-                            Spacer()
-                            Button("Upgrade") {
-                                viewModel.onUpgradeTapped.send()
-                            }.modifier(Modifier.Button.MainAction())
-                            Spacer()
+                        if viewModel.isUpgradeComplete {
+                            HStack {
+                                Spacer()
+                                Text("You're all set!\nThank you for using Chcklist! 🙂")
+                                    .modifier(Modifier.Settings.ItemDescription())
+                                    .multilineTextAlignment(.center)
+                                Spacer()
+                            }
+                        } else {
+                            HStack {
+                                Spacer()
+                                Button("Upgrade") {
+                                    viewModel.onUpgradeTapped.send()
+                                }.modifier(Modifier.Button.MainAction())
+                                Spacer()
+                            }
+                            .padding(.bottom)
+                            Text("Upgrade to CHCKLST+ to get unlimited checklists, templates & schedules.")
+                                .modifier(Modifier.Settings.ItemDescription())
+                                .padding(.horizontal)
                         }
-                        .padding(.bottom)
-                        Text("Upgrade to CHCKLST+ to get unlimited checklists, templates & schedules.")
-                            .modifier(Modifier.Settings.ItemDescription())
-                            .padding(.horizontal)
                         SeparatorView()
                     }
                     
@@ -88,13 +98,15 @@ struct SettingsView_Previews: PreviewProvider {
             SettingsView(
                 viewModel: SettingsViewModel(
                     navigationHelper: NavigationHelper(),
-                    restrictionManager: MockRestrictionManager()
+                    restrictionManager: MockRestrictionManager(),
+                    purchaseManager: MockPurchaseManager()
                 )
             )
             SettingsView(
                 viewModel: SettingsViewModel(
                     navigationHelper: NavigationHelper(),
-                    restrictionManager: MockRestrictionManager()
+                    restrictionManager: MockRestrictionManager(),
+                    purchaseManager: MockPurchaseManager()
                 )
             )
                 .preferredColorScheme(.dark)

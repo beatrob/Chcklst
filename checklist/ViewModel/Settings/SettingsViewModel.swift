@@ -27,12 +27,17 @@ class SettingsViewModel: ObservableObject {
         return viewModel
     }()
     @Published var isSheetVisible = false
+    @Published var isUpgradeComplete = false
     
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
     
-    init(navigationHelper: NavigationHelper, restrictionManager: RestrictionManager) {
+    init(
+        navigationHelper: NavigationHelper,
+        restrictionManager: RestrictionManager,
+        purchaseManager: PurchaseManager
+    ) {
         isInAppEnabled =  restrictionManager.restrictionsEnabled
         onMyTemplates.sink {
             navigationHelper.navigateToMyTemplates(source: .settings)
@@ -45,5 +50,9 @@ class SettingsViewModel: ObservableObject {
             self.sheet = AnyView(UpgradeView(viewModel: self.upgradeViewModel))
             self.isSheetVisible = true
         }.store(in: &cancellables)
+        
+        purchaseManager.mainProductPurchasedPublisher
+            .assign(to: \.isUpgradeComplete, on: self)
+            .store(in: &cancellables)
     }
 }
