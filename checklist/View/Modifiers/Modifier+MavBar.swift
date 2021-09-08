@@ -18,15 +18,13 @@ extension Modifier {
             let isExpanded: Bool
             
             enum Height: CGFloat {
-                case normal = 90
+                case normal = 58 // 90
                 case expanded = 145
             }
             
             func body(content: Content) -> some View {
                 content
-                    .frame(height: isExpanded ? Height.expanded.rawValue : Height.normal.rawValue)
                     .background(Color.menuBackground)
-                    .ignoresSafeArea()
             }
         }
         

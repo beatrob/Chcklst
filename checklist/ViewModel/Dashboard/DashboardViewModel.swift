@@ -15,7 +15,16 @@ class DashboardViewModel: ObservableObject {
     
     @Published var checklistCells: [DashboardChecklistCellViewModel] = [] {
         didSet {
-            isEmptyListViewVisible = checklistCells.isEmpty
+            if checklistCells.isEmpty {
+                if checklistFilterAndSort.isSearching {
+                    isNoSearchResultsVisible = true
+                } else {
+                    isEmptyListViewVisible = true
+                }
+            } else {
+                isNoSearchResultsVisible = false
+                isEmptyListViewVisible = false
+            }
         }
     }
     @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
@@ -23,6 +32,7 @@ class DashboardViewModel: ObservableObject {
     @Published var isSidemenuVisible = false
     @Published var isSheetVisible = false
     @Published var isEmptyListViewVisible = false
+    @Published var isNoSearchResultsVisible = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }

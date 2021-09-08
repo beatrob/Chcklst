@@ -40,14 +40,9 @@ struct DashboardNavBar: View {
     
     var searchBar: some View {
         VStack(alignment: .leading) {
-            Spacer()
-            if viewModel.isSearchTitleVisible {
-                Text("Search for checklists")
-                    .modifier(Modifier.NavBar.Title())
-            }
             HStack {
                 TextField(
-                    "Title, description or item",
+                    "Search for title, description or item",
                     text: $viewModel.searchText) { didBegin in
                     viewModel.isSearchTitleVisible = !didBegin
                 }
@@ -60,7 +55,6 @@ struct DashboardNavBar: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            Spacer()
             HStack {
                 if viewModel.isSearchBarVisible {
                     searchBar
@@ -68,8 +62,8 @@ struct DashboardNavBar: View {
                     navBar
                 }
             }
+            .padding(.bottom, 10)
             .padding(.horizontal)
-            .padding(.bottom)
         }
         .modifier(Modifier.NavBar.NavBar(isExpanded: viewModel.isSearchBarVisible)
         )
@@ -80,7 +74,7 @@ struct DashboardNavigationBar_Previews: PreviewProvider {
     
     static let viewModel: DashboardNavBarViewModel = {
         let viewModel = DashboardNavBarViewModel()
-        viewModel.isSearchBarVisible = true
+        viewModel.isSearchBarVisible = false
         return viewModel
     }()
     

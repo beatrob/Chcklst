@@ -12,8 +12,8 @@ import Combine
 struct EmptyListView: View {
     
     let message: String
-    let actionTitle: String
-    let onActionTappedSubject: EmptySubject
+    let actionTitle: String?
+    let onActionTappedSubject: EmptySubject?
     
     var body: some View {
         VStack(alignment: .center) {
@@ -22,15 +22,18 @@ struct EmptyListView: View {
                 .modifier(Modifier.Checklist.Description())
                 .multilineTextAlignment(.center)
                 .padding()
-            Button(
-                action: {
-                    onActionTappedSubject.send()
-                }, label: {
-                    Text(actionTitle)
-                }
-            )
-            .padding()
-            .modifier(Modifier.Button.MainAction())
+            if let actionTitle = self.actionTitle,
+               let tapSubject = self.onActionTappedSubject {
+                Button(
+                    action: {
+                        tapSubject.send()
+                    }, label: {
+                        Text(actionTitle)
+                    }
+                )
+                .padding()
+                .modifier(Modifier.Button.MainAction())
+            }
             Spacer()
             Spacer()
         }

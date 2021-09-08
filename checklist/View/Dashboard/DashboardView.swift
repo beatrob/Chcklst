@@ -25,6 +25,7 @@ struct DashboardView: View {
                 NavigationLinks()
 
                 ZStack {
+                    Color.menuBackground.ignoresSafeArea()
                     VStack(spacing: 0) {
                         DashboardNavBar(viewModel: viewModel.navBarViewModel)
                         if viewModel.isEmptyListViewVisible {
@@ -32,6 +33,12 @@ struct DashboardView: View {
                                 message: "Your checklist is empty",
                                 actionTitle: "Create new",
                                 onActionTappedSubject: viewModel.onCreateNewChecklist
+                            )
+                        } else if viewModel.isNoSearchResultsVisible {
+                            EmptyListView(
+                                message: "No results found",
+                                actionTitle: nil,
+                                onActionTappedSubject: nil
                             )
                         } else {
                             ScrollView {
@@ -47,19 +54,17 @@ struct DashboardView: View {
                         }
                     }
                     .background(Color.mainBackground)
-                    .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
-                    .ignoresSafeArea()
                     
                     if viewModel.isSidemenuVisible {
                         Color.mainBackground.opacity(viewModel.isSidemenuVisible ? 0.6 : 0)
                             .ignoresSafeArea()
-                            .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
                             .onTapGesture {
                                 viewModel.onDarkOverlayTapped.send()
                             }
                     }
-                    
                 }
+                .ignoresSafeArea(.container, edges: .bottom)
+                .offset(viewModel.isSidemenuVisible ? .init(width: sideMenuWidth, height: 0) : .zero)
             }
             .navigationBarHidden(true)
         }

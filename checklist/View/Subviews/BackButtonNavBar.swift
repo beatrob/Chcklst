@@ -26,7 +26,7 @@ struct BackButtonNavBar: View {
                 Text(viewModel.title).modifier(Modifier.Menu.Section())
             }
             .padding(.horizontal)
-            .padding(.bottom)
+            .padding(.bottom, 7)
         }
         .modifier(Modifier.NavBar.NavBar(isExpanded: false))
     }

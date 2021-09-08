@@ -16,6 +16,7 @@ protocol ChecklistFilterAndSort: AnyObject {
     var sort: SortDataModel { get set }
     var filter: FilterDataModel? { get set }
     var search: String? { get set }
+    var isSearching: Bool { get }
 }
 
 class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
@@ -49,6 +50,8 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
             updateFilterAndSort()
         }
     }
+    
+    var isSearching: Bool { search != nil }
     
     private var cancellables = Set<AnyCancellable>()
     

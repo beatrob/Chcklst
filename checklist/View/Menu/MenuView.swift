@@ -15,64 +15,66 @@ struct MenuView: View {
     var body: some View {
         ZStack {
             Color.checklistBackground
-            VStack(alignment: .center) {
-                HStack {
-                    Image("chcklst-logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 45)
-                        .padding(.leading)
-                        .padding(.top, 45)
-                        .padding(.bottom, 20)
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .center) {
+                    HStack {
+                        Image("chcklst-logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 45)
+                            .padding(.leading)
+                            .padding(.top, 45)
+                            .padding(.bottom, 20)
+                        Spacer()
+                    }
+                    HStack {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .modifier(Modifier.Menu.Section())
+                            .padding(.leading)
+                        Text("Sort by")
+                            .modifier(Modifier.Menu.Section())
+                        Spacer()
+                    }
+                    ForEach(viewModel.sortItems) { filterItem in
+                        MenuItemView(viewModel: filterItem)
+                    }
+                    HStack {
+                        Image(systemName: "eye")
+                            .modifier(Modifier.Menu.Section())
+                            .padding(.leading)
+                        Text("Filter by")
+                            .modifier(Modifier.Menu.Section())
+                        Spacer()
+                    }
+                    .padding(.vertical)
+                    ForEach(viewModel.filterItems) { filterItem in
+                        MenuItemView(viewModel: filterItem)
+                    }
                     Spacer()
+                    HStack {
+                        MenuItemView(viewModel: viewModel.schedules)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    HStack {
+                        MenuItemView(viewModel: viewModel.myTemplates)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    HStack {
+                        MenuItemView(viewModel: viewModel.settings)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    HStack {
+                        MenuItemView(viewModel: viewModel.about)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                    .padding(.bottom, 30)
                 }
-                HStack {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .modifier(Modifier.Menu.Section())
-                        .padding(.leading)
-                    Text("Sort by")
-                        .modifier(Modifier.Menu.Section())
-                    Spacer()
-                }
-                ForEach(viewModel.sortItems) { filterItem in
-                    MenuItemView(viewModel: filterItem)
-                }
-                HStack {
-                    Image(systemName: "eye")
-                        .modifier(Modifier.Menu.Section())
-                        .padding(.leading)
-                    Text("Filter by")
-                        .modifier(Modifier.Menu.Section())
-                    Spacer()
-                }
-                .padding(.vertical)
-                ForEach(viewModel.filterItems) { filterItem in
-                    MenuItemView(viewModel: filterItem)
-                }
-                Spacer()
-                HStack {
-                    MenuItemView(viewModel: viewModel.schedules)
-                        .padding(.leading)
-                    Spacer()
-                }
-                HStack {
-                    MenuItemView(viewModel: viewModel.myTemplates)
-                        .padding(.leading)
-                    Spacer()
-                }
-                HStack {
-                    MenuItemView(viewModel: viewModel.settings)
-                        .padding(.leading)
-                    Spacer()
-                }
-                HStack {
-                    MenuItemView(viewModel: viewModel.about)
-                        .padding(.leading)
-                    Spacer()
-                }
-                .padding(.bottom, 30)
+                .ignoresSafeArea()
             }
-            .ignoresSafeArea()
         }.ignoresSafeArea()
     }
 }
