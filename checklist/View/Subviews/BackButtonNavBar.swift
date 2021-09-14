@@ -14,7 +14,6 @@ struct BackButtonNavBar: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            Spacer()
             ZStack {
                 HStack(spacing: 15) {
                     NavBarChipButton(viewModel: viewModel.backButton)

@@ -15,7 +15,7 @@ struct MyTemplatesView: View {
     
     var body: some View {
         ZStack {
-            Color.checklistBackground
+            Color.menuBackground.ignoresSafeArea()
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)
                 if viewModel.isEmptyViewVisible {
@@ -44,8 +44,9 @@ struct MyTemplatesView: View {
                     }
                 }
             }
+            .background(Color.checklistBackground)
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.isSheetVisible) {
             self.viewModel.sheetView

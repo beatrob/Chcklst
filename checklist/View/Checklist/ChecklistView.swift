@@ -19,6 +19,7 @@ struct ChecklistView: View {
         }
         return GeometryReader { geometry in
             ZStack {
+                Color.menuBackground.ignoresSafeArea()
                 NavigationLink(
                     destination: viewModel.navigationDestinationView,
                     isActive: $viewModel.isNavigationLinkActive,
@@ -122,7 +123,7 @@ struct ChecklistView: View {
                 .sheet(isPresented: self.$viewModel.sheetVisibility.isVisible) {
                     viewModel.sheetVisibility.view
                 }
-            }.ignoresSafeArea()
+            }.ignoresSafeArea(.container, edges: .bottom)
         }
     }
 }
