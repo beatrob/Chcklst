@@ -46,7 +46,8 @@ struct DashboardNavBar: View {
                     text: $viewModel.searchText) { didBegin in
                     viewModel.isSearchTitleVisible = !didBegin
                 }
-                .modifier(Modifier.NavBar.Subtitle())
+                .modifier(Modifier.NavBar.SearchTextField())
+                
                 Spacer()
                 NavBarChipButton(viewModel: viewModel.closeSearchButtonViewModel)
             }
@@ -74,7 +75,7 @@ struct DashboardNavigationBar_Previews: PreviewProvider {
     
     static let viewModel: DashboardNavBarViewModel = {
         let viewModel = DashboardNavBarViewModel()
-        viewModel.isSearchBarVisible = false
+        viewModel.isSearchBarVisible = true
         return viewModel
     }()
     

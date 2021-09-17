@@ -18,8 +18,11 @@ class SelectTemplateViewModel: ObservableObject {
             isEmptyListViewVisible = templates.isEmpty
         }
     }
+    
     @Published var isDestionationViewVisible = false
     @Published var isEmptyListViewVisible = false
+    @Published var title: String?
+    @Published var descriptionText: String?
     let onTemplateTapped = TemplatePassthroughSubject()
     let onGotoDashboard = EmptySubject()
     var desitnationView = AnyView.empty

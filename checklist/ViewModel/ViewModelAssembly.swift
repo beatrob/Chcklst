@@ -37,6 +37,7 @@ class ViewModelAssembly: Assembly {
         )
         container.autoregister(InitializeAppViewModel.self, initializer: InitializeAppViewModel.init)
         container.autoregister(SelectTemplateViewModel.self, initializer: SelectTemplateViewModel.init)
+            .inObjectScope(.transient)
         container.autoregister(MenuViewModel.self, initializer: MenuViewModel.init)
         container.autoregister(DashboardNavBarViewModel.self, initializer: DashboardNavBarViewModel.init)
         container.autoregister(SchedulesViewModel.self, initializer: SchedulesViewModel.init)

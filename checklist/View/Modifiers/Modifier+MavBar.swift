@@ -37,6 +37,17 @@ extension Modifier {
             }
         }
         
+        struct SearchTextField: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.item.font)
+                    .foregroundColor(.firstAccent)
+                    .padding(.horizontal)
+                    .overlay(Capsule().stroke(Color.firstAccent))
+            }
+        }
+        
         struct Title: ViewModifier {
             
             func body(content: Content) -> some View {

@@ -14,16 +14,19 @@ struct ChecklistItemView: View, Equatable {
         lhs.viewModel === rhs.viewModel
     }
     
-    
     @ObservedObject var viewModel: ChecklistItemViewModel
+    @State var isTapable: Bool = true
+    
     @State private var isEditing: Bool = false
     @State private var desiredHeight: CGFloat = 40
     
     var body: some View {
         HStack {
             Image(systemName: viewModel.isDone ? "checkmark.circle" : "circle")
-                .onTapGesture {
-                    self.viewModel.onCheckMarkTapped.send()
+                .if(isTapable) {
+                    $0.onTapGesture {
+                        self.viewModel.onCheckMarkTapped.send()
+                    }
                 }
             MultilineTextView(
                 text: $viewModel.name,
@@ -36,9 +39,11 @@ struct ChecklistItemView: View, Equatable {
             )
             .frame(height: desiredHeight)
             .modifier(Modifier.Checklist.TextField(isEditable: viewModel.isEditable))
-            .onTapGesture {
-                if self.viewModel.isEditable {
-                    self.isEditing.toggle()
+            .if(isTapable) {
+                $0.onTapGesture {
+                    if self.viewModel.isEditable {
+                        self.isEditing.toggle()
+                    }
                 }
             }
         }

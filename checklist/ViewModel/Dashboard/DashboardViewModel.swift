@@ -150,7 +150,10 @@ class DashboardViewModel: ObservableObject {
                     self.showCreateNewChecklist()
                 },
                 onNewFromTemplate: {
-                    self.sheet = .selectTemplate(viewModel: self.selectTemplateVM)
+                    let viewModel = self.selectTemplateVM
+                    viewModel.title = "Create Checklist"
+                    viewModel.descriptionText = "Select a Template to create a new Checklist"
+                    self.sheet = .selectTemplate(viewModel: viewModel)
                 },
                 onCreateSchedule: self.createScheduleSubject
             )

@@ -55,16 +55,16 @@ enum DashboardActionSheet {
             )
         case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateSchedule):
             return ActionSheet(
-                title: Text("Add checklist"),
+                title: Text("CREATE NEW"),
                 message: nil,
                 buttons: [
-                    .default(Text("Create new")) {
+                    .default(Text("Checklist")) {
                         onNewChecklist()
                     },
-                    .default(Text("Create from template")) {
+                    .default(Text("Checklist from Template")) {
                         onNewFromTemplate()
                     },
-                    .default(Text("Create new schedule")) {
+                    .default(Text("Schedule")) {
                         onCreateSchedule.send()
                     },
                     .cancel()

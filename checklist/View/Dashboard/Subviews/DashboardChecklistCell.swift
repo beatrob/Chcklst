@@ -19,12 +19,6 @@ struct DashboardChecklistCell: View {
                 HStack {
                     Text(viewModel.title)
                         .modifier(Modifier.Checklist.SmallTitle())
-                        .onTapGesture {
-                            viewModel.onTapped.send()
-                        }
-                        .onLongPressGesture {
-                            viewModel.onLongTapped.send()
-                        }
                     Spacer()
                     if viewModel.isReminderSet {
                         Image(systemName: "bell.badge")
@@ -36,7 +30,7 @@ struct DashboardChecklistCell: View {
                 .padding(.trailing)
                 HStack {
                     viewModel.firstUndoneItem.map {
-                        ChecklistItemView(viewModel: $0)
+                        ChecklistItemView(viewModel: $0, isTapable: false)
                     }
                     Spacer()
                 }
@@ -63,6 +57,10 @@ struct DashboardChecklistCell: View {
                     )
                     .offset(CGSize(width: 10.0, height: -13.0))
             }
+        }.onTapGesture {
+            viewModel.onTapped.send()
+        }.onLongPressGesture {
+            viewModel.onLongTapped.send()
         }
     }
 }

@@ -31,6 +31,8 @@ class CreateScheduleViewModel: ObservableObject {
         let onTemplateTappedSubject = TemplatePassthroughSubject()
         let presenterSubject = PassthroughSubject<AnyView?, Never>()
         let selectTemplateViewModel = AppContext.resolver.resolve(SelectTemplateViewModel.self)!
+        selectTemplateViewModel.title = "Create Schedule"
+        selectTemplateViewModel.descriptionText = "Select a Template to create a new Schedule"
         selectTemplateViewModel.set(
             onTemplateTappedSubscriber: AnySubscriber(onTemplateTappedSubject),
             destinationPublisher: presenterSubject.eraseToAnyPublisher()

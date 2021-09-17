@@ -34,6 +34,19 @@ struct SelectTemplateView: View {
                     .isDetailLink(false)
                     .hidden()
                     
+                    if let title = viewModel.title {
+                        Text(title)
+                            .modifier(Modifier.Template.SmallTitle())
+                            .padding()
+                    }
+                    
+                    if let description = viewModel.descriptionText {
+                        Text(description)
+                            .modifier(Modifier.Checklist.Description())
+                            .padding(.bottom)
+                            .padding(.horizontal)
+                    }
+                    
                     ForEach(
                         viewModel.templates,
                         id: \.id) { template in
@@ -56,11 +69,12 @@ struct SelectTemplateView: View {
 
 struct SelectTemplateView_Previews: PreviewProvider {
     static var previews: some View {
-        SelectTemplateView(
-            viewModel: .init(
-                checklistDataSource: MockChecklistDataSource(),
-                templateDataSource: MockTemplateDataSource()
-            )
+        let viewModel = SelectTemplateViewModel(
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource()
         )
+        viewModel.title = "Create Checklist"
+        viewModel.descriptionText = "Select a Template to create a new Checklist"
+        return SelectTemplateView(viewModel: viewModel)
     }
 }
