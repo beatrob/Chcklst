@@ -12,6 +12,7 @@ import PromiseKit
 
 class ScheduleDetailViewModel: ObservableObject {
     
+    @Published var viewTitle: String
     @Published var title: String
     @Published var description: String
     @Published var items: [ChecklistItemViewModel]
@@ -93,6 +94,8 @@ class ScheduleDetailViewModel: ObservableObject {
         } else {
             self.date = referenceDate
         }
+        
+        viewTitle = state.isCreate ? "Create Schedule" : ""
         
         self.navbarViewModel.backButton.didTap
             .subscribe(backButtonViewModel.didTapSubject)

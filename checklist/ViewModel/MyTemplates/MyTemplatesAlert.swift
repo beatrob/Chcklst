@@ -14,6 +14,7 @@ import SwiftUI
 enum MyTemplatesAlert {
     
     case createChecklistSucess(onGotoDashboard: EmptyCompletion)
+    case createScheduleSuccess(onGotoSchedules: EmptyCompletion)
     case confirmDelete(onConfirm: EmptyCompletion)
     case none
     
@@ -21,8 +22,14 @@ enum MyTemplatesAlert {
         switch self {
         case .createChecklistSucess(let onGotoDashboard):
             return Alert(
-                title: Text("New checklist created"),
+                title: Text("New Checklist created"),
                 primaryButton: .default(Text("Go to Dashboard"), action: onGotoDashboard),
+                secondaryButton: .cancel()
+            )
+        case .createScheduleSuccess(let onGotoSchedules):
+            return Alert(
+                title: Text("New Schedule created"),
+                primaryButton: .default(Text("Go to Schedules"), action: onGotoSchedules),
                 secondaryButton: .cancel()
             )
         case .confirmDelete(let onConfirm):

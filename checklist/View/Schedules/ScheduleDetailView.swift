@@ -27,6 +27,9 @@ struct ScheduleDetailView: View {
                         HStack {
                             NavBarChipButton(viewModel: viewModel.backButtonViewModel)
                             Spacer()
+                            Text(viewModel.viewTitle)
+                                .modifier(Modifier.Template.SmallTitle())
+                            Spacer()
                         }.padding()
                     }
                     MultilineTextView(

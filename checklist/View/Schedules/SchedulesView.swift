@@ -21,7 +21,7 @@ struct SchedulesView: View {
                 label: { EmptyView() }
             ).hidden()
             
-            Color.checklistBackground
+            Color.menuBackground.ignoresSafeArea()
             
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)
@@ -50,8 +50,9 @@ struct SchedulesView: View {
                     }
                 }
             }
+            .background(Color.checklistBackground)
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.isSheetPresented) {
             viewModel.sheet

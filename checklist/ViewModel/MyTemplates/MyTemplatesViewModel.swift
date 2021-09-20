@@ -23,6 +23,8 @@ class MyTemplatesViewModel: ObservableObject {
     @Published var isSheetVisible = false
     @Published var isAlertVisible = false
     @Published var isEmptyViewVisible = false
+    @Published var isNavigationLinkActive = false
+    @Published var navigationLinkDesitanation: AnyView = .empty
     
     private var actionSheet: MyTemplatesActionSheet = .none {
         didSet {
@@ -36,6 +38,7 @@ class MyTemplatesViewModel: ObservableObject {
         }
     }
     var cancellables =  Set<AnyCancellable>()
+    var createScheduleViewModel: CreateScheduleViewModel?
     
     var actionSheetView: ActionSheet { actionSheet.actionSheet }
     var sheetView = AnyView(EmptyView())
@@ -81,6 +84,9 @@ class MyTemplatesViewModel: ObservableObject {
                 template: template,
                 onCreateChecklist: {
                     self?.displayCreateChecklist(template)
+                },
+                onCreateSchedule: {
+                    self?.createSchedule(template)
                 },
                 onEdit: {
                     templateDataSource.selectedTemplate.send(template)
@@ -132,5 +138,37 @@ private extension MyTemplatesViewModel {
         )!
         sheetView = AnyView(ChecklistView(viewModel: viewModel))
         isSheetVisible = true
+    }
+    
+    func createSchedule(_ template: TemplateDataModel) {
+        
+        let viewModel = AppContext.resolver.resolve(
+            ScheduleDetailViewModel.self,
+            argument: ScheduleDetailViewState.create(template: template)
+        )!
+        let view = ScheduleDetailView(viewModel: viewModel)
+        sheetView = AnyView(view)
+        isSheetVisible = true
+        viewModel.didCreateSchedule.sink { [weak self] _ in
+            self?.isSheetVisible = false
+            DispatchQueue.main.async {
+                self?.alert = .createScheduleSuccess(onGotoSchedules: {
+                    DispatchQueue.main.async {
+                        self?.openSchedules()
+                    }
+                })
+            }
+        }.store(in: &cancellables)
+    }
+    
+    func openSchedules() {
+        let viewModel = AppContext.resolver.resolve(SchedulesViewModel.self)!
+        let view = SchedulesView(viewModel: viewModel)
+        viewModel.onBackTapped.sink { [weak self] in
+            self?.navigationLinkDesitanation = .empty
+            self?.isNavigationLinkActive = false
+        }.store(in: &cancellables)
+        self.navigationLinkDesitanation = AnyView(view)
+        self.isNavigationLinkActive = true
     }
 }

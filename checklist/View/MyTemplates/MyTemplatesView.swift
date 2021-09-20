@@ -15,6 +15,13 @@ struct MyTemplatesView: View {
     
     var body: some View {
         ZStack {
+            
+            NavigationLink(
+                destination: viewModel.navigationLinkDesitanation,
+                isActive: $viewModel.isNavigationLinkActive,
+                label: { EmptyView() }
+            ).hidden()
+            
             Color.menuBackground.ignoresSafeArea()
             VStack(spacing: 0) {
                 BackButtonNavBar(viewModel: viewModel.navBarViewModel)

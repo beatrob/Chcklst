@@ -14,6 +14,7 @@ enum MyTemplatesActionSheet {
     case templateActions(
         template: TemplateDataModel,
         onCreateChecklist: EmptyCompletion,
+        onCreateSchedule: EmptyCompletion,
         onEdit: EmptyCompletion,
         onDelete: EmptyCompletion
     )
@@ -31,6 +32,7 @@ enum MyTemplatesActionSheet {
         case .templateActions(
             let template,
             let onCreateChecklist,
+            let onCreateSchedule,
             let onEdit,
             let onDelete
             ):
@@ -38,8 +40,11 @@ enum MyTemplatesActionSheet {
                 title: Text(template.title),
                 message: nil,
                 buttons: [
-                    .default(Text("Create checklist")) {
+                    .default(Text("Create Checklist")) {
                         onCreateChecklist()
+                    },
+                    .default(Text("Create Schedule")) {
+                        onCreateSchedule()
                     },
                     .default(Text("Edit")) {
                         onEdit()

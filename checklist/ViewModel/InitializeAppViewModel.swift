@@ -27,6 +27,7 @@ class InitializeAppViewModel: ObservableObject {
         initializeAppDataSource: InitializeAppDataSource
     ) {
         coreDataManager.initialize()
+            .then { Self.logAppDirectoryPath() }
             .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { templateDataSource.loadAllTemplates().asVoid() }
@@ -38,5 +39,13 @@ class InitializeAppViewModel: ObservableObject {
             .catch { error in
                 self.errorMessage = error.localizedDescription
             }
+    }
+    
+    private static func logAppDirectoryPath() -> Promise<Void> {
+        let url = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask).last?.absoluteString ??
+            "Not Found!"
+        log(debug: "Documents Directory: \(url)")
+        return .value
     }
 }
