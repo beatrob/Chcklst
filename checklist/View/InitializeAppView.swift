@@ -34,6 +34,7 @@ struct InitializeAppView_Previews: PreviewProvider {
         InitializeAppView(
             viewModel: .init(
                 coreDataManager: MockCoreDataManager(),
+                appearanceManager: AppearanceManager(),
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
                 scheduleDataSource: MockScheduleDataSource(),

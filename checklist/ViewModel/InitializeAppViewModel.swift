@@ -21,12 +21,14 @@ class InitializeAppViewModel: ObservableObject {
     
     init(
         coreDataManager: CoreDataManager,
+        appearanceManager: AppearanceManager,
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         scheduleDataSource: ScheduleDataSource,
         initializeAppDataSource: InitializeAppDataSource
     ) {
         coreDataManager.initialize()
+            .then { appearanceManager.initializeAppAppearance() }
             .then { Self.logAppDirectoryPath() }
             .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }

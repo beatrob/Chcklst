@@ -28,6 +28,7 @@ class SettingsViewModel: ObservableObject {
     }()
     @Published var isSheetVisible = false
     @Published var isUpgradeComplete = false
+    @Published var apperance: Appearance
     
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
@@ -36,9 +37,11 @@ class SettingsViewModel: ObservableObject {
     init(
         navigationHelper: NavigationHelper,
         restrictionManager: RestrictionManager,
-        purchaseManager: PurchaseManager
+        purchaseManager: PurchaseManager,
+        appearanceManager: AppearanceManager
     ) {
-        isInAppEnabled =  restrictionManager.restrictionsEnabled
+        apperance = appearanceManager.getCurrentAppearance()
+        isInAppEnabled = restrictionManager.restrictionsEnabled
         onMyTemplates.sink {
             navigationHelper.navigateToMyTemplates(source: .settings)
         }.store(in: &cancellables)
@@ -54,5 +57,9 @@ class SettingsViewModel: ObservableObject {
         purchaseManager.mainProductPurchasedPublisher
             .assign(to: \.isUpgradeComplete, on: self)
             .store(in: &cancellables)
+        
+        $apperance.dropFirst().sink { apperance in
+            appearanceManager.setAppearance(apperance)
+        }.store(in: &cancellables)
     }
 }

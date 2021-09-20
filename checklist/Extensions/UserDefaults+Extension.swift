@@ -13,6 +13,7 @@ extension UserDefaults {
     
     enum Key: String {
         case isAppInitialized = "kIsAppInitialized"
+        case appearance = "kAppearance"
         
         var key: String { rawValue }
     }
@@ -23,5 +24,16 @@ extension UserDefaults {
     
     func setAppInitialized() {
         set(true, forKey: Key.isAppInitialized.key)
+    }
+    
+    var appearance: Appearance? {
+        guard let value = string(forKey: Key.appearance.key) else {
+            return nil
+        }
+        return Appearance(rawValue: value)
+    }
+    
+    func setAppearance(_ appearance: Appearance) {
+        set(appearance.rawValue, forKey: Key.appearance.key)
     }
 }

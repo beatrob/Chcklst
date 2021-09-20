@@ -23,5 +23,6 @@ class InfrastructureAssembly: Assembly {
         } else {
             container.autoregister(PurchaseManager.self, initializer: DisabledPurchaseManager.init).inObjectScope(.container)
         }
+        container.autoregister(AppearanceManager.self, initializer: AppearanceManager.init).inObjectScope(.container)
     }
 }

@@ -62,10 +62,10 @@ struct SettingsView: View {
                                 .padding()
                             Spacer()
                         }
-                        Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text(""), content: {
-                            Text("Automatic").tag(1)
-                            Text("Light").tag(2)
-                            Text("Dark").tag(2)
+                        Picker(selection: $viewModel.apperance, label: Text(""), content: {
+                            Text(Appearance.automatic.rawValue).tag(Appearance.automatic)
+                            Text(Appearance.light.rawValue).tag(Appearance.light)
+                            Text(Appearance.dark.rawValue).tag(Appearance.dark)
                         })
                         .pickerStyle(SegmentedPickerStyle())
                         .padding(.horizontal)
@@ -103,14 +103,16 @@ struct SettingsView_Previews: PreviewProvider {
                 viewModel: SettingsViewModel(
                     navigationHelper: NavigationHelper(),
                     restrictionManager: MockRestrictionManager(),
-                    purchaseManager: MockPurchaseManager()
+                    purchaseManager: MockPurchaseManager(),
+                    appearanceManager: AppearanceManager()
                 )
             )
             SettingsView(
                 viewModel: SettingsViewModel(
                     navigationHelper: NavigationHelper(),
                     restrictionManager: MockRestrictionManager(),
-                    purchaseManager: MockPurchaseManager()
+                    purchaseManager: MockPurchaseManager(),
+                    appearanceManager: AppearanceManager()
                 )
             )
             .preferredColorScheme(.dark)

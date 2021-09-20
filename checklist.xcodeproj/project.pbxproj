@@ -133,6 +133,7 @@
 		FE7CFE7A268E5472004A11DE /* MockPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */; };
 		FE7CFE7C268E54AE004A11DE /* DisabledPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */; };
 		FE7CFE7E268E59D3004A11DE /* ProductDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */; };
+		FE7F1BA926F933BC00BA2590 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7F1BA826F933BC00BA2590 /* AppearanceManager.swift */; };
 		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
 		FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */; };
 		FE9A70F3263CA678001B81E7 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A70F2263CA678001B81E7 /* MyTextField.swift */; };
@@ -320,6 +321,7 @@
 		FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPurchaseManager.swift; sourceTree = "<group>"; };
 		FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledPurchaseManager.swift; sourceTree = "<group>"; };
 		FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDataModel.swift; sourceTree = "<group>"; };
+		FE7F1BA826F933BC00BA2590 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
 		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
 		FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyListView.swift; sourceTree = "<group>"; };
 		FE9A70F2263CA678001B81E7 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
@@ -546,6 +548,7 @@
 		DD52A65024E1A1E200A9A1FC /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				FE7F1BA726F933A500BA2590 /* Settings */,
 				FE7CFE76268E540C004A11DE /* Purchase */,
 				FED2DA5C268926540023E525 /* Restrictions */,
 				DDD4FBDD251660F4002B7F50 /* Notifications */,
@@ -859,6 +862,14 @@
 			path = Purchase;
 			sourceTree = "<group>";
 		};
+		FE7F1BA726F933A500BA2590 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FE7F1BA826F933BC00BA2590 /* AppearanceManager.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		FEBE21452664335800CC001E /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1070,6 +1081,7 @@
 				DDD0053B25EAEBAA0098E27E /* Modifier+MavBar.swift in Sources */,
 				DD08D94E254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift in Sources */,
 				DD7AF2B424EDCED90051CD16 /* UIApplication+Extension.swift in Sources */,
+				FE7F1BA926F933BC00BA2590 /* AppearanceManager.swift in Sources */,
 				DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */,
 				DD2BD1AF24E96A60004B2060 /* Array+Extension.swift in Sources */,
 				DD90241F24FB94FB0084CDDC /* MyTemplateItemView.swift in Sources */,
