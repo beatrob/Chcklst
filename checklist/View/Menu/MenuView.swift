@@ -50,7 +50,7 @@ struct MenuView: View {
                     ForEach(viewModel.filterItems) { filterItem in
                         MenuItemView(viewModel: filterItem)
                     }
-                    Spacer()
+                    Spacer(minLength: 50)
                     HStack {
                         MenuItemView(viewModel: viewModel.schedules)
                             .padding(.leading)

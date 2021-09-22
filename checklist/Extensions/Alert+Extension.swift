@@ -29,9 +29,12 @@ extension Alert {
         Alert(title: Text("Please select a date in the future"))
     }
     
-    static func getEnablePushNotifications() -> Alert {
+    static func getEnablePushNotifications(
+        shouldEnableNotifications: Bool = true,
+        onCancel: (() -> Void)? = nil
+    ) -> Alert {
         Alert(
-            title: Text("Please enable push notification in the Settings app."),
+            title: Text("Please \(shouldEnableNotifications ? "enable" : "disable") push notification in the Settings app."),
             primaryButton: .default(
                 Text("Go to Settings"),
                 action: {
@@ -41,7 +44,7 @@ extension Alert {
                     UIApplication.shared.open(settingsUrl)
                 }
             ),
-            secondaryButton: .cancel()
+            secondaryButton: .cancel(onCancel)
         )
     }
     

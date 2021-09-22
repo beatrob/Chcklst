@@ -76,7 +76,7 @@ struct SettingsView: View {
                             Text("Notifications").modifier(Modifier.Settings.ItemTitle())
                                 .padding()
                             Spacer()
-                            Toggle("", isOn: .constant(true))
+                            Toggle("", isOn: $viewModel.notificationsEnabled)
                                 .toggleStyle(SwitchToggleStyle(tint: .firstAccent))
                                 .padding()
                         }
@@ -88,10 +88,14 @@ struct SettingsView: View {
             }
             .background(Color.mainBackground)
         }
+        .onAppear { viewModel.onViewAppear.send() }
         .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.isSheetVisible) {
             viewModel.sheet
+        }
+        .alert(isPresented: $viewModel.isAlertVisible) {
+            viewModel.alert
         }
     }
 }
@@ -104,7 +108,8 @@ struct SettingsView_Previews: PreviewProvider {
                     navigationHelper: NavigationHelper(),
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
-                    appearanceManager: AppearanceManager()
+                    appearanceManager: AppearanceManager(),
+                    notificationManager: NotificationManager()
                 )
             )
             SettingsView(
@@ -112,7 +117,8 @@ struct SettingsView_Previews: PreviewProvider {
                     navigationHelper: NavigationHelper(),
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
-                    appearanceManager: AppearanceManager()
+                    appearanceManager: AppearanceManager(),
+                    notificationManager: NotificationManager()
                 )
             )
             .preferredColorScheme(.dark)

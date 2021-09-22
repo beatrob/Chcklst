@@ -37,8 +37,22 @@ class NotificationManager: NSObject {
     var deeplinkChecklistId: AnyPublisher<String, Never> {
         _deeplinkChecklistId.eraseToAnyPublisher()
     }
+    
     var deeplinkScheduleId: AnyPublisher<String, Never> {
         _deeplickScheduleId.eraseToAnyPublisher()
+    }
+    
+    func getNotificationsEnabled() -> Guarantee<Bool> {
+        Guarantee { resolver in
+            UNUserNotificationCenter
+                .current()
+                .getNotificationSettings { settings in
+                    resolver(
+                        settings.authorizationStatus == .authorized
+                        || settings.authorizationStatus == .provisional
+                    )
+                }
+        }
     }
     
     func registerPushNotifications() -> Promise<Bool> {
