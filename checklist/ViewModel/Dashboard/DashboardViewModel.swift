@@ -203,6 +203,11 @@ class DashboardViewModel: ObservableObject {
             self?.toggleSidemenu()
         }.store(in: &cancellables)
         
+        menuViewModel.onSelectAbout.sink { [weak self] in
+            navigationHelper.navigateToAbout()
+            self?.toggleSidemenu()
+        }.store(in: &cancellables)
+        
         onDarkOverlayTapped.sink { [weak self] in
             self?.toggleSidemenu()
         }.store(in: &cancellables)

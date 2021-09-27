@@ -129,6 +129,16 @@ private struct NavigationLinks: View {
             }
             .isDetailLink(false)
             .hidden()
+            
+            NavigationLink(
+                destination: navigationHelper.dashboardDestination,
+                tag: .about,
+                selection: $navigationHelper.dashboardSelection
+            ) {
+                EmptyView()
+            }
+            .isDetailLink(false)
+            .hidden()
         }
     }
 }

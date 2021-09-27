@@ -20,6 +20,7 @@ class NavigationHelper: ObservableObject {
     
     enum DashboardSelection: String {
         case settings
+        case about
         case checklistDetail
         case myTemplates
         case schedules
@@ -78,6 +79,15 @@ class NavigationHelper: ObservableObject {
         }.store(in: &cancellables)
         dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))
         dashboardSelection = .checklistDetail
+    }
+    
+    func navigateToAbout() {
+        let viewModel = AppContext.resolver.resolve(AboutViewModel.self)!
+        viewModel.navbarViewModel.backButton.didTap.sink { [weak self] in
+            self?.dashboardSelection = .none
+        }.store(in: &cancellables)
+        dashboardDestination = AnyView(AboutView(viewModel: viewModel))
+        dashboardSelection = .about
     }
     
     func popToDashboard() {

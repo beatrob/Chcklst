@@ -61,6 +61,7 @@ extension Modifier {
                     .foregroundColor(.lightText)
                     .frame(minWidth: minWidth)
                     .frame(height: 40)
+                    .padding(.horizontal)
                     .overlay(
                         Capsule()
                             .stroke(Color.text)
