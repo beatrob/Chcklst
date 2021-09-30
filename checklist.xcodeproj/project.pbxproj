@@ -131,6 +131,8 @@
 		FE559A54264341B800ACF179 /* ScheduleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A53264341B800ACF179 /* ScheduleCellView.swift */; };
 		FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A552643426D00ACF179 /* BackButtonNavBar.swift */; };
 		FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */; };
+		FE61E3602706495400015812 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE61E35F2706495400015812 /* HelpView.swift */; };
+		FE61E3622706496D00015812 /* HelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE61E3612706496D00015812 /* HelpViewModel.swift */; };
 		FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE77268E5417004A11DE /* PurchaseManager.swift */; };
 		FE7CFE7A268E5472004A11DE /* MockPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */; };
 		FE7CFE7C268E54AE004A11DE /* DisabledPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */; };
@@ -324,6 +326,8 @@
 		FE559A53264341B800ACF179 /* ScheduleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellView.swift; sourceTree = "<group>"; };
 		FE559A552643426D00ACF179 /* BackButtonNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonNavBar.swift; sourceTree = "<group>"; };
 		FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+TextField.swift"; sourceTree = "<group>"; };
+		FE61E35F2706495400015812 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		FE61E3612706496D00015812 /* HelpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewModel.swift; sourceTree = "<group>"; };
 		FE7CFE77268E5417004A11DE /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
 		FE7CFE79268E5472004A11DE /* MockPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPurchaseManager.swift; sourceTree = "<group>"; };
 		FE7CFE7B268E54AE004A11DE /* DisabledPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisabledPurchaseManager.swift; sourceTree = "<group>"; };
@@ -888,6 +892,7 @@
 			children = (
 				FE8D7EC426FD2BBE00671634 /* AboutView.swift */,
 				FE4860782702599A0022E6C4 /* TextReaderView.swift */,
+				FE61E35F2706495400015812 /* HelpView.swift */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -897,6 +902,7 @@
 			children = (
 				FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */,
 				FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */,
+				FE61E3612706496D00015812 /* HelpViewModel.swift */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -1081,6 +1087,7 @@
 				FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */,
 				DD2BD1B124E96E76004B2060 /* DataSourceError.swift in Sources */,
 				FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */,
+				FE61E3622706496D00015812 /* HelpViewModel.swift in Sources */,
 				DD84DCB1253E407E00A39DBB /* Font+extension.swift in Sources */,
 				DDDAED6625F578930077F6AA /* ChecklistActionSheet.swift in Sources */,
 				DD74DA752521E63A004587FC /* CoreDataManager.swift in Sources */,
@@ -1165,6 +1172,7 @@
 				DDE08AAB25DB1BE100F00D5A /* Modifier+Checklist.swift in Sources */,
 				DD72BA86250686AE00318F62 /* NavigationHelper.swift in Sources */,
 				FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */,
+				FE61E3602706495400015812 /* HelpView.swift in Sources */,
 				DD39A437252A236C003E73EA /* ChecklistViewModel.swift in Sources */,
 				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
 				DDE08A9425DB191500F00D5A /* MenuViewModel.swift in Sources */,

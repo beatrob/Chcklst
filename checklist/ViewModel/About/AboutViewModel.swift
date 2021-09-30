@@ -39,5 +39,11 @@ class AboutViewModel: ObservableObject {
             self?.sheet = AnyView(TextReaderView(viewModel: viewModel))
             self?.isSheetVisible = true
         }.store(in: &cancellables)
+        
+        onHelp.sink { [weak self] in
+            let viewModel = HelpViewModel()
+            self?.sheet = AnyView(HelpView(viewModel: viewModel))
+            self?.isSheetVisible = true
+        }.store(in: &cancellables)
     }
 }
