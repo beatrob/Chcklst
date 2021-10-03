@@ -13,22 +13,23 @@ struct TextReaderView: View {
     let viewModel: TextReaderViewModel
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Text(viewModel.title)
-                    .modifier(Modifier.Checklist.BigTitle())
-                    .padding()
+        VStack(spacing: 0) {
+            BackButtonNavBar(viewModel: viewModel.navbarViewModel)
+            ScrollView {
                 Text(viewModel.text)
                     .modifier(Modifier.Checklist.Description())
                     .padding()
             }
         }
+        .navigationBarHidden(true)
         .background(Color.mainBackground)
     }
 }
 
 struct TextReaderView_Previews: PreviewProvider {
     static var previews: some View {
-        TextReaderView(viewModel: .init(title: "Something", text: "Something text"))
+        TextReaderView(
+            viewModel: .init(title: "Something", text: "Something text", isBackButtonHidden: false)
+        )
     }
 }

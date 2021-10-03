@@ -25,7 +25,8 @@ class AboutViewModel: ObservableObject {
         onTermsAndConditions.sink { [weak self] in
             let viewModel = TextReaderViewModel(
                 title: .init("terms_and_conditions_title"),
-                text: .init("terms_and_conditions_text")
+                text: .init("terms_and_conditions_text"),
+                isBackButtonHidden: true
             )
             self?.sheet = AnyView(TextReaderView(viewModel: viewModel))
             self?.isSheetVisible = true
@@ -34,7 +35,8 @@ class AboutViewModel: ObservableObject {
         onPrivacyPolicy.sink { [weak self] in
             let viewModel = TextReaderViewModel(
                 title: .init("privacy_policy_title"),
-                text: .init("privacy_policy_text")
+                text: .init("privacy_policy_text"),
+                isBackButtonHidden: true
             )
             self?.sheet = AnyView(TextReaderView(viewModel: viewModel))
             self?.isSheetVisible = true

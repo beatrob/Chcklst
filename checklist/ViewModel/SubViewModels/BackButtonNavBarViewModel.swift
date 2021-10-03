@@ -13,13 +13,28 @@ import SwiftUI
 
 class BackButtonNavBarViewModel: ObservableObject {
     
-    @Published var title: String
+    enum Style {
+        case normal
+        case big
+        
+        var isBig: Bool {
+            self == .big
+        }
+    }
+    
+    @Published var title: LocalizedStringKey
     @Published var rightButton: NavBarChipButtonViewModel?
+    @Published var isBackButtonHidden = false
+    @Published var style: Style = .normal
     let backButton = NavBarChipButtonViewModel.getBackButton()
     
     init(title: String, rightButton: NavBarChipButtonViewModel? = nil) {
-        self.title = title
+        self.title = .init(title)
         self.rightButton = rightButton
+    }
+    
+    init(title: LocalizedStringKey) {
+        self.title = title
     }
     
     func setRightButton(_ rightButton: NavBarChipButtonViewModel) {

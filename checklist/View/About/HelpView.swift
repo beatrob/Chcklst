@@ -21,9 +21,9 @@ struct HelpView: View {
                     label: { EmptyView() }
                 ).hidden()
                 
-                Text(LocalizedStringKey("help_title"))
-                    .modifier(Modifier.Checklist.BigTitle())
-                    .padding()
+                BackButtonNavBar(viewModel: viewModel.navigationBarViewModel)
+                    .padding(.bottom)
+                
                 ForEach(viewModel.items) { item in
                     HStack {
                     Text(item.title)

@@ -50,9 +50,11 @@ extension Modifier {
         
         struct Title: ViewModifier {
             
+            let isBig: Bool
+            
             func body(content: Content) -> some View {
                 content
-                    .font(Font.Chcklst.smallTitle.font)
+                    .font(isBig ? Font.Chcklst.bigTitle.font : Font.Chcklst.smallTitle.font)
                     .foregroundColor(.firstAccent)
             }
         }

@@ -32,16 +32,33 @@ class HelpViewModel: ObservableObject {
     }
     
     private var cancellables = Set<AnyCancellable>()
+    private let textReaderViewModel = TextReaderViewModel(
+        title: .init(""),
+        text: .init(""),
+        isBackButtonHidden: false
+    )
     let items = Item.allCases
     let didSelectItem = PassthroughSubject<Item, Never>()
+    let navigationBarViewModel = BackButtonNavBarViewModel(title: LocalizedStringKey("help_title"))
     @Published var navigationLinkDestination: AnyView = .empty
     @Published var isNavigationLinkActive = false
     
     init() {
+        navigationBarViewModel.style = .big
+        navigationBarViewModel.isBackButtonHidden = true
         didSelectItem.sink { [weak self] item in
-            let viewModel = TextReaderViewModel(title: item.title, text: item.text)
-            self?.navigationLinkDestination = AnyView(TextReaderView(viewModel: viewModel))
-            self?.isNavigationLinkActive = true
+            guard let self = self else {
+                return
+            }
+            self.textReaderViewModel.title = item.title
+            self.textReaderViewModel.text = item.text
+            self.navigationLinkDestination = AnyView(TextReaderView(viewModel: self.textReaderViewModel))
+            self.isNavigationLinkActive = true
+        }.store(in: &cancellables)
+        
+        textReaderViewModel.onBackTapped.sink { [weak self] in
+            self?.isNavigationLinkActive = false
+            self?.navigationLinkDestination = .empty
         }.store(in: &cancellables)
     }
 }
