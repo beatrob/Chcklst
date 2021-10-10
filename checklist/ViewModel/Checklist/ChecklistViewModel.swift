@@ -88,6 +88,7 @@ class ChecklistViewModel: ObservableObject {
     let checklistDataSource: ChecklistDataSource
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
+    let restrictionManager: RestrictionManager
     
     lazy var navBarViewModel: ChecklistNavBarViewModel = {
         let viewModel = AppContext.resolver.resolve(
@@ -123,11 +124,13 @@ class ChecklistViewModel: ObservableObject {
         viewState: ChecklistViewState,
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        restrictionManager: RestrictionManager
     ) {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
         self.notificationManager = notificationManager
+        self.restrictionManager = restrictionManager
         self.viewState = viewState
         self.currentChecklist = .init(viewState.checklist)
         self.reminderCheckboxViewModel = .init(
@@ -245,19 +248,24 @@ private extension ChecklistViewModel {
     
     func saveNewChecklist() {
         let checklist = self.getChecklistFromUI()
-        if isReminderOn {
-            self.notificationManager.setupReminder(for: checklist)
-                .done {
-                    self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
-                    self.shouldDismissView = true
-                }
-                .catch {
-                    log(error: $0.localizedDescription)
-                }
-        } else {
-            self.createChecklist(checklist, shouldCreateTemplate: isCreateTemplateChecked)
-            self.shouldDismissView = true
-        }
+        restrictionManager.verifyCreateChecklist(presenter: self).get { verified  in
+            guard verified else {
+                return
+            }
+            if self.isReminderOn {
+                self.notificationManager.setupReminder(for: checklist)
+                    .done {
+                        self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
+                        self.shouldDismissView = true
+                    }
+                    .catch {
+                        log(error: $0.localizedDescription)
+                    }
+            } else {
+                self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
+            }
+        }.catch { $0.log(message: "Failed to verify CreateChecklist restriction") }
+        
     }
     
     func updateChecklist() {
@@ -362,6 +370,8 @@ private extension ChecklistViewModel {
             .get { _ in
                 if shouldCreateTemplate {
                     self.createTemplate(checklist)
+                } else {
+                    self.shouldDismissView = true
                 }
             }
             .catch {
@@ -371,25 +381,35 @@ private extension ChecklistViewModel {
     }
     
     func createTemplate(_ checklist: ChecklistDataModel) {
-        self.shouldDismissView = true
-        templateDataSource.createTemplate(
-            .init(
-                id: UUID().uuidString,
-                title: self.checklistName,
-                description: self.checklistDescription,
-                items: self.items.compactMap {
-                    guard !$0.name.isEmpty else {
-                        return nil
+        firstly {
+            restrictionManager.verifyCreateTemplate(presenter: self)
+        }.then { verified -> Promise<Bool> in
+            guard verified else {
+                return .value(false)
+            }
+            self.shouldDismissView = true
+            return self.templateDataSource.createTemplate(
+                .init(
+                    id: UUID().uuidString,
+                    title: self.checklistName,
+                    description: self.checklistDescription,
+                    items: self.items.compactMap {
+                        guard !$0.name.isEmpty else {
+                            return nil
+                        }
+                        return ChecklistItemDataModel(
+                            id: $0.id,
+                            name: $0.name,
+                            isDone: false,
+                            updateDate: Date()
+                        )
                     }
-                    return ChecklistItemDataModel(
-                        id: $0.id,
-                        name: $0.name,
-                        isDone: false,
-                        updateDate: Date()
-                    )
-                }
-            )
-        ).get {
+                )
+            ).map { _ in verified}
+        }.get { verified in
+            guard verified else {
+                return
+            }
             self.didCreateTemplateSubject.send()
         }.catch { error in
             error.log(message: "Failed to create template")
@@ -516,5 +536,29 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
                     #warning("TODO: Add error handling")
                 }
         })
+    }
+}
+
+
+extension ChecklistViewModel: RestrictionPresenter {
+    
+    func presentRestrictionAlert(_ alert: Alert) {
+        alertVisibility.set(view: alert, isVisible: true)
+        self.objectWillChange.send()
+    }
+    
+    func presentUpgradeView(_ upgradeView: UpgradeView) {
+        sheetVisibility.set(view: AnyView(upgradeView), isVisible: true)
+        self.objectWillChange.send()
+    }
+    
+    func cancelUpgradeView() {
+        sheetVisibility.set(view: AnyView.empty, isVisible: false)
+        self.objectWillChange.send()
+    }
+    
+    func dismissUpgradeView() {
+        sheetVisibility.set(view: AnyView.empty, isVisible: false)
+        self.objectWillChange.send()
     }
 }

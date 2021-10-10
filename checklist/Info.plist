@@ -60,5 +60,11 @@
 	</array>
 	<key>restrictionsEnabledString</key>
 	<string>$(RESTRICTIONS_ENABLED)</string>
+	<key>numberOfFreeChecklists</key>
+	<integer>10</integer>
+	<key>numberOfFreeTemplates</key>
+	<integer>0</integer>
+	<key>numberOfFreeSchedules</key>
+	<integer>1</integer>
 </dict>
 </plist>

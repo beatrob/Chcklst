@@ -1,0 +1,33 @@
+{
+  "identifier" : "6FCBBC99",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "12.34",
+      "familyShareable" : false,
+      "internalID" : "1C9BB576",
+      "localizations" : [
+        {
+          "description" : "",
+          "displayName" : "Chcklst PLUS TEST",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.robertkonczi.checklist.plus",
+      "referenceName" : "Chcklst PLUS TEST",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 1,
+    "minor" : 1
+  }
+}

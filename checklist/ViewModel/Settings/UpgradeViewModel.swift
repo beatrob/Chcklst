@@ -21,6 +21,7 @@ class UpgradeViewModel: ObservableObject {
     let onCancelTapped = EmptySubject()
     let onPurchaseTapped = EmptySubject()
     let onRestoreTapped = EmptySubject()
+    let onPurchaseSuccess: EmptyPublisher
     
     var alert: Alert = .empty
     private let purchaseManager: PurchaseManager
@@ -29,6 +30,10 @@ class UpgradeViewModel: ObservableObject {
     
     init(purchaseManager: PurchaseManager) {
         self.purchaseManager = purchaseManager
+        self.onPurchaseSuccess = purchaseManager.mainProductPurchasedPublisher
+            .scan(false) { prev, next in prev != next && next }
+            .map { _ in () }
+            .eraseToAnyPublisher()
        
         onAppear.sink { [weak self] in
             self?.loadMainProduct()

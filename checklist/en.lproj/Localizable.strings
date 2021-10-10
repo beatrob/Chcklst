@@ -19,3 +19,12 @@
 "help_schedules_text" = "";
 "help_chcklstplus_title" = "Chcklst+";
 "help_chcklstplus_text" = "";
+
+"upgrade_alert_checklist_limit_reached" = "You have reached the maximum number of Checklists";
+"upgrade_alert_template_limit_reached" = "You have reached the maximum number of Templates";
+"upgrade_alert_schedule_limit_reached" = "You have reached the maximum number of Schedules";
+"upgrade_alert_continue_message" = "To continue please upgrade to CHCKLST+";
+
+//Buttons
+"cancel_button" = "Cancel";
+"upgrade_button" = "Upgrade";
