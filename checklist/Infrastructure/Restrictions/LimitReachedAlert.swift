@@ -16,10 +16,20 @@ enum LimitReachedAlert {
         case cancel
     }
     
-    static func getAlert(title: LocalizedStringKey, callback: @escaping (TapAction) -> Void) -> Alert {
-        Alert(
+    static func getAlert(
+        title: LocalizedStringKey,
+        customMessage: LocalizedStringKey? = nil,
+        callback: @escaping (TapAction) -> Void
+    ) -> Alert {
+        let message: Text
+        if let customMessage = customMessage {
+            message = Text(customMessage)
+        } else {
+            message = Text(LocalizedStringKey("upgrade_alert_continue_message"))
+        }
+        return Alert(
             title: Text(title),
-            message: Text(LocalizedStringKey("upgrade_alert_continue_message")),
+            message: message,
             primaryButton: .default(Text(LocalizedStringKey("upgrade_button"))) {
                 callback(.upgrade)
             },

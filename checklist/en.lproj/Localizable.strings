@@ -22,6 +22,7 @@
 
 "upgrade_alert_checklist_limit_reached" = "You have reached the maximum number of Checklists";
 "upgrade_alert_template_limit_reached" = "You have reached the maximum number of Templates";
+"upgrade_alert_template_limit_reached_message" = "Your Checklist was succesfully created. To create a new Template please upgrade to CHCKLST+\nPress Cancel to go to Dashboard.";
 "upgrade_alert_schedule_limit_reached" = "You have reached the maximum number of Schedules";
 "upgrade_alert_continue_message" = "To continue please upgrade to CHCKLST+";
 

@@ -90,7 +90,10 @@ class RestrictionManagerImpl: RestrictionManager {
         return firstly {
             self.registerPresenter(presenter: presenter)
         }.then {
-            self.displayLimitReachedAlert(title: .init("upgrade_alert_template_limit_reached"))
+            self.displayLimitReachedAlert(
+                title: .init("upgrade_alert_template_limit_reached"),
+                customMessage: .init("upgrade_alert_template_limit_reached_message")
+            )
         }.then { tapAction -> Promise<Bool> in
             guard tapAction != .cancel else {
                 return .value(false)
@@ -113,9 +116,15 @@ private extension RestrictionManagerImpl {
         return .value
     }
     
-    func displayLimitReachedAlert(title: LocalizedStringKey) -> Guarantee<LimitReachedAlert.TapAction> {
+    func displayLimitReachedAlert(
+        title: LocalizedStringKey,
+        customMessage: LocalizedStringKey? = nil
+    ) -> Guarantee<LimitReachedAlert.TapAction> {
         Guarantee { resolver in
-            let alert = LimitReachedAlert.getAlert(title: title) { tapAction in
+            let alert = LimitReachedAlert.getAlert(
+                title: title,
+                customMessage: customMessage
+            ) { tapAction in
                 resolver(tapAction)
             }
             self.currentPresenter?.presentRestrictionAlert(alert)

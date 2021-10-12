@@ -407,10 +407,11 @@ private extension ChecklistViewModel {
                 )
             ).map { _ in verified}
         }.get { verified in
-            guard verified else {
-                return
+            if verified {
+                self.didCreateTemplateSubject.send()
+            } else {
+                self.shouldDismissView = true
             }
-            self.didCreateTemplateSubject.send()
         }.catch { error in
             error.log(message: "Failed to create template")
             #warning("TODO(): Implement proper error handling")
