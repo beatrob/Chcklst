@@ -16,8 +16,7 @@ struct UpgradeView: View {
     var activityIndicatiorView: some View {
         VStack {
             Spacer()
-            ActivityIndicatorView(isVisible: $viewModel.isLoading, type: .growingArc(.firstAccent))
-                .frame(width: 50, height: 50, alignment: .center)
+            
             Spacer()
         }
     }
@@ -25,7 +24,17 @@ struct UpgradeView: View {
     var body: some View {
         VStack {
             if viewModel.isLoading {
-               activityIndicatiorView
+                Spacer()
+                ActivityIndicatorView(isVisible: $viewModel.isLoading, type: .growingArc(.firstAccent))
+                    .frame(width: 50, height: 50, alignment: .center)
+                if viewModel.isPendingVisible {
+                    Text("Waiting for approval ...")
+                        .modifier(Modifier.Upgrade.Description())
+                        .padding()
+                    Spacer()
+                } else {
+                    Spacer()
+                }
             } else if viewModel.isPurchaseSuccessVisible {
                 Spacer()
                 Text("Upgrade complete")
@@ -37,39 +46,44 @@ struct UpgradeView: View {
                     .padding()
                 Spacer()
                 Button("Close") { viewModel.onCancelTapped.send() }
-                    .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
-                    .padding()
+                .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                .padding()
             } else {
-                ZStack {
-                    Color.menuBackground
-                    VStack {
+                VStack(spacing: .zero) {
+                    HStack {
                         Spacer()
-                        Text(viewModel.productTitle)
-                            .modifier(Modifier.Upgrade.Title())
-                            .padding()
-                        Text(viewModel.price)
-                            .modifier(Modifier.Upgrade.Price())
+                        VStack {
+                            Text(viewModel.productTitle)
+                                .modifier(Modifier.Upgrade.Title())
+                                .padding()
+                            Text(viewModel.price)
+                                .modifier(Modifier.Upgrade.Price())
+                                .padding()
+                        }
                         Spacer()
-                        Text("By upgrading you can unlock\nUNLIMITED ACCESS to")
-                            .modifier(Modifier.Upgrade.Description())
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        getDescriptionItem(title: "Checklists")
-                        getDescriptionItem(title: "Templates")
-                        getDescriptionItem(title: "Schedules")
-                        Spacer()
+                    }.background(Color.menuBackground)
+                    ZStack {
+                        Color.checklistBackground.ignoresSafeArea()
+                        VStack {
+                            Spacer()
+                            Text("By upgrading you can unlock\nUNLIMITED ACCESS to")
+                                .modifier(Modifier.Upgrade.Description())
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            getDescriptionItem(title: "Checklists")
+                            getDescriptionItem(title: "Templates")
+                            getDescriptionItem(title: "Schedules")
+                            Spacer()
+                        }
                     }
                 }.ignoresSafeArea()
                 Spacer()
                 Button("Purchase") { viewModel.onPurchaseTapped.send() }
-                    .modifier(Modifier.Button.MainAction(minWidth: 200))
-                    .padding(.top)
-                Button("Restore Purchase") { viewModel.onRestoreTapped.send() }
-                    .modifier(Modifier.Button.MainAction(minWidth: 200))
-                    .padding(.top)
+                .modifier(Modifier.Button.MainAction(minWidth: 200))
+                .padding(.top)
                 Button("Cancel") { viewModel.onCancelTapped.send() }
-                    .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
-                    .padding()
+                .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                .padding()
             }
         }
         .onAppear {

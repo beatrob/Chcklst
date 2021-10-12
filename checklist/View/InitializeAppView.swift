@@ -38,7 +38,9 @@ struct InitializeAppView_Previews: PreviewProvider {
                 checklistDataSource: MockChecklistDataSource(),
                 templateDataSource: MockTemplateDataSource(),
                 scheduleDataSource: MockScheduleDataSource(),
-                initializeAppDataSource: InitializeAppDataSourceImpl(coreDataManager: MockCoreDataManager()))
+                initializeAppDataSource: InitializeAppDataSourceImpl(coreDataManager: MockCoreDataManager()),
+                purchaseManager: MockPurchaseManager()
+            )
         )
     }
 }

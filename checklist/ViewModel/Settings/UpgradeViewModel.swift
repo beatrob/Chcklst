@@ -9,10 +9,10 @@
 import SwiftUI
 import Combine
 
-
 class UpgradeViewModel: ObservableObject {
     
     @Published var isLoading = true
+    @Published var isPendingVisible = false
     @Published var isAlertVisible = false
     @Published var isPurchaseSuccessVisible = false
     @Published var productTitle = ""
@@ -20,7 +20,6 @@ class UpgradeViewModel: ObservableObject {
     let onAppear = EmptySubject()
     let onCancelTapped = EmptySubject()
     let onPurchaseTapped = EmptySubject()
-    let onRestoreTapped = EmptySubject()
     let onPurchaseSuccess: EmptyPublisher
     
     var alert: Alert = .empty
@@ -30,69 +29,92 @@ class UpgradeViewModel: ObservableObject {
     
     init(purchaseManager: PurchaseManager) {
         self.purchaseManager = purchaseManager
-        self.onPurchaseSuccess = purchaseManager.mainProductPurchasedPublisher
-            .scan(false) { prev, next in prev != next && next }
+        self.onPurchaseSuccess = purchaseManager.mainProductPurchaseState
+            .filter { $0 == .purchased }
             .map { _ in () }
             .eraseToAnyPublisher()
+        
+        purchaseManager.mainProductPurchaseState.sink { [weak self] state in
+            self?.updatePurchaseState(state)
+        }.store(in: &cancellables)
        
-        onAppear.sink { [weak self] in
-            self?.loadMainProduct()
+        onAppear.combineLatest(purchaseManager.mainProductPurchaseState).sink { [weak self] (_, state) in
+            switch state {
+            case .notPurchased, .unknown:
+                self?.loadMainProduct()
+            default:
+                break
+            }
         }.store(in: &cancellables)
     
         onPurchaseTapped.sink { [weak self] in
             guard let product = self?.mainProduct else {
                 return
             }
-            withAnimation {
-                self?.isLoading = true
-            }
-            purchaseManager.purchaseProduct(product).done {
-                withAnimation {
-                    self?.isLoading = false
-                    self?.isPurchaseSuccessVisible = true
-                }
-            }.catch { error in
-                error.log(message: "Failed to purchase product")
-                self?.showAlert(error: error)
-                self?.isLoading = false
-            }
-        }.store(in: &cancellables)
-        
-        onRestoreTapped.sink { [weak self] in
-            withAnimation {
-                self?.isLoading = true
-            }
-            purchaseManager.restorePurchase().done {
-                withAnimation {
-                    self?.isLoading = false
-                    self?.isPurchaseSuccessVisible = true
-                }
-            }.catch { error in
-                error.log(message: "Failed to restore purchase")
-                self?.showAlert(error: error)
-                self?.isLoading = false
-            }
+            self?.purchaseProduct(product)
         }.store(in: &cancellables)
     }
     
     func loadMainProduct() {
-        purchaseManager.getMainProduct().done { product in
-            self.mainProduct = product
-            self.productTitle = product.title
-            self.price = "Upgrade for \(product.localizedPrice)"
-        }.ensure {
-            withAnimation {
-                self.isLoading = false
+        Task {
+            let result = await purchaseManager.getMainProduct()
+            await MainActor.run {
+                withAnimation {
+                    isLoading = false
+                }
+                switch result {
+                case .success(let product):
+                    self.mainProduct = product
+                    self.productTitle = product.title
+                    self.price = "Upgrade for \(product.localizedPrice)"
+                case .failure(let error):
+                    error.log(message: "Failed to load purchase")
+                    self.showAlert(error: error)
+                }
             }
         }
-        .catch { error in
-            error.log(message: "Failed to load purchase")
-            self.showAlert(error: error)
+    }
+    
+    func purchaseProduct(_ product: ProductDataModel) {
+        Task {
+            let result = await purchaseManager.purchaseProduct(product)
+            await MainActor.run {
+                switch result {
+                case .success:
+                    break // state handled publisher
+                case .failure(let error):
+                    isLoading = false
+                    self.showAlert(error: error)
+                }
+            }
         }
     }
     
     private func showAlert(error: Error) {
         self.alert = Alert.init(title: Text(error.localizedDescription))
         self.isAlertVisible = true
+    }
+    
+    private func updatePurchaseState(_ state: PurchaseSate) {
+        withAnimation {
+            switch state {
+            case .purchased:
+                isPurchaseSuccessVisible = true
+                isPendingVisible = false
+                isLoading = false
+            case .pending:
+                isPendingVisible = true
+                isPurchaseSuccessVisible = false
+                isLoading = true
+            case .unknown, .notPurchased:
+                isPendingVisible = false
+                isPurchaseSuccessVisible = false
+                isLoading = false
+            case .inProgress:
+                isPendingVisible = false
+                isPurchaseSuccessVisible = false
+                isLoading = true
+            }
+        }
     }
 }

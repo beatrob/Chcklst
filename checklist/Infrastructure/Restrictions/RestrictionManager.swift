@@ -51,7 +51,8 @@ class RestrictionManagerImpl: RestrictionManager {
             .map { $0.count }
             .subscribe(scheduleCount)
             .store(in: &cancellables)
-        purchaseManager.mainProductPurchasedPublisher
+        purchaseManager.mainProductPurchaseState
+            .map { $0.isPurchased }
             .subscribe(isMainProductPurchased)
             .store(in: &cancellables)
     }

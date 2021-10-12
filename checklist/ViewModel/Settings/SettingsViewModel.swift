@@ -62,7 +62,8 @@ class SettingsViewModel: ObservableObject {
             self.isSheetVisible = true
         }.store(in: &cancellables)
         
-        purchaseManager.mainProductPurchasedPublisher
+        purchaseManager.mainProductPurchaseState
+            .map { $0.isPurchased }
             .assign(to: \.isUpgradeComplete, on: self)
             .store(in: &cancellables)
         

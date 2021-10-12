@@ -7,34 +7,25 @@
 //
 
 import Foundation
-import PromiseKit
 import Combine
 
 class MockPurchaseManager: PurchaseManager {
     
-    var mainProductPurchasedPublisher: AnyPublisher<Bool, Never> {
-        CurrentValueSubject<Bool, Never>(false).eraseToAnyPublisher()
+    var mainProductPurchaseState: AnyPublisher<PurchaseSate, Never> {
+        CurrentValueSubject<PurchaseSate, Never>(.notPurchased).eraseToAnyPublisher()
     }
     
-    var isMainProductPurchased: Bool {
-        false
+    func purchaseProduct(_ productDataModel: ProductDataModel) async -> Result<Bool, PurchaseError> {
+        .success(false)
     }
+    
+    func loadPurchases() async { }
     
     var isPurchaseEnabled: Bool {
         true
     }
     
-    func completeTransactions() { }
-    
-    func getMainProduct() -> Promise<ProductDataModel> {
-        .value(.init(id: "1234", title: "Chcklist Plus", localizedPrice: "3.99$"))
-    }
-    
-    func purchaseProduct(_ product: ProductDataModel) -> Promise<Void> {
-        .value
-    }
-    
-    func restorePurchase() -> Promise<Void> {
-        .value
+    func getMainProduct() async -> Result<ProductDataModel, PurchaseError> {
+        .success(.init(id: "1234", title: "Chcklist Plus", localizedPrice: "3.99$"))
     }
 }

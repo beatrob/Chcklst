@@ -7,30 +7,25 @@
 //
 
 import Foundation
-import PromiseKit
 import Combine
 
 class DisabledPurchaseManager: PurchaseManager {
     
-    var mainProductPurchasedPublisher: AnyPublisher<Bool, Never> {
-        CurrentValueSubject<Bool, Never>(false).eraseToAnyPublisher()
+    var mainProductPurchaseState: AnyPublisher<PurchaseSate, Never> {
+        CurrentValueSubject<PurchaseSate, Never>(.notPurchased).eraseToAnyPublisher()
     }
+    
+    func purchaseProduct(_ productDataModel: ProductDataModel) async -> Result<Bool, PurchaseError> {
+        .failure(.unknown)
+    }
+    
+    func loadPurchases() { }
     
     var isPurchaseEnabled: Bool {
         false
     }
     
-    func completeTransactions() { }
-    
-    func getMainProduct() -> Promise<ProductDataModel> {
-        .init(error: NSError())
-    }
-    
-    func purchaseProduct(_ product: ProductDataModel) -> Promise<Void> {
-        .init(error: NSError())
-    }
-    
-    func restorePurchase() -> Promise<Void> {
-        .init(error: NSError())
+    func getMainProduct() async -> Result<ProductDataModel, PurchaseError> {
+        .failure(.unknown)
     }
 }

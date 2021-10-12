@@ -15,15 +15,6 @@ struct ProductDataModel: Identifiable {
     let title: String
     let localizedPrice: String
     
-    init?(product: SKProduct) {
-        guard let price = product.localizedPrice else {
-            return nil
-        }
-        self.id = product.productIdentifier
-        self.title = product.localizedTitle
-        self.localizedPrice = price
-    }
-    
     init(id: String, title: String, localizedPrice: String) {
         self.id = id
         self.title = title

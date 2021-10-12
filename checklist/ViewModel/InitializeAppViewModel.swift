@@ -25,7 +25,8 @@ class InitializeAppViewModel: ObservableObject {
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         scheduleDataSource: ScheduleDataSource,
-        initializeAppDataSource: InitializeAppDataSource
+        initializeAppDataSource: InitializeAppDataSource,
+        purchaseManager: PurchaseManager
     ) {
         coreDataManager.initialize()
             .then { appearanceManager.initializeAppAppearance() }
@@ -36,7 +37,14 @@ class InitializeAppViewModel: ObservableObject {
             .then { scheduleDataSource.loadAllSchedules().asVoid() }
             .then { checklistDataSource.deleteExpiredNotificationDates() }
             .then { after(seconds: 1) }
-            .done { self.initializeDidFinish.send() }
+            .done {
+                Task {
+                    await purchaseManager.loadPurchases()
+                    await MainActor.run {
+                        self.initializeDidFinish.send()
+                    }
+                }
+            }
             .ensure { self.isLoading = false }
             .catch { error in
                 self.errorMessage = error.localizedDescription

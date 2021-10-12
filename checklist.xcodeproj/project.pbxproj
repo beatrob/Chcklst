@@ -166,7 +166,6 @@
 		FED2DA59268923130023E525 /* Bundle+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA58268923130023E525 /* Bundle+Extension.swift */; };
 		FED2DA5B268924580023E525 /* RestrictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA5A268924580023E525 /* RestrictionManager.swift */; };
 		FED2DA5E2689266B0023E525 /* MockRestrictionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED2DA5D2689266B0023E525 /* MockRestrictionManager.swift */; };
-		FED2DA6126892DF00023E525 /* SwiftyStoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = FED2DA6026892DF00023E525 /* SwiftyStoreKit */; };
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
@@ -379,7 +378,6 @@
 			files = (
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */,
-				FED2DA6126892DF00023E525 /* SwiftyStoreKit in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
 				DD84DCAC253E1C5E00A39DBB /* SnapKit in Frameworks */,
@@ -962,7 +960,6 @@
 				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
 				DD2D91BA2532FD420032779C /* XCGLogger */,
 				DD84DCAB253E1C5E00A39DBB /* SnapKit */,
-				FED2DA6026892DF00023E525 /* SwiftyStoreKit */,
 				FEA82FC426A377FB0008F34A /* ActivityIndicatorView */,
 			);
 			productName = checklist;
@@ -1041,7 +1038,6 @@
 				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				DD84DCAA253E1C5E00A39DBB /* XCRemoteSwiftPackageReference "SnapKit" */,
-				FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */,
 				FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
@@ -1341,7 +1337,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1395,7 +1391,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1416,7 +1412,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1441,7 +1437,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1595,7 +1591,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1616,7 +1612,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1742,7 +1738,7 @@
 			repositoryURL = "https://github.com/Swinject/SwinjectAutoregistration";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.7.0;
+				minimumVersion = 2.8.0;
 			};
 		};
 		DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */ = {
@@ -1767,14 +1763,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
-			};
-		};
-		FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/bizz84/SwiftyStoreKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.16.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1819,11 +1807,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
 			productName = ActivityIndicatorView;
-		};
-		FED2DA6026892DF00023E525 /* SwiftyStoreKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FED2DA5F26892DF00023E525 /* XCRemoteSwiftPackageReference "SwiftyStoreKit" */;
-			productName = SwiftyStoreKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 

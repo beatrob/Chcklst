@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Logger.setup()
         UNUserNotificationCenter.current().delegate = AppContext.resolver.resolve(NotificationManager.self)!
-        AppContext.resolver.resolve(PurchaseManager.self)!.completeTransactions()
         return true
     }
 
