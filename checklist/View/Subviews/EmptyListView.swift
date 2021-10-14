@@ -24,15 +24,12 @@ struct EmptyListView: View {
                 .padding()
             if let actionTitle = self.actionTitle,
                let tapSubject = self.onActionTappedSubject {
-                Button(
-                    action: {
-                        tapSubject.send()
-                    }, label: {
-                        Text(actionTitle)
-                    }
+                CapsuleButton(
+                    title: actionTitle,
+                    type: .primary,
+                    onTapSubject: tapSubject
                 )
                 .padding()
-                .modifier(Modifier.Button.MainAction())
             }
             Spacer()
             Spacer()

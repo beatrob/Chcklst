@@ -40,6 +40,19 @@ extension TemplateMO {
         items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
     }
     
+    static func getManagedObject(
+        for dataModel: TemplateDataModel,
+        context: NSManagedObjectContext
+    ) -> Promise<TemplateMO> {
+        Promise { resolver in
+            let data = try context.fetch(Self.fetchRequest(withId: dataModel.id))
+            guard let template = data.first else {
+                throw CoreDataError.fetchError
+            }
+            resolver.fulfill(template)
+        }
+    }
+    
     static func createEntity(
         from dataModel: TemplateDataModel,
         andSaveToContext context: NSManagedObjectContext

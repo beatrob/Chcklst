@@ -36,9 +36,7 @@ struct EditReminderView: View {
                         Spacer()
                     }
                 }
-                Button("Save") {
-                    viewModel.onSave.send()
-                }.modifier(Modifier.Button.MainAction())
+                CapsuleButton(title: "Save", type: .primary, onTapSubject: viewModel.onSave)
             }
         }
         .alert(isPresented: $viewModel.isAlertVisible) {

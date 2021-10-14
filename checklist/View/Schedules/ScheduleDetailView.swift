@@ -109,18 +109,20 @@ struct ScheduleDetailView: View {
                         Button(viewModel.actionButtonTitle) {
                             viewModel.onActionButtonTapped.send()
                         }
-                        .modifier(Modifier.Button.MainAction())
+                        .modifier(Modifier.Button.PrimaryAction())
                         .padding()
                         Spacer()
                     }.padding(.bottom)
                 }
             }
         }
+        .sheet(isPresented: $viewModel.isSheetPresented) {
+            viewModel.sheet
+        }
         .alert(isPresented: $viewModel.isAlertPresented) {
             viewModel.alert
         }
         .navigationBarHidden(true)
-        .ignoresSafeArea()
     }
 }
 
@@ -142,7 +144,8 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                         )
                     ),
                     scheduleDataSource: MockScheduleDataSource(),
-                    notificationManager: NotificationManager()
+                    notificationManager: NotificationManager(),
+                    restrictionManager: MockRestrictionManager()
                 )
             )
             ScheduleDetailView(
@@ -176,7 +179,8 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                         )
                     ),
                     scheduleDataSource: MockScheduleDataSource(),
-                    notificationManager: NotificationManager()
+                    notificationManager: NotificationManager(),
+                    restrictionManager: MockRestrictionManager()
                 )
             )
         }

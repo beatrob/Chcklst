@@ -160,8 +160,10 @@ class ChecklistViewModel: ObservableObject {
         }
         
         onCreateTitleNext.sink { [weak self] in
-            self?.setupItemsAndFinalizeView()
-            self?.shouldCreateChecklistName = false
+            withAnimation {
+                self?.setupItemsAndFinalizeView()
+                self?.shouldCreateChecklistName = false
+            }
         }.store(in: &cancellables)
         
         onDeleteItem.sink { [weak self] item in

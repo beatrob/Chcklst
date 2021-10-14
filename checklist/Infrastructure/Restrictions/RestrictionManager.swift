@@ -105,7 +105,25 @@ class RestrictionManagerImpl: RestrictionManager {
     }
     
     func verifyCreateSchedule(presenter: RestrictionPresenter) -> Promise<Bool> {
-        .value(true)
+        guard
+            !isMainProductPurchased.value,
+            let maxFreeSchedules = Bundle.main.numberOfFreeSchedules,
+            self.scheduleCount.value > maxFreeSchedules
+        else {
+            return .value(true)
+        }
+        return firstly {
+            self.registerPresenter(presenter: presenter)
+        }.then {
+            self.displayLimitReachedAlert(title: .init("upgrade_alert_schedule_limit_reached"))
+        }.then { tapAction -> Promise<Bool> in
+            guard tapAction != .cancel else {
+                return .value(false)
+            }
+            return self.displayUpgradeView()
+        }.ensure {
+            self.currentPresenter = nil
+        }
     }
 }
 

@@ -45,8 +45,11 @@ struct UpgradeView: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 Spacer()
-                Button("Close") { viewModel.onCancelTapped.send() }
-                .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                CapsuleButton(
+                    title: "Close",
+                    type: .secondary,
+                    onTapSubject: viewModel.onCancelTapped
+                )
                 .padding()
             } else {
                 VStack(spacing: .zero) {
@@ -78,11 +81,17 @@ struct UpgradeView: View {
                     }
                 }.ignoresSafeArea()
                 Spacer()
-                Button("Purchase") { viewModel.onPurchaseTapped.send() }
-                .modifier(Modifier.Button.MainAction(minWidth: 200))
+                CapsuleButton(
+                    title: "Purchase",
+                    type: .primary,
+                    onTapSubject: viewModel.onPurchaseTapped
+                )
                 .padding(.top)
-                Button("Cancel") { viewModel.onCancelTapped.send() }
-                .modifier(Modifier.Button.SecondaryAction(minWidth: 200))
+                CapsuleButton(
+                    title: "Cancel",
+                    type: .secondary,
+                    onTapSubject: viewModel.onCancelTapped
+                )
                 .padding()
             }
         }

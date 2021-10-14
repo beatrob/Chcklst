@@ -44,9 +44,11 @@ struct SettingsView: View {
                             } else {
                                 HStack {
                                     Spacer()
-                                    Button("Upgrade") {
-                                        viewModel.onUpgradeTapped.send()
-                                    }.modifier(Modifier.Button.MainAction())
+                                    CapsuleButton(
+                                        title: "Upgrade",
+                                        type: .primary,
+                                        onTapSubject: viewModel.onUpgradeTapped
+                                    )
                                     Spacer()
                                 }
                                 .padding(.bottom)

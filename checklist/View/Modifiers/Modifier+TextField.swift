@@ -11,15 +11,36 @@ import SwiftUI
 
 extension Modifier {
     
-//    enum TextField {
-//
-//        struct SingleLineTextField: ViewModifier {
-//
-//            func body(content: Content) -> some View {
-//                content
-//                    .font(Font.Chcklst.description.font)
-//                    .foregroundColor(Color.text)
-//            }
-//        }
-//    }
+    enum TextField {
+
+        struct Text: ViewModifier {
+            
+            let font: Font.Chcklst
+            
+            init(font: Font.Chcklst? = nil) {
+                self.font = font ?? .description
+            }
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(font.font)
+                    .foregroundColor(Color.text)
+            }
+        }
+        
+        struct Placeholder: ViewModifier {
+            
+            let font: Font.Chcklst
+            
+            init(font: Font.Chcklst? = nil) {
+                self.font = font ?? .description
+            }
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(font.font)
+                    .foregroundColor(Color.gray)
+            }
+        }
+    }
 }

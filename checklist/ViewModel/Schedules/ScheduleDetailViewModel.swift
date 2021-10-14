@@ -32,6 +32,8 @@ class ScheduleDetailViewModel: ObservableObject {
     @Published var date: Date
     @Published var isAlertPresented = false
     @Published var alert: Alert = .empty
+    @Published var sheet: AnyView = .empty
+    @Published var isSheetPresented: Bool = false
     
     private let referenceDate = Date()
     private let state: ScheduleDetailViewState
@@ -45,6 +47,7 @@ class ScheduleDetailViewModel: ObservableObject {
     private let didDeleteSheduleSubject = EmptySubject()
     private let scheduleDataSource: ScheduleDataSource
     private let notificationManager: NotificationManager
+    private let restrictionManager: RestrictionManager
     let backButtonViewModel = NavBarChipButtonViewModel.getBackButton()
     let repeatCheckboxViewModel: CheckboxViewModel
     var isActionButtonDisabled: Bool {
@@ -74,10 +77,12 @@ class ScheduleDetailViewModel: ObservableObject {
     init(
         state: ScheduleDetailViewState,
         scheduleDataSource: ScheduleDataSource,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        restrictionManager: RestrictionManager
     ) {
         self.scheduleDataSource = scheduleDataSource
         self.notificationManager = notificationManager
+        self.restrictionManager = restrictionManager
         self.state = state
         self.title = state.title
         self.description = state.description ?? ""
@@ -237,7 +242,12 @@ private extension ScheduleDetailViewModel {
     
     func createSchedule(from template: TemplateDataModel, repeatFreq: ScheduleDataModel.RepeatFrequency) {
         firstly {
-            scheduleDataSource.createSchedule(
+            restrictionManager.verifyCreateSchedule(presenter: self)
+        }.then { isVerified -> Promise<ScheduleDataModel?> in
+            guard isVerified else {
+                return .value(nil)
+            }
+            return self.scheduleDataSource.createSchedule(
                 .init(
                     id: UUID().uuidString,
                     title: self.title,
@@ -246,11 +256,18 @@ private extension ScheduleDetailViewModel {
                     scheduleDate: self.date,
                     repeatFrequency: repeatFreq
                 )
-            )
-        }.then { schedule in
-            self.notificationManager.setupScheduleNotification(for: schedule)
-        }.get { _ in
-            self.didCreateSheduleSubject.send()
+            ).map { schedule -> ScheduleDataModel? in
+                schedule
+            }
+        }.then { schedule -> Promise<Bool> in
+            guard let schedule = schedule else {
+                return .value(false)
+            }
+            return self.notificationManager.setupScheduleNotification(for: schedule).map { true }
+        }.get { finished in
+            if finished {
+                self.didCreateSheduleSubject.send()
+            }
         }.catch {
             $0.log(message: "Failed to create schedule")
         }
@@ -276,5 +293,29 @@ private extension ScheduleDetailViewModel {
     func presentWrongFormData(with title: String) {
         self.alert = Alert(title: Text(title), message: nil, dismissButton: .cancel())
         self.isAlertPresented = true
+    }
+}
+
+
+extension ScheduleDetailViewModel: RestrictionPresenter {
+    
+    func presentRestrictionAlert(_ alert: Alert) {
+        self.alert = alert
+        self.isAlertPresented = true
+    }
+    
+    func presentUpgradeView(_ upgradeView: UpgradeView) {
+        self.sheet = AnyView(upgradeView)
+        self.isSheetPresented = true
+    }
+    
+    func cancelUpgradeView() {
+        self.isSheetPresented = false
+        self.sheet = .empty
+    }
+    
+    func dismissUpgradeView() {
+        self.isSheetPresented = false
+        self.sheet = .empty
     }
 }

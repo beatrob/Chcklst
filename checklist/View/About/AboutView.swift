@@ -20,18 +20,21 @@ struct AboutView: View {
                 VStack {
                     Spacer()
                     
-                    Button("Help") {
-                        viewModel.onHelp.send()
-                    }.modifier(Modifier.Button.SecondaryAction())
-                    
-                    Button("Terms & Conditions") {
-                        viewModel.onTermsAndConditions.send()
-                    }.modifier(Modifier.Button.SecondaryAction())
-                        .padding()
-                    
-                    Button("Privacy Policy") {
-                        viewModel.onPrivacyPolicy.send()
-                    }.modifier(Modifier.Button.SecondaryAction())
+                    CapsuleButton(
+                        title: "Help",
+                        type: .secondary,
+                        onTapSubject: viewModel.onHelp
+                    )
+                    CapsuleButton(
+                        title: "Terms & Conditions",
+                        type: .secondary,
+                        onTapSubject: viewModel.onTermsAndConditions
+                    ).padding()
+                    CapsuleButton(
+                        title: "Privacy Policy",
+                        type: .secondary,
+                        onTapSubject: viewModel.onPrivacyPolicy
+                    )
                     
                     Spacer(minLength: 150)
                     

@@ -46,11 +46,11 @@ struct ChecklistView: View {
                                         description: self.$viewModel.checklistDescription,
                                         isEditable: viewModel.isEditable
                                     )
-                                    Button("Next") {
-                                        withAnimation {
-                                            self.viewModel.onCreateTitleNext.send()
-                                        }
-                                    }.modifier(Modifier.Button.MainAction())
+                                    CapsuleButton(
+                                        title: "Next",
+                                        type: .primary,
+                                        onTapSubject: viewModel.onCreateTitleNext
+                                    )
                                     .padding(.vertical, 40)
                                 }
                                 .frame(width: geometry.size.width)
@@ -100,10 +100,11 @@ struct ChecklistView: View {
                                 if viewModel.shouldDisplayActionButton {
                                     HStack {
                                         Spacer()
-                                        Button(viewModel.actionButtonTitle) {
-                                            self.viewModel.onActionButtonTapped.send()
-                                        }
-                                        .modifier(Modifier.Button.MainAction())
+                                        CapsuleButton(
+                                            localizedKey: viewModel.actionButtonTitle,
+                                            type: .primary,
+                                            onTapSubject: viewModel.onActionButtonTapped
+                                        )
                                         .padding(.vertical, 40)
                                         Spacer()
                                     }

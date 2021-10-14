@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import PromiseKit
+import WidgetKit
 
 
 extension ScheduleMO {
@@ -56,7 +57,7 @@ extension ScheduleMO {
         firstly { () -> Promise<[RepeatFrequencyMO]> in
             RepeatFrequencyMO.getRepeatFrequencyMOs(for: dataModel.repeatFrequency, context: context)
         }.then { freqMO -> Promise<([RepeatFrequencyMO], TemplateMO)> in
-            TemplateMO.createEntity(from: dataModel.template, andSaveToContext: context)
+            TemplateMO.getManagedObject(for: dataModel.template, context: context)
                 .map { templateMO -> ([RepeatFrequencyMO], TemplateMO) in (freqMO, templateMO) }
         }.then { freqAndTemplate -> Promise<ScheduleMO> in
             guard let entity = NSEntityDescription.entity(forEntityName: "Schedule", in: context) else {

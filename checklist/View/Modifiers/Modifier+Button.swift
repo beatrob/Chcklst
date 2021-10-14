@@ -14,7 +14,7 @@ extension Modifier {
     enum Button {
         
         //MARK:-
-        struct MainAction: ViewModifier {
+        struct PrimaryAction: ViewModifier {
             
             let minWidth: CGFloat
             
@@ -30,7 +30,7 @@ extension Modifier {
                 content
                     .font(Font.Chcklst.boldItem.font)
                     .foregroundColor(.lightText)
-                    .frame(minWidth: minWidth)
+                    .frame(minWidth: minWidth, maxWidth: 200, minHeight: 40, maxHeight:  40, alignment: .center)
                     .frame(height: 40)
                     .padding(.horizontal)
                     .overlay(
@@ -60,7 +60,7 @@ extension Modifier {
                 content
                     .font(Font.Chcklst.boldItem.font)
                     .foregroundColor(.lightText)
-                    .frame(minWidth: minWidth)
+                    .frame(minWidth: minWidth, maxWidth: 200, minHeight: 40, maxHeight:  40, alignment: .center)
                     .frame(height: 40)
                     .padding(.horizontal)
                     .overlay(

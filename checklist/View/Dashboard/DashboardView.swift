@@ -43,6 +43,9 @@ struct DashboardView: View {
                         } else {
                             ScrollView {
                                 VStack {
+                                    MyTextField(text: .constant("Biiig text to test"), placeholder: "Textfield placeholder", font: .bigTitle, isEditable: .constant(true))
+
+                                        .padding()
                                     ForEach(viewModel.checklistCells, id: \.id) { cell in
                                         DashboardChecklistCell(viewModel: cell)
                                             .padding(.horizontal, 20)
