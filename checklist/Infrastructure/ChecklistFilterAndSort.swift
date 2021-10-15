@@ -17,6 +17,7 @@ protocol ChecklistFilterAndSort: AnyObject {
     var filter: FilterDataModel? { get set }
     var search: String? { get set }
     var isSearching: Bool { get }
+    var isFiltering: Bool { get }
 }
 
 class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
@@ -52,6 +53,13 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     }
     
     var isSearching: Bool { search != nil }
+    
+    var isFiltering: Bool {
+        guard let filter = filter else {
+            return false
+        }
+        return filter != .none
+    }
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -92,7 +100,6 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         case .none: return checklists
         case .done: return filterDone(checklists: checklists)
         case .withReminder: return filterReminders(checklists: checklists)
-        case .archived: return filterArchived(checklists: checklists)
         }
     }
     

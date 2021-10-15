@@ -18,7 +18,6 @@ struct ChecklistNavBar: View {
         VStack {
             HStack {
                 NavBarChipButton(viewModel: viewModel.backButton)
-                    .padding(.bottom)
                 Spacer()
                 viewModel.reminderDate.map { date in
                     HStack {
@@ -32,12 +31,11 @@ struct ChecklistNavBar: View {
                 }
                 if !viewModel.shouldDisplayDoneButton {
                     NavBarChipButton(viewModel: viewModel.actionsButton)
-                        .padding(.bottom)
                 } else {
                     NavBarChipButton(viewModel: viewModel.doneButton)
-                        .padding(.bottom)
                 }
             }
+            .padding(.bottom, 10)
         }
         .padding(.horizontal)
         .modifier(Modifier.NavBar.NavBar(isExpanded: false))

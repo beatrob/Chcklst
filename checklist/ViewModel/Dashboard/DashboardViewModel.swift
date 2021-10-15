@@ -16,14 +16,13 @@ class DashboardViewModel: ObservableObject {
     @Published var checklistCells: [DashboardChecklistCellViewModel] = [] {
         didSet {
             if checklistCells.isEmpty {
-                if checklistFilterAndSort.isSearching {
-                    isNoSearchResultsVisible = true
-                } else {
-                    isEmptyListViewVisible = true
-                }
+                isNoSearchResultsVisible = checklistFilterAndSort.isSearching
+                isNoFilterResulrsVisible = checklistFilterAndSort.isFiltering
+                isEmptyListViewVisible = !isNoSearchResultsVisible && !isNoFilterResulrsVisible
             } else {
                 isNoSearchResultsVisible = false
                 isEmptyListViewVisible = false
+                isNoFilterResulrsVisible = false
             }
         }
     }
@@ -33,6 +32,7 @@ class DashboardViewModel: ObservableObject {
     @Published var isSheetVisible = false
     @Published var isEmptyListViewVisible = false
     @Published var isNoSearchResultsVisible = false
+    @Published var isNoFilterResulrsVisible = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -48,6 +48,7 @@ class DashboardViewModel: ObservableObject {
     }
     
     let onCreateNewChecklist = EmptySubject()
+    let onClearFilter = EmptySubject()
     let onMenu = EmptySubject()
     let onDarkOverlayTapped = EmptySubject()
     let navBarViewModel = AppContext.resolver.resolve(DashboardNavBarViewModel.self)!
@@ -177,16 +178,20 @@ class DashboardViewModel: ObservableObject {
             self?.checklistCells.removeAll()
             self?.navBarViewModel.sortedByTitle = sort.title
             self?.checklistFilterAndSort.sort = sort
-            self?.toggleSidemenu()
+            self?.closeSideMenu()
         }.store(in: &cancellables)
         
-        menuViewModel.onSelectFilter.sink { [weak self] filter in
-            self?.checklistCells.removeAll()
-            self?.navBarViewModel.filterTitle = filter.title
-            self?.navBarViewModel.isFilterVisible = filter.isVisibleInNavbar
-            self?.checklistFilterAndSort.filter = filter
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
+        
+        menuViewModel.onSelectFilter
+            .merge(with: onClearFilter.map { FilterDataModel.none })
+            .sink { [weak self] filter in
+                self?.checklistCells.removeAll()
+                self?.navBarViewModel.filterTitle = filter.title
+                self?.navBarViewModel.isFilterVisible = filter.isVisibleInNavbar
+                self?.checklistFilterAndSort.filter = filter
+                self?.closeSideMenu()
+            }
+            .store(in: &cancellables)
         
         menuViewModel.onSelectMyTemplates.sink { [weak self] _ in
             navigationHelper.navigateToMyTemplates(source: .dashboard)
@@ -292,6 +297,12 @@ private extension DashboardViewModel {
     func toggleSidemenu() {
         withAnimation(.easeOut(duration: 0.2)) {
             self.isSidemenuVisible.toggle()
+        }
+    }
+    
+    func closeSideMenu() {
+        if isSidemenuVisible {
+            toggleSidemenu()
         }
     }
     

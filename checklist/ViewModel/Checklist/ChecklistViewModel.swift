@@ -14,12 +14,7 @@ import PromiseKit
 
 class ChecklistViewModel: ObservableObject {
     
-    @Published var shouldCreateChecklistName: Bool = true {
-        didSet {
-            shouldDisplayAddItems = !shouldCreateChecklistName
-        }
-    }
-    @Published var shouldDisplayAddItems: Bool = false
+    @Published var shouldDisplayAddItems: Bool = true
     @Published var shouldDismissView: Bool = false
     @Published var isReminderOn: Bool = false {
         didSet {
@@ -39,13 +34,13 @@ class ChecklistViewModel: ObservableObject {
     @Published var reminderDate: Date = Date()
     @Published var isCreateTemplateChecked: Bool = false
     var shouldDisplaySetReminder: Bool {
-        viewState.isEditEnabled && !viewState.isCreateTemplate && !shouldCreateChecklistName && !viewState.isUpdateTemplate
+        viewState.isEditEnabled && !viewState.isCreateTemplate && !viewState.isUpdateTemplate
     }
-    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew && !shouldCreateChecklistName }
-    var shouldDisplayActionButton: Bool { viewState.isEditEnabled && !shouldCreateChecklistName }
+    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew }
+    var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
     var shouldDisplayDescription: Bool { viewState.isEditEnabled || !checklistDescription.isEmpty }
-    var isEditable: Bool { viewState.isEditEnabled }
     
+    @Published var isEditable: Bool
     @Published var checklistName: String = ""
     @Published var checklistDescription: String = ""
     var items: [ChecklistItemViewModel] = []
@@ -69,7 +64,12 @@ class ChecklistViewModel: ObservableObject {
     private let didCreateTemplateSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
     
-    let onCreateTitleNext: EmptySubject = .init()
+    let createChecklistNavbarViewModel: BackButtonNavBarViewModel = {
+        let vm = BackButtonNavBarViewModel(title: "Create Checklist")
+        vm.isBackButtonHidden = true
+        vm.style = .big
+        return vm
+    }()
     let onAddItemsNext: EmptySubject = .init()
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
     let onEditTapped: EmptySubject = .init()
@@ -137,7 +137,12 @@ class ChecklistViewModel: ObservableObject {
             title: "Remind me on this device",
             isChecked: viewState.checklist?.isValidReminderSet ?? false
         )
-        self.saveAsTemplateCheckboxViewModel = .init(title: "Also save as template", isChecked: false)
+        self.saveAsTemplateCheckboxViewModel = .init(title: "Save as template", isChecked: false)
+        self.isEditable = viewState.isEditEnabled
+        
+        if viewState.isCreateNew {
+            addNewItem(name: nil, isDone: false, isEditable: true)
+        }
         
         reminderCheckboxViewModel.checked.sink { [weak self] isChecked in
             withAnimation {
@@ -159,13 +164,6 @@ class ChecklistViewModel: ObservableObject {
             setupDisplayChecklist()
         }
         
-        onCreateTitleNext.sink { [weak self] in
-            withAnimation {
-                self?.setupItemsAndFinalizeView()
-                self?.shouldCreateChecklistName = false
-            }
-        }.store(in: &cancellables)
-        
         onDeleteItem.sink { [weak self] item in
             self?.items.removeAll { $0.id == item.id }
             self?.objectWillChange.send()
@@ -178,6 +176,7 @@ class ChecklistViewModel: ObservableObject {
             else {
                 return
             }
+            self.isEditable = true
             self.items.forEach { $0.isEditable = true }
             self.isReminderOn = checklist.isValidReminderSet
             self.reminderDate = checklist.reminderDate ?? Date()
@@ -226,7 +225,6 @@ private extension ChecklistViewModel {
         guard let checklist = currentChecklist.value else {
             return
         }
-        shouldCreateChecklistName = false
         self.checklistName = checklist.title
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { self.addNewItem($0) }
@@ -241,7 +239,6 @@ private extension ChecklistViewModel {
         guard let checklist = currentChecklist.value else {
             return
         }
-        shouldCreateChecklistName = false
         self.checklistName = checklist.title
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { addNewItem(name: $0.name, isDone: false, isEditable: true) }
@@ -341,7 +338,6 @@ private extension ChecklistViewModel {
         checklistDescription = template.description ?? ""
         template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }
         addNewItem(name: nil, isDone: false, isEditable: true)
-        shouldCreateChecklistName = false
     }
     
     func getChecklistFromUI(id: String? = nil) -> ChecklistDataModel {

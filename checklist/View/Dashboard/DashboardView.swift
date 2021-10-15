@@ -40,12 +40,15 @@ struct DashboardView: View {
                                 actionTitle: nil,
                                 onActionTappedSubject: nil
                             )
+                        } else if viewModel.isNoFilterResulrsVisible {
+                            EmptyListView(
+                                message: "No results found",
+                                actionTitle: "Clear filter",
+                                onActionTappedSubject: viewModel.onClearFilter
+                            )
                         } else {
                             ScrollView {
                                 VStack {
-                                    MyTextField(text: .constant("Biiig text to test"), placeholder: "Textfield placeholder", font: .bigTitle, isEditable: .constant(true))
-
-                                        .padding()
                                     ForEach(viewModel.checklistCells, id: \.id) { cell in
                                         DashboardChecklistCell(viewModel: cell)
                                             .padding(.horizontal, 20)

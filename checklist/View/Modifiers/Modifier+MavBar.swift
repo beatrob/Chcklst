@@ -44,6 +44,7 @@ extension Modifier {
                     .font(Font.Chcklst.item.font)
                     .foregroundColor(.firstAccent)
                     .padding(.horizontal)
+                    .padding(2)
                     .overlay(Capsule().stroke(Color.firstAccent))
             }
         }

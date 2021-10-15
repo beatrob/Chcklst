@@ -13,8 +13,6 @@ struct ScheduleDetailView: View {
     @StateObject var viewModel: ScheduleDetailViewModel
     @State var titleHeight: CGFloat = 40
     @State var descriptionHeight: CGFloat = 30
-    @State var isTitleEditing = false
-    @State var isDescEditing = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -32,33 +30,22 @@ struct ScheduleDetailView: View {
                             Spacer()
                         }.padding()
                     }
-                    MultilineTextView(
+                    
+                    MyTextField(
                         text: $viewModel.title,
                         placeholder: "Title",
-                        font: Font.Chcklst.bigTitle,
-                        color: Color.firstAccent,
-                        isEditing: $isTitleEditing,
-                        isCrossedOut: .constant(false),
-                        desiredHeight: $titleHeight
-                    )
-                    .onTapGesture { isTitleEditing.toggle() }
-                    .frame(height: titleHeight)
-                    .modifier(Modifier.Checklist.TextField(isEditable: true))
-                    .padding()
+                        font: .bigTitle,
+                        isEditable: .constant(true),
+                        isCrossedOut: .constant(false)
+                    ).padding()
                     
-                    MultilineTextView(
+                    MyTextField(
                         text: $viewModel.description,
                         placeholder: "Description",
-                        font: Font.Chcklst.description,
-                        color: Color.text,
-                        isEditing: $isDescEditing,
-                        isCrossedOut: .constant(false),
-                        desiredHeight: $descriptionHeight
-                    )
-                    .onTapGesture { isDescEditing.toggle() }
-                    .frame(height: descriptionHeight)
-                    .modifier(Modifier.Checklist.TextField(isEditable: true))
-                    .padding()
+                        font: .description,
+                        isEditable: .constant(true),
+                        isCrossedOut: .constant(false)
+                    ).padding()
                     
                     ForEach(viewModel.items) {
                         ChecklistItemView(viewModel: $0)

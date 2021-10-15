@@ -14,6 +14,7 @@ struct MyTextField: View {
     let placeholder: String
     let font: Font.Chcklst
     @Binding var isEditable: Bool
+    @Binding var isCrossedOut: Bool
     
     @FocusState private var isTextEditorFocused
     
@@ -22,7 +23,7 @@ struct MyTextField: View {
             if isEditable {
                 TextEditor(text: $text)
                     .modifier(Modifier.TextField.Text(font: font))
-                    .frame(minHeight: 60)
+                    .frame(minHeight: font.minimumTextFieldHeight)
                     .focused($isTextEditorFocused)
                     .padding(2)
                     .overlay(
@@ -34,6 +35,7 @@ struct MyTextField: View {
                 || !isEditable {
                 HStack {
                     Text(text.isEmpty ? placeholder : text)
+                        .strikethrough(isCrossedOut)
                         .padding(.leading, 7)
                         .onTapGesture {
                             if isEditable {
@@ -59,7 +61,8 @@ struct MyTextField_Previews: PreviewProvider {
                 text: .constant("Very very very looong text to test if it can be split into two lines"),
                 placeholder: "Placeholder",
                 font: .bigTitle,
-                isEditable: .constant(false)
+                isEditable: .constant(false),
+                isCrossedOut: .constant(true)
             )
                 .previewInterfaceOrientation(.portrait)
         }

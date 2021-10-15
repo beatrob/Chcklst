@@ -11,6 +11,7 @@ import SwiftUI
 struct DashboardNavBar: View {
     
     @StateObject var viewModel: DashboardNavBarViewModel
+    @FocusState var isSearchBarFocused
     
     var navBar: some View {
         HStack(spacing: 15) {
@@ -34,6 +35,9 @@ struct DashboardNavBar: View {
             }
             
             NavBarChipButton(viewModel: viewModel.searchButtonViewModel)
+                .onTapGesture {
+                    print("tap tap")
+                }
             NavBarChipButton(viewModel: viewModel.addButtonViewModel)
         }
     }
@@ -42,15 +46,22 @@ struct DashboardNavBar: View {
         VStack(alignment: .leading) {
             HStack {
                 TextField(
-                    "Search for title, description or item",
-                    text: $viewModel.searchText) { didBegin in
-                    viewModel.isSearchTitleVisible = !didBegin
-                }
+                    "Search",
+                    text: $viewModel.searchText,
+                    prompt: Text("title, description or item")
+                )
+                .focused($isSearchBarFocused)
                 .modifier(Modifier.NavBar.SearchTextField())
-                
+                 
                 Spacer()
                 NavBarChipButton(viewModel: viewModel.closeSearchButtonViewModel)
             }
+        }.onAppear {
+            DispatchQueue.main.async {
+                isSearchBarFocused = true
+            }
+        }.onDisappear {
+            isSearchBarFocused = false
         }
     }
     

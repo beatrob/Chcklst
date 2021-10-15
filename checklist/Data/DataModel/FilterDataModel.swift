@@ -16,14 +16,12 @@ enum FilterDataModel: CaseIterable, Identifiable {
     
     case withReminder
     case done
-    case archived
     case none
     
     var title: String {
         switch self {
         case .withReminder: return "With reminder"
         case .done: return "Done"
-        case .archived: return "Archived"
         case .none: return "None"
         }
     }

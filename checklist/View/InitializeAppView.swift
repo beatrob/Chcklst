@@ -23,6 +23,7 @@ struct InitializeAppView: View {
                 ActivityIndicatorView(isVisible: self.$viewModel.isLoading, type: .growingArc(.firstAccent))
                     .frame(width: 50, height: 50, alignment: .center)
                 Text("Loading ...")
+                    .modifier(Modifier.Checklist.Description())
                     .padding(.top)
             }
         }

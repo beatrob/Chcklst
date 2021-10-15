@@ -11,6 +11,8 @@ import SwiftUI
 import UIKit
 
 
+typealias ChcklstFont = Font.Chcklst
+
 extension Font {
     
     enum Chcklst {
@@ -38,6 +40,10 @@ extension Font {
             case .bigTitle:
                 return 36
             }
+        }
+        
+        var minimumTextFieldHeight: CGFloat {
+            size + 22
         }
         
         var font: Font {

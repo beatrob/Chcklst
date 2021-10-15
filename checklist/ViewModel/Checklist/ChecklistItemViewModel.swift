@@ -19,7 +19,7 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
             onNameChanged.send(name)
         }
     }
-    @Published var isDone: Bool = false
+    @Published var isDone: Bool
     @Published var isEditable: Bool
     var updateDate: Date
     
@@ -46,10 +46,9 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.id = item.value.id
         self.isEditable = false
         self.updateDate = item.value.updateDate
-        item.sink {
-            self.name = $0.name
-            self.isDone = $0.isDone
-            self.updateDate = $0.updateDate
+        self.isDone = item.value.isDone
+        item.sink { [weak self] i in
+            self?.update(name: i.name, isDone: i.isDone, updateDate: i.updateDate)
         }.store(in: &cancellables)
         
         onSwipeRight.sink {
@@ -67,5 +66,15 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     
     static func == (lhs: ChecklistItemViewModel, rhs: ChecklistItemViewModel) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+
+private extension ChecklistItemViewModel {
+    
+    func update(name: String, isDone: Bool, updateDate: Date) {
+        self.name = name
+        self.isDone = isDone
+        self.updateDate = updateDate
     }
 }

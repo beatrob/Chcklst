@@ -30,7 +30,7 @@ struct DashboardChecklistCell: View {
                 .padding(.trailing)
                 HStack {
                     viewModel.firstUndoneItem.map {
-                        ChecklistItemView(viewModel: $0, isTapable: false)
+                        ChecklistItemView(viewModel: $0)
                     }
                     Spacer()
                 }

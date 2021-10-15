@@ -12,31 +12,18 @@ import Combine
 struct ChecklistNameView: View {
     
     @Binding var checklistName: String
-    @Binding var shouldCreateChecklistName: Bool
-    var isEditable: Bool
-    @State var textHeight: CGFloat = 100
-    @State var isEditing: Bool = false
-    @State var desiredHeight: CGFloat = 50
+    @Binding var isEditable: Bool
     
     var body: some View {
         VStack(alignment: .center) {
-            MultilineTextView(
+            MyTextField(
                 text: $checklistName,
-                placeholder: "Name your checklist",
-                font: Modifier.Checklist.BigTitle.font,
-                color: Modifier.Checklist.BigTitle.color,
-                isEditing: $isEditing,
-                isCrossedOut: .constant(false),
-                desiredHeight: $desiredHeight
+                placeholder: "Title",
+                font: .bigTitle,
+                isEditable: $isEditable,
+                isCrossedOut: .constant(false)
             )
-            .frame(height: desiredHeight)
-            .modifier(Modifier.Checklist.TextField(isEditable: isEditable))
             .padding()
-            .onTapGesture {
-                if self.isEditable {
-                    self.isEditing.toggle()
-                }
-            }
         }
     }
 }
@@ -46,8 +33,7 @@ struct NameYourChecklistView_Previews: PreviewProvider {
     static var previews: some View {
         ChecklistNameView(
             checklistName: .constant(""),
-            shouldCreateChecklistName: .constant(true),
-            isEditable: true
+            isEditable: .constant(true)
         )
     }
 }
