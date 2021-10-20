@@ -82,5 +82,14 @@ extension Modifier {
                     .foregroundColor(.red)
             }
         }
+        
+        struct TableCell: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.smallTitle.font)
+                    .foregroundColor(Color.text)
+            }
+        }
     }
 }

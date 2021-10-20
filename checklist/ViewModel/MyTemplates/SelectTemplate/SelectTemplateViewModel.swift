@@ -28,6 +28,7 @@ class SelectTemplateViewModel: ObservableObject {
     var desitnationView = AnyView.empty
     var cancellables =  Set<AnyCancellable>()
     var templateTappedCancellable: AnyCancellable?
+    var dismissCancellable: AnyCancellable?
     
     
     init(
@@ -46,6 +47,11 @@ class SelectTemplateViewModel: ObservableObject {
                 ChecklistViewModel.self,
                 argument: ChecklistViewState.createFromTemplate(template: template)
             )!
+            self.dismissCancellable = viewModel
+                .$shouldDismissView
+                .filter { $0 }
+                .map { _ in () }
+                .subscribe(self.onGotoDashboard)
             self.desitnationView = AnyView(ChecklistView(viewModel: viewModel))
             self.isDestionationViewVisible = true
         }

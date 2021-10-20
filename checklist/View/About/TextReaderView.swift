@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TextReaderView: View {
     
-    let viewModel: TextReaderViewModel
+    @StateObject var viewModel: TextReaderViewModel
     
     var body: some View {
         VStack(spacing: 0) {

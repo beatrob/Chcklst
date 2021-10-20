@@ -11,6 +11,7 @@ import Foundation
 
 extension Array where Element == ChecklistItemDataModel {
     
+    @discardableResult
     mutating func updateItem(_ item: Element) -> Bool {
         guard let index = firstIndex(of: item) else {
             return false

@@ -39,7 +39,7 @@ enum ChecklistActionSheet {
                     .default(Text("Mark all done")) {
                         delegate.onMarkAllDoneAction()
                     },
-                    .default(Text("Save as template")) {
+                    .default(Text("Create Template")) {
                         delegate.onSaveAsTemplateAction()
                     },
                     .destructive(Text("Delete")) {

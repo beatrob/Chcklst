@@ -160,8 +160,8 @@ class ChecklistViewModel: ObservableObject {
             setupTemplate(template)
         } else if viewState.isCreateTemplate {
             setupCreateTemplate()
-        } else if viewState.isDisplay {
-            setupDisplayChecklist()
+        } else if viewState.isDisplay || viewState.isUpdate {
+            setupDisplayChecklist(isUpdate: viewState.isUpdate)
         }
         
         onDeleteItem.sink { [weak self] item in
@@ -170,17 +170,7 @@ class ChecklistViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onEditTapped.sink { [weak self] in
-            guard
-                let self = self,
-                let checklist = self.currentChecklist.value
-            else {
-                return
-            }
-            self.isEditable = true
-            self.items.forEach { $0.isEditable = true }
-            self.isReminderOn = checklist.isValidReminderSet
-            self.reminderDate = checklist.reminderDate ?? Date()
-            self.viewState = .update(checklist: checklist)
+            self?.enableEditMode()
         }.store(in: &cancellables)
         
         onDoneTapped.sink { [weak self] in
@@ -216,12 +206,13 @@ private extension ChecklistViewModel {
             return
         }
         self.items.forEach { $0.isEditable = false }
+        self.isEditable = false
         self.resignFirstResponder()
         self.updateChecklist()
         self.viewState = .display(checklist: checklist)
     }
     
-    func setupDisplayChecklist() {
+    func setupDisplayChecklist(isUpdate: Bool) {
         guard let checklist = currentChecklist.value else {
             return
         }
@@ -232,6 +223,9 @@ private extension ChecklistViewModel {
             checklist.getWithCurrentUpdateDate()
         ).catch { error in
             error.log(message: "Failed to update checklist")
+        }
+        if isUpdate {
+            enableEditMode()
         }
     }
     
@@ -292,23 +286,36 @@ private extension ChecklistViewModel {
         }
     }
     
-    func setupItemsAndFinalizeView() {
+    func insertEmptyItemIfNeedd() {
         if items.isEmpty {
             addNewItem(name: nil, isDone: false, isEditable: true)
         } else if let lastItem = items.last, !lastItem.name.isEmpty {
             addNewItem(name: nil, isDone: false, isEditable: true)
         }
+    }
+    
+    func clearEmptyItems() {
         let emptyItems = items.filter{ $0.name.isEmpty && $0 != items.last }
-        emptyItems.forEach { emptyItem in
-            items.removeAll { emptyItem == $0 }
+        if !emptyItems.isEmpty {
+            emptyItems.forEach { emptyItem in
+                items.removeAll { emptyItem == $0 }
+            }
         }
+        objectWillChange.send()
     }
     
     func addNewItem(name: String?, isDone: Bool, isEditable: Bool) {
         let id = UUID().uuidString
         let viewModel = ChecklistItemViewModel(id: id, name: name, isDone: isDone, isEditable: isEditable)
-        viewModel.onNameChanged.sink { [weak self] name in
-            self?.setupItemsAndFinalizeView()
+        viewModel.onTextDidClear.sink { [weak self]  in
+            withAnimation {
+                self?.clearEmptyItems()
+            }
+        }.store(in: &cancellables)
+        viewModel.onNameChanged.sink { [weak self] _ in
+            withAnimation {
+                self?.insertEmptyItemIfNeedd()
+            }
         }.store(in: &cancellables)
         self.items.append(viewModel)
         self.objectWillChange.send()
@@ -440,6 +447,17 @@ private extension ChecklistViewModel {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     #endif
+    
+    func enableEditMode() {
+        guard let checklist = self.currentChecklist.value else {
+            return
+        }
+        self.isEditable = true
+        self.items.forEach { $0.isEditable = true }
+        self.isReminderOn = checklist.isValidReminderSet
+        self.reminderDate = checklist.reminderDate ?? Date()
+        self.viewState = .update(checklist: checklist)
+    }
 }
 
 

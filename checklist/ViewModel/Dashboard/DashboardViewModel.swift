@@ -102,7 +102,7 @@ class DashboardViewModel: ObservableObject {
             }
             log(debug: "Deeplinking to checklist: \(checklist)")
             after(seconds: 1).done {
-                checklistDataSource.selectedCheckList.send(checklist)
+                navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
                 notificationManager.clearDeeplinkcChecklistId()
             }
         }.store(in: &cancellables)
@@ -126,13 +126,6 @@ class DashboardViewModel: ObservableObject {
             self.checklistCells = results.map {
                 self.getChecklistCellViewModel(with: $0)
             }
-        }.store(in: &cancellables)
-        
-        checklistDataSource.selectedCheckList.dropFirst().sink { checklist in
-            guard let checklist = checklist else {
-                return
-            }
-            navigationHelper.navigateToChecklistDetail(with: checklist)
         }.store(in: &cancellables)
         
         let createChecklist = ChecklistPassthroughSubject()
@@ -254,15 +247,17 @@ class DashboardViewModel: ObservableObject {
     
     func getChecklistCellViewModel(with checklist: ChecklistDataModel) -> DashboardChecklistCellViewModel {
         let viewModel = DashboardChecklistCellViewModel(checklist: checklist)
+        
         viewModel.onChecklistTapped.sink { [weak self] checklist in
-            self?.checklistDataSource.selectedCheckList.send(checklist)
+            self?.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
         }.store(in: &cancellables)
+        
         viewModel.onChecklistLongTapped.sink { [weak self] checklist in
             guard let self = self else { return }
             self.actionSheet = .editChecklist(
                 checklist: checklist,
                 onEdit: {
-                    #warning("TODO: implement edit checklist")
+                    self.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: true)
                 },
                 onCreateTemplate: {
                     self.templateDataSource.createTemplate(.init(checklist: checklist))
@@ -277,6 +272,7 @@ class DashboardViewModel: ObservableObject {
                 }
             )
         }.store(in: &cancellables)
+        
         viewModel.onUpdateItem.sink { [weak self] item in
             guard let self = self else { return }
             self.checklistDataSource.updateItem(item, in: checklist)
@@ -285,6 +281,7 @@ class DashboardViewModel: ObservableObject {
                     $0.log(message: "Failed to update item \(item)")
                 }
         }.store(in: &cancellables)
+        
         return viewModel
     }
 }
@@ -364,7 +361,7 @@ private extension DashboardViewModel {
         }.get { checklist in
             after(seconds: 1).done {
                 if openAfterCreated {
-                    self.checklistDataSource.selectedCheckList.send(checklist)
+                    self.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
                 }
                 self.notificationManager.clearDeeplinkcChecklistId()
             }

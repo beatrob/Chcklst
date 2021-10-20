@@ -69,10 +69,12 @@ class NavigationHelper: ObservableObject {
         }
     }
     
-    func navigateToChecklistDetail(with checklist: ChecklistDataModel) {
+    func navigateToChecklistDetail(with checklist: ChecklistDataModel, shouldEdit: Bool) {
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
-            argument: ChecklistViewState.display(checklist: checklist)
+            argument: shouldEdit ?
+                ChecklistViewState.update(checklist: checklist) :
+                ChecklistViewState.display(checklist: checklist)
         )!
         viewModel.onDismiss.sink { [weak self] in
             self?.popToDashboard()

@@ -27,6 +27,15 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     let onSwipeLeft: PassthroughSubject<Void, Never> = .init()
     let onCheckMarkTapped: PassthroughSubject<Void, Never> = .init()
     let onNameChanged: PassthroughSubject<String, Never> = .init()
+    let onDidEndEditing: PassthroughSubject<Void, Never> = .init()
+    var onTextDidClear: EmptyPublisher {
+        onDidEndEditing
+            .combineLatest($name)
+            .map { $0.1.isEmpty }
+            .filter { $0 }
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
     
     var cancellables =  Set<AnyCancellable>()
     
@@ -42,11 +51,13 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.updateDate = Date()
     }
     
-    init(item: CurrentValueSubject<ChecklistItemDataModel, Never>) {
-        self.id = item.value.id
-        self.isEditable = false
-        self.updateDate = item.value.updateDate
-        self.isDone = item.value.isDone
+    convenience init(item: CurrentValueSubject<ChecklistItemDataModel, Never>) {
+        self.init(
+            id: item.value.id,
+            name: item.value.name,
+            isDone: item.value.isDone,
+            isEditable: false
+        )
         item.sink { [weak self] i in
             self?.update(name: i.name, isDone: i.isDone, updateDate: i.updateDate)
         }.store(in: &cancellables)

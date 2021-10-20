@@ -36,7 +36,8 @@ struct ScheduleDetailView: View {
                         placeholder: "Title",
                         font: .bigTitle,
                         isEditable: .constant(true),
-                        isCrossedOut: .constant(false)
+                        isCrossedOut: .constant(false),
+                        didEndEditing: nil
                     ).padding()
                     
                     MyTextField(
@@ -44,7 +45,8 @@ struct ScheduleDetailView: View {
                         placeholder: "Description",
                         font: .description,
                         isEditable: .constant(true),
-                        isCrossedOut: .constant(false)
+                        isCrossedOut: .constant(false),
+                        didEndEditing: nil
                     ).padding()
                     
                     ForEach(viewModel.items) {

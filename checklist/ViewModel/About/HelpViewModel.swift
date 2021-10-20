@@ -12,7 +12,7 @@ import SwiftUI
 
 class HelpViewModel: ObservableObject {
     
-    enum Item: String, CaseIterable, Identifiable {
+    enum Item: String, CaseIterable, Identifiable, Hashable {
         case checklists
         case templates
         case schedules
@@ -38,16 +38,17 @@ class HelpViewModel: ObservableObject {
         isBackButtonHidden: false
     )
     let items = Item.allCases
-    let didSelectItem = PassthroughSubject<Item, Never>()
+    
     let navigationBarViewModel = BackButtonNavBarViewModel(title: LocalizedStringKey("help_title"))
     @Published var navigationLinkDestination: AnyView = .empty
     @Published var isNavigationLinkActive = false
+    @Published var selection: Item? = nil
     
     init() {
         navigationBarViewModel.style = .big
         navigationBarViewModel.isBackButtonHidden = true
-        didSelectItem.sink { [weak self] item in
-            guard let self = self else {
+        $selection.sink { [weak self] item in
+            guard let self = self, let item = item else {
                 return
             }
             self.textReaderViewModel.title = item.title
@@ -58,7 +59,6 @@ class HelpViewModel: ObservableObject {
         
         textReaderViewModel.onBackTapped.sink { [weak self] in
             self?.isNavigationLinkActive = false
-            self?.navigationLinkDestination = .empty
         }.store(in: &cancellables)
     }
 }

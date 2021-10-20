@@ -23,7 +23,8 @@ struct ChecklistDescriptionView: View {
                 placeholder: "Description (optional)",
                 font: .description,
                 isEditable: $isEditable,
-                isCrossedOut: .constant(false)
+                isCrossedOut: .constant(false),
+                didEndEditing: nil
             )
             .padding(.horizontal)
         }

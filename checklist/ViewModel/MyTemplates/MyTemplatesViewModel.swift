@@ -49,7 +49,7 @@ class MyTemplatesViewModel: ObservableObject {
     let navigationHelper: NavigationHelper
     let navBarViewModel = AppContext.resolver.resolve(
         BackButtonNavBarViewModel.self,
-        argument: "My Templates"
+        argument: "Templates"
     )!
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct MyTextField: View {
     
@@ -15,8 +16,9 @@ struct MyTextField: View {
     let font: Font.Chcklst
     @Binding var isEditable: Bool
     @Binding var isCrossedOut: Bool
-    
+    let didEndEditing: PassthroughSubject<Void, Never>?
     @FocusState private var isTextEditorFocused
+    @State private var previousFocusedValue = false
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -29,7 +31,12 @@ struct MyTextField: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.text, lineWidth: 1)
-                    )
+                    ).onChange(of: isTextEditorFocused) { isFocused in
+                        if !isFocused && previousFocusedValue {
+                            didEndEditing?.send()
+                        }
+                        previousFocusedValue = isFocused
+                    }
             }
             if (isEditable && !isTextEditorFocused && text.isEmpty)
                 || !isEditable {
@@ -62,7 +69,8 @@ struct MyTextField_Previews: PreviewProvider {
                 placeholder: "Placeholder",
                 font: .bigTitle,
                 isEditable: .constant(false),
-                isCrossedOut: .constant(true)
+                isCrossedOut: .constant(true),
+                didEndEditing: nil
             )
                 .previewInterfaceOrientation(.portrait)
         }

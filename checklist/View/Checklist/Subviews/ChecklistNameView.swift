@@ -21,7 +21,8 @@ struct ChecklistNameView: View {
                 placeholder: "Title",
                 font: .bigTitle,
                 isEditable: $isEditable,
-                isCrossedOut: .constant(false)
+                isCrossedOut: .constant(false),
+                didEndEditing: nil
             )
             .padding()
         }

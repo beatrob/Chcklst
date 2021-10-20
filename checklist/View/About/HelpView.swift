@@ -14,7 +14,7 @@ struct HelpView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 NavigationLink(
                     destination: viewModel.navigationLinkDestination,
                     isActive: $viewModel.isNavigationLinkActive,
@@ -22,23 +22,31 @@ struct HelpView: View {
                 ).hidden()
                 
                 BackButtonNavBar(viewModel: viewModel.navigationBarViewModel)
-                    .padding(.bottom)
                 
                 ForEach(viewModel.items) { item in
-                    HStack {
-                    Text(item.title)
-                        .modifier(Modifier.Checklist.SmallTitle())
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .modifier(Modifier.Checklist.SmallTitle())
+                    Button {
+                        viewModel.selection = item
+                    } label: {
+                        VStack(spacing: 0) {
+                            HStack {
+                                Text(item.title)
+                                    .listRowBackground(Color.clear)
+                                    .padding(.vertical)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                            }
+                            Rectangle()
+                                .foregroundColor(Color.gray)
+                                .frame(height: 1)
+                        }
                     }
-                    .padding(.horizontal)
-                    .onTapGesture {
-                        viewModel.didSelectItem.send(item)
-                    }
-                    SeparatorView()
+                    .padding()
+                    .modifier(Modifier.Button.TableCell())
                 }
+                
+                
                 Spacer()
+                
             }
             .navigationBarHidden(true)
         }

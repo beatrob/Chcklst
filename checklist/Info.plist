@@ -58,13 +58,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>restrictionsEnabledString</key>
-	<string>$(RESTRICTIONS_ENABLED)</string>
 	<key>numberOfFreeChecklists</key>
 	<integer>10</integer>
-	<key>numberOfFreeTemplates</key>
-	<integer>0</integer>
 	<key>numberOfFreeSchedules</key>
-	<integer>0</integer>
+	<integer>5</integer>
+	<key>numberOfFreeTemplates</key>
+	<integer>2</integer>
+	<key>restrictionsEnabledString</key>
+	<string>$(RESTRICTIONS_ENABLED)</string>
 </dict>
 </plist>

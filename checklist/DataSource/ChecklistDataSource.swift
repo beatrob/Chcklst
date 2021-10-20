@@ -14,7 +14,6 @@ import PromiseKit
 protocol ChecklistDataSource {
     
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
-    var selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> { get }
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
     func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func getChecklist(withId id: String) -> ChecklistDataModel?
@@ -35,7 +34,6 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> {
         _checklists.eraseToAnyPublisher()
     }
-    let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     
     let coreDataManager: CoreDataChecklistManager
     
@@ -54,11 +52,7 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         checklist.updateToCurrentDate()
         return coreDataManager.update(checklist: checklist)
         .get {
-            if self._checklists.value[index].items.updateItem(item) {
-                if self.selectedCheckList.value == checklist {
-                    _ = self.selectedCheckList.value?.items.updateItem(item)
-                }
-            }
+            self._checklists.value[index].items.updateItem(item)
         }.map { checklist }
     }
     

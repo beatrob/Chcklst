@@ -91,7 +91,6 @@
 		DDB298DB25114F4B00F326D2 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DA25114F4A00F326D2 /* String+Extension.swift */; };
 		DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DC2511623500F326D2 /* ViewVisibility.swift */; };
 		DDB298DF2511626000F326D2 /* DashboardSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB298DE2511626000F326D2 /* DashboardSheet.swift */; };
-		DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DDC4C0F6252A63A500F223D3 /* ChecklistWidget.intentdefinition */; };
 		DDD0053B25EAEBAA0098E27E /* Modifier+MavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD0053A25EAEBAA0098E27E /* Modifier+MavBar.swift */; };
 		DDD0054025EAECBA0098E27E /* ChecklistNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD0053F25EAECBA0098E27E /* ChecklistNavBar.swift */; };
 		DDD0054825EAED4A0098E27E /* ChecklistNavBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD0054725EAED4A0098E27E /* ChecklistNavBarViewModel.swift */; };
@@ -275,10 +274,6 @@
 		DDB298DE2511626000F326D2 /* DashboardSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSheet.swift; sourceTree = "<group>"; };
 		DDC4C0EF252A63A500F223D3 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DDC4C0F1252A63A500F223D3 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		DDC4C0F4252A63A500F223D3 /* ChecklistWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistWidget.swift; sourceTree = "<group>"; };
-		DDC4C0F6252A63A500F223D3 /* ChecklistWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = ChecklistWidget.intentdefinition; sourceTree = "<group>"; };
-		DDC4C0F7252A63A700F223D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DDC4C0F9252A63A700F223D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDD0053A25EAEBAA0098E27E /* Modifier+MavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+MavBar.swift"; sourceTree = "<group>"; };
 		DDD0053F25EAECBA0098E27E /* ChecklistNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistNavBar.swift; sourceTree = "<group>"; };
 		DDD0054725EAED4A0098E27E /* ChecklistNavBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistNavBarViewModel.swift; sourceTree = "<group>"; };
@@ -450,7 +445,6 @@
 			children = (
 				DD52A62324E19EF000A9A1FC /* checklist */,
 				DD52A63D24E19EF100A9A1FC /* checklistTests */,
-				DDC4C0F3252A63A500F223D3 /* ChecklistWidget */,
 				DDC4C0EE252A63A500F223D3 /* Frameworks */,
 				DD52A62224E19EF000A9A1FC /* Products */,
 			);
@@ -712,17 +706,6 @@
 				DDC4C0F1252A63A500F223D3 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		DDC4C0F3252A63A500F223D3 /* ChecklistWidget */ = {
-			isa = PBXGroup;
-			children = (
-				DDC4C0F4252A63A500F223D3 /* ChecklistWidget.swift */,
-				DDC4C0F6252A63A500F223D3 /* ChecklistWidget.intentdefinition */,
-				DDC4C0F7252A63A700F223D3 /* Assets.xcassets */,
-				DDC4C0F9252A63A700F223D3 /* Info.plist */,
-			);
-			path = ChecklistWidget;
 			sourceTree = "<group>";
 		};
 		DDC50F9625440BBF00B19AED /* Subviews */ = {
@@ -1088,7 +1071,6 @@
 				FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */,
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
 				FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */,
-				DDC4C0FB252A63A700F223D3 /* ChecklistWidget.intentdefinition in Sources */,
 				FEA82FC926A37D500008F34A /* UpgradeViewModel.swift in Sources */,
 				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
@@ -1345,7 +1327,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1372,7 +1354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1503,7 +1485,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

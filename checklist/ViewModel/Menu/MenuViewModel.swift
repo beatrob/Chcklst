@@ -24,7 +24,7 @@ class MenuViewModel: ObservableObject {
         dataModel: .init(title: "Schedules"), isSelected: false
     )
     @Published var myTemplates = MenuItemViewModel<MenuItemDataModel>(
-        dataModel: .init(title: "My Temlates"), isSelected: false
+        dataModel: .init(title: "Templates"), isSelected: false
     )
     @Published var settings = MenuItemViewModel<MenuItemDataModel>(
         dataModel: .init(title: "Settings"), isSelected: false

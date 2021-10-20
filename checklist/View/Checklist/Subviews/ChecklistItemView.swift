@@ -29,7 +29,8 @@ struct ChecklistItemView: View, Equatable {
                 placeholder: "Add task",
                 font: .item,
                 isEditable: $viewModel.isEditable,
-                isCrossedOut: $viewModel.isDone
+                isCrossedOut: $viewModel.isDone,
+                didEndEditing: viewModel.onDidEndEditing
             )
         }
         .gesture(
