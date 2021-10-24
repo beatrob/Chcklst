@@ -59,5 +59,15 @@ extension Modifier {
                     .foregroundColor(.firstAccent)
             }
         }
+        
+        struct OrderAndFilterText: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .lineLimit(1)
+                    .font(Font.Chcklst.smallText.font)
+                    .foregroundColor(.firstAccent)
+            }
+        }
     }
 }

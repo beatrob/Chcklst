@@ -59,7 +59,7 @@ class NotificationManager: NSObject {
         Promise { resolver in
             UNUserNotificationCenter
                 .current()
-                .requestAuthorization(options: [.alert, .announcement, .badge, .sound]) { granted, error in
+                .requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
                     if let error = error {
                         resolver.reject(error)
                     } else {
@@ -168,6 +168,12 @@ class NotificationManager: NSObject {
             UNUserNotificationCenter.current().removeAllDeliveredNotifications()
         }
     }
+}
+
+
+//MARK:- Private methods
+
+private extension NotificationManager {
     
     private func registerPushNotification(
         prefix: Prefix,
@@ -190,7 +196,7 @@ class NotificationManager: NSObject {
         }
     }
     
-    private func getDateComponents(
+    func getDateComponents(
         for date: Date,
         repeatFrequency: ScheduleDataModel.RepeatFrequency
     ) -> DateComponents {
@@ -206,7 +212,7 @@ class NotificationManager: NSObject {
         }
     }
     
-    private func getDateComponents(
+    func getDateComponents(
         for date: Date,
         customDays: [DayDataModel]
     ) -> [DateComponents] {
@@ -216,7 +222,7 @@ class NotificationManager: NSObject {
             .map { Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: date) }
     }
     
-    private func getScheduleId(fromNotificationId notfId: String) -> String? {
+    func getScheduleId(fromNotificationId notfId: String) -> String? {
         let id = notfId.replacingOccurrences(of: Prefix.schedule.rawValue, with: "")
         let split = id.split(separator: "_")
         if !split.isEmpty {
@@ -241,5 +247,9 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
                   let scheduleId = getScheduleId(fromNotificationId: identifier) {
             _deeplickScheduleId.send(scheduleId)
         }
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        UNNotificationPresentationOptions.banner
     }
 }

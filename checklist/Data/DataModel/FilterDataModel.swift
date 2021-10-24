@@ -20,7 +20,7 @@ enum FilterDataModel: CaseIterable, Identifiable {
     
     var title: String {
         switch self {
-        case .withReminder: return "With reminder"
+        case .withReminder: return "Reminder set"
         case .done: return "Done"
         case .none: return "None"
         }

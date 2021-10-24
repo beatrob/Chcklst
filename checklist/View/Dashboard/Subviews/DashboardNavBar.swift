@@ -20,24 +20,22 @@ struct DashboardNavBar: View {
             
             HStack(spacing: 5) {
                 Image(systemName: "arrow.up.arrow.down")
-                    .modifier(Modifier.Menu.Section())
+                    .modifier(Modifier.NavBar.OrderAndFilterText())
                 Text(viewModel.sortedByTitle)
-                    .modifier(Modifier.Menu.Section())
+                    .modifier(Modifier.NavBar.OrderAndFilterText())
             }
             
             if viewModel.isFilterVisible {
                 HStack(spacing: 5) {
                     Image(systemName: "eye")
-                        .modifier(Modifier.Menu.Section())
+                        .modifier(Modifier.NavBar.OrderAndFilterText())
                     Text(viewModel.filterTitle)
-                        .modifier(Modifier.Menu.Section())
+                        .modifier(Modifier.NavBar.OrderAndFilterText())
                 }
             }
             
             NavBarChipButton(viewModel: viewModel.searchButtonViewModel)
-                .onTapGesture {
-                    print("tap tap")
-                }
+
             NavBarChipButton(viewModel: viewModel.addButtonViewModel)
         }
     }
