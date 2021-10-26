@@ -16,6 +16,8 @@ enum DashboardAlert {
     case templateCreated(gotoTemplates: EmptyCompletion)
     case scheduleCreated(gotoSchedules: EmptyCompletion)
     case confirmDeleteChecklist(onDelete: EmptyCompletion)
+    case confirmMarkAllItemsDone(onConfirm: EmptyCompletion)
+    case confirmMarkAllItemsUnDone(onConfirm: EmptyCompletion)
     
     var view: Alert {
         switch self {
@@ -35,6 +37,10 @@ enum DashboardAlert {
                 secondaryButton: .cancel()
             )
         case .none: return .empty
+        case .confirmMarkAllItemsDone(let onConfirm):
+            return ChecklistAlert.confirmMarkAllDone(onConfirm: onConfirm).view
+        case .confirmMarkAllItemsUnDone(let onConfirm):
+            return ChecklistAlert.confirmMarkAllUnDone(onConfirm: onConfirm).view
         }
     }
     

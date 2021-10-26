@@ -17,9 +17,9 @@ struct CheckboxView: View {
             Image(systemName: viewModel.isChecked ? "checkmark.square" : "square")
                 .resizable()
                 .frame(width: 20, height: 20)
-                .modifier(Modifier.Checklist.Item())
+                .modifier(Modifier.Checklist.Item(color: .text))
             Text(viewModel.title)
-                .modifier(Modifier.Checklist.Item())
+                .modifier(Modifier.Checklist.Item(color: .text))
         }.onTapGesture {
             self.viewModel.isChecked.toggle()
         }

@@ -11,12 +11,8 @@ import Combine
 import SwiftUI
 
 enum DashboardActionSheet {
-    case editChecklist(
-        checklist: ChecklistDataModel,
-        onEdit: EmptyCompletion,
-        onCreateTemplate: EmptyCompletion,
-        onDelete: EmptyCompletion
-    )
+    case editChecklist(checklist: ChecklistDataModel, delegate: ChecklistActionSheetDelegate)
+    
     case createChecklist(
             onNewChecklist: EmptyCompletion,
             onNewFromTemplate: EmptyCompletion,
@@ -33,26 +29,10 @@ enum DashboardActionSheet {
     
     var actionSheet: ActionSheet {
         switch self {
-        case .editChecklist(let checklist, let onEdit, let onCreateTemplate, let onDelete):
-            return ActionSheet(
-                title: Text(checklist.title),
-                message: nil,
-                buttons: [
-                    .default(Text("Mark all as done")) {
-                        
-                    },
-                    .default(Text("Edit")) {
-                        withAnimation { onEdit() }
-                    },
-                    .default(Text("Create template")) {
-                        onCreateTemplate()
-                    },
-                    .destructive(Text("Delete")) {
-                        withAnimation { onDelete() }
-                    },
-                    .cancel()
-                ]
-            )
+        case .editChecklist(let checklist, let delegate):
+            return ChecklistActionSheet
+                .actionMenu(checklist: checklist, delegate: delegate)
+                .view
         case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateSchedule):
             return ActionSheet(
                 title: Text("CREATE NEW"),

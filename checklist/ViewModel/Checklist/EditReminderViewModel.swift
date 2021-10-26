@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import PromiseKit
 
 
 class EditReminderViewModel: ObservableObject {
@@ -33,14 +34,22 @@ class EditReminderViewModel: ObservableObject {
     @Published var reminderDate = Date()
     var alert = Alert.empty
     @Published var isAlertVisible: Bool = false
-    let onDeleteReminder = EmptySubject()
-    let onSaveReminder = PassthroughSubject<Date, Never>()
+    let onDidDeleteReminder = EmptySubject()
+    let onDidCreateReminder = PassthroughSubject<Date, Never>()
     let onSave = EmptySubject()
     private var cancellables = Set<AnyCancellable>()
     private let notificationManager: NotificationManager
     let reminderCheckboxViewModel: CheckboxViewModel
+    private let checklistDataSource: ChecklistDataSource
+    private let checklist: ChecklistDataModel
     
-    init(checklist: ChecklistDataModel, notificationManager: NotificationManager) {
+    init(
+        checklist: ChecklistDataModel,
+        notificationManager: NotificationManager,
+        checklistDataSource: ChecklistDataSource
+    ) {
+        self.checklistDataSource = checklistDataSource
+        self.checklist = checklist
         self.title = checklist.title
         self.notificationManager = notificationManager
         self.isReminderOn = checklist.isValidReminderSet
@@ -59,16 +68,43 @@ class EditReminderViewModel: ObservableObject {
         onSave.sink { [weak self] in
             guard let self = self else { return }
             if !self.isReminderOn {
-                self.onDeleteReminder.send()
+                self.deleteReminder()
             } else {
                 if self.reminderDate >= Date() {
-                    self.onSaveReminder.send(self.reminderDate)
+                    self.createReminder(date: self.reminderDate)
                 } else {
                     self.alert = .getWrongReminderDate()
                     self.isAlertVisible = true
                 }
             }
         }.store(in: &cancellables)
+    }
+}
+
+
+private extension EditReminderViewModel {
+    
+    func createReminder(date: Date) {
+        firstly {
+            self.checklistDataSource.updateReminderDate(date, for: checklist)
+        }.get {
+            self.onDidCreateReminder.send(date)
+        }.then {
+            return self.notificationManager.setupReminder(date: date, for: self.checklist)
+        }.catch { error in
+            error.log(message: "Failed to save reminder")
+            #warning("TODO: Add error hanling")
+        }
+    }
+    
+    func deleteReminder() {
+        checklistDataSource.updateReminderDate(nil, for: checklist).done {
+            self.notificationManager.removeReminder(for: self.checklist)
+            self.onDidDeleteReminder.send()
+        }.catch { error in
+            error.log(message: "Failed to delete reminder")
+            #warning("TODO: Add error hanling")
+        }
     }
 }
 

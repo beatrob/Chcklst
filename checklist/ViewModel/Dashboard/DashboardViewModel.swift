@@ -111,7 +111,7 @@ class DashboardViewModel: ObservableObject {
             guard !scheduleId.isEmpty else {
                 return
             }
-            self?.createChecklist(for: scheduleId, openAfterCreated: true)
+            self?.createChecklist(for: scheduleId, openAfterCreated: false)
         }.store(in: &cancellables)
         
         checklistFilterAndSort.filteredAndSortedCheckLists
@@ -254,23 +254,12 @@ class DashboardViewModel: ObservableObject {
         
         viewModel.onChecklistLongTapped.sink { [weak self] checklist in
             guard let self = self else { return }
-            self.actionSheet = .editChecklist(
-                checklist: checklist,
-                onEdit: {
-                    self.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: true)
-                },
-                onCreateTemplate: {
-                    self.templateDataSource.createTemplate(.init(checklist: checklist))
-                        .catch { $0.log(message: "Failed to create new template from checklist \(checklist)") }
-                },
-                onDelete: { [weak self] in
-                    self?.alert = .confirmDeleteChecklist(onDelete: {
-                        self?.checklistDataSource.deleteChecklist(checklist)
-                        .done { Logger.log.debug("Checklist deleted with id: \(checklist.id)") }
-                        .catch { _ in Logger.log.error("Delete checklist failed") }
-                    })
-                }
-            )
+            self.actionSheet = .editChecklist(checklist: checklist, delegate: self)
+            Haptics.play(.actionSheet)
+        }.store(in: &cancellables)
+        
+        viewModel.onDeleteCheklistTapped.sink { [unowned self] checklist in
+            self.handleDeleteChecklist(checklist)
         }.store(in: &cancellables)
         
         viewModel.onUpdateItem.sink { [weak self] item in
@@ -376,5 +365,73 @@ private extension DashboardViewModel {
                 self.createChecklist(for: $0, openAfterCreated: false)
             }
         }
+    }
+    
+    func handleDeleteChecklist(_ checklist: ChecklistDataModel) {
+        alert = .confirmDeleteChecklist(onDelete: { [unowned self] in
+            self.checklistDataSource.deleteChecklist(checklist)
+            .done {
+                Logger.log.debug("Checklist deleted with id: \(checklist.id)")
+                Haptics.notify(.success)
+            }.catch { _ in
+                Logger.log.error("Delete checklist failed")
+                Haptics.notify(.error)
+            }
+        })
+    }
+}
+
+
+extension DashboardViewModel: ChecklistActionSheetDelegate {
+    
+    
+    func onEditAction(checklist: ChecklistDataModel) {
+        navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: true)
+    }
+    
+    func onMarkAllDoneAction(checklist: ChecklistDataModel) {
+        alert = .confirmMarkAllItemsDone { [weak self] in
+            guard let self = self else { return }
+            var chcklst = checklist
+            for i in 0...checklist.items.count-1 {
+                chcklst.items[i].isDone = true
+            }
+            self.checklistDataSource.updateChecklist(chcklst).catch { error in
+                error.log(message: "Failed to mark all items done")
+            }
+            
+        }
+    }
+    
+    func onMarkAllUndoneAction(checklist: ChecklistDataModel) {
+        alert = .confirmMarkAllItemsUnDone { [weak self] in
+            guard let self = self else { return }
+            var chcklst = checklist
+            for i in 0...checklist.items.count-1 {
+                chcklst.items[i].isDone = false
+            }
+            self.checklistDataSource.updateChecklist(chcklst).catch { error in
+                error.log(message: "Failed to mark all items undone")
+            }
+        }
+    }
+    
+    func onSetReminderAction(checklist: ChecklistDataModel) {
+        let vm = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
+        vm.onDidDeleteReminder
+            .merge(with: vm.onDidCreateReminder.map { _ in () })
+            .sink { [weak self] in
+                self?.sheet = .none
+        }.store(in: &cancellables)
+        self.sheet = .editReminder(viewModel: vm)
+    }
+    
+    func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
+        templateDataSource.createTemplate(.init(checklist: checklist))
+            .catch { $0.log(message: "Failed to create new template from checklist \(checklist)") }
+    }
+    
+    func onDeleteAction(checklist: ChecklistDataModel) {
+        handleDeleteChecklist(checklist)
     }
 }

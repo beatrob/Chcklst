@@ -96,9 +96,11 @@ class ChecklistViewModel: ObservableObject {
             argument: currentChecklist.eraseToAnyPublisher()
         )!
         viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
-        viewModel.actionsButton.didTap.sink { [weak self] in
-            guard let self = self else { return }
-            self.actionSheet = .actionMenu(delegate: self)
+        viewModel.actionsButton.didTap.zip(currentChecklist).sink { [weak self] tupple in
+            guard let self = self, let checklist = tupple.1  else {
+                return
+            }
+            self.actionSheet = .actionMenu(checklist: checklist, delegate: self)
             self.objectWillChange.send()
         }.store(in: &cancellables)
         viewModel.doneButton.didTap.sink { [weak self] in
@@ -245,8 +247,8 @@ private extension ChecklistViewModel {
             guard verified else {
                 return
             }
-            if self.isReminderOn {
-                self.notificationManager.setupReminder(for: checklist)
+            if self.isReminderOn, let date = checklist.reminderDate {
+                self.notificationManager.setupReminder(date: date, for: checklist)
                     .done {
                         self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
                         self.shouldDismissView = true
@@ -273,13 +275,14 @@ private extension ChecklistViewModel {
         firstly {
             .value(checklistToUpdate.isValidReminderSet)
         }.then { isReminderSet -> Promise<Void> in
-            guard isReminderSet else {
+            guard isReminderSet, let reminderDate = checklistToUpdate.reminderDate else {
                 return .value
             }
-            return self.notificationManager.setupReminder(for: checklistToUpdate)
+            return self.notificationManager.setupReminder(date: reminderDate, for: checklistToUpdate)
         }.then {
             self.checklistDataSource.updateChecklist(checklistToUpdate)
         }.done {
+            self.currentChecklist.send(checklistToUpdate)
             log(debug: "Update checklist success. \(checklistToUpdate)")
         }.catch { error in
             log(error: "Update checklist failed. \(error.localizedDescription)")
@@ -463,14 +466,14 @@ private extension ChecklistViewModel {
 
 extension ChecklistViewModel: ChecklistActionSheetDelegate {
     
-    func onEditAction() {
+    func onEditAction(checklist: ChecklistDataModel) {
         withAnimation {
             navBarViewModel.shouldDisplayDoneButton = true
             onEditTapped.send()
         }
     }
     
-    func onMarkAllDoneAction() {
+    func onMarkAllDoneAction(checklist: ChecklistDataModel) {
         alert = .confirmMarkAllDone(onConfirm: { [weak self] in
             guard let self = self else { return }
             self.items.forEach { item in
@@ -480,45 +483,36 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
         })
     }
     
-    func onSetReminderAction() {
+    func onMarkAllUndoneAction(checklist: ChecklistDataModel) {
+        alert = .confirmMarkAllUnDone(onConfirm: { [weak self] in
+            guard let self = self else { return }
+            self.items.forEach { item in
+                item.isDone = false
+            }
+            self.updateChecklist()
+        })
+    }
+    
+    func onSetReminderAction(checklist: ChecklistDataModel) {
         guard let checklist = currentChecklist.value else {
             return
         }
         let viewModel = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
-        viewModel.onDeleteReminder.sink { [weak self] in
+        viewModel.onDidDeleteReminder.sink { [weak self] in
+            self?.currentChecklist.value?.reminderDate = nil
             self?.sheetVisibility.isVisible = false
-            self?.checklistDataSource.updateReminderDate(nil, for: checklist).done {
-                self?.notificationManager.removeReminder(for: checklist)
-                self?.currentChecklist.value?.reminderDate = nil
-            }.catch { error in
-                error.log(message: "Failed to delete reminder")
-                #warning("TODO: Add error hanling")
-            }
             self?.objectWillChange.send()
         }.store(in: &cancellables)
-        viewModel.onSaveReminder.sink { [weak self] date in
-            guard let self = self else { return }
-            self.sheetVisibility.isVisible = false
-            firstly {
-                self.checklistDataSource.updateReminderDate(date, for: checklist)
-            }.get {
-                self.currentChecklist.value?.reminderDate = date
-            }.then { _ -> Promise<Void> in
-                guard let checklist = self.currentChecklist.value else {
-                    throw DataSourceError.checkListNotFound
-                }
-                return self.notificationManager.setupReminder(for: checklist)
-            }.catch { error in
-                error.log(message: "Failed to save reminder")
-                #warning("TODO: Add error hanling")
-            }
-            self.objectWillChange.send()
+        viewModel.onDidCreateReminder.sink { [weak self] date in
+            self?.currentChecklist.value?.reminderDate = date
+            self?.sheetVisibility.isVisible = false
+            self?.objectWillChange.send()
         }.store(in: &cancellables)
         let view = EditReminderView(viewModel: viewModel)
         sheetVisibility.set(view: AnyView(view), isVisible: true)
     }
     
-    func onSaveAsTemplateAction() {
+    func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
         guard let checklist = currentChecklist.value else {
             return
         }
@@ -542,7 +536,7 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
         sheetVisibility.set(view: AnyView(view), isVisible: true)
     }
     
-    func onDeleteAction() {
+    func onDeleteAction(checklist: ChecklistDataModel) {
         alert = .confirmDelete(onDelete: { [weak self] in
             guard let checklist = self?.currentChecklist.value else {
                 return

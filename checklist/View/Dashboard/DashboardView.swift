@@ -30,8 +30,8 @@ struct DashboardView: View {
                         DashboardNavBar(viewModel: viewModel.navBarViewModel)
                         if viewModel.isEmptyListViewVisible {
                             EmptyListView(
-                                message: "Your checklist is empty",
-                                actionTitle: "Create new",
+                                message: "Your list is empty",
+                                actionTitle: "New Checklist",
                                 onActionTappedSubject: viewModel.onCreateNewChecklist
                             )
                         } else if viewModel.isNoSearchResultsVisible {

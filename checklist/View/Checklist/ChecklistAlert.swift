@@ -15,6 +15,7 @@ enum ChecklistAlert {
     case notificationsDisabled
     case confirmDelete(onDelete: EmptyCompletion)
     case confirmMarkAllDone(onConfirm: EmptyCompletion)
+    case confirmMarkAllUnDone(onConfirm: EmptyCompletion)
     case templateCreated(onGoToTemplates: EmptyCompletion)
     case none
     
@@ -29,6 +30,13 @@ enum ChecklistAlert {
                 title: Text("Do you wish to mark all items done?"),
                 message: nil,
                 primaryButton: .default(Text("Mark all done"), action: onConfirm),
+                secondaryButton: .cancel()
+                )
+        case .confirmMarkAllUnDone(let onConfirm):
+            return Alert(
+                title: Text("Do you wish to mark all items undone?"),
+                message: nil,
+                primaryButton: .default(Text("Mark all undone"), action: onConfirm),
                 secondaryButton: .cancel()
                 )
         case .templateCreated(let onGoToTemplates):

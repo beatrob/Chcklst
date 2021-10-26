@@ -18,25 +18,41 @@ struct DashboardChecklistCell: View {
             VStack {
                 HStack {
                     Text(viewModel.title)
-                        .modifier(Modifier.Checklist.SmallTitle())
+                        .if(viewModel.shouldStrikeThroughTitle) {
+                            $0.strikethrough()
+                        }
+                        .modifier(Modifier.Checklist.SmallTitle(color: .lightText))
+                        
                     Spacer()
                     if viewModel.isReminderSet {
                         Image(systemName: "bell.badge")
+                            .modifier(Modifier.Checklist.Item(color: .lightText))
                     }
-                    Text(viewModel.counter).modifier(Modifier.Checklist.Item())
+                    Text(viewModel.counter).modifier(Modifier.Checklist.Item(color: .lightText))
                 }
-                .padding(.top)
-                .padding(.leading)
-                .padding(.trailing)
-                HStack {
-                    viewModel.firstUndoneItem.map {
-                        ChecklistItemView(viewModel: $0)
+                .padding()
+                .background(Color.firstAccent)
+                .onTapGesture {
+                    viewModel.onTapped.send()
+                }.onLongPressGesture {
+                    viewModel.onLongTapped.send()
+                }
+                
+                if let firstUndone = viewModel.firstUndoneItem{
+                    HStack {
+                        ChecklistItemView(viewModel: firstUndone)
+                        Spacer()
                     }
-                    Spacer()
+                    .padding()
                 }
-                .padding(.leading)
-                .padding(.trailing)
-                .padding(.bottom)
+                
+                if viewModel.shouldDisplayDeleteButton {
+                    Button("Delete") {
+                        viewModel.onDelete.send()
+                    }
+                    .padding()
+                    .modifier(Modifier.Button.DestructiveAction())
+                }
             }
             .background(Color.checklistBackground)
             .cornerRadius(20)
@@ -57,10 +73,6 @@ struct DashboardChecklistCell: View {
                     )
                     .offset(CGSize(width: 10.0, height: -13.0))
             }
-        }.onTapGesture {
-            viewModel.onTapped.send()
-        }.onLongPressGesture {
-            viewModel.onLongTapped.send()
         }
     }
 }

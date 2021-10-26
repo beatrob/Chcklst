@@ -9,41 +9,42 @@
 import SwiftUI
 
 protocol ChecklistActionSheetDelegate {
-    func onEditAction()
-    func onMarkAllDoneAction()
-    func onSetReminderAction()
-    func onSaveAsTemplateAction()
-    func onDeleteAction()
+    func onEditAction(checklist: ChecklistDataModel)
+    func onMarkAllDoneAction(checklist: ChecklistDataModel)
+    func onMarkAllUndoneAction(checklist: ChecklistDataModel)
+    func onSetReminderAction(checklist: ChecklistDataModel)
+    func onSaveAsTemplateAction(checklist: ChecklistDataModel)
+    func onDeleteAction(checklist: ChecklistDataModel)
 }
 
 enum ChecklistActionSheet {
     
     case none
-    case actionMenu(delegate: ChecklistActionSheetDelegate)
+    case actionMenu(checklist: ChecklistDataModel, delegate: ChecklistActionSheetDelegate)
     
     var view: ActionSheet {
         switch self {
         case .none:
             return ActionSheet(title: Text(""))
-        case .actionMenu(let delegate):
+        case .actionMenu(let checklist, let delegate):
             return ActionSheet(
-                title: Text("Select na option"),
+                title: Text(checklist.title),
                 message: nil,
                 buttons: [
                     .default(Text("Edit")) {
-                        delegate.onEditAction()
+                        delegate.onEditAction(checklist: checklist)
                     },
                     .default(Text("Edit reminder")) {
-                        delegate.onSetReminderAction()
+                        delegate.onSetReminderAction(checklist: checklist)
                     },
-                    .default(Text("Mark all done")) {
-                        delegate.onMarkAllDoneAction()
-                    },
+                    checklist.isDone ?
+                        .default(Text("Mark all undone")) { delegate.onMarkAllUndoneAction(checklist: checklist) }
+                    : .default(Text("Mark all done")) { delegate.onMarkAllDoneAction(checklist: checklist) },
                     .default(Text("Create Template")) {
-                        delegate.onSaveAsTemplateAction()
+                        delegate.onSaveAsTemplateAction(checklist: checklist)
                     },
                     .destructive(Text("Delete")) {
-                        delegate.onDeleteAction()
+                        delegate.onDeleteAction(checklist: checklist)
                     },
                     .cancel()
                 ]

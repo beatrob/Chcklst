@@ -73,6 +73,10 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         onCheckMarkTapped.sink {
             item.value.toggleDone()
         }.store(in: &cancellables)
+        
+        onSwipeRight.merge(with: onSwipeLeft, onCheckMarkTapped).sink {
+            Haptics.play(.itemDoneUndone)
+        }.store(in: &cancellables)
     }
     
     static func == (lhs: ChecklistItemViewModel, rhs: ChecklistItemViewModel) -> Bool {

@@ -50,7 +50,8 @@ struct EditReminderView_Previews: PreviewProvider {
         EditReminderView(
             viewModel: EditReminderViewModel(
                 checklist: .getWelcomeChecklist(),
-                notificationManager: NotificationManager()
+                notificationManager: NotificationManager(),
+                checklistDataSource: MockChecklistDataSource()
             )
         )
     }

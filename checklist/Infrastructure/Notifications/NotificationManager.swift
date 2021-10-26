@@ -32,15 +32,16 @@ class NotificationManager: NSObject {
     }
     
     private let _deeplinkChecklistId: CurrentValueSubject<String, Never> = .init("")
-    private let _deeplickScheduleId: CurrentValueSubject<String, Never> = .init("")
+    private let _deeplinkScheduleId: CurrentValueSubject<String, Never> = .init("")
     
     var deeplinkChecklistId: AnyPublisher<String, Never> {
         _deeplinkChecklistId.eraseToAnyPublisher()
     }
     
     var deeplinkScheduleId: AnyPublisher<String, Never> {
-        _deeplickScheduleId.eraseToAnyPublisher()
+        _deeplinkScheduleId.eraseToAnyPublisher()
     }
+    
     
     func getNotificationsEnabled() -> Guarantee<Bool> {
         Guarantee { resolver in
@@ -69,31 +70,24 @@ class NotificationManager: NSObject {
         }
     }
     
-    func setupReminder(for checklist: ChecklistDataModel) -> Promise<Void> {
-        firstly { () -> Promise<Date> in
-            guard let reminderDate = checklist.reminderDate else {
-                throw NotificationError.nilReminderDate
-            }
-            return .value(reminderDate)
-        }.then { reminderDate -> Promise<Void> in
-            let content = UNMutableNotificationContent()
-            content.title = checklist.title
-            content.body = "It's time to get things done. Your checklist is waiting for you!"
-            content.sound = .default
-            
-            return self.registerPushNotification(
-                prefix: Prefix.checklist,
-                identifier: checklist.id,
-                contnet: content,
-                trigger: UNCalendarNotificationTrigger(
-                    dateMatching: Calendar.current.dateComponents(
-                        [.year, .month, .day, .hour, .minute],
-                        from: reminderDate
-                    ),
-                    repeats: false
-                )
+    func setupReminder(date: Date, for checklist: ChecklistDataModel) -> Promise<Void> {
+        let content = UNMutableNotificationContent()
+        content.title = checklist.title
+        content.body = "It's time to get things done. Your checklist is waiting for you!"
+        content.sound = .default
+        
+        return self.registerPushNotification(
+            prefix: Prefix.checklist,
+            identifier: checklist.id,
+            contnet: content,
+            trigger: UNCalendarNotificationTrigger(
+                dateMatching: Calendar.current.dateComponents(
+                    [.year, .month, .day, .hour, .minute],
+                    from: date
+                ),
+                repeats: false
             )
-        }
+        )
     }
     
     func removeReminder(for checklist: ChecklistDataModel) {
@@ -245,11 +239,16 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
             )
         } else if identifier.hasPrefix(Prefix.schedule.rawValue),
                   let scheduleId = getScheduleId(fromNotificationId: identifier) {
-            _deeplickScheduleId.send(scheduleId)
+            _deeplinkScheduleId.send(scheduleId)
         }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        UNNotificationPresentationOptions.banner
+        let identifier = notification.request.identifier
+        if identifier.hasPrefix(Prefix.schedule.rawValue),
+            let scheduleId = getScheduleId(fromNotificationId: identifier) {
+            _deeplinkScheduleId.send(scheduleId)
+        }
+        return UNNotificationPresentationOptions.banner
     }
 }

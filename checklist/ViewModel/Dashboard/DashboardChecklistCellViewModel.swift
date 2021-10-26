@@ -28,18 +28,25 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     @Published var counter: String = ""
     @Published var isReminderSet: Bool = false
     @Published var shouldShowNewBadge: Bool = false
+    @Published var shouldDisplayDeleteButton: Bool = false
     @Published var firstUndoneItem: ChecklistItemViewModel?
+    @Published var shouldStrikeThroughTitle = false
     
     let onLongTapped = EmptySubject()
     let onTapped = EmptySubject()
+    let onDelete = EmptySubject()
     let onUpdateItem = ChecklistItemPassthroughSubject()
     
     var onChecklistTapped: AnyPublisher<ChecklistDataModel, Never> {
-        onTapped.map { self.checklist }.eraseToAnyPublisher()
+        onTapped.map { [unowned self] in self.checklist }.eraseToAnyPublisher()
     }
     
     var onChecklistLongTapped: AnyPublisher<ChecklistDataModel, Never> {
-        onLongTapped.map { self.checklist }.eraseToAnyPublisher()
+        onLongTapped.map { [unowned self] in self.checklist }.eraseToAnyPublisher()
+    }
+    
+    var onDeleteCheklistTapped: AnyPublisher<ChecklistDataModel, Never> {
+        onDelete.map { [unowned self] in self.checklist }.eraseToAnyPublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -65,6 +72,8 @@ private extension DashboardChecklistCellViewModel {
         isReminderSet = checklist.isValidReminderSet
         firstUndoneItem = getItemViewModel(for: getFirstUndoneItem())
         shouldShowNewBadge = checklist.creationDate == checklist.updateDate
+        shouldDisplayDeleteButton = checklist.isDone
+        shouldStrikeThroughTitle = checklist.isDone
     }
     
     func getItemViewModel(for item: ChecklistItemDataModel?) -> ChecklistItemViewModel? {

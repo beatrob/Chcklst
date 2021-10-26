@@ -15,6 +15,7 @@ enum DashboardSheet {
     case none
     case createChecklist(viewModel: ChecklistViewModel)
     case selectTemplate(viewModel: SelectTemplateViewModel)
+    case editReminder(viewModel: EditReminderViewModel)
     case menu
     
     var view: AnyView {
@@ -29,6 +30,10 @@ enum DashboardSheet {
         case .menu:
             return AnyView(
                 MenuView(viewModel: AppContext.resolver.resolve(MenuViewModel.self)!)
+            )
+        case .editReminder(let viewModel):
+            return AnyView(
+                EditReminderView(viewModel: viewModel)
             )
         case .none: return AnyView.empty
         }

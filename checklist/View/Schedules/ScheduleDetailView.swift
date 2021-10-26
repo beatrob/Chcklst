@@ -56,7 +56,7 @@ struct ScheduleDetailView: View {
                     
                     Text("Schedule date")
                         .padding()
-                        .modifier(Modifier.Checklist.SmallTitle())
+                        .modifier(Modifier.Checklist.SmallTitle(color: .text))
                     HStack {
                         Spacer()
                         DatePicker(

@@ -114,6 +114,7 @@
 		DDFF95DD260949390084DBF4 /* Modifier+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFF95DC260949390084DBF4 /* Modifier+Template.swift */; };
 		FE0B2081270A4CD800EE86CB /* RestrictionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0B2080270A4CD800EE86CB /* RestrictionPresenter.swift */; };
 		FE0B2083270A53D300EE86CB /* LimitReachedAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0B2082270A53D300EE86CB /* LimitReachedAlert.swift */; };
+		FE2E61CC2725FDC0007B9321 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2E61CB2725FDC0007B9321 /* Haptics.swift */; };
 		FE4860792702599A0022E6C4 /* TextReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4860782702599A0022E6C4 /* TextReaderView.swift */; };
 		FE48607B27025A180022E6C4 /* TextReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */; };
 		FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A472643335300ACF179 /* ScheduleDataSource.swift */; };
@@ -298,6 +299,7 @@
 		DDFF95DC260949390084DBF4 /* Modifier+Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Template.swift"; sourceTree = "<group>"; };
 		FE0B2080270A4CD800EE86CB /* RestrictionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictionPresenter.swift; sourceTree = "<group>"; };
 		FE0B2082270A53D300EE86CB /* LimitReachedAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitReachedAlert.swift; sourceTree = "<group>"; };
+		FE2E61CB2725FDC0007B9321 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		FE4860782702599A0022E6C4 /* TextReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReaderView.swift; sourceTree = "<group>"; };
 		FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReaderViewModel.swift; sourceTree = "<group>"; };
 		FE559A472643335300ACF179 /* ScheduleDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataSource.swift; sourceTree = "<group>"; };
@@ -547,6 +549,7 @@
 				DDB298DC2511623500F326D2 /* ViewVisibility.swift */,
 				DD2D91912530EB430032779C /* ChecklistFilterAndSort.swift */,
 				DD2D91BF2532FDF80032779C /* Logger.swift */,
+				FE2E61CB2725FDC0007B9321 /* Haptics.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -1107,6 +1110,7 @@
 				DD727A4924F271E1004089B6 /* SettingsView.swift in Sources */,
 				DDE08A9425DB191500F00D5A /* MenuViewModel.swift in Sources */,
 				DD2BD1AA24E937B0004B2060 /* ChecklistItemView.swift in Sources */,
+				FE2E61CC2725FDC0007B9321 /* Haptics.swift in Sources */,
 				DDE08A8D25DB18CB00F00D5A /* MenuView.swift in Sources */,
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */,
