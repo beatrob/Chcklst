@@ -221,6 +221,7 @@ private extension ChecklistViewModel {
         self.checklistName = checklist.title
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { self.addNewItem($0) }
+        reorderItems()
         checklistDataSource.updateChecklist(
             checklist.getWithCurrentUpdateDate()
         ).catch { error in
@@ -325,18 +326,10 @@ private extension ChecklistViewModel {
     }
     
     func addNewItem(_ item: ChecklistItemDataModel) {
-        let subject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
-        let viewModel = ChecklistItemViewModel(item: subject)
+        let viewModel = ChecklistItemViewModel(item: item, checklistDataSource: checklistDataSource)
         
-        subject.dropFirst().sink { [weak self] item in
-            guard
-                let self = self,
-                let checklist = self.currentChecklist.value
-            else {
-                return
-            }
-            self.checklistDataSource.updateItem(item, in: checklist)
-                .catch { $0.log(message: "Failed to update checklist item \(item)") }
+        viewModel.onDidChangeDoneState.sink { [weak self] isDone in
+            self?.reorderItems()
         }.store(in: &cancellables)
         
         self.items.append(viewModel)
@@ -547,6 +540,18 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
                     #warning("TODO: Add error handling")
                 }
         })
+    }
+    
+    func reorderItems() {
+        guard !items.isEmpty else {
+            return
+        }
+        withAnimation {
+            let doneItems = items.filter { $0.isDone }.sorted { $0.updateDate < $1.updateDate }
+            let undoneItems = items.filter { !$0.isDone }.sorted { $0.updateDate < $1.updateDate }
+            items = undoneItems + doneItems
+            objectWillChange.send()
+        }
     }
 }
 

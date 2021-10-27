@@ -262,15 +262,6 @@ class DashboardViewModel: ObservableObject {
             self.handleDeleteChecklist(checklist)
         }.store(in: &cancellables)
         
-        viewModel.onUpdateItem.sink { [weak self] item in
-            guard let self = self else { return }
-            self.checklistDataSource.updateItem(item, in: checklist)
-                .done { viewModel.update(with: $0) }
-                .catch {
-                    $0.log(message: "Failed to update item \(item)")
-                }
-        }.store(in: &cancellables)
-        
         return viewModel
     }
 }

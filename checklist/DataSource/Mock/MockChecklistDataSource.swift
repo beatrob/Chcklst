@@ -79,6 +79,15 @@ class MockChecklistDataSource: ChecklistDataSource {
         }.store(in: &cancellables)
     }
     
+    func updateItem(_ item: ChecklistItemDataModel, isDone: Bool) -> Promise<Void> {
+        guard let chck = _checkLists.value.first(where: { ch in ch.items.contains(item) }) else {
+            return .init(error: DataSourceError.checkListNotFound)
+        }
+        var i = item
+        i.isDone = isDone
+        return updateItem(i, in: chck).asVoid()
+    }
+    
     func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checkLists.value.firstIndex(of: checkList) else {
             return .init(error: DataSourceError.checkListNotFound)

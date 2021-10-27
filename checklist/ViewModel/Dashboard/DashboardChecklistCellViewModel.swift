@@ -35,7 +35,6 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     let onLongTapped = EmptySubject()
     let onTapped = EmptySubject()
     let onDelete = EmptySubject()
-    let onUpdateItem = ChecklistItemPassthroughSubject()
     
     var onChecklistTapped: AnyPublisher<ChecklistDataModel, Never> {
         onTapped.map { [unowned self] in self.checklist }.eraseToAnyPublisher()
@@ -80,17 +79,28 @@ private extension DashboardChecklistCellViewModel {
         guard let item = item else {
             return nil
         }
-        let itemSubject = CurrentValueSubject<ChecklistItemDataModel, Never>(item)
-        itemSubject.dropFirst().sink { [weak self] item in
-            self?.onUpdateItem.send(item)
-        }.store(in: &cancellables)
-        return .init(item: itemSubject)
+        let viewModel = ChecklistItemViewModel(
+            item: item,
+            checklistDataSource: AppContext.resolver.resolve(ChecklistDataSource.self)!
+        )
+        
+        viewModel.onDidChangeDoneState
+            .sink { [unowned self] isDone in
+                guard let i = self.checklist.items.firstIndex(of: item) else {
+                    return
+                }
+                self.checklist.items[i].isDone = isDone
+
+            }
+            .store(in: &cancellables)
+        
+        return viewModel
     }
     
     func getFirstUndoneItem() -> ChecklistItemDataModel? {
         checklist.items
             .filter(\.isUndone)
-            .sorted { (left, right) -> Bool in right.updateDate > left.updateDate }
+            .sorted { (left, right) -> Bool in left.updateDate < right.updateDate }
             .first
     }
 }

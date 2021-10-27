@@ -33,15 +33,7 @@ struct ChecklistItemView: View, Equatable {
                 didEndEditing: viewModel.onDidEndEditing
             )
         }
-        .gesture(
-            DragGesture(minimumDistance: 100.0, coordinateSpace: .local).onEnded { value in
-                if value.location.x > value.startLocation.x, value.translation.width > 100 {
-                    self.viewModel.onSwipeRight.send()
-                } else if value.location.x < value.startLocation.x, value.translation.width < -100 {
-                    self.viewModel.onSwipeLeft.send()
-                }
-            }
-        )
+        .onLongPressGesture { viewModel.onLongPress.send() }
     }
 }
 
@@ -50,13 +42,12 @@ struct ChecklistItemView_Previews: PreviewProvider {
         ChecklistItemView(
             viewModel: .init(
                 item: .init(
-                    .init(
-                        id: "123",
-                        name: "Buy some good milk",
-                        isDone: false,
-                        updateDate: Date()
-                    )
-                )
+                    id: "123",
+                    name: "Buy some good milk",
+                    isDone: false,
+                    updateDate: Date()
+                ),
+                checklistDataSource: MockChecklistDataSource()
             )
         ).previewLayout(.sizeThatFits)
     }

@@ -23,11 +23,11 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     @Published var isEditable: Bool
     var updateDate: Date
     
-    let onSwipeRight: PassthroughSubject<Void, Never> = .init()
-    let onSwipeLeft: PassthroughSubject<Void, Never> = .init()
-    let onCheckMarkTapped: PassthroughSubject<Void, Never> = .init()
+    let onLongPress = EmptySubject()
+    let onCheckMarkTapped = EmptySubject()
     let onNameChanged: PassthroughSubject<String, Never> = .init()
-    let onDidEndEditing: PassthroughSubject<Void, Never> = .init()
+    let onDidEndEditing = EmptySubject()
+    let onDidChangeDoneState = PassthroughSubject<Bool, Never>()
     var onTextDidClear: EmptyPublisher {
         onDidEndEditing
             .combineLatest($name)
@@ -51,45 +51,33 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.updateDate = Date()
     }
     
-    convenience init(item: CurrentValueSubject<ChecklistItemDataModel, Never>) {
+    convenience init(item: ChecklistItemDataModel, checklistDataSource: ChecklistDataSource) {
         self.init(
-            id: item.value.id,
-            name: item.value.name,
-            isDone: item.value.isDone,
+            id: item.id,
+            name: item.name,
+            isDone: item.isDone,
             isEditable: false
         )
-        item.sink { [weak self] i in
-            self?.update(name: i.name, isDone: i.isDone, updateDate: i.updateDate)
-        }.store(in: &cancellables)
-        
-        onSwipeRight.sink {
-            item.value.toDone()
-        }.store(in: &cancellables)
-        
-        onSwipeLeft.sink {
-            item.value.toUnDone()
-        }.store(in: &cancellables)
-        
-        onCheckMarkTapped.sink {
-            item.value.toggleDone()
-        }.store(in: &cancellables)
-        
-        onSwipeRight.merge(with: onSwipeLeft, onCheckMarkTapped).sink {
-            Haptics.play(.itemDoneUndone)
-        }.store(in: &cancellables)
+        self.updateDate = item.updateDate
+        onCheckMarkTapped
+            .merge(with: onLongPress)
+            .sink { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                self.updateDate = Date()
+                self.isDone.toggle()
+                Haptics.play(.itemDoneUndone)
+                checklistDataSource.updateItem(item, isDone: self.isDone).done {
+                    self.onDidChangeDoneState.send(self.isDone)
+                }.catch { error in
+                    error.log(message: "Failed to update done/undone item")
+                }
+            }
+            .store(in: &cancellables)
     }
     
     static func == (lhs: ChecklistItemViewModel, rhs: ChecklistItemViewModel) -> Bool {
         lhs.id == rhs.id
-    }
-}
-
-
-private extension ChecklistItemViewModel {
-    
-    func update(name: String, isDone: Bool, updateDate: Date) {
-        self.name = name
-        self.isDone = isDone
-        self.updateDate = updateDate
     }
 }
