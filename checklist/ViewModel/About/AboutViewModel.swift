@@ -21,7 +21,7 @@ class AboutViewModel: ObservableObject {
     @Published var isSheetVisible = false
     @Published var sheet = AnyView.empty
     
-    init() {
+    init(notificationManager: NotificationManager) {
         onTermsAndConditions.sink { [weak self] in
             let viewModel = TextReaderViewModel(
                 title: .init("terms_and_conditions_title"),
@@ -47,5 +47,12 @@ class AboutViewModel: ObservableObject {
             self?.sheet = AnyView(HelpView(viewModel: viewModel))
             self?.isSheetVisible = true
         }.store(in: &cancellables)
+        
+        notificationManager.deeplinkChecklistId
+            .merge(with: notificationManager.deeplinkScheduleId)
+            .sink { [weak self] _ in
+                self?.isSheetVisible = false
+                self?.sheet = .empty
+            }.store(in: &cancellables)
     }
 }

@@ -13,7 +13,7 @@ typealias ChecklistPassthroughSubject = PassthroughSubject<ChecklistDataModel, N
 typealias ChecklistCurrentValueSubject = CurrentValueSubject<ChecklistDataModel?, Never>
 typealias ChecklistPublisher = AnyPublisher<ChecklistDataModel, Never>
 
-typealias ChecklistItemPassthroughSubject = PassthroughSubject<ChecklistItemDataModel, Never>
+typealias ChecklistItemPassthroughSubject = PassthroughSubject<ItemDataModel, Never>
 
 typealias TemplatePassthroughSubject = PassthroughSubject<TemplateDataModel, Never>
 typealias TemplateCurrentValueSubject = CurrentValueSubject<TemplateDataModel?, Never>

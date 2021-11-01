@@ -51,7 +51,7 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.updateDate = Date()
     }
     
-    convenience init(item: ChecklistItemDataModel, checklistDataSource: ChecklistDataSource) {
+    convenience init(item: ItemDataModel, checklistDataSource: ChecklistDataSource) {
         self.init(
             id: item.id,
             name: item.name,

@@ -36,7 +36,7 @@ class SchedulesViewModel: ObservableObject {
     @Published var isNavigationActive = false
     @Published var isEmptyListViewVisible = false
     
-    init(scheduleDataSource: ScheduleDataSource) {
+    init(scheduleDataSource: ScheduleDataSource, notificationManager: NotificationManager) {
         
         let rightButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
         onCreateSchedule.subscribe(rightButton.didTapSubject).store(in: &cancellables)
@@ -105,5 +105,13 @@ class SchedulesViewModel: ObservableObject {
             self.navigationDestination = AnyView(ScheduleDetailView(viewModel: viewModel))
             self.isNavigationActive = true
         }.store(in: &cancellables)
+        
+        notificationManager.deeplinkChecklistId
+            .merge(with: notificationManager.deeplinkScheduleId)
+            .sink { [weak self] _ in
+                self?.isSheetPresented = false
+                self?.sheet = .empty
+            }
+            .store(in: &cancellables)
     }
 }

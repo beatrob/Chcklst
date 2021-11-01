@@ -109,7 +109,7 @@ struct CreateChecklistView_Previews: PreviewProvider {
                     viewState: .display(checklist: .getWelcomeChecklist()),
                     checklistDataSource: MockChecklistDataSource(),
                     templateDataSource: MockTemplateDataSource(),
-                    notificationManager: NotificationManager(),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
                     restrictionManager: MockRestrictionManager()
                 )
             )
@@ -118,7 +118,7 @@ struct CreateChecklistView_Previews: PreviewProvider {
                     viewState: .createNew,
                     checklistDataSource: MockChecklistDataSource(),
                     templateDataSource: MockTemplateDataSource(),
-                    notificationManager: NotificationManager(),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
                     restrictionManager: MockRestrictionManager()
                 )
             )

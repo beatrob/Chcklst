@@ -33,6 +33,7 @@ class NotificationManager: NSObject {
     
     private let _deeplinkChecklistId: CurrentValueSubject<String, Never> = .init("")
     private let _deeplinkScheduleId: CurrentValueSubject<String, Never> = .init("")
+    private let checklistDataSource: ChecklistDataSource
     
     var deeplinkChecklistId: AnyPublisher<String, Never> {
         _deeplinkChecklistId.eraseToAnyPublisher()
@@ -42,6 +43,9 @@ class NotificationManager: NSObject {
         _deeplinkScheduleId.eraseToAnyPublisher()
     }
     
+    init(checklistDataSource: ChecklistDataSource) {
+        self.checklistDataSource = checklistDataSource
+    }
     
     func getNotificationsEnabled() -> Guarantee<Bool> {
         Guarantee { resolver in
@@ -148,15 +152,17 @@ class NotificationManager: NSObject {
         _deeplinkChecklistId.send("")
     }
     
-    func getPendingSchedules() -> Guarantee<[String]> {
+    func getDeliveredReminders() -> Guarantee<DeliveredRemindersDataModel> {
         Guarantee { resolver in
             UNUserNotificationCenter.current().getDeliveredNotifications { notifications in
-                let ids = notifications
-                    .map { $0.request.identifier }
-                    .filter { $0.hasPrefix(Prefix.schedule.rawValue) }
+                let ids = notifications.map { $0.request.identifier }
+                let scheduleIds = ids.filter { $0.hasPrefix(Prefix.schedule.rawValue) }
                     .map { self.getScheduleId(fromNotificationId: $0) }
                     .compactMap { $0 }
-                resolver(ids)
+                let checklistIds = ids.filter { $0.hasPrefix(Prefix.checklist.rawValue) }
+                    .map { self.getChecklistId(from: $0) }
+                    .compactMap { $0 }
+                resolver(.init(scheduleIds: scheduleIds, checklistIds: checklistIds))
             }
         }.get { _ in
             UNUserNotificationCenter.current().removeAllDeliveredNotifications()
@@ -225,6 +231,16 @@ private extension NotificationManager {
             return nil
         }
     }
+    
+    func getChecklistId(from notificationId: String) -> String? {
+        guard notificationId.hasPrefix(Prefix.checklist.rawValue) else {
+            return nil
+        }
+        return notificationId.replacingOccurrences(
+            of: Prefix.checklist.rawValue,
+            with: ""
+        )
+    }
 }
 
 
@@ -248,7 +264,18 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         if identifier.hasPrefix(Prefix.schedule.rawValue),
             let scheduleId = getScheduleId(fromNotificationId: identifier) {
             _deeplinkScheduleId.send(scheduleId)
+            return .banner
+        } else if let id = getChecklistId(from: identifier) {
+            return await withCheckedContinuation { continuation in
+                checklistDataSource.deleteExpiredNotification(for: id).done {
+                    log(debug: "Checklist with id \(id) deleted")
+                }.ensure {
+                    continuation.resume(returning: .banner)
+                }.catch { error in
+                    error.log(message: "Failed to remove reminder")
+                }
+            }
         }
-        return UNNotificationPresentationOptions.banner
+        return .banner
     }
 }

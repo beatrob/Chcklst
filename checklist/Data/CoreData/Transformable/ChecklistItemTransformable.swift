@@ -21,7 +21,7 @@ public class ChecklistItemArrayTransformable: NSObject, NSCoding {
         checklistItems = coder.decodeObject(forKey: "checklistItems") as! [ChecklistItemTransformable]
     }
     
-    init(checklistItems: [ChecklistItemDataModel]) {
+    init(checklistItems: [ItemDataModel]) {
         let items = checklistItems.map {
             ChecklistItemTransformable(
                 id: $0.id,
@@ -34,9 +34,9 @@ public class ChecklistItemArrayTransformable: NSObject, NSCoding {
         super.init()
     }
     
-    func getItemDataModels() -> [ChecklistItemDataModel]? {
+    func getItemDataModels() -> [ItemDataModel]? {
         return checklistItems.map {
-            ChecklistItemDataModel(
+            ItemDataModel(
                 id: $0.id,
                 name: $0.name,
                 isDone: $0.isDone,

@@ -67,7 +67,9 @@ struct AboutView: View {
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
         AboutView(
-            viewModel: AboutViewModel()
+            viewModel: AboutViewModel(
+                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+            )
         )
     }
 }

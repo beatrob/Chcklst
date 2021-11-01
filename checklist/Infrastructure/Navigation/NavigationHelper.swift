@@ -98,4 +98,8 @@ class NavigationHelper: ObservableObject {
         dashboardDestination = .empty
         settingsDestination = .empty
     }
+    
+    var isOnDashboard: Bool {
+        dashboardSelection == .none
+    }
 }

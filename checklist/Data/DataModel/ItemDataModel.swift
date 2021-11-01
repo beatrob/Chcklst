@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct ChecklistItemDataModel: Equatable {
+struct ItemDataModel: Equatable {
     
     let id: String
     var name: String
@@ -33,7 +33,7 @@ struct ChecklistItemDataModel: Equatable {
         self.updateDate = Date()
     }
     
-    mutating func update(with item: ChecklistItemDataModel) {
+    mutating func update(with item: ItemDataModel) {
         self.name = item.name
         self.isDone = item.isDone
         self.updateDate = item.updateDate

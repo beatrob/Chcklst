@@ -73,7 +73,8 @@ struct MyTemplatesView_Previews: PreviewProvider {
             viewModel: .init(
                 templateDataSource: MockTemplateDataSource(),
                 checklistDataSource: MockChecklistDataSource(),
-                navigationHelper: NavigationHelper()
+                navigationHelper: NavigationHelper(),
+                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
             )
         )
     }

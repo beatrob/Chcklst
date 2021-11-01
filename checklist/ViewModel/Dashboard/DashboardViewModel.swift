@@ -91,7 +91,7 @@ class DashboardViewModel: ObservableObject {
         
         setupCreateScheduleHandling()
         
-        notificationManager.deeplinkChecklistId.sink { checklistId in
+        notificationManager.deeplinkChecklistId.sink { [weak self] checklistId in
             log(debug: "Did receive deepling cheklistId \(checklistId)")
             guard !checklistId.isEmpty else {
                 return
@@ -101,7 +101,11 @@ class DashboardViewModel: ObservableObject {
                 return
             }
             log(debug: "Deeplinking to checklist: \(checklist)")
-            after(seconds: 1).done {
+            self?.sheet = .none
+            if !navigationHelper.isOnDashboard {
+                navigationHelper.popToDashboard()
+            }
+            after(seconds: 0.5).done {
                 navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
                 notificationManager.clearDeeplinkcChecklistId()
             }
@@ -211,10 +215,10 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         checklistFilterAndSort.sort = .initial
-        loadPendingSchedules()
+        loadDeliveredReminders()
         
         AppContext.didEnterForeground.delay(for: .seconds(1), scheduler: RunLoop.main).sink { [weak self] in
-            self?.loadPendingSchedules()
+            self?.loadDeliveredReminders()
         }.store(in: &cancellables)
     }
     
@@ -350,10 +354,18 @@ private extension DashboardViewModel {
         }
     }
     
-    func loadPendingSchedules() {
-        notificationManager.getPendingSchedules().done { scheduleIds in
-            scheduleIds.forEach {
+    func loadDeliveredReminders() {
+        notificationManager.getDeliveredReminders().done { reminders in
+            reminders.scheduleIds.forEach {
                 self.createChecklist(for: $0, openAfterCreated: false)
+            }
+            when(
+                resolved: reminders.checklistIds.map {
+                    self.checklistDataSource.deleteExpiredNotification(for: $0)
+                }
+            ).done { result in
+                let failed = result.filter { !$0.isFulfilled }.count
+                log(debug: "Remove expired reminders finished with \(failed) failures")
             }
         }
     }
@@ -418,8 +430,13 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
     }
     
     func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
-        templateDataSource.createTemplate(.init(checklist: checklist))
-            .catch { $0.log(message: "Failed to create new template from checklist \(checklist)") }
+        templateDataSource.createTemplate(.init(checklist: checklist)).get {
+            self.alert = .templateCreated(gotoTemplates: { [weak self] in
+                self?.navigationHelper.navigateToMyTemplates(source: .dashboard)
+            })
+        }.catch {
+            $0.log(message: "Failed to create new template from checklist \(checklist)")
+        }
     }
     
     func onDeleteAction(checklist: ChecklistDataModel) {

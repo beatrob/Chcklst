@@ -142,10 +142,6 @@ class ChecklistViewModel: ObservableObject {
         self.saveAsTemplateCheckboxViewModel = .init(title: "Save as template", isChecked: false)
         self.isEditable = viewState.isEditEnabled
         
-        if viewState.isCreateNew {
-            addNewItem(name: nil, isDone: false, isEditable: true)
-        }
-        
         reminderCheckboxViewModel.checked.sink { [weak self] isChecked in
             withAnimation {
                 self?.isReminderOn = isChecked
@@ -164,6 +160,10 @@ class ChecklistViewModel: ObservableObject {
             setupCreateTemplate()
         } else if viewState.isDisplay || viewState.isUpdate {
             setupDisplayChecklist(isUpdate: viewState.isUpdate)
+        }
+        
+        if viewState.isCreateNew {
+            addNewItem(name: nil, isDone: false, isEditable: true)
         }
         
         onDeleteItem.sink { [weak self] item in
@@ -207,11 +207,12 @@ private extension ChecklistViewModel {
         guard let checklist = self.currentChecklist.value else {
             return
         }
-        self.items.forEach { $0.isEditable = false }
-        self.isEditable = false
-        self.resignFirstResponder()
-        self.updateChecklist()
-        self.viewState = .display(checklist: checklist)
+        items.removeAll { $0.name.isEmpty }
+        items.forEach { $0.isEditable = false }
+        isEditable = false
+        resignFirstResponder()
+        updateChecklist()
+        viewState = .display(checklist: checklist)
     }
     
     func setupDisplayChecklist(isUpdate: Bool) {
@@ -325,7 +326,7 @@ private extension ChecklistViewModel {
         self.objectWillChange.send()
     }
     
-    func addNewItem(_ item: ChecklistItemDataModel) {
+    func addNewItem(_ item: ItemDataModel) {
         let viewModel = ChecklistItemViewModel(item: item, checklistDataSource: checklistDataSource)
         
         viewModel.onDidChangeDoneState.sink { [weak self] isDone in
@@ -356,7 +357,7 @@ private extension ChecklistViewModel {
                 guard !$0.name.isEmpty else {
                     return nil
                 }
-                return ChecklistItemDataModel(
+                return ItemDataModel(
                     id: $0.id,
                     name: $0.name,
                     isDone: $0.isDone,
@@ -398,13 +399,14 @@ private extension ChecklistViewModel {
                         guard !$0.name.isEmpty else {
                             return nil
                         }
-                        return ChecklistItemDataModel(
+                        return ItemDataModel(
                             id: $0.id,
                             name: $0.name,
                             isDone: false,
                             updateDate: Date()
                         )
-                    }
+                    },
+                    created: Date()
                 )
             ).map { _ in verified}
         }.get { verified in
@@ -429,7 +431,8 @@ private extension ChecklistViewModel {
             id: template.id,
             title: checklist.title,
             description: checklist.description,
-            items: checklist.items
+            items: checklist.items,
+            created: template.created
         )
         templateDataSource.updateTemplate(templateToUpdate).get {
             self.didUpdateTemplate.send()
@@ -448,11 +451,13 @@ private extension ChecklistViewModel {
         guard let checklist = self.currentChecklist.value else {
             return
         }
-        self.isEditable = true
-        self.items.forEach { $0.isEditable = true }
-        self.isReminderOn = checklist.isValidReminderSet
-        self.reminderDate = checklist.reminderDate ?? Date()
-        self.viewState = .update(checklist: checklist)
+        isEditable = true
+        items.forEach { $0.isEditable = true }
+        isReminderOn = checklist.isValidReminderSet
+        reminderDate = checklist.reminderDate ?? Date()
+        viewState = .update(checklist: checklist)
+        navBarViewModel.shouldDisplayDoneButton = true
+        addNewItem(name: nil, isDone: false, isEditable: true)
     }
 }
 

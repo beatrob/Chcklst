@@ -111,7 +111,7 @@ struct SettingsView_Previews: PreviewProvider {
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
                     appearanceManager: AppearanceManager(),
-                    notificationManager: NotificationManager()
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
                 )
             )
             SettingsView(
@@ -120,7 +120,7 @@ struct SettingsView_Previews: PreviewProvider {
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
                     appearanceManager: AppearanceManager(),
-                    notificationManager: NotificationManager()
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
                 )
             )
             .preferredColorScheme(.dark)

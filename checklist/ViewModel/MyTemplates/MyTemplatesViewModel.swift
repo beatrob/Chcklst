@@ -58,11 +58,14 @@ class MyTemplatesViewModel: ObservableObject {
     init(
         templateDataSource: TemplateDataSource,
         checklistDataSource: ChecklistDataSource,
-        navigationHelper: NavigationHelper
+        navigationHelper: NavigationHelper,
+        notificationManager: NotificationManager
     ) {
         self.navigationHelper = navigationHelper
         templateDataSource.templates.sink { [weak self] templates in
-            self?.templates = templates
+            self?.templates = templates.sorted(by: { left, right in
+                left.created > right.created
+            })
         }.store(in: &cancellables)
         
         templateDataSource.selectedTemplate.dropFirst().sink { [weak self] template in
@@ -113,6 +116,14 @@ class MyTemplatesViewModel: ObservableObject {
         }.store(in: &self.cancellables)
         
         onGotoDashboard.subscribe(navBarViewModel.backButton.didTapSubject).store(in: &cancellables)
+        
+        notificationManager.deeplinkChecklistId
+            .merge(with: notificationManager.deeplinkScheduleId)
+            .sink { [weak self] _ in
+                self?.isSheetVisible = false
+                self?.sheetView = .empty
+            }
+            .store(in: &cancellables)
     }
 }
 

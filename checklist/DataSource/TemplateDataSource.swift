@@ -17,7 +17,7 @@ protocol TemplateDataSource {
     var selectedTemplate: TemplateCurrentValueSubject { get }
     func loadAllTemplates() -> Promise<[TemplateDataModel]>
     func updateItem(
-        _ item: ChecklistItemDataModel,
+        _ item: ItemDataModel,
         for template: TemplateDataModel,
         _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void
     )
@@ -44,7 +44,7 @@ class TemplateDataSourceImpl: TemplateDataSource {
         self.coreDataManager = coreDataManager
     }
     
-    func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
+    func updateItem(_ item: ItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
         guard let index = _templates.value.firstIndex(of: template) else {
             completion(.failure(.templateNotFound))
             return

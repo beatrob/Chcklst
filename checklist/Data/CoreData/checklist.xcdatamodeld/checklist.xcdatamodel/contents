@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="20G165" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Checklist" representedClassName="ChecklistMO" syncable="YES">
         <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="645052500" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
@@ -27,6 +27,7 @@
         <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Template" inverseName="schedules" inverseEntity="Template"/>
     </entity>
     <entity name="Template" representedClassName="TemplateMO" syncable="YES">
+        <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="657401460" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
         <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
@@ -35,8 +36,8 @@
     </entity>
     <elements>
         <element name="Checklist" positionX="-239.1010131835938" positionY="-200.6466369628906" width="128" height="134"/>
-        <element name="RepeatFrequency" positionX="325.5234375" positionY="-91.17114257812506" width="128" height="59"/>
+        <element name="RepeatFrequency" positionX="375.246337890625" positionY="-108.6470336914063" width="128" height="59"/>
         <element name="Schedule" positionX="159.217529296875" positionY="-114.6210021972656" width="144.5001220703125" height="133"/>
-        <element name="Template" positionX="-43.0924072265625" positionY="6.325714111328125" width="128" height="118"/>
+        <element name="Template" positionX="-92.14324951171875" positionY="0.456787109375" width="128" height="133"/>
     </elements>
 </model>

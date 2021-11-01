@@ -23,4 +23,5 @@ extension TemplateMO {
     @NSManaged public var notes: String?
     @NSManaged public var title: String
     @NSManaged public var schedules: NSSet?
+    @NSManaged public var creationDate: Date
 }

@@ -79,7 +79,7 @@ class MockChecklistDataSource: ChecklistDataSource {
         }.store(in: &cancellables)
     }
     
-    func updateItem(_ item: ChecklistItemDataModel, isDone: Bool) -> Promise<Void> {
+    func updateItem(_ item: ItemDataModel, isDone: Bool) -> Promise<Void> {
         guard let chck = _checkLists.value.first(where: { ch in ch.items.contains(item) }) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
@@ -88,7 +88,7 @@ class MockChecklistDataSource: ChecklistDataSource {
         return updateItem(i, in: chck).asVoid()
     }
     
-    func updateItem(_ item: ChecklistItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+    func updateItem(_ item: ItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checkLists.value.firstIndex(of: checkList) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
@@ -97,7 +97,7 @@ class MockChecklistDataSource: ChecklistDataSource {
             checklist.updateToCurrentDate()
             return .value(checklist)
         }
-        return .init(error: DataSourceError.checkListItemNotFound)
+        return .init(error: DataSourceError.itemNotFound)
     }
     
     func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {
@@ -131,6 +131,10 @@ class MockChecklistDataSource: ChecklistDataSource {
     }
     
     func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
+        .value
+    }
+    
+    func deleteExpiredNotification(for checklistId: String) -> Promise<Void> {
         .value
     }
 }

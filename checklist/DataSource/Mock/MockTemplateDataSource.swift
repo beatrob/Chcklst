@@ -22,7 +22,8 @@ class MockTemplateDataSource: TemplateDataSource {
                 items: [
                     .init(id: "11", name: "First things first", isDone: false, updateDate: Date()),
                     .init(id: "12", name: "Second things secons", isDone: false, updateDate: Date())
-                ]
+                ],
+                created: Date().addingTimeInterval(1)
             ),
             .init(
                 id: "2",
@@ -31,7 +32,8 @@ class MockTemplateDataSource: TemplateDataSource {
                 items: [
                     .init(id: "11", name: "[2] First things first", isDone: false, updateDate: Date()),
                     .init(id: "12", name: "[2] Second things secons", isDone: false, updateDate: Date())
-                ]
+                ],
+                created: Date().addingTimeInterval(2)
             ),
         ]
     )
@@ -44,7 +46,7 @@ class MockTemplateDataSource: TemplateDataSource {
     
     var cancellables =  Set<AnyCancellable>()
     
-    func updateItem(_ item: ChecklistItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
+    func updateItem(_ item: ItemDataModel, for template: TemplateDataModel, _ completion: @escaping (Swift.Result<Void, DataSourceError>) -> Void) {
         
     }
     

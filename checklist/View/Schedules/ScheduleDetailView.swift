@@ -116,6 +116,7 @@ struct ScheduleDetailView: View {
 }
 
 struct ScheduleDetailView_Previews: PreviewProvider {
+    
     static var previews: some View {
         Group {
             ScheduleDetailView(
@@ -129,11 +130,12 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                                 .init(id: "1", name: "Item 1", isDone: false, updateDate: Date()),
                                 .init(id: "2", name: "Item 2", isDone: false, updateDate: Date()),
                                 .init(id: "3", name: "Item 3", isDone: false, updateDate: Date())
-                            ]
+                            ],
+                            created: Date()
                         )
                     ),
                     scheduleDataSource: MockScheduleDataSource(),
-                    notificationManager: NotificationManager(),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
                     restrictionManager: MockRestrictionManager()
                 )
             )
@@ -161,14 +163,15 @@ struct ScheduleDetailView_Previews: PreviewProvider {
                                         isDone: false,
                                         updateDate: Date()
                                     )
-                                ]
+                                ],
+                                created: Date()
                             ),
                             scheduleDate: Date(),
                             repeatFrequency: .customDays(days: [.monday, .wednesday])
                         )
                     ),
                     scheduleDataSource: MockScheduleDataSource(),
-                    notificationManager: NotificationManager(),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
                     restrictionManager: MockRestrictionManager()
                 )
             )

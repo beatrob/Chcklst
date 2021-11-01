@@ -16,68 +16,68 @@ extension ChecklistDataModel {
         return ChecklistDataModel(
             id: UUID().uuidString,
             title: "Welcome",
-            description: "Welcome to C H C K L S T, an app which helps you get things done using the power of checklist. By following this short tutorial you will learn all the cool things you can do 😉",
+            description: "Welcome to Chcklst, an app which helps you get things done using the power of checklist. By following this short tutorial you will learn all the cool things you can do 😉",
             creationDate: now,
             updateDate: now,
             items: [
                 .init(
                     id: UUID().uuidString,
-                    name: "Tap on the bullet, or swipe right on this title to make this done",
+                    name: "Tap on the bullet, or long-tap on this title to make this item done/un-done",
                     isDone: false,
                     updateDate: now.addingTimeInterval(1)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Start a new cheklist by tapping the + icon on the Dashboard",
+                    name: "Create a new Cheklist by tapping on the + icon on the Dashboard",
                     isDone: false,
                     updateDate: now.addingTimeInterval(2)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Select \"Create new checklist\" to start a new checklist form scratch",
+                    name: "Select \"Checklist\" to start a new checklist form scratch",
                     isDone: false,
                     updateDate: now.addingTimeInterval(3)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Select \"New from template\" to create a checklist from your saved tamplets",
+                    name: "Select \"Checklist from template\" to create a checklist from your saved tamplets",
                     isDone: false,
                     updateDate: now.addingTimeInterval(4)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Fill your new checklist with your TODO's",
+                    name: "Fill your new Checklist with items",
                     isDone: false,
                     updateDate: now.addingTimeInterval(5)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Create a new template in addition to reuse your TODO list later",
+                    name: "Create a new Template in addition to reuse your TODO list later",
                     isDone: false,
                     updateDate: now.addingTimeInterval(6)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Setup a reminder to notify you when to get things done",
+                    name: "Setup a reminder to getr notified you when it's time to make things done",
                     isDone: false,
                     updateDate: now.addingTimeInterval(7)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Edit, delete, organize and do more with your checklist byt long-pressing the titles on the Dashboard",
+                    name: "Edit, delete and do more with your Checklist byt long-pressing the titles on the Dashboard",
                     isDone: false,
                     updateDate: now.addingTimeInterval(8)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Enjoy life! 🙂",
+                    name: "Create Schedules from Templates to plan your Checklists ahead",
                     isDone: false,
                     updateDate: now.addingTimeInterval(9)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Tap on the checkmark, or swipe left on this title to make this undone",
-                    isDone: true,
+                    name: "Enjoy life! 🙂",
+                    isDone: false,
                     updateDate: now.addingTimeInterval(10)
                 )
             ]

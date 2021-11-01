@@ -9,12 +9,13 @@
 import Foundation
 
 
-struct TemplateDataModel: Equatable {
+struct TemplateDataModel: Equatable, Hashable {
     
     let id: String
     let title: String
     let description: String?
-    var items: [ChecklistItemDataModel]
+    let created: Date
+    var items: [ItemDataModel]
     
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
@@ -24,12 +25,14 @@ struct TemplateDataModel: Equatable {
         id: String,
         title: String,
         description: String?,
-        items: [ChecklistItemDataModel]
+        items: [ItemDataModel],
+        created: Date
     ) {
         self.id = id
         self.title = title
         self.description = description
         self.items = items
+        self.created = created
     }
     
     init(checklist: ChecklistDataModel) {
@@ -37,5 +40,10 @@ struct TemplateDataModel: Equatable {
         title = checklist.title
         description = checklist.description
         items = checklist.items
+        created = Date()
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id.hashValue)
     }
 }

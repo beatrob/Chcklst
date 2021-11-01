@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct ChecklistDataModel: Equatable {
+struct ChecklistDataModel: Equatable, Hashable {
     
     let id: String
     let title: String
@@ -17,9 +17,9 @@ struct ChecklistDataModel: Equatable {
     var creationDate: Date
     var updateDate: Date
     var reminderDate: Date?
-    var items: [ChecklistItemDataModel]
+    var items: [ItemDataModel]
     var isDone: Bool {
-        items.filter(\.isDone).count == items.count
+        items.filter(\.isDone).count == items.count && !items.isEmpty
     }
     var isArchived: Bool = false
     
@@ -28,6 +28,13 @@ struct ChecklistDataModel: Equatable {
             return false
         }
         return reminderDate >= Date()
+    }
+    
+    var hasExpiredReminder: Bool {
+        guard let reminderDate = reminderDate else {
+            return false
+        }
+        return reminderDate < Date()
     }
     
     mutating func removeReminderDate() {
@@ -49,6 +56,10 @@ struct ChecklistDataModel: Equatable {
             items: items,
             isArchived: isArchived
         )
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     static func == (lhs: Self, rhs: Self) -> Bool {

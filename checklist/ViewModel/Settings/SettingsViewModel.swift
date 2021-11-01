@@ -99,6 +99,13 @@ class SettingsViewModel: ObservableObject {
             .sink { [weak self] _ in
                 self?.reloadNotificationsState()
             }.store(in: &cancellables)
+        
+        notificationManager.deeplinkScheduleId
+            .merge(with: notificationManager.deeplinkChecklistId)
+            .sink { [weak self] _ in
+                self?.isSheetVisible = false
+                self?.sheet = .empty
+            }.store(in: &cancellables)
     }
     
     private func showOpenSetingsAlert(shouldEnableNotifications: Bool) {

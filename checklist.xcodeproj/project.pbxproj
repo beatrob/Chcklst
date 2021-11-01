@@ -42,7 +42,7 @@
 		DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65124E1A20800A9A1FC /* AppContext.swift */; };
 		DD52A65424E1A35400A9A1FC /* ViewModelAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */; };
 		DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */; };
-		DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */; };
+		DD52A65924E1BC0800A9A1FC /* ItemDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65824E1BC0800A9A1FC /* ItemDataModel.swift */; };
 		DD52A65C24E1BCE400A9A1FC /* ChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */; };
 		DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */; };
 		DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */; };
@@ -137,6 +137,9 @@
 		FE8D7EC526FD2BBE00671634 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D7EC426FD2BBE00671634 /* AboutView.swift */; };
 		FE8D7EC826FD2C0500671634 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */; };
 		FE94197727011676001493AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE94197927011676001493AB /* Localizable.strings */; };
+		FE999231272EBDE6001C327F /* DeliveredRemindersDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */; };
+		FE9A8EF82730884600601D55 /* ItemDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A8EF72730884600601D55 /* ItemDataSource.swift */; };
+		FE9A8EFA27308B6900601D55 /* MockItemsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A8EF927308B6900601D55 /* MockItemsDataSource.swift */; };
 		FEA766102718BE40004D1900 /* CapsuleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA7660F2718BE40004D1900 /* CapsuleButton.swift */; };
 		FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = FEA82FC426A377FB0008F34A /* ActivityIndicatorView */; };
 		FEA82FC726A37CAB0008F34A /* UpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA82FC626A37CAB0008F34A /* UpgradeView.swift */; };
@@ -224,7 +227,7 @@
 		DD52A65124E1A20800A9A1FC /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		DD52A65324E1A35400A9A1FC /* ViewModelAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelAssembly.swift; sourceTree = "<group>"; };
 		DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistDataModel.swift; sourceTree = "<group>"; };
-		DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistItemDataModel.swift; sourceTree = "<group>"; };
+		DD52A65824E1BC0800A9A1FC /* ItemDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataModel.swift; sourceTree = "<group>"; };
 		DD52A65B24E1BCE400A9A1FC /* ChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecklistDataSource.swift; sourceTree = "<group>"; };
 		DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockChecklistDataSource.swift; sourceTree = "<group>"; };
 		DD52A66324E1C34100A9A1FC /* DataSourceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSourceAssembly.swift; sourceTree = "<group>"; };
@@ -321,6 +324,9 @@
 		FE8D7EC426FD2BBE00671634 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		FE94197827011676001493AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveredRemindersDataModel.swift; sourceTree = "<group>"; };
+		FE9A8EF72730884600601D55 /* ItemDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataSource.swift; sourceTree = "<group>"; };
+		FE9A8EF927308B6900601D55 /* MockItemsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockItemsDataSource.swift; sourceTree = "<group>"; };
 		FEA7660F2718BE40004D1900 /* CapsuleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapsuleButton.swift; sourceTree = "<group>"; };
 		FEA82FC226A2D1A50008F34A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		FEA82FC626A37CAB0008F34A /* UpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeView.swift; sourceTree = "<group>"; };
@@ -557,11 +563,12 @@
 				DD2D91862530CA2A0032779C /* SortDataModel.swift */,
 				DD36F56025E0611B0041E3B6 /* FilterDataModel.swift */,
 				DD52A65624E1BB2800A9A1FC /* ChecklistDataModel.swift */,
-				DD52A65824E1BC0800A9A1FC /* ChecklistItemDataModel.swift */,
+				DD52A65824E1BC0800A9A1FC /* ItemDataModel.swift */,
 				DD90241824FB7DCD0084CDDC /* TemplateDataModel.swift */,
 				FEA913A32641DEB300594478 /* ScheduleDataModel.swift */,
 				FEA913A52641E4D700594478 /* DayDataModel.swift */,
 				FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */,
+				FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -577,6 +584,7 @@
 				DD90241624FB7D590084CDDC /* TemplateDataSource.swift */,
 				DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */,
 				DD179BBF25F69E710006629F /* ChecklistDataModel+Welcome.swift */,
+				FE9A8EF72730884600601D55 /* ItemDataSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -587,6 +595,7 @@
 				DD52A66124E1C05C00A9A1FC /* MockChecklistDataSource.swift */,
 				DD90241A24FB7F9D0084CDDC /* MockTemplateDataSource.swift */,
 				FE559A492643358900ACF179 /* MockScheduleDataSource.swift */,
+				FE9A8EF927308B6900601D55 /* MockItemsDataSource.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -1031,6 +1040,7 @@
 				DDD0054025EAECBA0098E27E /* ChecklistNavBar.swift in Sources */,
 				DDE08AA625DB1BBD00F00D5A /* Modifier.swift in Sources */,
 				DD74DA6725213CF3004587FC /* CoreDataAssembly.swift in Sources */,
+				FE999231272EBDE6001C327F /* DeliveredRemindersDataModel.swift in Sources */,
 				DD52A65724E1BB2800A9A1FC /* ChecklistDataModel.swift in Sources */,
 				DD52A62524E19EF000A9A1FC /* AppDelegate.swift in Sources */,
 				DD2D91742530A7260032779C /* NavBarChipButton.swift in Sources */,
@@ -1087,7 +1097,8 @@
 				DD74DA6525213C25004587FC /* CoreDataManagerImpl.swift in Sources */,
 				DD8A303025FAB7B300A6937E /* EditReminderView.swift in Sources */,
 				DD74DA702521E2AB004587FC /* InitializeAppView.swift in Sources */,
-				DD52A65924E1BC0800A9A1FC /* ChecklistItemDataModel.swift in Sources */,
+				DD52A65924E1BC0800A9A1FC /* ItemDataModel.swift in Sources */,
+				FE9A8EFA27308B6900601D55 /* MockItemsDataSource.swift in Sources */,
 				FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */,
 				FED2DA5B268924580023E525 /* RestrictionManager.swift in Sources */,
 				FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */,
@@ -1112,6 +1123,7 @@
 				DD52A65224E1A20800A9A1FC /* AppContext.swift in Sources */,
 				FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */,
 				FEBE214F266434A800CC001E /* ScheduleMO+Helpers.swift in Sources */,
+				FE9A8EF82730884600601D55 /* ItemDataSource.swift in Sources */,
 				DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */,
 				DD8C44F92536074800F470C2 /* Error+Extension.swift in Sources */,
 				DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */,

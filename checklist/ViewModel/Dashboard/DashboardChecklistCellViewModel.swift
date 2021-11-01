@@ -75,7 +75,7 @@ private extension DashboardChecklistCellViewModel {
         shouldStrikeThroughTitle = checklist.isDone
     }
     
-    func getItemViewModel(for item: ChecklistItemDataModel?) -> ChecklistItemViewModel? {
+    func getItemViewModel(for item: ItemDataModel?) -> ChecklistItemViewModel? {
         guard let item = item else {
             return nil
         }
@@ -97,7 +97,7 @@ private extension DashboardChecklistCellViewModel {
         return viewModel
     }
     
-    func getFirstUndoneItem() -> ChecklistItemDataModel? {
+    func getFirstUndoneItem() -> ItemDataModel? {
         checklist.items
             .filter(\.isUndone)
             .sorted { (left, right) -> Bool in left.updateDate < right.updateDate }

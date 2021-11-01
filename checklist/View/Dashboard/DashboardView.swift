@@ -158,7 +158,7 @@ struct DashboardView_Previews: PreviewProvider {
                 scheduleDataSource: MockScheduleDataSource(),
                 navigationHelper: NavigationHelper(),
                 checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
-                notificationManager: NotificationManager()
+                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
             )
         ).environmentObject(NavigationHelper())
     }

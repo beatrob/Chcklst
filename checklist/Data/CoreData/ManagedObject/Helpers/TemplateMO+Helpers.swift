@@ -29,7 +29,8 @@ extension TemplateMO {
             id: identifier,
             title: title,
             description: notes,
-            items: items?.getItemDataModels() ?? []
+            items: items?.getItemDataModels() ?? [],
+            created: creationDate
         )
     }
     
@@ -38,6 +39,7 @@ extension TemplateMO {
         title = dataModel.title
         notes = dataModel.description
         items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
+        creationDate = dataModel.created
     }
     
     static func getManagedObject(

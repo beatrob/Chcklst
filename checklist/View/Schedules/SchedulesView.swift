@@ -62,7 +62,10 @@ struct SchedulesView: View {
 
 struct SchedulesView_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = SchedulesViewModel(scheduleDataSource: MockScheduleDataSource())
+        let viewModel = SchedulesViewModel(
+            scheduleDataSource: MockScheduleDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
         viewModel.cells = MockScheduleDataSource.mockData.map {
             ScheduleCellViewModel(schedule: $0)
         }

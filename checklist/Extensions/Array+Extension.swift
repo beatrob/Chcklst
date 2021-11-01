@@ -9,7 +9,7 @@
 import Foundation
 
 
-extension Array where Element == ChecklistItemDataModel {
+extension Array where Element == ItemDataModel {
     
     @discardableResult
     mutating func updateItem(_ item: Element) -> Bool {
