@@ -24,7 +24,7 @@ struct ChecklistItemView: View, Equatable {
                         self.viewModel.onCheckMarkTapped.send()
                     }
                 }
-            MyTextField(
+            MultilineTextField(
                 text: $viewModel.name,
                 placeholder: "Add task",
                 font: .item,
@@ -32,8 +32,9 @@ struct ChecklistItemView: View, Equatable {
                 isCrossedOut: $viewModel.isDone,
                 didEndEditing: viewModel.onDidEndEditing
             )
+        }.if(!viewModel.isEditable) {
+            $0.onLongPressGesture { viewModel.onLongPress.send() }
         }
-        .onLongPressGesture { viewModel.onLongPress.send() }
     }
 }
 

@@ -123,7 +123,7 @@
 		FE559A54264341B800ACF179 /* ScheduleCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A53264341B800ACF179 /* ScheduleCellView.swift */; };
 		FE559A562643426D00ACF179 /* BackButtonNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A552643426D00ACF179 /* BackButtonNavBar.swift */; };
 		FE5F2176262CCDC200CC00EC /* Modifier+TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */; };
-		FE619E152717FC6B00EEB866 /* MyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE619E142717FC6B00EEB866 /* MyTextField.swift */; };
+		FE619E152717FC6B00EEB866 /* MultilineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE619E142717FC6B00EEB866 /* MultilineTextField.swift */; };
 		FE61E3602706495400015812 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE61E35F2706495400015812 /* HelpView.swift */; };
 		FE61E3622706496D00015812 /* HelpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE61E3612706496D00015812 /* HelpViewModel.swift */; };
 		FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7CFE77268E5417004A11DE /* PurchaseManager.swift */; };
@@ -312,7 +312,7 @@
 		FE559A53264341B800ACF179 /* ScheduleCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleCellView.swift; sourceTree = "<group>"; };
 		FE559A552643426D00ACF179 /* BackButtonNavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonNavBar.swift; sourceTree = "<group>"; };
 		FE5F2175262CCDC200CC00EC /* Modifier+TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+TextField.swift"; sourceTree = "<group>"; };
-		FE619E142717FC6B00EEB866 /* MyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTextField.swift; sourceTree = "<group>"; };
+		FE619E142717FC6B00EEB866 /* MultilineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextField.swift; sourceTree = "<group>"; };
 		FE61E35F2706495400015812 /* HelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		FE61E3612706496D00015812 /* HelpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewModel.swift; sourceTree = "<group>"; };
 		FE7CFE77268E5417004A11DE /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
@@ -721,7 +721,7 @@
 				FEA8B5192628E4900084909E /* SeparatorView.swift */,
 				FE559A552643426D00ACF179 /* BackButtonNavBar.swift */,
 				FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */,
-				FE619E142717FC6B00EEB866 /* MyTextField.swift */,
+				FE619E142717FC6B00EEB866 /* MultilineTextField.swift */,
 				FEA7660F2718BE40004D1900 /* CapsuleButton.swift */,
 			);
 			path = Subviews;
@@ -1137,7 +1137,7 @@
 				FEBE21422664260600CC001E /* CoreDataManager+Schedules.swift in Sources */,
 				DD90241524FB7A6F0084CDDC /* MyTemplatesViewModel.swift in Sources */,
 				DDFCC42F25D7262E00627DB9 /* DashboardChecklistCellViewModel.swift in Sources */,
-				FE619E152717FC6B00EEB866 /* MyTextField.swift in Sources */,
+				FE619E152717FC6B00EEB866 /* MultilineTextField.swift in Sources */,
 				DD52A66424E1C34100A9A1FC /* DataSourceAssembly.swift in Sources */,
 				DD727A4D24F2722A004089B6 /* SettingsViewModel.swift in Sources */,
 				FEA913A62641E4D700594478 /* DayDataModel.swift in Sources */,

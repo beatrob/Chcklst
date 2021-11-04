@@ -31,7 +31,7 @@ struct ScheduleDetailView: View {
                         }.padding()
                     }
                     
-                    MyTextField(
+                    MultilineTextField(
                         text: $viewModel.title,
                         placeholder: "Title",
                         font: .bigTitle,
@@ -40,7 +40,7 @@ struct ScheduleDetailView: View {
                         didEndEditing: nil
                     ).padding()
                     
-                    MyTextField(
+                    MultilineTextField(
                         text: $viewModel.description,
                         placeholder: "Description",
                         font: .description,

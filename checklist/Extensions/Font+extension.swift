@@ -78,5 +78,17 @@ extension Font {
         private func getUIFont(name: String) -> UIFont {
             UIFont(name: name, size: size)!
         }
+        
+        func getMinimumTextFieldHeight(for text: String, width: CGFloat) -> CGFloat {
+            let size = text.boundingRect(
+                with: .init(width: width, height: .greatestFiniteMagnitude),
+                options: .usesLineFragmentOrigin,
+                attributes: [.font: uiFont],
+                context: nil
+            )
+            return size.height + 18
+        }
     }
+    
+    
 }

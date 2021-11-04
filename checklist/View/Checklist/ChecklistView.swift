@@ -50,7 +50,7 @@ struct ChecklistView: View {
                                 onNext: viewModel.onAddItemsNext,
                                 onDeleteItem: viewModel.onDeleteItem
                             )
-                                .padding(.bottom)
+                                .padding(.bottom, 30)
                             if viewModel.shouldDisplaySetReminder {
                                 CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
                                     .padding()

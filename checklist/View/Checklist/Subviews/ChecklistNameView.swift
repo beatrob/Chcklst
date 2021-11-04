@@ -16,7 +16,7 @@ struct ChecklistNameView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            MyTextField(
+            MultilineTextField(
                 text: $checklistName,
                 placeholder: "Title",
                 font: .bigTitle,
