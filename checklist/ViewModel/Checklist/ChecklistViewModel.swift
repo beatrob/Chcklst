@@ -322,19 +322,37 @@ private extension ChecklistViewModel {
                 self?.insertEmptyItemIfNeedd()
             }
         }.store(in: &cancellables)
+        viewModel.onDidChangeDoneState.sink { [weak self] _ in
+            self?.reloadCurrentChecklist()
+        }.store(in: &cancellables)
         self.items.append(viewModel)
         self.objectWillChange.send()
     }
     
     func addNewItem(_ item: ItemDataModel) {
-        let viewModel = ChecklistItemViewModel(item: item, checklistDataSource: checklistDataSource)
+        let viewModel = ChecklistItemViewModel(
+            item: item,
+            itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
+        )
         
         viewModel.onDidChangeDoneState.sink { [weak self] isDone in
+            self?.reloadCurrentChecklist()
             self?.reorderItems()
         }.store(in: &cancellables)
         
         self.items.append(viewModel)
         self.objectWillChange.send()
+    }
+    
+    func reloadCurrentChecklist() {
+        guard let checklist = self.currentChecklist.value else {
+            return
+        }
+        self.checklistDataSource.reloadChecklist(checklist).get {
+            self.currentChecklist.value = $0
+        }.catch { error in
+            error.log(message: "Failed to update current Checklist")
+        }
     }
     
     func setupTemplate(_ template: TemplateDataModel) {
@@ -400,7 +418,7 @@ private extension ChecklistViewModel {
                             return nil
                         }
                         return ItemDataModel(
-                            id: $0.id,
+                            id: UUID().uuidString,
                             name: $0.name,
                             isDone: false,
                             updateDate: Date()
@@ -496,16 +514,18 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             return
         }
         let viewModel = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
-        viewModel.onDidDeleteReminder.sink { [weak self] in
-            self?.currentChecklist.value?.reminderDate = nil
-            self?.sheetVisibility.isVisible = false
-            self?.objectWillChange.send()
+        
+        viewModel.onDidCreateReminder
+            .map { _ in () }
+            .merge(with: viewModel.onDidDeleteReminder)
+            .sink { [weak self] in
+                self?.checklistDataSource.reloadChecklist(checklist).get {
+                    self?.currentChecklist.value = $0
+                }.catch({ error in
+                    error.log(message: "Failed to reload checklist")
+                })
         }.store(in: &cancellables)
-        viewModel.onDidCreateReminder.sink { [weak self] date in
-            self?.currentChecklist.value?.reminderDate = date
-            self?.sheetVisibility.isVisible = false
-            self?.objectWillChange.send()
-        }.store(in: &cancellables)
+        
         let view = EditReminderView(viewModel: viewModel)
         sheetVisibility.set(view: AnyView(view), isVisible: true)
     }

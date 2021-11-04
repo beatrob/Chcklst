@@ -19,9 +19,9 @@ extension TemplateMO {
     static let entityName = "Template"
     
     @NSManaged public var identifier: String
-    @NSManaged public var items: ChecklistItemArrayTransformable?
     @NSManaged public var notes: String?
     @NSManaged public var title: String
     @NSManaged public var schedules: NSSet?
     @NSManaged public var creationDate: Date
+    @NSManaged public var items: NSSet?
 }

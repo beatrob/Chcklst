@@ -15,7 +15,7 @@ class CoreDataManagerImpl: CoreDataManager {
     
     // MARK: - Core Data stack
 
-    private var persistentContainer: NSPersistentCloudKitContainer?
+    private var persistentContainer: NSPersistentContainer?
     
     func getViewContext() -> Promise<NSManagedObjectContext> {
         guard let context = persistentContainer?.viewContext else {
@@ -27,7 +27,7 @@ class CoreDataManagerImpl: CoreDataManager {
     
     func initialize() -> Promise<Void> {
         Promise { resolver in
-            let container = NSPersistentCloudKitContainer(name: "checklist")
+            let container = NSPersistentContainer(name: "checklist")
             container.loadPersistentStores { [weak self] (storeDescription, error) in
                 if let error = error {
                     resolver.reject(error)

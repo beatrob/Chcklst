@@ -14,14 +14,14 @@ struct ChecklistDataModel: Equatable, Hashable {
     let id: String
     let title: String
     let description: String?
-    var creationDate: Date
-    var updateDate: Date
-    var reminderDate: Date?
-    var items: [ItemDataModel]
+    let creationDate: Date
+    let updateDate: Date
+    let reminderDate: Date?
+    let items: [ItemDataModel]
+    
     var isDone: Bool {
         items.filter(\.isDone).count == items.count && !items.isEmpty
     }
-    var isArchived: Bool = false
     
     var isValidReminderSet: Bool {
         guard let reminderDate = reminderDate else {
@@ -37,14 +37,6 @@ struct ChecklistDataModel: Equatable, Hashable {
         return reminderDate < Date()
     }
     
-    mutating func removeReminderDate() {
-        reminderDate = nil
-    }
-    
-    mutating func updateToCurrentDate() {
-        updateDate = Date()
-    }
-    
     func getWithCurrentUpdateDate() -> ChecklistDataModel {
         .init(
             id: id,
@@ -53,8 +45,45 @@ struct ChecklistDataModel: Equatable, Hashable {
             creationDate: creationDate,
             updateDate: Date(),
             reminderDate: reminderDate,
-            items: items,
-            isArchived: isArchived
+            items: items
+        )
+    }
+    
+    func getWithAllItemsDone() -> ChecklistDataModel {
+        .init(
+            id: id,
+            title: title,
+            description: description,
+            creationDate: creationDate,
+            updateDate: Date(),
+            reminderDate: reminderDate,
+            items: items.map {
+                ItemDataModel(
+                    id: $0.id,
+                    name: $0.name,
+                    isDone: false,
+                    updateDate: !$0.isDone ? $0.updateDate : Date()
+                )
+            }
+        )
+    }
+    
+    func getWithAllItemsUndone() -> ChecklistDataModel {
+        .init(
+            id: id,
+            title: title,
+            description: description,
+            creationDate: creationDate,
+            updateDate: Date(),
+            reminderDate: reminderDate,
+            items: items.map {
+                ItemDataModel(
+                    id: $0.id,
+                    name: $0.name,
+                    isDone: true,
+                    updateDate: $0.isDone ? $0.updateDate : Date()
+                )
+            }
         )
     }
     

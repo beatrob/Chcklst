@@ -12,11 +12,25 @@ import PromiseKit
 
 protocol ItemDataSource {
     
-    func getItems(for checklist: ChecklistDataModel) -> Promise<[ItemDataModel]>
-    func getItems(for template: TemplateDataModel) -> Promise<[ItemDataModel]>
-    func update(_ items: [ItemDataModel]) -> Promise<[ItemDataModel]>
-    func delete(_ items: [ItemDataModel]) -> Promise<Void>
-    func setItem(_ item: ItemDataModel, isDone: Bool) -> Promise<ItemDataModel>
-    func saveItems(_ items: [ItemDataModel], for checklist: ChecklistDataModel) -> Promise<[ItemDataModel]>
-    func saveItem(_ items: [ItemDataModel], for template: TemplateDataModel) -> Promise<[ItemDataModel]>
+    func setItem(_ item: ItemDataModel, done: Bool) -> Promise<ItemDataModel>
+}
+
+
+class ItemDataSourceImpl: ItemDataSource {
+    
+    private let coreDataManager: CoreDataItemManager
+    
+    init(coreDataManager: CoreDataItemManager) {
+        self.coreDataManager = coreDataManager
+    }
+    
+    func setItem(_ item: ItemDataModel, done: Bool) -> Promise<ItemDataModel> {
+        let newItem = ItemDataModel(
+            id: item.id,
+            name: item.name,
+            isDone: done,
+            updateDate: Date()
+        )
+        return coreDataManager.save(newItem).map { newItem }
+    }
 }

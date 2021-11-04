@@ -88,10 +88,13 @@ struct DashboardChecklistCell_Previews: PreviewProvider {
                     description: nil,
                     creationDate: now,
                     updateDate: now,
+                    reminderDate: nil,
                     items: [
                         .init(id: "1234", name: "Let's do the dishes", isDone: false, updateDate: Date())
                     ]
-                )
+                ),
+                checklistDataSource: MockChecklistDataSource(),
+                itemDataSource: MockItemDataSource()
             )
         )
         .previewLayout(PreviewLayout.sizeThatFits)

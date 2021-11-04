@@ -16,12 +16,19 @@ extension CoreDataManagerImpl: CoreDataChecklistManager {
     func fetchAllChecklists() -> Promise<[ChecklistDataModel]> {
         firstly { getViewContext() }
         .then { context -> Promise<[ChecklistMO]> in
-            guard let data = try context.fetch(ChecklistMO.fetchRequest()) as? [ChecklistMO] else {
-                throw CoreDataError.fetchError
-            }
+            let data = try context.fetch(ChecklistMO.fetchRequest())
             return .value(data)
         }
         .map { checklists in checklists.map { $0.toChecklistDataModel() } }
+    }
+    
+    func fetch(checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+        firstly { getViewContext() }
+        .then { context -> Promise<[ChecklistMO]> in
+            let data = try context.fetch(ChecklistMO.fetchRequest(withId: checklist.id))
+            return .value(data)
+        }
+        .map { checklists in checklists.map { $0.toChecklistDataModel() }.first! }
     }
     
     func save(checklist: ChecklistDataModel) -> Promise<Void> {
@@ -38,23 +45,26 @@ extension CoreDataManagerImpl: CoreDataChecklistManager {
             guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: checklist.id)).first else {
                 throw CoreDataError.fetchError
             }
-            checklistMO.setup(with: checklist)
+            checklistMO.setup(with: checklist, context: context)
             return .value
         }
         .then { self.saveContext() }
     }
     
-    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<Void> {
+    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<ChecklistDataModel> {
         firstly {
             getViewContext()
-        }.then { context -> Promise<Void> in
+        }.then { context -> Promise<ChecklistMO> in
             guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: id)).first else {
                 throw CoreDataError.fetchError
             }
             checklistMO.reminderDate = date
-            return .value
-        }.then {
-            self.saveContext()
+            checklistMO.updateDate = Date()
+            return .value(checklistMO)
+        }.map {
+            $0.toChecklistDataModel()
+        }.then { checklist in
+            self.saveContext().map { checklist }
         }
     }
     
@@ -64,6 +74,7 @@ extension CoreDataManagerImpl: CoreDataChecklistManager {
             guard let checklistMO = try context.fetch(ChecklistMO.fetchRequest(withId: checklist.id)).first else {
                 throw CoreDataError.fetchError
             }
+            (checklistMO.items as! Set<ItemMO>).forEach { context.delete($0) }
             context.delete(checklistMO)
             return .value
         }

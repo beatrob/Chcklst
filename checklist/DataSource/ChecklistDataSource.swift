@@ -15,13 +15,12 @@ protocol ChecklistDataSource {
     
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> { get }
     func loadAllChecklists() -> Promise<[ChecklistDataModel]>
-    func updateItem(_ item: ItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel>
-    func updateItem(_ item: ItemDataModel, isDone: Bool) -> Promise<Void>
+    func reloadChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func getChecklist(withId id: String) -> ChecklistDataModel?
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
     func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void>
-    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void>
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func deleteExpiredNotificationDates() -> Promise<Void>
     func deleteExpiredNotification(for checklistId: String) -> Promise<Void>
 }
@@ -43,39 +42,14 @@ class CheckListDataSourceImpl: ChecklistDataSource {
         self.coreDataManager = coreDataManager
     }
     
-    func updateItem(_ item: ItemDataModel,in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
-        guard let index = _checklists.value.firstIndex(of: checkList) else {
-            return .init(error: DataSourceError.checkListNotFound)
-        }
-        var checklist = _checklists.value[index]
-        guard checklist.items.updateItem(item) else {
-            return .init(error: DataSourceError.itemNotFound)
-        }
-        checklist.updateToCurrentDate()
-        return coreDataManager.update(checklist: checklist)
-        .get {
-            self._checklists.value[index].items.updateItem(item)
-        }.map { checklist }
-    }
-    
-    func updateItem(_ item: ItemDataModel, isDone: Bool) -> Promise<Void> {
-        guard let checklist = _checklists.value.first(where: { $0.items.contains(item) }) else {
-            return .init(error: DataSourceError.checkListNotFound)
-        }
-        var i = item
-        i.updateDate = Date()
-        i.isDone = isDone
-        return updateItem(i, in: checklist).asVoid()
-    }
-    
-    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checklists.value.firstIndex(of: checklist) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
         return firstly {
             coreDataManager.updateReminderDate(date, forChecklistWithId: checklist.id)
         }.get {
-            self._checklists.value[index].reminderDate = date
+            self._checklists.value[index] = $0
         }
     }
     
@@ -84,15 +58,27 @@ class CheckListDataSourceImpl: ChecklistDataSource {
             .get { self._checklists.value = $0 }
     }
     
+    func reloadChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+        coreDataManager.fetch(checklist: checklist)
+            .get { ch in
+                var checklists = self._checklists.value
+                guard let i = checklists.firstIndex(of: checklist) else {
+                    throw DataSourceError.checkListNotFound
+                }
+                checklists.remove(at: i)
+                checklists.insert(ch, at: i)
+                self._checklists.value = checklists
+            }
+    }
+    
     func getChecklist(withId id: String) -> ChecklistDataModel? {
         _checklists.value.first { $0.id == id }
     }
     
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
         coreDataManager
             .save(checklist: checklist)
             .get { self._checklists.value.append(checklist) }
-            .map { checklist }
     }
     
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
@@ -103,35 +89,39 @@ class CheckListDataSourceImpl: ChecklistDataSource {
     func updateChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
         coreDataManager.update(checklist: checklist)
         .get {
-            if !self._checklists.value.updateItem(checklist) {
+            if !self._checklists.value.update(checklist) {
                 throw DataSourceError.checklistUpdateInMemoryFailed
             }
         }
     }
     
     func deleteExpiredNotificationDates() -> Promise<Void> {
-        var toUpdate = _checklists.value.filter { $0.hasExpiredReminder }
+        let toUpdate = _checklists.value.filter { $0.hasExpiredReminder }
         guard !toUpdate.isEmpty else {
             return .value
         }
-        for i in 0 ..< toUpdate.count {
-            toUpdate[i].removeReminderDate()
-        }
         return when(
-            resolved: toUpdate.map {
-                updateChecklist($0)
+            resolved: toUpdate.map { ch in
+                coreDataManager.updateReminderDate(nil, forChecklistWithId: ch.id).get {
+                    if !self._checklists.value.update($0) {
+                        throw DataSourceError.checklistUpdateInMemoryFailed
+                    }
+                }
             }
         ).asVoid()
     }
     
     func deleteExpiredNotification(for checklistId: String) -> Promise<Void> {
         guard
-            var checklist = _checklists.value.first(where: { $0.id == checklistId }),
+            let checklist = _checklists.value.first(where: { $0.id == checklistId }),
             checklist.hasExpiredReminder
         else {
             return .init(error: DataSourceError.checkListNotFound)
         }
-        checklist.removeReminderDate()
-        return updateChecklist(checklist)
+        return coreDataManager.updateReminderDate(nil, forChecklistWithId: checklist.id).get {
+            if !self._checklists.value.update($0) {
+                throw DataSourceError.checklistUpdateInMemoryFailed
+            }
+        }.asVoid()
     }
 }

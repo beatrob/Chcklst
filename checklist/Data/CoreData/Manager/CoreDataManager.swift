@@ -17,9 +17,10 @@ protocol CoreDataManager {
 protocol CoreDataChecklistManager {
     
     func fetchAllChecklists() -> Promise<[ChecklistDataModel]>
+    func fetch(checklist: ChecklistDataModel) -> Promise<ChecklistDataModel>
     func save(checklist: ChecklistDataModel) -> Promise<Void>
     func update(checklist: ChecklistDataModel) ->  Promise<Void>
-    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<Void>
+    func updateReminderDate(_ date: Date?, forChecklistWithId id: String) -> Promise<ChecklistDataModel>
     func delete(checklist: ChecklistDataModel) -> Promise<Void>
 }
 
@@ -29,6 +30,11 @@ protocol CoreDataTemplateManager {
     func save(template: TemplateDataModel) -> Promise<Void>
     func update(template: TemplateDataModel) ->  Promise<Void>
     func delete(template: TemplateDataModel) -> Promise<Void>
+}
+
+protocol CoreDataItemManager {
+    
+    func save(_ item: ItemDataModel) -> Promise<Void>
 }
 
 protocol CoreDataSchedulesManager {

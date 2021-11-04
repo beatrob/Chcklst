@@ -39,7 +39,14 @@ struct TemplateDataModel: Equatable, Hashable {
         id = UUID().uuidString
         title = checklist.title
         description = checklist.description
-        items = checklist.items
+        items = checklist.items.map {
+            ItemDataModel(
+                id: UUID().uuidString,
+                name: $0.name,
+                isDone: false,
+                updateDate: Date()
+            )
+        }
         created = Date()
     }
     

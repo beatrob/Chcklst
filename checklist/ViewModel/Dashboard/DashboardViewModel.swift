@@ -250,7 +250,11 @@ class DashboardViewModel: ObservableObject {
     }
     
     func getChecklistCellViewModel(with checklist: ChecklistDataModel) -> DashboardChecklistCellViewModel {
-        let viewModel = DashboardChecklistCellViewModel(checklist: checklist)
+        let viewModel = DashboardChecklistCellViewModel(
+            checklist: checklist,
+            checklistDataSource: self.checklistDataSource,
+            itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
+        )
         
         viewModel.onChecklistTapped.sink { [weak self] checklist in
             self?.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
@@ -332,16 +336,16 @@ private extension DashboardViewModel {
             }
         }.then { schedule -> Promise<ChecklistDataModel> in
             let now = Date()
-            return self.checklistDataSource.createChecklist(
-                .init(
-                    id: UUID().uuidString,
-                    title: schedule.title,
-                    description: schedule.description,
-                    creationDate: now,
-                    updateDate: now,
-                    items: schedule.template.items
-                )
+            let checklist = ChecklistDataModel(
+                id: UUID().uuidString,
+                title: schedule.title,
+                description: schedule.description,
+                creationDate: now,
+                updateDate: now,
+                reminderDate: nil,
+                items: schedule.template.items
             )
+            return self.checklistDataSource.createChecklist(checklist).map { checklist }
         }.get { checklist in
             after(seconds: 1).done {
                 if openAfterCreated {
@@ -395,25 +399,16 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
     func onMarkAllDoneAction(checklist: ChecklistDataModel) {
         alert = .confirmMarkAllItemsDone { [weak self] in
             guard let self = self else { return }
-            var chcklst = checklist
-            for i in 0...checklist.items.count-1 {
-                chcklst.items[i].isDone = true
-            }
-            self.checklistDataSource.updateChecklist(chcklst).catch { error in
+            self.checklistDataSource.updateChecklist(checklist.getWithAllItemsDone()).catch { error in
                 error.log(message: "Failed to mark all items done")
             }
-            
         }
     }
     
     func onMarkAllUndoneAction(checklist: ChecklistDataModel) {
         alert = .confirmMarkAllItemsUnDone { [weak self] in
             guard let self = self else { return }
-            var chcklst = checklist
-            for i in 0...checklist.items.count-1 {
-                chcklst.items[i].isDone = false
-            }
-            self.checklistDataSource.updateChecklist(chcklst).catch { error in
+            self.checklistDataSource.updateChecklist(checklist.getWithAllItemsUndone()).catch { error in
                 error.log(message: "Failed to mark all items undone")
             }
         }

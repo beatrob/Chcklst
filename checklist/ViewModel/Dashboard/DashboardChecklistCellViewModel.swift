@@ -35,6 +35,8 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     let onLongTapped = EmptySubject()
     let onTapped = EmptySubject()
     let onDelete = EmptySubject()
+    let checklistDataSource: ChecklistDataSource
+    let itemDataSource: ItemDataSource
     
     var onChecklistTapped: AnyPublisher<ChecklistDataModel, Never> {
         onTapped.map { [unowned self] in self.checklist }.eraseToAnyPublisher()
@@ -50,8 +52,14 @@ class DashboardChecklistCellViewModel: ObservableObject, Identifiable {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(checklist: ChecklistDataModel) {
+    init(
+        checklist: ChecklistDataModel,
+        checklistDataSource: ChecklistDataSource,
+        itemDataSource: ItemDataSource
+    ) {
         self.checklist = checklist
+        self.checklistDataSource = checklistDataSource
+        self.itemDataSource = itemDataSource
         setup()
     }
     
@@ -69,10 +77,10 @@ private extension DashboardChecklistCellViewModel {
         title = checklist.title
         counter = "\(checklist.items.filter(\.isDone).count)/\(checklist.items.count)"
         isReminderSet = checklist.isValidReminderSet
-        firstUndoneItem = getItemViewModel(for: getFirstUndoneItem())
         shouldShowNewBadge = checklist.creationDate == checklist.updateDate
         shouldDisplayDeleteButton = checklist.isDone
         shouldStrikeThroughTitle = checklist.isDone
+        firstUndoneItem = getItemViewModel(for: getFirstUndoneItem())
     }
     
     func getItemViewModel(for item: ItemDataModel?) -> ChecklistItemViewModel? {
@@ -81,16 +89,19 @@ private extension DashboardChecklistCellViewModel {
         }
         let viewModel = ChecklistItemViewModel(
             item: item,
-            checklistDataSource: AppContext.resolver.resolve(ChecklistDataSource.self)!
+            itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
         )
         
         viewModel.onDidChangeDoneState
-            .sink { [unowned self] isDone in
-                guard let i = self.checklist.items.firstIndex(of: item) else {
+            .sink { [weak self] isDone in
+                guard let self = self else {
                     return
                 }
-                self.checklist.items[i].isDone = isDone
-
+                self.checklistDataSource.reloadChecklist(self.checklist).get {
+                    self.checklist = $0
+                }.catch { error in
+                    error.log(message: "Faied to update Checklist")
+                }
             }
             .store(in: &cancellables)
         

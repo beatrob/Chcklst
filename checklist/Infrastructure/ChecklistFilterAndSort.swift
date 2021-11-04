@@ -22,7 +22,8 @@ protocol ChecklistFilterAndSort: AnyObject {
 
 class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     
-    private let dataSource: ChecklistDataSource
+    private let checklistDataSource: ChecklistDataSource
+
     private let _filteredChecklists = PassthroughSubject<[ChecklistDataModel], Never>()
     private let _searchResults = PassthroughSubject<[ChecklistDataModel], Never>()
     
@@ -64,21 +65,23 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     private var cancellables = Set<AnyCancellable>()
     
     init(dataSource: ChecklistDataSource) {
-        self.dataSource = dataSource
+        self.checklistDataSource = dataSource
     }
     
     private func updateFilterAndSort() {
         cancellables.removeAll()
-        dataSource.checkLists.sink { [weak self] checklists  in
-            guard let self = self else { return }
-            if let searchResults = self.search(checklists: checklists) {
-                self._searchResults.send(searchResults)
-                return
-            }
-            let filtered = self.filter(checklists: checklists)
-            let sorted = self.sort(checklists: filtered)
-            self._filteredChecklists.send(sorted)
-        }.store(in: &cancellables)
+        checklistDataSource.checkLists
+            .filter { [weak self] _ in !(self?.isSearching ?? false) }
+            .map { [weak self] in self?.filter(checklists: $0) ?? $0 }
+            .map { [weak self] in self?.sort(checklists: $0) ?? $0 }
+            .subscribe(_filteredChecklists)
+            .store(in: &cancellables)
+        
+        checklistDataSource.checkLists
+            .filter { [weak self] _ in self?.isSearching ?? false }
+            .map { [weak self] in self?.search(checklists: $0) ?? $0 }
+            .subscribe(_searchResults)
+            .store(in: &cancellables)        
     }
     
     private func search(checklists: [ChecklistDataModel]) -> [ChecklistDataModel]? {
@@ -87,8 +90,7 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         }
         return checklists.filter { checklist -> Bool in
             checklist.title.lowercased().contains(searchText) ||
-                checklist.description?.lowercased().contains(searchText) ?? false ||
-                checklist.items.contains(where: { $0.name.lowercased().contains(searchText)})
+                checklist.description?.lowercased().contains(searchText) ?? false
         }
     }
     
@@ -131,9 +133,5 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
     
     private func filterReminders(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
         checklists.filter { $0.isValidReminderSet }
-    }
-    
-    private func filterArchived(checklists: [ChecklistDataModel]) -> [ChecklistDataModel] {
-        checklists.filter { $0.isArchived }
     }
 }

@@ -47,7 +47,7 @@ struct ChecklistItemView_Previews: PreviewProvider {
                     isDone: false,
                     updateDate: Date()
                 ),
-                checklistDataSource: MockChecklistDataSource()
+                itemDataSource: MockItemDataSource()
             )
         ).previewLayout(.sizeThatFits)
     }

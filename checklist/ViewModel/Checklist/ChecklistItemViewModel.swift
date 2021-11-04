@@ -51,7 +51,7 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
         self.updateDate = Date()
     }
     
-    convenience init(item: ItemDataModel, checklistDataSource: ChecklistDataSource) {
+    convenience init(item: ItemDataModel, itemDataSource: ItemDataSource) {
         self.init(
             id: item.id,
             name: item.name,
@@ -65,11 +65,11 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
                 guard let self = self else {
                     return
                 }
-                self.updateDate = Date()
                 self.isDone.toggle()
                 Haptics.play(.itemDoneUndone)
-                checklistDataSource.updateItem(item, isDone: self.isDone).done {
-                    self.onDidChangeDoneState.send(self.isDone)
+                itemDataSource.setItem(item, done: self.isDone).done { i in
+                    self.updateDate = i.updateDate
+                    self.onDidChangeDoneState.send(i.isDone)
                 }.catch { error in
                     error.log(message: "Failed to update done/undone item")
                 }

@@ -55,8 +55,7 @@ struct ChecklistNavBar_Preview: PreviewProvider {
                     creationDate: Date(),
                     updateDate: Date(),
                     reminderDate: Date().addingTimeInterval(1000),
-                    items: [],
-                    isArchived: false
+                    items: []
                 )
             ).eraseToAnyPublisher()
         )

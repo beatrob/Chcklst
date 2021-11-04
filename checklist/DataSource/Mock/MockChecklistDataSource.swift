@@ -13,6 +13,7 @@ import PromiseKit
 
 class MockChecklistDataSource: ChecklistDataSource {
     
+    
     static let now = Date()
 
     var _checkLists: CurrentValueSubject<[ChecklistDataModel], Never> = .init([
@@ -22,6 +23,7 @@ class MockChecklistDataSource: ChecklistDataSource {
             description: "My first super cool checklist to do stuff efficiently",
             creationDate: MockChecklistDataSource.now,
             updateDate: MockChecklistDataSource.now,
+            reminderDate: nil,
             items: [
                 .init(id: "1", name: "Do this for the first.", isDone: false, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -37,6 +39,7 @@ class MockChecklistDataSource: ChecklistDataSource {
             description: "My second super cool checklist to do stuff efficiently",
             creationDate: MockChecklistDataSource.now,
             updateDate: MockChecklistDataSource.now,
+            reminderDate: nil,
             items: [
                 .init(id: "1", name: "Something something something.", isDone: true, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -52,6 +55,7 @@ class MockChecklistDataSource: ChecklistDataSource {
             description: "My first super cool checklist to do stuff efficiently",
             creationDate: MockChecklistDataSource.now,
             updateDate: MockChecklistDataSource.now,
+            reminderDate: nil,
             items: [
                 .init(id: "1", name: "Lala blah blah blah.", isDone: false, updateDate: Date()),
                 .init(id: "2", name: "Do this for the second.", isDone: false, updateDate: Date().addingTimeInterval(1)),
@@ -63,49 +67,34 @@ class MockChecklistDataSource: ChecklistDataSource {
         )
     ])
     
-    let selectedCheckList: CurrentValueSubject<ChecklistDataModel?, Never> = .init(nil)
     var cancellables =  Set<AnyCancellable>()
     
     var checkLists: AnyPublisher<[ChecklistDataModel], Never> {
         _checkLists.eraseToAnyPublisher()
     }
     
-    init() {
-        selectedCheckList.dropFirst().sink { [weak self] checklist in
-            guard let self = self else { return }
-            guard var checklist = checklist else { return }
-            checklist.updateDate = Date()
-            _ = self._checkLists.value.updateItem(checklist)
-        }.store(in: &cancellables)
+    func reloadChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+        .value(checklist)
     }
     
-    func updateItem(_ item: ItemDataModel, isDone: Bool) -> Promise<Void> {
-        guard let chck = _checkLists.value.first(where: { ch in ch.items.contains(item) }) else {
-            return .init(error: DataSourceError.checkListNotFound)
-        }
-        var i = item
-        i.isDone = isDone
-        return updateItem(i, in: chck).asVoid()
-    }
-    
-    func updateItem(_ item: ItemDataModel, in checkList: ChecklistDataModel) -> Promise<ChecklistDataModel> {
-        guard let index = _checkLists.value.firstIndex(of: checkList) else {
-            return .init(error: DataSourceError.checkListNotFound)
-        }
-        var checklist = _checkLists.value[index]
-        if checklist.items.updateItem(item) {
-            checklist.updateToCurrentDate()
-            return .value(checklist)
-        }
-        return .init(error: DataSourceError.itemNotFound)
-    }
-    
-    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<Void> {
+    func updateReminderDate(_ date: Date?, for checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
         guard let index = _checkLists.value.firstIndex(of: checklist) else {
             return .init(error: DataSourceError.checkListNotFound)
         }
-        _checkLists.value[index].reminderDate = date
-        return .value
+        let ch = ChecklistDataModel(
+            id: checklist.id,
+            title: checklist.title,
+            description: checklist.description,
+            creationDate: checklist.creationDate,
+            updateDate: Date(),
+            reminderDate: date,
+            items: checklist.items
+        )
+        var checklists = _checkLists.value
+        checklists.remove(at: index)
+        checklists.insert(ch, at: index)
+        _checkLists.value = checklists
+        return .value(ch)
     }
     
     func loadAllChecklists() -> Promise<[ChecklistDataModel]> {
@@ -116,9 +105,9 @@ class MockChecklistDataSource: ChecklistDataSource {
         _checkLists.value.first { $0.id == id }
     }
     
-    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<ChecklistDataModel> {
+    func createChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {
         _checkLists.value.insert(checklist, at: 0)
-        return .value(checklist)
+        return .value
     }
     
     func deleteChecklist(_ checklist: ChecklistDataModel) -> Promise<Void> {

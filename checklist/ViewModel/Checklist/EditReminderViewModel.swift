@@ -86,11 +86,11 @@ private extension EditReminderViewModel {
     
     func createReminder(date: Date) {
         firstly {
-            self.checklistDataSource.updateReminderDate(date, for: checklist)
+            self.checklistDataSource.updateReminderDate(date, for: checklist).asVoid()
+        }.then {
+            self.notificationManager.setupReminder(date: date, for: self.checklist)
         }.get {
             self.onDidCreateReminder.send(date)
-        }.then {
-            return self.notificationManager.setupReminder(date: date, for: self.checklist)
         }.catch { error in
             error.log(message: "Failed to save reminder")
             #warning("TODO: Add error hanling")
@@ -98,7 +98,7 @@ private extension EditReminderViewModel {
     }
     
     func deleteReminder() {
-        checklistDataSource.updateReminderDate(nil, for: checklist).done {
+        checklistDataSource.updateReminderDate(nil, for: checklist).done { _ in
             self.notificationManager.removeReminder(for: self.checklist)
             self.onDidDeleteReminder.send()
         }.catch { error in

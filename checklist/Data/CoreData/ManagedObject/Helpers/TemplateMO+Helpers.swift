@@ -29,17 +29,30 @@ extension TemplateMO {
             id: identifier,
             title: title,
             description: notes,
-            items: items?.getItemDataModels() ?? [],
+            items: (items as? Set<ItemMO>)?.compactMap { $0.toDataModel() } ?? [],
             created: creationDate
         )
     }
     
-    func setup(with dataModel: TemplateDataModel) {
+    func setup(with dataModel: TemplateDataModel, context: NSManagedObjectContext) {
         identifier = dataModel.id
         title = dataModel.title
         notes = dataModel.description
-        items = ChecklistItemArrayTransformable(checklistItems: dataModel.items)
         creationDate = dataModel.created
+        do {
+            let oldItems = items
+            let newItems = Set(try dataModel.items.map {
+                try ItemMO.getManagedObject(for: $0, context: context)
+            })
+            if oldItems?.count ?? 0 > 0 {
+                (oldItems as! Set<ItemMO>).subtracting(newItems).forEach { item in
+                    context.delete(item)
+                }
+            }
+            items = newItems as NSSet
+        } catch {
+            error.log(message: "Failed to get ItemMO")
+        }
     }
     
     static func getManagedObject(
@@ -63,7 +76,7 @@ extension TemplateMO {
             return .init(error: CoreDataError.createEntityError)
         }
         let templateMO = TemplateMO(entity: entity, insertInto: context)
-        templateMO.setup(with: dataModel)
+        templateMO.setup(with: dataModel, context: context)
         return .value(templateMO)
     }
 }
@@ -82,5 +95,22 @@ extension TemplateMO {
 
     @objc(removeSchedules:)
     @NSManaged public func removeFromSchedules(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for items
+extension TemplateMO {
+
+    @objc(addItemsObject:)
+    @NSManaged public func addToItems(_ value: ItemMO)
+
+    @objc(removeItemsObject:)
+    @NSManaged public func removeFromItems(_ value: ItemMO)
+
+    @objc(addItems:)
+    @NSManaged public func addToItems(_ values: NSSet)
+
+    @objc(removeItems:)
+    @NSManaged public func removeFromItems(_ values: NSSet)
 
 }

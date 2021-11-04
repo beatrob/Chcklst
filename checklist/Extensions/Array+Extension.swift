@@ -24,7 +24,7 @@ extension Array where Element == ItemDataModel {
 
 extension Array where Element == ChecklistDataModel {
     
-    mutating func updateItem(_ item: Element) -> Bool {
+    mutating func update(_ item: Element) -> Bool {
         guard let index = firstIndex(of: item) else {
             return false
         }

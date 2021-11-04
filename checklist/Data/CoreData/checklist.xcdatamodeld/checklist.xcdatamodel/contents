@@ -3,11 +3,19 @@
     <entity name="Checklist" representedClassName="ChecklistMO" syncable="YES">
         <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="645052500" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
-        <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="reminderDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="updateDate" attributeType="Date" defaultDateTimeInterval="622938540" usesScalarValueType="NO"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="checklist" inverseEntity="Item"/>
+    </entity>
+    <entity name="Item" representedClassName="ItemMO" syncable="YES">
+        <attribute name="identifier" attributeType="String" defaultValueString=""/>
+        <attribute name="isDone" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <attribute name="updateDate" attributeType="Date" defaultDateTimeInterval="657584520" usesScalarValueType="NO"/>
+        <relationship name="checklist" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Checklist" inverseName="items" inverseEntity="Checklist"/>
+        <relationship name="template" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Template" inverseName="items" inverseEntity="Template"/>
     </entity>
     <entity name="RepeatFrequency" representedClassName="RepeatFrequencyMO" syncable="YES">
         <attribute name="identifier" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -29,15 +37,16 @@
     <entity name="Template" representedClassName="TemplateMO" syncable="YES">
         <attribute name="creationDate" attributeType="Date" defaultDateTimeInterval="657401460" usesScalarValueType="NO"/>
         <attribute name="identifier" attributeType="String" defaultValueString=""/>
-        <attribute name="items" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="ChecklistItemArrayTransformable"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="template" inverseEntity="Item"/>
         <relationship name="schedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Schedule" inverseName="template" inverseEntity="Schedule"/>
     </entity>
     <elements>
-        <element name="Checklist" positionX="-239.1010131835938" positionY="-200.6466369628906" width="128" height="134"/>
-        <element name="RepeatFrequency" positionX="375.246337890625" positionY="-108.6470336914063" width="128" height="59"/>
-        <element name="Schedule" positionX="159.217529296875" positionY="-114.6210021972656" width="144.5001220703125" height="133"/>
-        <element name="Template" positionX="-92.14324951171875" positionY="0.456787109375" width="128" height="133"/>
+        <element name="Checklist" positionX="-372.6693725585938" positionY="-94.8220520019531" width="128" height="148"/>
+        <element name="RepeatFrequency" positionX="296.6239013671875" positionY="-115.1716918945313" width="128" height="59"/>
+        <element name="Schedule" positionX="46.068359375" positionY="-55.22225952148435" width="144.5001220703125" height="133"/>
+        <element name="Template" positionX="-319.1498413085938" positionY="86.75665283203125" width="128" height="133"/>
+        <element name="Item" positionX="-13.2711181640625" positionY="-274.2381591796875" width="140.513427734375" height="133"/>
     </elements>
 </model>

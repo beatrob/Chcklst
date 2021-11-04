@@ -15,7 +15,12 @@ class CoreDataAssembly: Assembly {
     
     func assemble(container: Container) {
         container.autoregister(CoreDataManager.self, initializer: CoreDataManagerImpl.init)
-            .implements(CoreDataChecklistManager.self, CoreDataTemplateManager.self, CoreDataSchedulesManager.self)
+            .implements(
+                CoreDataChecklistManager.self,
+                CoreDataTemplateManager.self,
+                CoreDataSchedulesManager.self,
+                CoreDataItemManager.self
+            )
             .inObjectScope(.container)
     }
 }

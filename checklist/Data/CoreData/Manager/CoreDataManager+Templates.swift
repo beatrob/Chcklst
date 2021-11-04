@@ -16,9 +16,7 @@ extension CoreDataManagerImpl: CoreDataTemplateManager {
     func fetchAllTemplates() -> Promise<[TemplateDataModel]> {
         firstly { getViewContext() }
         .then { context -> Promise<[TemplateMO]> in
-            guard let data = try context.fetch(TemplateMO.fetchRequest()) as? [TemplateMO] else {
-                throw CoreDataError.fetchError
-            }
+            let data = try context.fetch(TemplateMO.fetchRequest())
             return .value(data)
         }
         .map { templates in templates.map { $0.toTemplateDataModel() } }
@@ -38,7 +36,7 @@ extension CoreDataManagerImpl: CoreDataTemplateManager {
             guard let templateMO = try context.fetch(TemplateMO.fetchRequest(withId: template.id)).first else {
                 throw CoreDataError.fetchError
             }
-            templateMO.setup(with: template)
+            templateMO.setup(with: template, context: context)
             return .value
         }
         .then { self.saveContext() }
@@ -50,6 +48,7 @@ extension CoreDataManagerImpl: CoreDataTemplateManager {
             guard let templateMO = try context.fetch(TemplateMO.fetchRequest(withId: template.id)).first else {
                 throw CoreDataError.fetchError
             }
+            (templateMO.items as! Set<ItemMO>).forEach { context.delete($0) }
             context.delete(templateMO)
             return .value
         }

@@ -19,6 +19,7 @@ extension ChecklistDataModel {
             description: "Welcome to Chcklst, an app which helps you get things done using the power of checklist. By following this short tutorial you will learn all the cool things you can do 😉",
             creationDate: now,
             updateDate: now,
+            reminderDate: nil,
             items: [
                 .init(
                     id: UUID().uuidString,
