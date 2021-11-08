@@ -53,7 +53,7 @@ struct ScheduleDataModel: Equatable {
             case .yearly:
                 return [5]
             case .customDays(let days):
-                return days.map(\.rawValue)
+                return days.map(\.index)
             }
         }
         

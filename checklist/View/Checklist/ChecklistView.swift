@@ -29,57 +29,66 @@ struct ChecklistView: View {
                     if viewModel.isNavBarVisible {
                         ChecklistNavBar(viewModel: viewModel.navBarViewModel)
                     } else {
-                        BackButtonNavBar(viewModel: viewModel.createChecklistNavbarViewModel)
+                        BackButtonNavBar(viewModel: viewModel.createViewNavbarViewModel)
                     }
                     ScrollView {
-                        VStack {
-                            ChecklistNameView(
-                                checklistName: $viewModel.checklistName,
-                                isEditable: $viewModel.isEditable
-                            )
-                            if viewModel.shouldDisplayDescription {
-                                ChecklistDescriptionView(
-                                    description: $viewModel.checklistDescription,
+                        ScrollViewReader { scroller in
+                            VStack {
+                                ChecklistNameView(
+                                    checklistName: $viewModel.checklistName,
                                     isEditable: $viewModel.isEditable
                                 )
-                                .padding(.bottom, 20)
-                            }
-                            ChecklistItemsView(
-                                shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
-                                items: viewModel.items,
-                                onNext: viewModel.onAddItemsNext,
-                                onDeleteItem: viewModel.onDeleteItem
-                            )
-                                .padding(.bottom, 30)
-                            if viewModel.shouldDisplaySetReminder {
-                                CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
-                                    .padding()
-                                if viewModel.isReminderOn {
-                                    HStack {
-                                        Spacer()
-                                        DatePicker("",
-                                                   selection: $viewModel.reminderDate,
-                                                   displayedComponents: [.date, .hourAndMinute]
-                                        )
-                                            .labelsHidden()
-                                        Spacer()
+                                if viewModel.shouldDisplayDescription {
+                                    ChecklistDescriptionView(
+                                        description: $viewModel.checklistDescription,
+                                        isEditable: $viewModel.isEditable
+                                    )
+                                        .padding(.bottom, 20)
+                                }
+                                ChecklistItemsView(
+                                    shouldDisplayAddItems: $viewModel.shouldDisplayAddItems,
+                                    items: viewModel.items,
+                                    onNext: viewModel.onAddItemsNext,
+                                    onDeleteItem: viewModel.onDeleteItem
+                                )
+                                    .padding(.bottom, 30)
+                                    .onChange(of: viewModel.items, perform: { _ in
+                                        if let last = viewModel.items.last {
+                                            withAnimation {
+                                                scroller.scrollTo(last, anchor: .bottom)
+                                            }
+                                        }
+                                    })
+                                if viewModel.shouldDisplaySetReminder {
+                                    CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
+                                        .padding()
+                                    if viewModel.isReminderOn {
+                                        HStack {
+                                            Spacer()
+                                            DatePicker("",
+                                                       selection: $viewModel.reminderDate,
+                                                       displayedComponents: [.date, .hourAndMinute]
+                                            )
+                                                .labelsHidden()
+                                            Spacer()
+                                        }
                                     }
                                 }
-                            }
-                            if viewModel.shouldDisplaySaveAsTemplate {
-                                CheckboxView(viewModel: viewModel.saveAsTemplateCheckboxViewModel)
-                                    .padding()
-                            }
-                            if viewModel.shouldDisplayActionButton {
-                                HStack {
-                                    Spacer()
-                                    CapsuleButton(
-                                        localizedKey: viewModel.actionButtonTitle,
-                                        type: .primary,
-                                        onTapSubject: viewModel.onActionButtonTapped
-                                    )
-                                        .padding(.vertical, 40)
-                                    Spacer()
+                                if viewModel.shouldDisplaySaveAsTemplate {
+                                    CheckboxView(viewModel: viewModel.saveAsTemplateCheckboxViewModel)
+                                        .padding()
+                                }
+                                if viewModel.shouldDisplayActionButton {
+                                    HStack {
+                                        Spacer()
+                                        CapsuleButton(
+                                            localizedKey: viewModel.actionButtonTitle,
+                                            type: .primary,
+                                            onTapSubject: viewModel.onActionButtonTapped
+                                        )
+                                            .padding(.vertical, 40)
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
@@ -93,8 +102,8 @@ struct ChecklistView: View {
                 .actionSheet(isPresented: self.$viewModel.actionSheetVisibility.isVisible, content: {
                     viewModel.actionSheetVisibility.view
                 })
-                .sheet(isPresented: self.$viewModel.sheetVisibility.isVisible) {
-                    viewModel.sheetVisibility.view
+                .sheet(isPresented: self.$viewModel.isSheetVisible) {
+                    viewModel.sheet
                 }
             }.ignoresSafeArea(.container, edges: .bottom)
         }

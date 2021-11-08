@@ -107,7 +107,7 @@ class DashboardViewModel: ObservableObject {
             }
             after(seconds: 0.5).done {
                 navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
-                notificationManager.clearDeeplinkcChecklistId()
+                notificationManager.clearDeeplinkChecklistId()
             }
         }.store(in: &cancellables)
         
@@ -115,7 +115,7 @@ class DashboardViewModel: ObservableObject {
             guard !scheduleId.isEmpty else {
                 return
             }
-            self?.createChecklist(for: scheduleId, openAfterCreated: false)
+            self?.createChecklist(for: scheduleId)
         }.store(in: &cancellables)
         
         checklistFilterAndSort.filteredAndSortedCheckLists
@@ -327,31 +327,21 @@ private extension DashboardViewModel {
             .store(in: &self.cancellables)
     }
     
-    func createChecklist(for scheduleId: String, openAfterCreated: Bool) {
+    func createChecklist(for scheduleId: String) {
         firstly {
             scheduleDataSource.getSchedule(with: scheduleId)
-        }.get { schedule in
-            self.scheduleDataSource.deleteSchedule(schedule).catch {
-                $0.log(message: "Failed to delete schedule")
+        }.then { schedule -> Promise<ScheduleDataModel> in
+            guard schedule.repeatFrequency.isNever else {
+                return .value(schedule)
             }
+            return self.scheduleDataSource.deleteSchedule(schedule).map { schedule }
         }.then { schedule -> Promise<ChecklistDataModel> in
-            let now = Date()
-            let checklist = ChecklistDataModel(
-                id: UUID().uuidString,
-                title: schedule.title,
-                description: schedule.description,
-                creationDate: now,
-                updateDate: now,
-                reminderDate: nil,
-                items: schedule.template.items
-            )
+            let checklist = ChecklistDataModel(schedule: schedule)
             return self.checklistDataSource.createChecklist(checklist).map { checklist }
         }.get { checklist in
+            self.notificationManager.clearDeeplinkChecklistId()
             after(seconds: 1).done {
-                if openAfterCreated {
-                    self.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
-                }
-                self.notificationManager.clearDeeplinkcChecklistId()
+                self.navigationHelper.popToDashboard()
             }
         }.catch { error in
             error.log(message: "Failed to create checklist for schedule ID: \(scheduleId)")
@@ -361,7 +351,7 @@ private extension DashboardViewModel {
     func loadDeliveredReminders() {
         notificationManager.getDeliveredReminders().done { reminders in
             reminders.scheduleIds.forEach {
-                self.createChecklist(for: $0, openAfterCreated: false)
+                self.createChecklist(for: $0)
             }
             when(
                 resolved: reminders.checklistIds.map {

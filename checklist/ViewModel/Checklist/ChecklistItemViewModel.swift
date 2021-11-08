@@ -11,7 +11,7 @@ import Combine
 import SwiftUI
 
 
-class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
+class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable, Hashable {
     
     let id: String
     @Published var name: String = "" {
@@ -79,5 +79,9 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable {
     
     static func == (lhs: ChecklistItemViewModel, rhs: ChecklistItemViewModel) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }

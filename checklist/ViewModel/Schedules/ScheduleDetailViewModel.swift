@@ -96,6 +96,7 @@ class ScheduleDetailViewModel: ObservableObject {
             self.date = schedule.scheduleDate
             self.repeatFrequency = schedule.repeatFrequency
             self.isRepeatOn = !schedule.repeatFrequency.isNever
+            self.shouldDisplayDays = schedule.repeatFrequency.isCustomDays
         } else {
             self.date = referenceDate
         }
@@ -121,7 +122,8 @@ class ScheduleDetailViewModel: ObservableObject {
             let isChecked = state.schedule?.repeatFrequency.getCustomDaysIfAvailable.contains($0) ?? false
             return CheckboxViewModel(
                 title: $0.title,
-                isChecked: isChecked
+                isChecked: isChecked,
+                data: $0
             )
         }
         
@@ -153,6 +155,8 @@ class ScheduleDetailViewModel: ObservableObject {
                     self.alert = .getEnablePushNotifications()
                     self.isAlertPresented = true
                 }
+            }.catch { error in
+                error.log(message: "Failed to register push notifications")
             }
         }.store(in: &cancellables)
         
@@ -164,7 +168,11 @@ class ScheduleDetailViewModel: ObservableObject {
                 title: Text("Do you really want to delete this schedule?"),
                 message: nil,
                 primaryButton: .destructive(Text("Delete"), action: {
-                    scheduleDataSource.deleteSchedule(schedule).done {
+                    firstly {
+                        scheduleDataSource.deleteSchedule(schedule)
+                    }.then {
+                        notificationManager.removeReminder(for: schedule)
+                    }.done {
                         self.didDeleteSheduleSubject.send()
                     }.catch {
                         $0.log(message: "Failed to delete schedule")
@@ -224,7 +232,10 @@ private extension ScheduleDetailViewModel {
     
     func observeCustomDaysCheckboxes() {
         customDaysCheckboxes.forEach { vM in
-            vM.checked.dropFirst().sink { [weak self] checked in
+            vM.checked
+                .dropFirst()
+                .delay(for: .seconds(0.2), scheduler: RunLoop.main)
+                .sink { [weak self] checked in
                 guard
                     let self = self,
                     self.repeatFrequency?.isCustomDays ?? false
@@ -283,7 +294,11 @@ private extension ScheduleDetailViewModel {
                 scheduleDate: self.date,
                 repeatFrequency: repeatFreq
             )
-        ).done {
+        ).then {
+            self.notificationManager.removeReminder(for: schedule)
+        }.then {
+            self.notificationManager.setupScheduleNotification(for: schedule)
+        }.done {
             self.didUpdateSheduleSubject.send()
         }.catch {
             $0.log(message: "Failed to update schedule")

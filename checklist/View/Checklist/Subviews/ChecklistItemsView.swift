@@ -26,6 +26,7 @@ struct ChecklistItemsView: View {
                         ChecklistItemView(viewModel: item)
                             .padding(.horizontal)
                             .padding(.vertical, 5)
+                            .id(item)
                     }
                 }
             }

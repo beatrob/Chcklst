@@ -32,8 +32,6 @@ struct ChecklistItemView: View, Equatable {
                 isCrossedOut: $viewModel.isDone,
                 didEndEditing: viewModel.onDidEndEditing
             )
-        }.if(!viewModel.isEditable) {
-            $0.onLongPressGesture { viewModel.onLongPress.send() }
         }
     }
 }

@@ -49,7 +49,8 @@ class ChecklistViewModel: ObservableObject {
     
     @Published var viewState: ChecklistViewState
     @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
-    @Published var sheetVisibility = ViewVisibility(view: AnyView(EmptyView()))
+    @Published var isSheetVisible: Bool = false
+    @Published var sheet: AnyView = .empty
     @Published var actionSheetVisibility = ViewVisibility(view: ChecklistActionSheet.none.view)
     private var alert: ChecklistAlert = .none {
         didSet {
@@ -64,7 +65,8 @@ class ChecklistViewModel: ObservableObject {
     private let didCreateTemplateSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
     
-    let createChecklistNavbarViewModel: BackButtonNavBarViewModel = {
+    /// Create Checklist or Template
+    let createViewNavbarViewModel: BackButtonNavBarViewModel = {
         let vm = BackButtonNavBarViewModel(title: "Create Checklist")
         vm.isBackButtonHidden = true
         vm.style = .big
@@ -96,8 +98,8 @@ class ChecklistViewModel: ObservableObject {
             argument: currentChecklist.eraseToAnyPublisher()
         )!
         viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
-        viewModel.actionsButton.didTap.zip(currentChecklist).sink { [weak self] tupple in
-            guard let self = self, let checklist = tupple.1  else {
+        viewModel.actionsButton.didTap.sink { [weak self] tupple in
+            guard let self = self, let checklist = self.currentChecklist.value  else {
                 return
             }
             self.actionSheet = .actionMenu(checklist: checklist, delegate: self)
@@ -237,6 +239,7 @@ private extension ChecklistViewModel {
         guard let checklist = currentChecklist.value else {
             return
         }
+        createViewNavbarViewModel.title = "Create Template"
         self.checklistName = checklist.title
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { addNewItem(name: $0.name, isDone: false, isEditable: true) }
@@ -285,6 +288,7 @@ private extension ChecklistViewModel {
             self.checklistDataSource.updateChecklist(checklistToUpdate)
         }.done {
             self.currentChecklist.send(checklistToUpdate)
+            self.reorderItems()
             log(debug: "Update checklist success. \(checklistToUpdate)")
         }.catch { error in
             log(error: "Update checklist failed. \(error.localizedDescription)")
@@ -519,6 +523,8 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             .map { _ in () }
             .merge(with: viewModel.onDidDeleteReminder)
             .sink { [weak self] in
+                self?.sheet = .empty
+                self?.isSheetVisible = false
                 self?.checklistDataSource.reloadChecklist(checklist).get {
                     self?.currentChecklist.value = $0
                 }.catch({ error in
@@ -527,7 +533,8 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
         }.store(in: &cancellables)
         
         let view = EditReminderView(viewModel: viewModel)
-        sheetVisibility.set(view: AnyView(view), isVisible: true)
+        sheet = AnyView(view)
+        isSheetVisible = true
     }
     
     func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
@@ -551,7 +558,8 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             self?.objectWillChange.send()
         }.store(in: &cancellables)
         let view = ChecklistView(viewModel: viewModel)
-        sheetVisibility.set(view: AnyView(view), isVisible: true)
+        sheet = AnyView(view)
+        isSheetVisible = true
     }
     
     func onDeleteAction(checklist: ChecklistDataModel) {
@@ -589,17 +597,20 @@ extension ChecklistViewModel: RestrictionPresenter {
     }
     
     func presentUpgradeView(_ upgradeView: UpgradeView) {
-        sheetVisibility.set(view: AnyView(upgradeView), isVisible: true)
+        sheet = AnyView(upgradeView)
+        isSheetVisible = true
         self.objectWillChange.send()
     }
     
     func cancelUpgradeView() {
-        sheetVisibility.set(view: AnyView.empty, isVisible: false)
+        sheet = AnyView.empty
+        isSheetVisible = true
         self.objectWillChange.send()
     }
     
     func dismissUpgradeView() {
-        sheetVisibility.set(view: AnyView.empty, isVisible: false)
+        sheet = AnyView.empty
+        isSheetVisible = true
         self.objectWillChange.send()
     }
 }

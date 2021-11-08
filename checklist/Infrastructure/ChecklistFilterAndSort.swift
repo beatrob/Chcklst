@@ -90,7 +90,8 @@ class ChecklistFilterAndSortImpl: ChecklistFilterAndSort {
         }
         return checklists.filter { checklist -> Bool in
             checklist.title.lowercased().contains(searchText) ||
-                checklist.description?.lowercased().contains(searchText) ?? false
+                checklist.description?.lowercased().contains(searchText) ?? false ||
+                checklist.items.contains(where: { $0.name.lowercased().contains(searchText)})
         }
     }
     

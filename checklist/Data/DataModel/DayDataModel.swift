@@ -9,13 +9,16 @@
 import Foundation
 
 enum DayDataModel: Int, CaseIterable {
-    case monday = 100
-    case tuesday = 101
-    case wednesday = 102
-    case thursday = 103
-    case friday = 104
-    case saturday = 105
-    case sunday = 106
+    
+    case sunday = 0
+    case monday = 1
+    case tuesday = 2
+    case wednesday = 3
+    case thursday = 4
+    case friday = 5
+    case saturday = 6
+    
+    static var indexOffset = 100
     
     var title: String {
         switch self {
@@ -36,8 +39,16 @@ enum DayDataModel: Int, CaseIterable {
         }
     }
     
-    var weakdayOffset: Int {
-        self.rawValue - 100
+    var index: Int {
+        rawValue + Self.indexOffset
+    }
+    
+    var firstWeekday: DayDataModel? {
+        .init(rawValue: Calendar.current.firstWeekday)
+    }
+    
+    var calendarWeekdayOffset: Int {
+        self.rawValue + (firstWeekday?.rawValue ?? 0)
     }
     
     static var allCases: [DayDataModel] {

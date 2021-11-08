@@ -19,6 +19,43 @@ struct ChecklistDataModel: Equatable, Hashable {
     let reminderDate: Date?
     let items: [ItemDataModel]
     
+    init(
+        id: String,
+        title: String,
+        description: String?,
+        creationDate: Date,
+        updateDate: Date,
+        reminderDate: Date?,
+        items: [ItemDataModel]
+    ) {
+        self.id = id
+        self.title = title
+        self.description = description
+        self.creationDate = creationDate
+        self.updateDate = updateDate
+        self.reminderDate = reminderDate
+        self.items = items
+    }
+    
+    init(schedule: ScheduleDataModel) {
+        self.init(
+            id: UUID().uuidString,
+            title: schedule.title,
+            description: schedule.description,
+            creationDate: Date(),
+            updateDate: Date(),
+            reminderDate: nil,
+            items: schedule.template.items.map {
+                ItemDataModel(
+                    id: UUID().uuidString,
+                    name: $0.name,
+                    isDone: false,
+                    updateDate: Date()
+                )
+            }
+        )
+    }
+    
     var isDone: Bool {
         items.filter(\.isDone).count == items.count && !items.isEmpty
     }

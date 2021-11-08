@@ -98,6 +98,21 @@ class NotificationManager: NSObject {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [checklist.id])
     }
     
+    func removeReminder(for schedule: ScheduleDataModel) -> Guarantee<Void> {
+        Guarantee { res in
+            UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+                let notifications = requests.filter { $0.identifier.contains(schedule.id) }
+                guard !notifications.isEmpty else {
+                    return
+                }
+                UNUserNotificationCenter.current().removePendingNotificationRequests(
+                    withIdentifiers: notifications.map { $0.identifier }
+                )
+                res(())
+            }
+        }
+    }
+    
     func setupScheduleNotification(for schedule: ScheduleDataModel) -> Promise<Void> {
         let content = UNMutableNotificationContent()
         content.title = schedule.title
@@ -137,16 +152,20 @@ class NotificationManager: NSObject {
                                 )
                             }
                         + [reg1]
-                    )
+                ).then {
+                    self.debugPendingNotifications()
+                }
             default:
                 return reg1
             }
         } else {
             return reg1
         }
+        
+        
     }
     
-    func clearDeeplinkcChecklistId() {
+    func clearDeeplinkChecklistId() {
         log(debug: "Clearing deeplink checklist ID")
         _deeplinkChecklistId.send("")
         _deeplinkChecklistId.send("")
@@ -216,10 +235,36 @@ private extension NotificationManager {
         for date: Date,
         customDays: [DayDataModel]
     ) -> [DateComponents] {
-        customDays
-            .map { Calendar.current.date(bySetting: .weekday, value: $0.weakdayOffset, of: date) }
-            .compactMap { $0 }
-            .map { Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: date) }
+        let originalHourAndMinute = Calendar.current.dateComponents([.hour, .minute], from: date)
+        guard
+            let originalHour = originalHourAndMinute.hour,
+            let originalMinute = originalHourAndMinute.minute
+        else {
+            return []
+        }
+        
+        let days = customDays
+            .compactMap { day -> DateComponents? in
+                
+                guard
+                    let weekDayDate = Calendar.current.date(
+                        bySetting: .weekday,
+                        value: day.calendarWeekdayOffset,
+                        of: date
+                    ),
+                    let newDate = Calendar.current.date(
+                        bySettingHour: originalHour,
+                        minute: originalMinute,
+                        second: 0,
+                        of: weekDayDate
+                    )
+                else {
+                    return nil
+                }
+                
+                return Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: newDate)
+            }
+        return days
     }
     
     func getScheduleId(fromNotificationId notfId: String) -> String? {
@@ -240,6 +285,21 @@ private extension NotificationManager {
             of: Prefix.checklist.rawValue,
             with: ""
         )
+    }
+    
+    func debugPendingNotifications() -> Promise<Void> {
+        #if DEBUG
+        return Promise { res in
+            UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+                log(
+                    debug: "Pending notification requests:\n\(requests.map { String(describing: $0) }.joined(separator: "\n"))"
+                )
+                res.fulfill(())
+            }
+        }
+        #else
+        return .value
+        #endif
     }
 }
 

@@ -105,6 +105,9 @@ struct ScheduleDetailView: View {
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
         .sheet(isPresented: $viewModel.isSheetPresented) {
             viewModel.sheet
         }
