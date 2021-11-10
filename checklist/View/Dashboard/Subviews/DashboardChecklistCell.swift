@@ -73,7 +73,7 @@ struct DashboardChecklistCell: View {
                     )
                     .offset(CGSize(width: 10.0, height: -13.0))
             }
-        }
+        }.id(viewModel.id)
     }
 }
 

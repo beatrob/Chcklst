@@ -14,11 +14,11 @@ extension ChecklistViewModel {
     
     var actionButtonTitle: LocalizedStringKey {
         switch viewState {
-        case .createFromTemplate, .createNew:
+        case .createChecklistFromTemplate, .createChecklist:
             return .init("Create")
-        case .update, .updateTemplate:
+        case .updateChecklist, .updateTemplate:
             return .init("Save")
-        case .createTemplate:
+        case .createTemplateFromChecklist, .createTemplate:
             return .init("Create Template")
         case .display:
             return .init("")

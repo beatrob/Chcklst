@@ -17,9 +17,7 @@ extension CoreDataManagerImpl: CoreDataSchedulesManager {
         firstly {
             getViewContext()
         }.then { context -> Promise<[ScheduleMO]> in
-            guard let data = try context.fetch(ScheduleMO.fetchRequest()) as? [ScheduleMO] else {
-                throw CoreDataError.fetchError
-            }
+            let data = try context.fetch(ScheduleMO.fetchRequest())
             return .value(data)
         }.map {
             schedules in schedules.compactMap { $0.toDataModel() }

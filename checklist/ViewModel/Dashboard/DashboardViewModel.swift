@@ -33,6 +33,7 @@ class DashboardViewModel: ObservableObject {
     @Published var isEmptyListViewVisible = false
     @Published var isNoSearchResultsVisible = false
     @Published var isNoFilterResulrsVisible = false
+    @Published var scrollToId: String?
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -145,13 +146,18 @@ class DashboardViewModel: ObservableObject {
             }
             self.actionSheet = .createChecklist(
                 onNewChecklist: {
-                    self.showCreateNewChecklist()
+                    self.showChecklistView(state: .createChecklist)
                 },
                 onNewFromTemplate: {
                     let viewModel = self.selectTemplateVM
-                    viewModel.title = "Create Checklist"
-                    viewModel.descriptionText = "Select a Template to create a new Checklist"
+                    viewModel.reset(
+                        withTitle: "Create Checklist",
+                        description: "Select a Template to create a new Checklist"
+                    )
                     self.sheet = .selectTemplate(viewModel: viewModel)
+                },
+                onCreateTemplate: {
+                    self.showChecklistView(state: .createTemplate)
                 },
                 onCreateSchedule: self.createScheduleSubject
             )
@@ -223,22 +229,17 @@ class DashboardViewModel: ObservableObject {
     }
     
     func handleChecklistData(_ checklists: [ChecklistDataModel]) {
+        scrollToId = nil
+        var isDeleteDetected = false
         if checklistCells.isEmpty {
             checklistCells = checklists.map {
                 self.getChecklistCellViewModel(with: $0)
             }
             return
         } else {
-            // update/insert
-            checklists.forEach { checklist in
-                if let cell = self.checklistCells.first(where: { $0.id == checklist.id }) {
-                    cell.update(with: checklist)
-                } else {
-                    self.checklistCells.insert(getChecklistCellViewModel(with: checklist), at: 0)
-                }
-            }
             // delete
             if checklists.count < self.checklistCells.count {
+                isDeleteDetected = true
                 let toDelete = self.checklistCells.enumerated().filter {
                     !checklists.contains($0.element.checklist)
                 }
@@ -246,6 +247,21 @@ class DashboardViewModel: ObservableObject {
                     self.checklistCells.remove(at: $0)
                 }
             }
+            
+            // update/insert
+            checklists.enumerated().forEach { checklist in
+                if checklist.offset < self.checklistCells.count {
+                    self.checklistCells[checklist.offset].update(with: checklist.element)
+                } else {
+                    self.checklistCells.append(getChecklistCellViewModel(with: checklist.element))
+                }
+            }
+            withAnimation {
+                objectWillChange.send()
+            }
+        }
+        if checklistFilterAndSort.sort == .latest && !isDeleteDetected {
+            scrollToId = "top"
         }
     }
     
@@ -257,11 +273,23 @@ class DashboardViewModel: ObservableObject {
         )
         
         viewModel.onChecklistTapped.sink { [weak self] checklist in
-            self?.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
+            guard let self = self else { return }
+            firstly { () -> Promise<Void> in
+                guard checklist.isNew else {
+                    return .value
+                }
+                return self.checklistDataSource.updateChecklist(checklist.getWithCurrentUpdateDate())
+            }.get {
+                self.navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
+            }.catch { error in
+                error.log(message: "Failed to update checklist date.")
+            }
         }.store(in: &cancellables)
         
         viewModel.onChecklistLongTapped.sink { [weak self] checklist in
-            guard let self = self else { return }
+            guard let self = self else {
+                return
+            }
             self.actionSheet = .editChecklist(checklist: checklist, delegate: self)
             Haptics.play(.actionSheet)
         }.store(in: &cancellables)
@@ -291,16 +319,19 @@ private extension DashboardViewModel {
         }
     }
     
-    func showCreateNewChecklist() {
+    func showChecklistView(state: ChecklistViewState) {
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
-            argument:ChecklistViewState.createNew
+            argument: state
         )!
-        viewModel.onDidCreateTemplate.sink { [weak self] in
+        viewModel.onDidCreateTemplate.delay(for: .seconds(0.5), scheduler: RunLoop.main).sink { [weak self] in
             self?.alert = .templateCreated(
                 gotoTemplates: { self?.navigationHelper.navigateToMyTemplates(source: .dashboard) }
             )
         }.store(in: &self.cancellables)
+        viewModel.dismissView.sink { [weak self] in
+            self?.sheet = .none
+        }.store(in: &cancellables)
         self.sheet = .createChecklist(viewModel: viewModel)
     }
     
@@ -340,6 +371,7 @@ private extension DashboardViewModel {
             return self.checklistDataSource.createChecklist(checklist).map { checklist }
         }.get { checklist in
             self.notificationManager.clearDeeplinkChecklistId()
+        }.then { _ in
             after(seconds: 1).done {
                 self.navigationHelper.popToDashboard()
             }

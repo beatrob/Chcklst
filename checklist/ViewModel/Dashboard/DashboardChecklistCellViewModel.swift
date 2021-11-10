@@ -77,7 +77,7 @@ private extension DashboardChecklistCellViewModel {
         title = checklist.title
         counter = "\(checklist.items.filter(\.isDone).count)/\(checklist.items.count)"
         isReminderSet = checklist.isValidReminderSet
-        shouldShowNewBadge = checklist.creationDate == checklist.updateDate
+        shouldShowNewBadge = checklist.isNew
         shouldDisplayDeleteButton = checklist.isDone
         shouldStrikeThroughTitle = checklist.isDone
         firstUndoneItem = getItemViewModel(for: getFirstUndoneItem())
@@ -97,9 +97,7 @@ private extension DashboardChecklistCellViewModel {
                 guard let self = self else {
                     return
                 }
-                self.checklistDataSource.reloadChecklist(self.checklist).get {
-                    self.checklist = $0
-                }.catch { error in
+                self.checklistDataSource.reloadChecklist(self.checklist).catch { error in
                     error.log(message: "Faied to update Checklist")
                 }
             }

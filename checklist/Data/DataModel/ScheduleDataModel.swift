@@ -70,7 +70,7 @@ struct ScheduleDataModel: Equatable {
             case .yearly:
                 return "Yearly"
             case .customDays(let days):
-                return "Every \(days.map { $0.title}.joined(separator: ", "))"
+                return "Every \(days.sorted { $0.rawValue < $1.rawValue }.map { $0.title}.joined(separator: ", "))"
             }
         }
         

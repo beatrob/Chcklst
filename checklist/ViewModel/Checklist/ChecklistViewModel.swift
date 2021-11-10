@@ -15,7 +15,6 @@ import PromiseKit
 class ChecklistViewModel: ObservableObject {
     
     @Published var shouldDisplayAddItems: Bool = true
-    @Published var shouldDismissView: Bool = false
     @Published var isReminderOn: Bool = false {
         didSet {
             guard isReminderOn else {
@@ -36,7 +35,7 @@ class ChecklistViewModel: ObservableObject {
     var shouldDisplaySetReminder: Bool {
         viewState.isEditEnabled && !viewState.isCreateTemplate && !viewState.isUpdateTemplate
     }
-    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateNew }
+    var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateChecklist }
     var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
     var shouldDisplayDescription: Bool { viewState.isEditEnabled || !checklistDescription.isEmpty }
     
@@ -52,6 +51,7 @@ class ChecklistViewModel: ObservableObject {
     @Published var isSheetVisible: Bool = false
     @Published var sheet: AnyView = .empty
     @Published var actionSheetVisibility = ViewVisibility(view: ChecklistActionSheet.none.view)
+    @Published var enableAutoscrollToNewItem = false
     private var alert: ChecklistAlert = .none {
         didSet {
             alertVisibility.set(view: alert.view, isVisible: alert.isVisible)
@@ -66,18 +66,14 @@ class ChecklistViewModel: ObservableObject {
     private let didUpdateTemplate = EmptySubject()
     
     /// Create Checklist or Template
-    let createViewNavbarViewModel: BackButtonNavBarViewModel = {
-        let vm = BackButtonNavBarViewModel(title: "Create Checklist")
-        vm.isBackButtonHidden = true
-        vm.style = .big
-        return vm
-    }()
+    let createViewNavbarViewModel: BackButtonNavBarViewModel = BackButtonNavBarViewModel(title: "Create Checklist")
     let onAddItemsNext: EmptySubject = .init()
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
     let onEditTapped: EmptySubject = .init()
     let onDoneTapped: EmptySubject = .init()
     let onActionButtonTapped: EmptySubject = .init()
-    let onDismissTapped: EmptySubject = .init()
+    let dismissView = EmptySubject()
+    let onBackTapped = EmptySubject()
     var onDidCreateTemplate: EmptyPublisher {
         didCreateTemplateSubject.eraseToAnyPublisher()
     }
@@ -97,7 +93,7 @@ class ChecklistViewModel: ObservableObject {
             ChecklistNavBarViewModel.self,
             argument: currentChecklist.eraseToAnyPublisher()
         )!
-        viewModel.backButton.didTap.subscribe(onDismissTapped).store(in: &cancellables)
+        viewModel.backButton.didTap.subscribe(dismissView).store(in: &cancellables)
         viewModel.actionsButton.didTap.sink { [weak self] tupple in
             guard let self = self, let checklist = self.currentChecklist.value  else {
                 return
@@ -115,9 +111,6 @@ class ChecklistViewModel: ObservableObject {
     }()
     
     var cancellables =  Set<AnyCancellable>()
-    var onDismiss: EmptyPublisher {
-        onDismissTapped.eraseToAnyPublisher()
-    }
     var isNavBarVisible: Bool {
         !viewState.isCreateTemplate && currentChecklist.value != nil
     }
@@ -160,11 +153,19 @@ class ChecklistViewModel: ObservableObject {
             setupTemplate(template)
         } else if viewState.isCreateTemplate {
             setupCreateTemplate()
+            createViewNavbarViewModel.style = .big
+            createViewNavbarViewModel.isBackButtonHidden = true
+            createViewNavbarViewModel.isTransparent = false
         } else if viewState.isDisplay || viewState.isUpdate {
             setupDisplayChecklist(isUpdate: viewState.isUpdate)
         }
         
-        if viewState.isCreateNew {
+        if viewState.isCreateChecklist {
+            createViewNavbarViewModel.style = viewState.isCreateFromTemplate ? .normal : .big
+            createViewNavbarViewModel.isBackButtonHidden = !viewState.isCreateFromTemplate
+            createViewNavbarViewModel.topPaddingEnabled = viewState.isCreateFromTemplate
+            createViewNavbarViewModel.isTransparent = viewState.isCreateFromTemplate
+            createViewNavbarViewModel.backButton.didTap.subscribe(onBackTapped).store(in: &cancellables)
             addNewItem(name: nil, isDone: false, isEditable: true)
         }
         
@@ -184,11 +185,11 @@ class ChecklistViewModel: ObservableObject {
         onActionButtonTapped.sink { [weak self] in
             guard let self = self else { return }
             switch self.viewState {
-            case .update:
+            case .updateChecklist:
                 self.setEditDoneAndUpdateChecklist()
-            case .createFromTemplate, .createNew:
+            case .createChecklistFromTemplate, .createChecklist:
                 self.saveNewChecklist()
-            case .createTemplate:
+            case .createTemplateFromChecklist, .createTemplate:
                 self.createTemplate(self.getChecklistFromUI())
             case .updateTemplate:
                 self.updateTemplate()
@@ -225,24 +226,16 @@ private extension ChecklistViewModel {
         self.checklistDescription = checklist.description ?? ""
         checklist.items.forEach { self.addNewItem($0) }
         reorderItems()
-        checklistDataSource.updateChecklist(
-            checklist.getWithCurrentUpdateDate()
-        ).catch { error in
-            error.log(message: "Failed to update checklist")
-        }
         if isUpdate {
             enableEditMode()
         }
     }
     
     func setupCreateTemplate() {
-        guard let checklist = currentChecklist.value else {
-            return
-        }
         createViewNavbarViewModel.title = "Create Template"
-        self.checklistName = checklist.title
-        self.checklistDescription = checklist.description ?? ""
-        checklist.items.forEach { addNewItem(name: $0.name, isDone: false, isEditable: true) }
+        self.checklistName = currentChecklist.value?.title ?? ""
+        self.checklistDescription = currentChecklist.value?.description ?? ""
+        currentChecklist.value?.items.forEach { addNewItem(name: $0.name, isDone: false, isEditable: true) }
         addNewItem(name: nil, isDone: false, isEditable: true)
     }
     
@@ -256,7 +249,6 @@ private extension ChecklistViewModel {
                 self.notificationManager.setupReminder(date: date, for: checklist)
                     .done {
                         self.createChecklist(checklist, shouldCreateTemplate: self.isCreateTemplateChecked)
-                        self.shouldDismissView = true
                     }
                     .catch {
                         log(error: $0.localizedDescription)
@@ -277,6 +269,7 @@ private extension ChecklistViewModel {
         if checklist.reminderDate != checklistToUpdate.reminderDate {
             notificationManager.removeReminder(for: checklist)
         }
+        self.enableAutoscrollToNewItem = false
         firstly {
             .value(checklistToUpdate.isValidReminderSet)
         }.then { isReminderSet -> Promise<Void> in
@@ -287,6 +280,7 @@ private extension ChecklistViewModel {
         }.then {
             self.checklistDataSource.updateChecklist(checklistToUpdate)
         }.done {
+            self.navBarViewModel.shouldDisplayDoneButton = false
             self.currentChecklist.send(checklistToUpdate)
             self.reorderItems()
             log(debug: "Update checklist success. \(checklistToUpdate)")
@@ -299,6 +293,7 @@ private extension ChecklistViewModel {
         if items.isEmpty {
             addNewItem(name: nil, isDone: false, isEditable: true)
         } else if let lastItem = items.last, !lastItem.name.isEmpty {
+            self.enableAutoscrollToNewItem = true
             addNewItem(name: nil, isDone: false, isEditable: true)
         }
     }
@@ -341,7 +336,6 @@ private extension ChecklistViewModel {
         
         viewModel.onDidChangeDoneState.sink { [weak self] isDone in
             self?.reloadCurrentChecklist()
-            self?.reorderItems()
         }.store(in: &cancellables)
         
         self.items.append(viewModel)
@@ -354,6 +348,7 @@ private extension ChecklistViewModel {
         }
         self.checklistDataSource.reloadChecklist(checklist).get {
             self.currentChecklist.value = $0
+            self.reorderItems()
         }.catch { error in
             error.log(message: "Failed to update current Checklist")
         }
@@ -395,7 +390,7 @@ private extension ChecklistViewModel {
                 if shouldCreateTemplate {
                     self.createTemplate(checklist)
                 } else {
-                    self.shouldDismissView = true
+                    self.dismissView.send()
                 }
             }
             .catch {
@@ -411,7 +406,6 @@ private extension ChecklistViewModel {
             guard verified else {
                 return .value(false)
             }
-            self.shouldDismissView = true
             return self.templateDataSource.createTemplate(
                 .init(
                     id: UUID().uuidString,
@@ -434,8 +428,9 @@ private extension ChecklistViewModel {
         }.get { verified in
             if verified {
                 self.didCreateTemplateSubject.send()
-            } else {
-                self.shouldDismissView = true
+            }
+            if self.viewState.isCreateChecklist {
+                self.dismissView.send()
             }
         }.catch { error in
             error.log(message: "Failed to create template")
@@ -473,11 +468,12 @@ private extension ChecklistViewModel {
         guard let checklist = self.currentChecklist.value else {
             return
         }
+        enableAutoscrollToNewItem = false
         isEditable = true
         items.forEach { $0.isEditable = true }
         isReminderOn = checklist.isValidReminderSet
         reminderDate = checklist.reminderDate ?? Date()
-        viewState = .update(checklist: checklist)
+        viewState = .updateChecklist(checklist: checklist)
         navBarViewModel.shouldDisplayDoneButton = true
         addNewItem(name: nil, isDone: false, isEditable: true)
     }
@@ -543,7 +539,7 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
         }
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
-            argument: ChecklistViewState.createTemplate(checklist: checklist)
+            argument: ChecklistViewState.createTemplateFromChecklist(checklist: checklist)
             )!
         viewModel.onDidCreateTemplate.sink { [weak self] in
             self?.alert = .templateCreated(onGoToTemplates: {
@@ -568,7 +564,7 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
                 return
             }
             self?.checklistDataSource.deleteChecklist(checklist)
-                .done { self?.onDismissTapped.send() }
+                .done { self?.dismissView.send() }
                 .catch { error in
                     #warning("TODO: Add error handling")
                 }
@@ -599,18 +595,15 @@ extension ChecklistViewModel: RestrictionPresenter {
     func presentUpgradeView(_ upgradeView: UpgradeView) {
         sheet = AnyView(upgradeView)
         isSheetVisible = true
-        self.objectWillChange.send()
     }
     
     func cancelUpgradeView() {
         sheet = AnyView.empty
         isSheetVisible = true
-        self.objectWillChange.send()
     }
     
     func dismissUpgradeView() {
-        sheet = AnyView.empty
-        isSheetVisible = true
-        self.objectWillChange.send()
+        self.sheet = AnyView.empty
+        self.isSheetVisible = false
     }
 }

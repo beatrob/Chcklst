@@ -28,11 +28,12 @@ struct BackButtonNavBar: View {
                 Text(viewModel.title)
                     .modifier(Modifier.NavBar.Title(isBig: viewModel.style.isBig))
             }
-            .if(viewModel.style.isBig) { $0.padding(.top, verticalPadding) }
+            .if(viewModel.style.isBig || viewModel.topPaddingEnabled) { $0.padding(.top, verticalPadding) }
             .padding(.horizontal)
             .padding(.bottom, verticalPadding)
         }
-        .modifier(Modifier.NavBar.NavBar(isExpanded: false))
+        .modifier(Modifier.NavBar.NavBar(isTransparent: viewModel.isTransparent))
+        .if(viewModel.isTransparent) { $0.background(Color.clear) }
     }
 }
 

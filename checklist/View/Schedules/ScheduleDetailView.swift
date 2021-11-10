@@ -16,92 +16,90 @@ struct ScheduleDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            if viewModel.isNavbarVisible {
-                BackButtonNavBar(viewModel: viewModel.navbarViewModel)
-            }
+            BackButtonNavBar(viewModel: viewModel.navbarViewModel)
             ScrollView {
-                VStack(alignment: .leading) {
-                    if !viewModel.isNavbarVisible  {
+                ScrollViewReader { reader in
+                    VStack(alignment: .leading) {
+                        MultilineTextField(
+                            text: $viewModel.title,
+                            placeholder: "Title",
+                            font: .bigTitle,
+                            isEditable: .constant(true),
+                            isCrossedOut: .constant(false),
+                            didEndEditing: nil
+                        ).padding()
+                        
+                        MultilineTextField(
+                            text: $viewModel.description,
+                            placeholder: "Description",
+                            font: .description,
+                            isEditable: .constant(true),
+                            isCrossedOut: .constant(false),
+                            didEndEditing: nil
+                        ).padding()
+                        
+                        ForEach(viewModel.items) {
+                            ChecklistItemView(viewModel: $0)
+                                .padding(.horizontal)
+                        }
+                        
+                        Text("Schedule date")
+                            .padding()
+                            .modifier(Modifier.Checklist.SmallTitle(color: .text))
                         HStack {
-                            NavBarChipButton(viewModel: viewModel.backButtonViewModel)
                             Spacer()
-                            Text(viewModel.viewTitle)
-                                .modifier(Modifier.Template.SmallTitle())
+                            DatePicker(
+                                "",
+                                selection: $viewModel.date,
+                                displayedComponents: [.date, .hourAndMinute]
+                            ).labelsHidden()
                             Spacer()
-                        }.padding()
-                    }
-                    
-                    MultilineTextField(
-                        text: $viewModel.title,
-                        placeholder: "Title",
-                        font: .bigTitle,
-                        isEditable: .constant(true),
-                        isCrossedOut: .constant(false),
-                        didEndEditing: nil
-                    ).padding()
-                    
-                    MultilineTextField(
-                        text: $viewModel.description,
-                        placeholder: "Description",
-                        font: .description,
-                        isEditable: .constant(true),
-                        isCrossedOut: .constant(false),
-                        didEndEditing: nil
-                    ).padding()
-                    
-                    ForEach(viewModel.items) {
-                        ChecklistItemView(viewModel: $0)
-                            .padding(.horizontal)
-                    }
-                    
-                    Text("Schedule date")
-                        .padding()
-                        .modifier(Modifier.Checklist.SmallTitle(color: .text))
-                    HStack {
-                        Spacer()
-                        DatePicker(
-                            "",
-                            selection: $viewModel.date,
-                            displayedComponents: [.date, .hourAndMinute]
-                        ).labelsHidden()
-                        Spacer()
-                    }
-                    
-                    HStack(alignment: .top) {
-                        VStack(alignment: .leading) {
-                            CheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
-                            if viewModel.isRepeatOn {
-                                ForEach(viewModel.repeatFrequencyCheckboxes) {
-                                    CheckboxView(viewModel: $0)
-                                        .padding(.top)
-                                        .padding(.horizontal)
-                                }
-                            }
                         }
-                        if viewModel.shouldDisplayDays {
+                        
+                        HStack(alignment: .top) {
                             VStack(alignment: .leading) {
-                                Text("EVERY")
-                                    .modifier(Modifier.Checklist.Description())
-                                ForEach(viewModel.customDaysCheckboxes) {
-                                    CheckboxView(viewModel: $0)
+                                CheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
+                                    .onChange(of: viewModel.isRepeatOn) { newValue in
+                                        if newValue {
+                                            withAnimation {
+                                                reader.scrollTo("actionButton", anchor: .bottom)
+                                            }
+                                        }
+                                    }
+                                if viewModel.isRepeatOn {
+                                    ForEach(viewModel.repeatFrequencyCheckboxes) {
+                                        CheckboxView(viewModel: $0)
+                                            .padding(.top)
+                                            .padding(.horizontal)
+                                    }
                                 }
                             }
-                            .padding(.leading)
-                        } else {
+                            if viewModel.shouldDisplayDays {
+                                VStack(alignment: .leading) {
+                                    Text("EVERY")
+                                        .modifier(Modifier.Checklist.Description())
+                                    ForEach(viewModel.customDaysCheckboxes) {
+                                        CheckboxView(viewModel: $0)
+                                    }
+                                }
+                                .padding(.leading)
+                            } else {
+                                Spacer()
+                            }
+                        }
+                        .padding()
+                        
+                        HStack {
+                            Spacer()
+                            CapsuleButton(
+                                title: viewModel.actionButtonTitle,
+                                type: .primary,
+                                onTapSubject: viewModel.onActionButtonTapped)
                             Spacer()
                         }
+                        .id("actionButton")
+                        .padding(.bottom)
                     }
-                    .padding()
-                    
-                    HStack {
-                        Spacer()
-                        Button(viewModel.actionButtonTitle) {
-                            viewModel.onActionButtonTapped.send()
-                        }
-                        .modifier(Modifier.Button.PrimaryAction())
-                        .padding()
-                        Spacer()
-                    }.padding(.bottom)
                 }
             }
         }

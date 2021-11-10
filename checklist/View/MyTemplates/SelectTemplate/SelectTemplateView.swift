@@ -24,42 +24,44 @@ struct SelectTemplateView: View {
                     onActionTappedSubject: viewModel.onGotoDashboard
                 )
             } else {
-                VStack {
-                    NavigationLink(
-                        destination: viewModel.desitnationView,
-                        isActive: $viewModel.isDestionationViewVisible,
-                        label: {
-                            EmptyView()
-                        })
-                    .isDetailLink(false)
-                    .hidden()
-                    
-                    if let title = viewModel.title {
-                        Text(title)
-                            .modifier(Modifier.Template.SmallTitle())
-                            .padding()
-                    }
-                    
-                    if let description = viewModel.descriptionText {
-                        Text(description)
-                            .modifier(Modifier.Checklist.Description())
-                            .padding(.bottom)
-                            .padding(.horizontal)
-                    }
-                    
-                    ForEach(
-                        viewModel.templates,
-                        id: \.id) { template in
-                            MyTemplateItemView(
-                                name: template.title,
-                                description: template.description,
-                                displayRightArrow: true
-                            )
-                                .onTapGesture {
-                                    self.viewModel.onTemplateTapped.send(template)
+                ScrollView {
+                    VStack {
+                        NavigationLink(
+                            destination: viewModel.desitnationView,
+                            isActive: $viewModel.isDestionationViewVisible,
+                            label: {
+                                EmptyView()
+                            })
+                            .isDetailLink(false)
+                            .hidden()
+                        
+                        if let title = viewModel.title {
+                            Text(title)
+                                .modifier(Modifier.Template.SmallTitle())
+                                .padding()
+                        }
+                        
+                        if let description = viewModel.descriptionText {
+                            Text(description)
+                                .modifier(Modifier.Checklist.Description())
+                                .padding(.bottom)
+                                .padding(.horizontal)
+                        }
+                        
+                        ForEach(
+                            viewModel.templates,
+                            id: \.id) { template in
+                                MyTemplateItemView(
+                                    name: template.title,
+                                    description: template.description,
+                                    displayRightArrow: true
+                                )
+                                    .onTapGesture {
+                                        self.viewModel.onTemplateTapped.send(template)
+                                    }
                             }
+                        Spacer()
                     }
-                    Spacer()
                 }
                 .navigationBarHidden(true)
             }

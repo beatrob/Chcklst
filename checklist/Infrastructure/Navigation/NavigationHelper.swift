@@ -59,6 +59,12 @@ class NavigationHelper: ObservableObject {
         viewModel.onBackTapped.sink { [weak self] in
             self?.dashboardSelection = .none
         }.store(in: &cancellables)
+        viewModel.onGotoSchedules.sink { [weak self] in
+            self?.popToDashboard()
+            DispatchQueue.main.async {
+                self?.navigateToSchedules()
+            }
+        }.store(in: &cancellables)
         switch source {
         case .dashboard:
             dashboardDestination = AnyView(MyTemplatesView(viewModel: viewModel))
@@ -73,10 +79,10 @@ class NavigationHelper: ObservableObject {
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
             argument: shouldEdit ?
-                ChecklistViewState.update(checklist: checklist) :
+                ChecklistViewState.updateChecklist(checklist: checklist) :
                 ChecklistViewState.display(checklist: checklist)
         )!
-        viewModel.onDismiss.sink { [weak self] in
+        viewModel.dismissView.sink { [weak self] in
             self?.popToDashboard()
         }.store(in: &cancellables)
         dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))

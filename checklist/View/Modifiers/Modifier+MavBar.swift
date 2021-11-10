@@ -15,16 +15,11 @@ extension Modifier {
         
         struct NavBar: ViewModifier {
             
-            let isExpanded: Bool
-            
-            enum Height: CGFloat {
-                case normal = 58 // 90
-                case expanded = 145
-            }
+            let isTransparent: Bool
             
             func body(content: Content) -> some View {
                 content
-                    .background(Color.menuBackground)
+                    .background(isTransparent ? Color.clear : Color.menuBackground)
             }
         }
         

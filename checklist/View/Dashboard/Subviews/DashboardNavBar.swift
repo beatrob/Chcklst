@@ -75,8 +75,7 @@ struct DashboardNavBar: View {
             .padding(.bottom, 10)
             .padding(.horizontal)
         }
-        .modifier(Modifier.NavBar.NavBar(isExpanded: viewModel.isSearchBarVisible)
-        )
+        .modifier(Modifier.NavBar.NavBar(isTransparent: false))
     }
 }
 

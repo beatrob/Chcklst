@@ -48,14 +48,22 @@ struct DashboardView: View {
                             )
                         } else {
                             ScrollView {
-                                VStack {
-                                    ForEach(viewModel.checklistCells, id: \.id) { cell in
-                                        DashboardChecklistCell(viewModel: cell)
-                                            .padding(.horizontal, 20)
-                                            .padding(.vertical, 7)
+                                ScrollViewReader { reader in
+                                    EmptyView().id("top")
+                                    VStack {
+                                        ForEach(viewModel.checklistCells, id: \.id) { cell in
+                                            DashboardChecklistCell(viewModel: cell)
+                                                .padding(.horizontal, 20)
+                                                .padding(.vertical, 7)
+                                        }
                                     }
+                                    .onChange(of: viewModel.scrollToId, perform: { newValue in
+                                        withAnimation {
+                                            reader.scrollTo(newValue, anchor: .top)
+                                        }
+                                    })
+                                    .padding(.vertical)
                                 }
-                                .padding(.vertical)
                             }
                         }
                     }

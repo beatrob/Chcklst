@@ -74,6 +74,10 @@ struct ChecklistDataModel: Equatable, Hashable {
         return reminderDate < Date()
     }
     
+    var isNew: Bool {
+        creationDate == updateDate
+    }
+    
     func getWithCurrentUpdateDate() -> ChecklistDataModel {
         .init(
             id: id,

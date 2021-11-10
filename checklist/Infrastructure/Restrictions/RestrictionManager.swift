@@ -74,6 +74,8 @@ class RestrictionManagerImpl: RestrictionManager {
                 return .value(false)
             }
             return self.displayUpgradeView()
+        }.then { verified in
+            after(seconds: 0.5).map { verified }
         }.ensure {
             self.currentPresenter = nil
         }
@@ -99,6 +101,8 @@ class RestrictionManagerImpl: RestrictionManager {
                 return .value(false)
             }
             return self.displayUpgradeView()
+        }.then { verified in
+            after(seconds: 0.5).map { verified }
         }.ensure {
             self.currentPresenter = nil
         }
@@ -121,6 +125,8 @@ class RestrictionManagerImpl: RestrictionManager {
                 return .value(false)
             }
             return self.displayUpgradeView()
+        }.then { verified in
+            after(seconds: 0.5).map { verified }
         }.ensure {
             self.currentPresenter = nil
         }

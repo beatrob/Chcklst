@@ -120,11 +120,12 @@ class NotificationManager: NSObject {
         content.sound = .default
         
         let repeats = !schedule.repeatFrequency.isNever && !schedule.repeatFrequency.isCustomDays
+        let defaultDateComponents = getDateComponents(
+            for: schedule.scheduleDate,
+            repeatFrequency: schedule.repeatFrequency
+        )
         let trigger = UNCalendarNotificationTrigger(
-            dateMatching: getDateComponents(
-                for: schedule.scheduleDate,
-                repeatFrequency: schedule.repeatFrequency
-            ),
+            dateMatching: defaultDateComponents,
             repeats: repeats
         )
         let reg1 = registerPushNotification(
@@ -139,6 +140,11 @@ class NotificationManager: NSObject {
                 return when(
                     fulfilled:
                         getDateComponents(for: schedule.scheduleDate, customDays: days)
+                            .filter {
+                                $0.day != defaultDateComponents.day &&
+                                $0.hour != defaultDateComponents.hour &&
+                                $0.minute != defaultDateComponents.minute
+                            }
                             .enumerated()
                             .map {
                                 registerPushNotification(

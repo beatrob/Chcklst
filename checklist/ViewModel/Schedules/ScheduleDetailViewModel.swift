@@ -72,7 +72,12 @@ class ScheduleDetailViewModel: ObservableObject {
     var didDeleteSchedule: EmptyPublisher {
         didDeleteSheduleSubject.eraseToAnyPublisher()
     }
-    var isNavbarVisible: Bool { state.isUpdate }
+    var isBackButtonVisible = true {
+        didSet {
+            navbarViewModel.isBackButtonHidden = !isBackButtonVisible
+            navbarViewModel.style = .big
+        }
+    }
     
     init(
         state: ScheduleDetailViewState,
@@ -92,6 +97,13 @@ class ScheduleDetailViewModel: ObservableObject {
             isChecked: state.isRepeatOn
         )
         self.actionButtonTitle = state.actionButtonTitle
+        self.navbarViewModel.isTransparent = state.isCreate
+        self.navbarViewModel.topPaddingEnabled = state.isCreate
+        
+        if state.isCreate {
+            self.navbarViewModel.title = .init("Create Schedule")
+            self.navbarViewModel.rightButton = nil
+        }
         if let schedule = state.schedule {
             self.date = schedule.scheduleDate
             self.repeatFrequency = schedule.repeatFrequency

@@ -16,6 +16,7 @@ enum DashboardActionSheet {
     case createChecklist(
             onNewChecklist: EmptyCompletion,
             onNewFromTemplate: EmptyCompletion,
+            onCreateTemplate: EmptyCompletion,
             onCreateSchedule: EmptySubject
          )
     case none
@@ -33,7 +34,7 @@ enum DashboardActionSheet {
             return ChecklistActionSheet
                 .actionMenu(checklist: checklist, delegate: delegate)
                 .view
-        case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateSchedule):
+        case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateTemplate, let onCreateSchedule):
             return ActionSheet(
                 title: Text("CREATE NEW"),
                 message: nil,
@@ -43,6 +44,9 @@ enum DashboardActionSheet {
                     },
                     .default(Text("Checklist from Template")) {
                         onNewFromTemplate()
+                    },
+                    .default(Text("Template")) {
+                        onCreateTemplate()
                     },
                     .default(Text("Schedule")) {
                         onCreateSchedule.send()

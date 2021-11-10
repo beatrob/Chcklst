@@ -46,23 +46,21 @@ class SchedulesViewModel: ObservableObject {
             CreateScheduleViewModel.self,
             argument: rightButton.didTap
         )!
-        scheduleDataSource.schedules.sink { [weak self] schedules in
+        scheduleDataSource.schedules.sink { [weak self] in
             guard let self = self else {
                 return
             }
+            let schedules = $0.sorted { $0.scheduleDate < $1.scheduleDate }
             if !schedules.isEmpty && schedules.count == self.cells.count {
                 schedules.enumerated().forEach {
                     self.cells[$0.offset].update(with: $0.element)
                 }
+                self.objectWillChange.send()
             } else {
                 self.cells = schedules.map {
                     ScheduleCellViewModel(schedule: $0)
                 }
             }
-            self.cells.sort { left, right in
-                left.scheduleDate < right.scheduleDate
-            }
-            
         }.store(in: &cancellables)
         
         createScheduleViewModel.presentViewPublisher.sink { [weak self] in

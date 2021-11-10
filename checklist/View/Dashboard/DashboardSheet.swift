@@ -14,13 +14,14 @@ enum DashboardSheet {
     
     case none
     case createChecklist(viewModel: ChecklistViewModel)
+    case createTemplate(viewModel: ChecklistViewModel)
     case selectTemplate(viewModel: SelectTemplateViewModel)
     case editReminder(viewModel: EditReminderViewModel)
     case menu
     
     var view: AnyView {
         switch self {
-        case .createChecklist(let viewModel):
+        case .createChecklist(let viewModel), .createTemplate(let viewModel):
             return AnyView(ChecklistView(viewModel: viewModel))
         case .selectTemplate(let viewModel):
             return AnyView(

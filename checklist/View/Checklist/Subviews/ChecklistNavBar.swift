@@ -38,7 +38,7 @@ struct ChecklistNavBar: View {
             .padding(.bottom, 10)
         }
         .padding(.horizontal)
-        .modifier(Modifier.NavBar.NavBar(isExpanded: false))
+        .modifier(Modifier.NavBar.NavBar(isTransparent: false))
     }
 }
 

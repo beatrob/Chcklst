@@ -26,6 +26,8 @@ class BackButtonNavBarViewModel: ObservableObject {
     @Published var rightButton: NavBarChipButtonViewModel?
     @Published var isBackButtonHidden = false
     @Published var style: Style = .normal
+    @Published var isTransparent = false
+    @Published var topPaddingEnabled = false
     let backButton = NavBarChipButtonViewModel.getBackButton()
     
     init(title: String, rightButton: NavBarChipButtonViewModel? = nil) {

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ScheduleCellView: View {
     
-    @StateObject var viewModel: ScheduleCellViewModel
+    @ObservedObject var viewModel: ScheduleCellViewModel
     
     var body: some View {
         VStack(alignment: .leading) {

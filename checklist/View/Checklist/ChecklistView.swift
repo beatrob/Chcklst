@@ -10,14 +10,10 @@ import SwiftUI
 
 struct ChecklistView: View {
     
-    @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel: ChecklistViewModel
     
     var body: some View {
-        if viewModel.shouldDismissView {
-            presentationMode.wrappedValue.dismiss()
-        }
-        return GeometryReader { geometry in
+        GeometryReader { geometry in
             ZStack {
                 NavigationLink(
                     destination: viewModel.navigationDestinationView,
@@ -53,6 +49,9 @@ struct ChecklistView: View {
                                 )
                                     .padding(.bottom, 30)
                                     .onChange(of: viewModel.items, perform: { _ in
+                                        guard viewModel.enableAutoscrollToNewItem else {
+                                            return
+                                        }
                                         if let last = viewModel.items.last {
                                             withAnimation {
                                                 scroller.scrollTo(last, anchor: .bottom)
@@ -124,7 +123,7 @@ struct CreateChecklistView_Previews: PreviewProvider {
             )
             ChecklistView(
                 viewModel: ChecklistViewModel(
-                    viewState: .createNew,
+                    viewState: .createChecklist,
                     checklistDataSource: MockChecklistDataSource(),
                     templateDataSource: MockTemplateDataSource(),
                     notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),

@@ -83,7 +83,7 @@ extension ScheduleMO {
             return .never
         }
         
-        let customDays = freqRaws.compactMap { DayDataModel(rawValue: $0) }
+        let customDays = freqRaws.compactMap { DayDataModel(index: $0) }
         if !customDays.isEmpty {
             return .customDays(days: customDays)
         } else {

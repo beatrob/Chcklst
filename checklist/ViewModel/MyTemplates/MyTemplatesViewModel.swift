@@ -55,6 +55,8 @@ class MyTemplatesViewModel: ObservableObject {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
     
+    let onGotoSchedules = EmptySubject()
+    
     init(
         templateDataSource: TemplateDataSource,
         checklistDataSource: ChecklistDataSource,
@@ -62,6 +64,13 @@ class MyTemplatesViewModel: ObservableObject {
         notificationManager: NotificationManager
     ) {
         self.navigationHelper = navigationHelper
+        
+        let createButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
+        createButton.didTap.sink { [weak self] in
+            self?.displayCreate(nil)
+        }.store(in: &cancellables)
+        self.navBarViewModel.setRightButton(createButton)
+        
         templateDataSource.templates.sink { [weak self] templates in
             self?.templates = templates.sorted(by: { left, right in
                 left.created > right.created
@@ -86,7 +95,7 @@ class MyTemplatesViewModel: ObservableObject {
             self?.actionSheet = .templateActions(
                 template: template,
                 onCreateChecklist: {
-                    self?.displayCreateChecklist(template)
+                    self?.displayCreate(template)
                 },
                 onCreateSchedule: {
                     self?.createSchedule(template)
@@ -138,15 +147,26 @@ private extension MyTemplatesViewModel {
         viewModel.onDidUpdateTemplate.sink { [weak self] in
             self?.isSheetVisible = false
         }.store(in: &cancellables)
+        viewModel.dismissView.sink { [weak self] in
+            self?.sheetView = .empty
+            self?.isSheetVisible = false
+        }.store(in: &cancellables)
         sheetView = AnyView(ChecklistView(viewModel: viewModel))
         isSheetVisible = true
     }
     
-    func displayCreateChecklist(_ template: TemplateDataModel) {
+    func displayCreate(_ template: TemplateDataModel?) {
+        let viewState: ChecklistViewState = template == nil ?
+            .createTemplate :
+            .createChecklistFromTemplate(template: template!)
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
-            argument: ChecklistViewState.createFromTemplate(template: template)
+            argument: viewState
         )!
+        viewModel.dismissView.sink { [weak self] in
+            self?.sheetView = .empty
+            self?.isSheetVisible = false
+        }.store(in: &cancellables)
         sheetView = AnyView(ChecklistView(viewModel: viewModel))
         isSheetVisible = true
     }
@@ -157,6 +177,7 @@ private extension MyTemplatesViewModel {
             ScheduleDetailViewModel.self,
             argument: ScheduleDetailViewState.create(template: template)
         )!
+        viewModel.isBackButtonVisible = false
         let view = ScheduleDetailView(viewModel: viewModel)
         sheetView = AnyView(view)
         isSheetVisible = true
@@ -165,21 +186,10 @@ private extension MyTemplatesViewModel {
             DispatchQueue.main.async {
                 self?.alert = .createScheduleSuccess(onGotoSchedules: {
                     DispatchQueue.main.async {
-                        self?.openSchedules()
+                        self?.onGotoSchedules.send()
                     }
                 })
             }
         }.store(in: &cancellables)
-    }
-    
-    func openSchedules() {
-        let viewModel = AppContext.resolver.resolve(SchedulesViewModel.self)!
-        let view = SchedulesView(viewModel: viewModel)
-        viewModel.onBackTapped.sink { [weak self] in
-            self?.navigationLinkDesitanation = .empty
-            self?.isNavigationLinkActive = false
-        }.store(in: &cancellables)
-        self.navigationLinkDesitanation = AnyView(view)
-        self.isNavigationLinkActive = true
     }
 }

@@ -51,9 +51,13 @@ enum DayDataModel: Int, CaseIterable {
         self.rawValue + (firstWeekday?.rawValue ?? 0)
     }
     
+    init?(index: Int) {
+        self.init(rawValue: index - Self.indexOffset)
+    }
+    
     static var allCases: [DayDataModel] {
         Calendar.current.firstWeekday == 1 ?
             [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday] :
-            [.sunday, .monday, tuesday, .wednesday, .thursday, .friday, saturday, .sunday]
+            [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
     }
 }

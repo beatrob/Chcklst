@@ -29,7 +29,7 @@ class SelectTemplateViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     var templateTappedCancellable: AnyCancellable?
     var dismissCancellable: AnyCancellable?
-    
+    var backCancellable: AnyCancellable?
     
     init(
         checklistDataSource: ChecklistDataSource,
@@ -45,16 +45,23 @@ class SelectTemplateViewModel: ObservableObject {
             }
             let viewModel = AppContext.resolver.resolve(
                 ChecklistViewModel.self,
-                argument: ChecklistViewState.createFromTemplate(template: template)
+                argument: ChecklistViewState.createChecklistFromTemplate(template: template)
             )!
-            self.dismissCancellable = viewModel
-                .$shouldDismissView
-                .filter { $0 }
-                .map { _ in () }
-                .subscribe(self.onGotoDashboard)
+            self.backCancellable = viewModel.onBackTapped.sink { [weak self] in
+                self?.desitnationView = .empty
+                self?.isDestionationViewVisible = false
+            }
+            self.dismissCancellable = viewModel.dismissView.subscribe(self.onGotoDashboard)
             self.desitnationView = AnyView(ChecklistView(viewModel: viewModel))
             self.isDestionationViewVisible = true
         }
+    }
+    
+    func reset(withTitle title: String, description: String) {
+        self.title = title
+        self.descriptionText = description
+        self.desitnationView = .empty
+        self.isDestionationViewVisible = false
     }
     
     func set(
