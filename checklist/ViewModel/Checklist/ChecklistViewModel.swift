@@ -395,13 +395,15 @@ private extension ChecklistViewModel {
             }
             .catch {
                 $0.log(message: "Failed to create checklist")
-                #warning("TODO(): Implement proper error handling")
             }
     }
     
     func createTemplate(_ checklist: ChecklistDataModel) {
         firstly {
-            restrictionManager.verifyCreateTemplate(presenter: self)
+            restrictionManager.verifyCreateTemplate(
+                presenter: self,
+                isCreateFromScratch: viewState.isCreateTemplate
+            )
         }.then { verified -> Promise<Bool> in
             guard verified else {
                 return .value(false)
@@ -428,13 +430,12 @@ private extension ChecklistViewModel {
         }.get { verified in
             if verified {
                 self.didCreateTemplateSubject.send()
-            }
-            if self.viewState.isCreateChecklist {
+                self.dismissView.send()
+            } else if self.viewState.isCreateChecklist {
                 self.dismissView.send()
             }
         }.catch { error in
             error.log(message: "Failed to create template")
-            #warning("TODO(): Implement proper error handling")
         }
     }
     
@@ -566,7 +567,7 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             self?.checklistDataSource.deleteChecklist(checklist)
                 .done { self?.dismissView.send() }
                 .catch { error in
-                    #warning("TODO: Add error handling")
+                    error.log(message: "Failed to delete checklist")
                 }
         })
     }
@@ -598,8 +599,8 @@ extension ChecklistViewModel: RestrictionPresenter {
     }
     
     func cancelUpgradeView() {
-        sheet = AnyView.empty
-        isSheetVisible = true
+        self.sheet = AnyView.empty
+        self.isSheetVisible = true
     }
     
     func dismissUpgradeView() {

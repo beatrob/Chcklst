@@ -16,7 +16,7 @@ class UpgradeViewModel: ObservableObject {
     @Published var isAlertVisible = false
     @Published var isPurchaseSuccessVisible = false
     @Published var productTitle = ""
-    @Published var price = ""
+    @Published var price: LocalizedStringKey = ""
     let onAppear = EmptySubject()
     let onCancelTapped = EmptySubject()
     let onPurchaseTapped = EmptySubject()
@@ -66,7 +66,7 @@ class UpgradeViewModel: ObservableObject {
                 case .success(let product):
                     self.mainProduct = product
                     self.productTitle = product.title
-                    self.price = "Upgrade for \(product.localizedPrice)"
+                    self.price = "Upgrade for\n**\(product.localizedPrice)**"
                 case .failure(let error):
                     error.log(message: "Failed to load purchase")
                     self.showAlert(error: error)

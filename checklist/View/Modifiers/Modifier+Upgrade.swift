@@ -27,7 +27,7 @@ extension Modifier {
             func body(content: Content) -> some View {
                 content
                     .foregroundColor(.firstAccent)
-                    .font(Font.Chcklst.italicDescription.font)
+                    .font(Font.Chcklst.bigItalicDescription.font)
             }
         }
         
@@ -36,7 +36,7 @@ extension Modifier {
             func body(content: Content) -> some View {
                 content
                     .foregroundColor(.text)
-                    .font(Font.Chcklst.description.font)
+                    .font(Font.Chcklst.bigDescription.font)
             }
         }
     }

@@ -19,7 +19,7 @@ enum DashboardAlert {
     case confirmMarkAllItemsDone(onConfirm: EmptyCompletion)
     case confirmMarkAllItemsUnDone(onConfirm: EmptyCompletion)
     
-    var view: Alert {
+    var alert: Alert {
         switch self {
         case .templateCreated(let gotoTemplates):
             return Alert.getTemplateCreated {

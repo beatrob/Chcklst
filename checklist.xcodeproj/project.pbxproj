@@ -112,6 +112,12 @@
 		DDFF95DD260949390084DBF4 /* Modifier+Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFF95DC260949390084DBF4 /* Modifier+Template.swift */; };
 		FE0B2081270A4CD800EE86CB /* RestrictionPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0B2080270A4CD800EE86CB /* RestrictionPresenter.swift */; };
 		FE0B2083270A53D300EE86CB /* LimitReachedAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0B2082270A53D300EE86CB /* LimitReachedAlert.swift */; };
+		FE178235274112CD00C17F21 /* NotificationDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE178234274112CD00C17F21 /* NotificationDataModel.swift */; };
+		FE1782372741176C00C17F21 /* DebugNotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1782362741176C00C17F21 /* DebugNotificationsViewModel.swift */; };
+		FE17823A274117CC00C17F21 /* DebugCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE178239274117CC00C17F21 /* DebugCellViewModel.swift */; };
+		FE17823F27412C2500C17F21 /* DebugCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE17823E27412C2500C17F21 /* DebugCellView.swift */; };
+		FE178242274131ED00C17F21 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = FE178241274131ED00C17F21 /* OrderedCollections */; };
+		FE1782442741363400C17F21 /* DebugNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1782432741363400C17F21 /* DebugNotificationsView.swift */; };
 		FE2E61CC2725FDC0007B9321 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2E61CB2725FDC0007B9321 /* Haptics.swift */; };
 		FE4860792702599A0022E6C4 /* TextReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4860782702599A0022E6C4 /* TextReaderView.swift */; };
 		FE48607B27025A180022E6C4 /* TextReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */; };
@@ -301,6 +307,11 @@
 		DDFF95DC260949390084DBF4 /* Modifier+Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Template.swift"; sourceTree = "<group>"; };
 		FE0B2080270A4CD800EE86CB /* RestrictionPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestrictionPresenter.swift; sourceTree = "<group>"; };
 		FE0B2082270A53D300EE86CB /* LimitReachedAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitReachedAlert.swift; sourceTree = "<group>"; };
+		FE178234274112CD00C17F21 /* NotificationDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDataModel.swift; sourceTree = "<group>"; };
+		FE1782362741176C00C17F21 /* DebugNotificationsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugNotificationsViewModel.swift; sourceTree = "<group>"; };
+		FE178239274117CC00C17F21 /* DebugCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCellViewModel.swift; sourceTree = "<group>"; };
+		FE17823E27412C2500C17F21 /* DebugCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCellView.swift; sourceTree = "<group>"; };
+		FE1782432741363400C17F21 /* DebugNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugNotificationsView.swift; sourceTree = "<group>"; };
 		FE2E61CB2725FDC0007B9321 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		FE4860782702599A0022E6C4 /* TextReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReaderView.swift; sourceTree = "<group>"; };
 		FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextReaderViewModel.swift; sourceTree = "<group>"; };
@@ -371,6 +382,7 @@
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
 				DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */,
 				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
+				FE178242274131ED00C17F21 /* OrderedCollections in Frameworks */,
 				DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,6 +523,7 @@
 		DD52A64924E19FE400A9A1FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				FE17823B27412BFE00C17F21 /* Debug */,
 				FE8D7EC326FD2BA900671634 /* About */,
 				FE71C7DA2628D90D00BBF63B /* Settings */,
 				DDE08A9125DB18D200F00D5A /* Menu */,
@@ -539,6 +552,7 @@
 				FE559A4C26433F6300ACF179 /* Schedules */,
 				DD90240F24FB79D40084CDDC /* Settings */,
 				FE559A57264342B900ACF179 /* SubViewModels */,
+				FE1782382741177500C17F21 /* Debug */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -573,6 +587,7 @@
 				FEA913A52641E4D700594478 /* DayDataModel.swift */,
 				FE7CFE7D268E59D3004A11DE /* ProductDataModel.swift */,
 				FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */,
+				FE178234274112CD00C17F21 /* NotificationDataModel.swift */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -796,6 +811,24 @@
 			path = Subviews;
 			sourceTree = "<group>";
 		};
+		FE1782382741177500C17F21 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				FE1782362741176C00C17F21 /* DebugNotificationsViewModel.swift */,
+				FE178239274117CC00C17F21 /* DebugCellViewModel.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
+		FE17823B27412BFE00C17F21 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				FE17823E27412C2500C17F21 /* DebugCellView.swift */,
+				FE1782432741363400C17F21 /* DebugNotificationsView.swift */,
+			);
+			path = Debug;
+			sourceTree = "<group>";
+		};
 		FE559A4B26433EE800ACF179 /* Schedules */ = {
 			isa = PBXGroup;
 			children = (
@@ -922,6 +955,7 @@
 				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
 				DD2D91BA2532FD420032779C /* XCGLogger */,
 				FEA82FC426A377FB0008F34A /* ActivityIndicatorView */,
+				FE178241274131ED00C17F21 /* OrderedCollections */,
 			);
 			productName = checklist;
 			productReference = DD52A62124E19EF000A9A1FC /* checklist.app */;
@@ -979,6 +1013,7 @@
 				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
+				FE178240274131ED00C17F21 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = DD52A62224E19EF000A9A1FC /* Products */;
 			projectDirPath = "";
@@ -1075,11 +1110,13 @@
 				FEBE21532664353300CC001E /* RepeatFrequencyMO+Helpers.swift in Sources */,
 				FE48607B27025A180022E6C4 /* TextReaderViewModel.swift in Sources */,
 				FEA8B5152628DF4C0084909E /* Modifier+Settings.swift in Sources */,
+				FE1782372741176C00C17F21 /* DebugNotificationsViewModel.swift in Sources */,
 				DD179BC025F69E710006629F /* ChecklistDataModel+Welcome.swift in Sources */,
 				DD74DA722521E365004587FC /* InitializeAppViewModel.swift in Sources */,
 				FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */,
 				DDE08AA125DB1A6000F00D5A /* MenuItemViewModel.swift in Sources */,
 				FE7CFE78268E5417004A11DE /* PurchaseManager.swift in Sources */,
+				FE17823A274117CC00C17F21 /* DebugCellViewModel.swift in Sources */,
 				FEA82FC926A37D500008F34A /* UpgradeViewModel.swift in Sources */,
 				FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */,
 				FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */,
@@ -1104,7 +1141,9 @@
 				DD90241B24FB7F9D0084CDDC /* MockTemplateDataSource.swift in Sources */,
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
 				DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */,
+				FE17823F27412C2500C17F21 /* DebugCellView.swift in Sources */,
 				FE8D7EC526FD2BBE00671634 /* AboutView.swift in Sources */,
+				FE178235274112CD00C17F21 /* NotificationDataModel.swift in Sources */,
 				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
 				FEBB62D62733445F00F107B8 /* CoreDataManager+Items.swift in Sources */,
 				DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */,
@@ -1126,6 +1165,7 @@
 				DD72BA8D250787C300318F62 /* AnyView+Extension.swift in Sources */,
 				DD8C44F92536074800F470C2 /* Error+Extension.swift in Sources */,
 				DDB298DD2511623500F326D2 /* ViewVisibility.swift in Sources */,
+				FE1782442741363400C17F21 /* DebugNotificationsView.swift in Sources */,
 				DD39A42C2529BAC2003E73EA /* ChecklistItemViewModel.swift in Sources */,
 				DD8C4504253631E700F470C2 /* ChecklistViewModel+Input.swift in Sources */,
 				DDD22312252672A700C18BF9 /* SelectTemplateView.swift in Sources */,
@@ -1339,7 +1379,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1366,7 +1406,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1497,7 +1537,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.10.0;
+				MARKETING_VERSION = 0.11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1597,6 +1637,14 @@
 				minimumVersion = 6.13.3;
 			};
 		};
+		FE178240274131ED00C17F21 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
@@ -1637,6 +1685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */;
 			productName = PromiseKit;
+		};
+		FE178241274131ED00C17F21 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE178240274131ED00C17F21 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
 		};
 		FEA82FC426A377FB0008F34A /* ActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -26,9 +26,11 @@ class DashboardViewModel: ObservableObject {
             }
         }
     }
-    @Published var alertVisibility = ViewVisibility(view: DashboardAlert.none.view)
+    @Published var alert: Alert = .empty
+    @Published var isAlertVisible = false
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var isSidemenuVisible = false
+    @Published var sheet: AnyView = .empty
     @Published var isSheetVisible = false
     @Published var isEmptyListViewVisible = false
     @Published var isNoSearchResultsVisible = false
@@ -37,15 +39,6 @@ class DashboardViewModel: ObservableObject {
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
-    }
-    @Published var alert: DashboardAlert = .none {
-        didSet { alertVisibility.set(view: alert.view, isVisible: alert.isVisible) }
-    }
-    @Published var sheet: DashboardSheet = .none {
-        didSet {
-            isSheetVisible = sheet.isVisible
-            sheetView = sheet.view
-        }
     }
     
     let onCreateNewChecklist = EmptySubject()
@@ -56,7 +49,6 @@ class DashboardViewModel: ObservableObject {
     let menuViewModel = AppContext.resolver.resolve(MenuViewModel.self)!
     
     var cancellables =  Set<AnyCancellable>()
-    var sheetView = AnyView.empty
     
     private lazy var selectTemplateVM: SelectTemplateViewModel = {
         AppContext.resolver.resolve(SelectTemplateViewModel.self)!
@@ -70,6 +62,7 @@ class DashboardViewModel: ObservableObject {
     private let navigationHelper: NavigationHelper
     private let createScheduleSubject = EmptySubject()
     private let createScheduleViewModel: CreateScheduleViewModel
+    private let restrictionManager: RestrictionManager
     
     init(
         checklistDataSource: ChecklistDataSource,
@@ -77,7 +70,8 @@ class DashboardViewModel: ObservableObject {
         scheduleDataSource: ScheduleDataSource,
         navigationHelper: NavigationHelper,
         checklistFilterAndSort: ChecklistFilterAndSort,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        restrictionManager: RestrictionManager
     ) {
         self.checklistDataSource = checklistDataSource
         self.templateDataSource = templateDataSource
@@ -85,6 +79,7 @@ class DashboardViewModel: ObservableObject {
         self.scheduleDataSource = scheduleDataSource
         self.notificationManager = notificationManager
         self.navigationHelper = navigationHelper
+        self.restrictionManager = restrictionManager
         self.createScheduleViewModel = AppContext.resolver.resolve(
             CreateScheduleViewModel.self,
             argument: createScheduleSubject.eraseToAnyPublisher()
@@ -102,7 +97,8 @@ class DashboardViewModel: ObservableObject {
                 return
             }
             log(debug: "Deeplinking to checklist: \(checklist)")
-            self?.sheet = .none
+            self?.sheet = .empty
+            self?.isSheetVisible = false
             if !navigationHelper.isOnDashboard {
                 navigationHelper.popToDashboard()
             }
@@ -154,7 +150,8 @@ class DashboardViewModel: ObservableObject {
                         withTitle: "Create Checklist",
                         description: "Select a Template to create a new Checklist"
                     )
-                    self.sheet = .selectTemplate(viewModel: viewModel)
+                    self.sheet = DashboardSheet.selectTemplate(viewModel: viewModel).view
+                    self.isSheetVisible = true
                 },
                 onCreateTemplate: {
                     self.showChecklistView(state: .createTemplate)
@@ -164,7 +161,8 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onMenu.sink { [weak self] in
-            self?.sheet = .menu
+            self?.sheet = DashboardSheet.menu.view
+            self?.isSheetVisible = true
         }.store(in: &cancellables)
         
         navBarViewModel.onMenuTapped.sink { [weak self] _ in
@@ -325,29 +323,33 @@ private extension DashboardViewModel {
             argument: state
         )!
         viewModel.onDidCreateTemplate.delay(for: .seconds(0.5), scheduler: RunLoop.main).sink { [weak self] in
-            self?.alert = .templateCreated(
+            self?.alert = DashboardAlert.templateCreated(
                 gotoTemplates: { self?.navigationHelper.navigateToMyTemplates(source: .dashboard) }
-            )
+            ).alert
+            self?.isAlertVisible = true
         }.store(in: &self.cancellables)
         viewModel.dismissView.sink { [weak self] in
-            self?.sheet = .none
+            self?.sheet = .empty
+            self?.isSheetVisible = false
         }.store(in: &cancellables)
-        self.sheet = .createChecklist(viewModel: viewModel)
+        self.sheet = DashboardSheet.createChecklist(viewModel: viewModel).view
+        self.isSheetVisible = true
     }
     
     func setupCreateScheduleHandling() {
         createScheduleViewModel.didCreateSchedulePublisher.sink { [weak self] in
-            self?.sheetView = .empty
+            self?.sheet = .empty
             self?.isSheetVisible = false
             DispatchQueue.main.async {
-                self?.alert = .scheduleCreated(gotoSchedules: {
+                self?.alert = DashboardAlert.scheduleCreated(gotoSchedules: {
                     self?.navigationHelper.navigateToSchedules()
-                })
+                }).alert
+                self?.isAlertVisible = true
             }
         }.store(in: &cancellables)
         
         createScheduleViewModel.presentViewPublisher.sink { [weak self] anyView in
-            self?.sheetView = anyView
+            self?.sheet = anyView
             self?.isSheetVisible = true
         }.store(in: &cancellables)
         
@@ -397,7 +399,7 @@ private extension DashboardViewModel {
     }
     
     func handleDeleteChecklist(_ checklist: ChecklistDataModel) {
-        alert = .confirmDeleteChecklist(onDelete: { [unowned self] in
+        alert = DashboardAlert.confirmDeleteChecklist(onDelete: { [unowned self] in
             self.checklistDataSource.deleteChecklist(checklist)
             .done {
                 Logger.log.debug("Checklist deleted with id: \(checklist.id)")
@@ -406,7 +408,8 @@ private extension DashboardViewModel {
                 Logger.log.error("Delete checklist failed")
                 Haptics.notify(.error)
             }
-        })
+        }).alert
+        isAlertVisible = true
     }
 }
 
@@ -419,21 +422,23 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
     }
     
     func onMarkAllDoneAction(checklist: ChecklistDataModel) {
-        alert = .confirmMarkAllItemsDone { [weak self] in
+        alert = DashboardAlert.confirmMarkAllItemsDone { [weak self] in
             guard let self = self else { return }
             self.checklistDataSource.updateChecklist(checklist.getWithAllItemsDone()).catch { error in
                 error.log(message: "Failed to mark all items done")
             }
-        }
+        }.alert
+        isAlertVisible = true
     }
     
     func onMarkAllUndoneAction(checklist: ChecklistDataModel) {
-        alert = .confirmMarkAllItemsUnDone { [weak self] in
+        alert = DashboardAlert.confirmMarkAllItemsUnDone { [weak self] in
             guard let self = self else { return }
             self.checklistDataSource.updateChecklist(checklist.getWithAllItemsUndone()).catch { error in
                 error.log(message: "Failed to mark all items undone")
             }
-        }
+        }.alert
+        isAlertVisible = true
     }
     
     func onSetReminderAction(checklist: ChecklistDataModel) {
@@ -441,16 +446,34 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
         vm.onDidDeleteReminder
             .merge(with: vm.onDidCreateReminder.map { _ in () })
             .sink { [weak self] in
-                self?.sheet = .none
+                self?.sheet = .empty
+                self?.isSheetVisible = false
         }.store(in: &cancellables)
-        self.sheet = .editReminder(viewModel: vm)
+        self.sheet = DashboardSheet.editReminder(viewModel: vm).view
+        self.isSheetVisible = true
     }
     
     func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
-        templateDataSource.createTemplate(.init(checklist: checklist)).get {
-            self.alert = .templateCreated(gotoTemplates: { [weak self] in
+        firstly {
+            restrictionManager.verifyCreateTemplate(presenter: self, isCreateFromScratch: true)
+        }.then { verified -> Promise<Bool> in
+            guard verified else {
+                return .value(false)
+            }
+            return self.templateDataSource.createTemplate(.init(checklist: checklist)).map { verified }
+        }.then { verified -> Promise<Bool> in
+            guard verified else {
+                return .value(false)
+            }
+            return after(seconds: 0.5).map { verified }
+        }.get { verified in
+            guard verified else {
+                return
+            }
+            self.alert = DashboardAlert.templateCreated(gotoTemplates: { [weak self] in
                 self?.navigationHelper.navigateToMyTemplates(source: .dashboard)
-            })
+            }).alert
+            self.isAlertVisible = true
         }.catch {
             $0.log(message: "Failed to create new template from checklist \(checklist)")
         }
@@ -458,5 +481,28 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
     
     func onDeleteAction(checklist: ChecklistDataModel) {
         handleDeleteChecklist(checklist)
+    }
+}
+
+
+extension DashboardViewModel: RestrictionPresenter {
+    
+    func presentRestrictionAlert(_ alert: Alert) {
+        self.alert = alert
+        self.isAlertVisible = true
+    }
+    
+    func presentUpgradeView(_ upgradeView: UpgradeView) {
+        self.sheet = AnyView(upgradeView)
+        self.isSheetVisible = true
+    }
+    
+    func cancelUpgradeView() {
+        dismissUpgradeView()
+    }
+    
+    func dismissUpgradeView() {
+        self.sheet = .empty
+        self.isSheetVisible = false
     }
 }

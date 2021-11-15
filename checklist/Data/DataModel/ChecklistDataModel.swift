@@ -75,7 +75,10 @@ struct ChecklistDataModel: Equatable, Hashable {
     }
     
     var isNew: Bool {
-        creationDate == updateDate
+        guard !items.isEmpty else {
+            return creationDate == updateDate
+        }
+        return !items.contains { $0.isDone } && creationDate == updateDate
     }
     
     func getWithCurrentUpdateDate() -> ChecklistDataModel {

@@ -14,7 +14,7 @@ import SwiftUI
 protocol RestrictionManager {
     var restrictionsEnabled: Bool { get }
     func verifyCreateChecklist(presenter: RestrictionPresenter) -> Promise<Bool>
-    func verifyCreateTemplate(presenter: RestrictionPresenter) -> Promise<Bool>
+    func verifyCreateTemplate(presenter: RestrictionPresenter, isCreateFromScratch: Bool) -> Promise<Bool>
     func verifyCreateSchedule(presenter: RestrictionPresenter) -> Promise<Bool>
 }
 
@@ -81,11 +81,11 @@ class RestrictionManagerImpl: RestrictionManager {
         }
     }
     
-    func verifyCreateTemplate(presenter: RestrictionPresenter) -> Promise<Bool> {
+    func verifyCreateTemplate(presenter: RestrictionPresenter, isCreateFromScratch: Bool) -> Promise<Bool> {
         guard
             !isMainProductPurchased.value,
             let maxFreeTemplates = Bundle.main.numberOfFreeTemplates,
-            self.checklistCount.value > maxFreeTemplates
+            self.templateCount.value > maxFreeTemplates
         else {
             return .value(true)
         }
@@ -94,7 +94,11 @@ class RestrictionManagerImpl: RestrictionManager {
         }.then {
             self.displayLimitReachedAlert(
                 title: .init("upgrade_alert_template_limit_reached"),
-                customMessage: .init("upgrade_alert_template_limit_reached_message")
+                customMessage: LocalizedStringKey(
+                    stringLiteral: isCreateFromScratch ?
+                        "upgrade_alert_template_limit_reached_message_create_from_scratch" :
+                        "upgrade_alert_template_limit_reached_message_create_from_checklist"
+                )
             )
         }.then { tapAction -> Promise<Bool> in
             guard tapAction != .cancel else {

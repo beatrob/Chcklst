@@ -15,7 +15,6 @@ extension CoreDataManagerImpl: CoreDataItemManager {
     func save(_ item: ItemDataModel) -> Promise<Void> {
         getViewContext().get { context in
             let item = try ItemMO.getManagedObject(for: item, context: context)
-            item.checklist?.updateDate = Date()
         }.asVoid().then {
             self.saveContext()
         }

@@ -93,7 +93,6 @@ private extension EditReminderViewModel {
             self.onDidCreateReminder.send(date)
         }.catch { error in
             error.log(message: "Failed to save reminder")
-            #warning("TODO: Add error hanling")
         }
     }
     
@@ -103,7 +102,6 @@ private extension EditReminderViewModel {
             self.onDidDeleteReminder.send()
         }.catch { error in
             error.log(message: "Failed to delete reminder")
-            #warning("TODO: Add error hanling")
         }
     }
 }

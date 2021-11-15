@@ -83,14 +83,14 @@ struct DashboardView: View {
             .navigationBarHidden(true)
         }
 
-        .alert(isPresented: $viewModel.alertVisibility.isVisible) {
-            self.viewModel.alertVisibility.view
+        .alert(isPresented: $viewModel.isAlertVisible) {
+            self.viewModel.alert
         }
         .actionSheet(isPresented: $viewModel.actionSheetVisibility.isVisible) {
             self.viewModel.actionSheetVisibility.view
         }
         .sheet(isPresented: $viewModel.isSheetVisible) {
-            self.viewModel.sheetView
+            self.viewModel.sheet
         }
     }
 }
@@ -166,7 +166,8 @@ struct DashboardView_Previews: PreviewProvider {
                 scheduleDataSource: MockScheduleDataSource(),
                 navigationHelper: NavigationHelper(),
                 checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
-                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+                restrictionManager: MockRestrictionManager()
             )
         ).environmentObject(NavigationHelper())
     }

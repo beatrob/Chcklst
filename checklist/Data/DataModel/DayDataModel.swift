@@ -43,12 +43,16 @@ enum DayDataModel: Int, CaseIterable {
         rawValue + Self.indexOffset
     }
     
-    var firstWeekday: DayDataModel? {
-        .init(rawValue: Calendar.current.firstWeekday)
+    static var firstWeekdayNumber: Int {
+        Calendar.current.firstWeekday - 1
+    }
+    
+    static var firstWeekday: DayDataModel? {
+        .init(rawValue: Self.firstWeekdayNumber)
     }
     
     var calendarWeekdayOffset: Int {
-        self.rawValue + (firstWeekday?.rawValue ?? 0)
+        self.rawValue + (Self.firstWeekday?.rawValue ?? 0)
     }
     
     init?(index: Int) {
@@ -56,7 +60,7 @@ enum DayDataModel: Int, CaseIterable {
     }
     
     static var allCases: [DayDataModel] {
-        Calendar.current.firstWeekday == 1 ?
+        firstWeekdayNumber == 1 ?
             [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday] :
             [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
     }

@@ -76,6 +76,9 @@ class NavigationHelper: ObservableObject {
     }
     
     func navigateToChecklistDetail(with checklist: ChecklistDataModel, shouldEdit: Bool) {
+        guard !navigateToDebugViewIfNeeded(with: checklist) else {
+            return
+        }
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
             argument: shouldEdit ?
@@ -107,5 +110,21 @@ class NavigationHelper: ObservableObject {
     
     var isOnDashboard: Bool {
         dashboardSelection == .none
+    }
+}
+
+private extension NavigationHelper {
+    
+    func navigateToDebugViewIfNeeded(with checklist: ChecklistDataModel) -> Bool {
+        if checklist.title == DebugNotificationsViewModel.id {
+            let viewModel = AppContext.resolver.resolve(DebugNotificationsViewModel.self)!
+            viewModel.navbar.backButton.didTap.sink { [weak self] in
+                self?.popToDashboard()
+            }.store(in: &cancellables)
+            dashboardDestination = AnyView(DebugNotificationsView(viewModel: viewModel))
+            dashboardSelection = .checklistDetail
+            return true
+        }
+        return false
     }
 }

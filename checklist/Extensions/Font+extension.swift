@@ -28,6 +28,8 @@ extension Font {
         case boldItem
         case description
         case italicDescription
+        case bigDescription
+        case bigItalicDescription
         case smallText
         
         var size: CGFloat {
@@ -40,6 +42,8 @@ extension Font {
                 return 18
             case .smallTitle:
                 return 20
+            case .bigDescription, .bigItalicDescription:
+                return 24
             case .bigTitle:
                 return 36
             }
@@ -51,23 +55,27 @@ extension Font {
         
         var font: Font {
             switch self {
-            case .item, .description, .smallText:
+            case .item, .description, .smallText, .bigDescription:
                 return getFont(name: Chcklst.regular)
             case .boldItem, .smallTitle, .bigTitle:
                 return getFont(name: Chcklst.bold)
             case .italicDescription:
                 return getFont(name: Chcklst.boldItalic)
+            case .bigItalicDescription:
+                return getFont(name: Chcklst.italic)
             }
         }
         
         var uiFont: UIFont {
             switch self {
-            case .item, .description, .smallText:
+            case .item, .description, .smallText, .bigDescription:
                 return getUIFont(name: Chcklst.regular)
             case .boldItem, .smallTitle, .bigTitle:
                 return getUIFont(name: Chcklst.bold)
             case .italicDescription:
                 return getUIFont(name: Chcklst.boldItalic)
+            case .bigItalicDescription:
+                return getUIFont(name: Chcklst.italic)
             }
         }
         

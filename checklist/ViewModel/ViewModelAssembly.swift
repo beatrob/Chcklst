@@ -63,5 +63,9 @@ class ViewModelAssembly: Assembly {
         )
         container.autoregister(AboutViewModel.self, initializer: AboutViewModel.init)
         container.autoregister(UpgradeViewModel.self, initializer: UpgradeViewModel.init)
+        container.autoregister(
+            DebugNotificationsViewModel.self,
+            initializer: DebugNotificationsViewModel.init
+        ).inObjectScope(.transient)
     }
 }

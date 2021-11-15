@@ -58,10 +58,11 @@ struct UpgradeView: View {
                         VStack {
                             Text(viewModel.productTitle)
                                 .modifier(Modifier.Upgrade.Title())
-                                .padding()
+                                .padding(.top, 20)
                             Text(viewModel.price)
                                 .modifier(Modifier.Upgrade.Price())
-                                .padding()
+                                .multilineTextAlignment(.center)
+                                .padding(.bottom, 20)
                         }
                         Spacer()
                     }.background(Color.menuBackground)
@@ -69,7 +70,12 @@ struct UpgradeView: View {
                         Color.checklistBackground.ignoresSafeArea()
                         VStack {
                             Spacer()
-                            Text("By upgrading you can unlock\nUNLIMITED ACCESS to")
+                            Image("chcklst-logo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 80)
+                                .padding(.vertical)
+                            Text("By upgrading you can unlock\n**UNLIMITED ACCESS** to")
                                 .modifier(Modifier.Upgrade.Description())
                                 .multilineTextAlignment(.center)
                                 .padding()
@@ -79,7 +85,7 @@ struct UpgradeView: View {
                             Spacer()
                         }
                     }
-                }.ignoresSafeArea()
+                }
                 Spacer()
                 CapsuleButton(
                     title: "Purchase",
@@ -109,7 +115,7 @@ struct UpgradeView: View {
             Text(title)
         }
         .modifier(Modifier.Upgrade.Description())
-        .padding(.top)
+        .padding(.top, 8)
     }
 }
 

@@ -16,14 +16,14 @@ extension ChecklistDataModel {
         return ChecklistDataModel(
             id: UUID().uuidString,
             title: "Welcome",
-            description: "Welcome to Chcklst, an app which helps you get things done using the power of checklist. By following this short tutorial you will learn all the cool things you can do 😉",
+            description: "Welcome to Chcklst, an app which helps you get things done using the power of checklists. By following this short tutorial you will learn all the cool things you can do 😉",
             creationDate: now,
             updateDate: now,
             reminderDate: nil,
             items: [
                 .init(
                     id: UUID().uuidString,
-                    name: "Tap on the bullet, or long-tap on this title to make this item done/un-done",
+                    name: "Tap on the bullet to make this item done/un-done",
                     isDone: false,
                     updateDate: now.addingTimeInterval(1)
                 ),
@@ -59,7 +59,7 @@ extension ChecklistDataModel {
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Setup a reminder to getr notified you when it's time to make things done",
+                    name: "Setup a reminder to get notified you when it's time to get things done",
                     isDone: false,
                     updateDate: now.addingTimeInterval(7)
                 ),

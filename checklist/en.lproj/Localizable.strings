@@ -81,62 +81,66 @@ These terms and conditions are effective as of 2021-09-26
 If you have any questions or suggestions about my Terms and Conditions, do not hesitate to contact me at chcklst.app@gmail.com.";
 "help_title" = "Help";
 "help_checklists_title" = "Checklists";
-"help_checklists_text" = "With checklists you can significantly improve your productivity. Creating a shopping, a to-do, a backpack or other types of lists is very easy and straight-forward using Chcklst.
+"help_checklists_text" = "With Checklists you can significantly improve your productivity. Creating a shopping, a to-do, a backpack or other types of lists is very easy and straight-forward using Chcklst.
 
 **Creating a Checklist**
 
 Start to create your Checklist by tapping the “+” button on your dashboard. Next, you can choose to create a new empty list, or you can use one of your Templates created earlier (you can read more about Templates on the Help page)
 
-When creating a new list from scratch you can enter a title and a description to describe the list. Then you can add as many items as you want, or you can leave the items empty, and fill them later.
+When creating a new list from scratch you can enter a title and a description. Then you can add as many items as you want, or you can leave the items empty, and fill them later.
 
 Before creating a new Checklist you can choose to set a reminder to get notified when things are needed to be done. To set a reminder you have to enable push notifications, when prompted select “Allow”, or you can enable it later in the Settings menu.
 
 You can check the “Save as Template” checkbox to create a new Template from your new list. The Checklist title, description and all the items will be copied to the new Template so you can reuse it later.
 
-After your new Checklist is created you will be prompted to the dashboard. Your new Checklist is always displayed at the top of the board with the title, the done/undone number of items. The first undone item in your list is also visible on the dashboard.
+After your new Checklist is created you will be prompted to the dashboard, where the checklists are displayed with the title and the items done/undone ratio. The first undone item in your list is also visible under the title.
 
 **Using Checklists**
 
-You can open a Checklist from the dashboard. By tapping the bullet icon on before each item you can set the item done or undone. You can also do that by long pressing the text of the item. Done items are marked with a check-mark. their text is crossed out and are moved to the bottom of the list. By un-checking, the item will be moved back to the top of the list.
+You can open a Checklist from the dashboard. By tapping the bullet icon on before each item you can set the item done or undone. Done items are marked with a check-mark, their text is crossed out and are moved to the bottom of the list. By un-checking, the item will be moved back to the top of the list.
 
-**Editing & Removing Checklists**
+**Editing & Deleting Checklists**
 
-You can edit a Checklist by long-pressing on it’s bubble on the dashboard, then select “Edit” from the bottom action sheet, select “Delete” to remove your list (this operation is not reversible at the moment). You can achieve the same results from the Cheklist detail page by tapping the “...” icon in the navigation bar.
+You can edit a Checklist by long-pressing on it’s title on the dashboard, then select “Edit” from the bottom action sheet, select “Delete” to remove your list (this operation is not reversible). You can achieve the same results from the Cheklist detail page by tapping the “...” icon on the navigation bar.
 ";
 "help_templates_title" = "Templates";
 "help_templates_text" = "With Templates you can easily reuse your most frequent Checklists.
 
 **Creating Templates**
 
-You can create Templates from existing or new Checklists from the dashboard, the “Create Cheklist” form or the Checklist detail page.
+You can create Templates from existing or new Checklists on the dashboard. You can also create new Templates from scratch.
 
 **Using Templates**
 
-Your Templates can be accessed from the side-menu, by tapping the “Templates” button. Here you can edit, or delete your existing Templates. It’s also possible to create new Checklists and Schedules from this screen (you can read more about Schedules on the Help page).
+Your Templates can be accessed from the side-menu, by tapping the “Templates” button. Here you can edit, or delete your existing Templates. On this screem it’s also possible to create new Checklists and Schedules (read more about Schedules on the Help page).
 ";
 "help_schedules_title" = "Schedules";
-"help_schedules_text" = "Schedules are basically your future Checklist waiting to be created on a certain date and time. Using schedules you can plan your Checklists ahead, so you never miss a thing waiting to be done.
+"help_schedules_text" = "Schedules are basically your future Checklists waiting to be created on a certain date and time. Using schedules you can plan and automate your Checklists.
 
 **Creating Schedules**
 
-Schedules can be created from existing Templates. Start with selecting a Template from the list. Next you can change the Schedule’s title & description which is prefilled from the template. As a last step you have to set the Schedule date, which is the date and time when your new Checklist will be created. It’s also possible to set a repeat frequency of you Schedule. This will ensure that your checklist will be repeatedly with the given frequency.
+Schedules can be created from existing Templates. Start with selecting a Template from the list. Next you can change the Schedule’s title & description, these are prefilled from the template. As a last step you have to set the Schedule date and time when your new Checklist is going to be created. It’s also possible to set a repeat frequency of you Schedule. This will ensure that your checklist will be created repeatedly in the given time interval.
 
 **Using Schedules**
 
-Your planned schedules are visible in the “Schedules” page where you can edit, delete or re-schedule them. Expired or used schedules are automatically deleted.
+Your planned Schedules are visible in the “Schedules” page where you can edit, delete or re-schedule them. Expired or used Schedules are automatically deleted.
 ";
 "help_chcklstplus_title" = "Chcklst+";
-"help_chcklstplus_text" = "Chcklst is a free to use app, which has some limitations in the number of available Checklists, Templates and Schedule. To disable these limitations and get access to unlimited usage you can upgrade to Chcklst+.
+"help_chcklstplus_text" = "Chcklst is a free to use app, with some limitations in the number of available Checklists, Templates and Schedule. To disable these limitations and get access to unlimited usage you can upgrade to Chcklst+.
 
-This app is an indie-developer project, you can also support the developer to continue work and improve the application.
+This app is an indie-developer project, you can also support the developer to maintain and improve the application.
 ";
 
 "upgrade_alert_checklist_limit_reached" = "You have reached the maximum number of Checklists";
 "upgrade_alert_template_limit_reached" = "You have reached the maximum number of Templates";
 "upgrade_alert_schedule_limit_reached" = "You have reached the maximum number of Schedules";
-"upgrade_alert_template_limit_reached_message" = "Your Checklist was succesfully created. To create a new Template please upgrade to CHCKLST+\nPress Cancel to go to Dashboard.";
+"upgrade_alert_template_limit_reached_message_create_from_scratch" = "To create a new Template please upgrade to CHCKLST+";
+"upgrade_alert_template_limit_reached_message_create_from_checklist" = "Your Checklist was succesfully created. To create a new Template please upgrade to CHCKLST+.\nPress Cancel to go to Dashboard.";
 "upgrade_alert_schedule_limit_reached" = "You have reached the maximum number of Schedules";
 "upgrade_alert_continue_message" = "To continue please upgrade to CHCKLST+";
+
+"info_checklist_created" = "Your Checklist was succesfully created.";
+"info_press_cancel_to_dashboard" = "Press Cancel to go to Dashboard.";
 
 //Buttons
 "cancel_button" = "Cancel";

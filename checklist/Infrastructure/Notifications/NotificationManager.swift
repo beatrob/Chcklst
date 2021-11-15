@@ -103,6 +103,7 @@ class NotificationManager: NSObject {
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 let notifications = requests.filter { $0.identifier.contains(schedule.id) }
                 guard !notifications.isEmpty else {
+                    res(())
                     return
                 }
                 UNUserNotificationCenter.current().removePendingNotificationRequests(
@@ -120,6 +121,7 @@ class NotificationManager: NSObject {
         content.sound = .default
         
         let repeats = !schedule.repeatFrequency.isNever && !schedule.repeatFrequency.isCustomDays
+        let defaultWeekday = Calendar.current.dateComponents([.weekday], from: schedule.scheduleDate)
         let defaultDateComponents = getDateComponents(
             for: schedule.scheduleDate,
             repeatFrequency: schedule.repeatFrequency
@@ -128,25 +130,15 @@ class NotificationManager: NSObject {
             dateMatching: defaultDateComponents,
             repeats: repeats
         )
-        let reg1 = registerPushNotification(
-            prefix: Prefix.schedule,
-            identifier: schedule.id,
-            contnet: content,
-            trigger: trigger
-        )
         if !schedule.repeatFrequency.isNever {
             switch schedule.repeatFrequency {
             case .customDays(let days):
+                let dateComponents = getDateComponents(for: schedule.scheduleDate, customDays: days)
+                let containsDefaultDateComponents = dateComponents.first {
+                    $0.weekday == defaultWeekday.weekday && $0.weekday != nil
+                } != nil
                 return when(
-                    fulfilled:
-                        getDateComponents(for: schedule.scheduleDate, customDays: days)
-                            .filter {
-                                $0.day != defaultDateComponents.day &&
-                                $0.hour != defaultDateComponents.hour &&
-                                $0.minute != defaultDateComponents.minute
-                            }
-                            .enumerated()
-                            .map {
+                    fulfilled: dateComponents.enumerated().map {
                                 registerPushNotification(
                                     prefix: Prefix.schedule,
                                     identifier: schedule.id + "_\($0.offset)",
@@ -156,16 +148,33 @@ class NotificationManager: NSObject {
                                         repeats: true
                                     )
                                 )
-                            }
-                        + [reg1]
+                            } + (containsDefaultDateComponents ? [] : [
+                                        registerPushNotification(
+                                            prefix: Prefix.schedule,
+                                            identifier: schedule.id,
+                                            contnet: content,
+                                            trigger: trigger
+                                        )
+                                    ]
+                                )
                 ).then {
                     self.debugPendingNotifications()
                 }
             default:
-                return reg1
+                return registerPushNotification(
+                    prefix: Prefix.schedule,
+                    identifier: schedule.id,
+                    contnet: content,
+                    trigger: trigger
+                )
             }
         } else {
-            return reg1
+            return registerPushNotification(
+                prefix: Prefix.schedule,
+                identifier: schedule.id,
+                contnet: content,
+                trigger: trigger
+            )
         }
         
         
@@ -191,6 +200,30 @@ class NotificationManager: NSObject {
             }
         }.get { _ in
             UNUserNotificationCenter.current().removeAllDeliveredNotifications()
+        }
+    }
+    
+    func getPendingNotifications() -> Guarantee<[NotificationDataModel]> {
+        Guarantee { fulfill in
+            UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+                fulfill(requests.map {
+                    let calendarNT = $0.trigger as? UNCalendarNotificationTrigger
+                    let intervalNT = $0.trigger as? UNTimeIntervalNotificationTrigger
+                    let isRepeat: Bool? = calendarNT?.repeats ?? intervalNT?.repeats
+                    let nextTriggerDate = calendarNT?.nextTriggerDate() ?? intervalNT?.nextTriggerDate()
+                    let dateComponents = calendarNT?.dateComponents
+                    let interval = intervalNT?.timeInterval
+                    return NotificationDataModel(
+                        id: $0.identifier,
+                        title: $0.content.title,
+                        nextTriggerDate: nextTriggerDate,
+                        isRepeat: isRepeat ?? false,
+                        timeInterval: interval,
+                        dateComponents: dateComponents
+                    )
+                })
+                
+            }
         }
     }
 }
@@ -227,13 +260,13 @@ private extension NotificationManager {
     ) -> DateComponents {
         switch repeatFrequency {
         case .daily:
-            return Calendar.current.dateComponents([.day, .hour, .minute], from: date)
+            return Calendar.current.dateComponents([.hour, .minute], from: date)
         case .monthly:
-            return Calendar.current.dateComponents([.month, .day, .hour, .minute], from: date)
+            return Calendar.current.dateComponents([.hour, .minute, .day], from: date)
         case .weekly:
-            return Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: date)
+            return Calendar.current.dateComponents([.weekday, .hour, .minute], from: date)
         case .yearly, .never, .customDays:
-            return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+            return Calendar.current.dateComponents([.hour, .minute, .day, .month], from: date)
         }
     }
     
@@ -268,7 +301,7 @@ private extension NotificationManager {
                     return nil
                 }
                 
-                return Calendar.current.dateComponents([.weekday, .day, .hour, .minute], from: newDate)
+                return Calendar.current.dateComponents([.weekday, .hour, .minute], from: newDate)
             }
         return days
     }

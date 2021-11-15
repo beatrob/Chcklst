@@ -29,7 +29,7 @@ class MockRestrictionManager: RestrictionManager {
         .value(true)
     }
     
-    func verifyCreateTemplate(presenter: RestrictionPresenter) -> Promise<Bool> {
+    func verifyCreateTemplate(presenter: RestrictionPresenter, isCreateFromScratch: Bool) -> Promise<Bool> {
         .value(true)
     }
     
