@@ -297,19 +297,18 @@ private extension ScheduleDetailViewModel {
     }
     
     func updateSchedule(_ schedule: ScheduleDataModel, repeatFreq: ScheduleDataModel.RepeatFrequency) {
-        scheduleDataSource.updateSchedule(
-            .init(
-                id: schedule.id,
-                title: self.title,
-                description: self.description,
-                template: schedule.template,
-                scheduleDate: self.date,
-                repeatFrequency: repeatFreq
-            )
-        ).then {
+        let new = schedule.copy(
+            with: self.title,
+            description: self.description,
+            scheduleDate: self.date,
+            repeatFrequency: repeatFreq
+        )
+        firstly {
+            scheduleDataSource.updateSchedule(new)
+        }.then {
             self.notificationManager.removeReminder(for: schedule)
         }.then {
-            self.notificationManager.setupScheduleNotification(for: schedule)
+            self.notificationManager.setupScheduleNotification(for: new)
         }.done {
             self.didUpdateSheduleSubject.send()
         }.catch {

@@ -10,6 +10,7 @@ import Foundation
 
 struct ScheduleDataModel: Equatable {
     
+    
     enum RepeatFrequency: CaseIterable, Identifiable {
         
         case never
@@ -161,5 +162,21 @@ struct ScheduleDataModel: Equatable {
     
     static func == (lhs: ScheduleDataModel, rhs: ScheduleDataModel) -> Bool {
         lhs.id ==  rhs.id
+    }
+    
+    func copy(
+        with title: String,
+        description: String?,
+        scheduleDate: Date,
+        repeatFrequency: ScheduleDataModel.RepeatFrequency
+    ) -> ScheduleDataModel {
+        .init(
+            id: self.id,
+            title: title,
+            description: description,
+            template: self.template,
+            scheduleDate: scheduleDate,
+            repeatFrequency: repeatFrequency
+        )
     }
 }

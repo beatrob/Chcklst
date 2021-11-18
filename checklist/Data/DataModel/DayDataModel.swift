@@ -10,13 +10,13 @@ import Foundation
 
 enum DayDataModel: Int, CaseIterable {
     
-    case sunday = 0
-    case monday = 1
-    case tuesday = 2
-    case wednesday = 3
-    case thursday = 4
-    case friday = 5
-    case saturday = 6
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
     
     static var indexOffset = 100
     
@@ -43,16 +43,12 @@ enum DayDataModel: Int, CaseIterable {
         rawValue + Self.indexOffset
     }
     
-    static var firstWeekdayNumber: Int {
-        Calendar.current.firstWeekday - 1
-    }
-    
     static var firstWeekday: DayDataModel? {
-        .init(rawValue: Self.firstWeekdayNumber)
+        .init(rawValue: Calendar.current.firstWeekday)
     }
     
     var calendarWeekdayOffset: Int {
-        self.rawValue + (Self.firstWeekday?.rawValue ?? 0)
+        self.rawValue
     }
     
     init?(index: Int) {
@@ -60,8 +56,8 @@ enum DayDataModel: Int, CaseIterable {
     }
     
     static var allCases: [DayDataModel] {
-        firstWeekdayNumber == 1 ?
-            [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday] :
-            [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
+        Calendar.current.firstWeekday == 1 ?
+            [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday] :
+            [.monday, .tuesday, .wednesday, .thursday, .friday, .saturday, .sunday]
     }
 }

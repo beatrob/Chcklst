@@ -263,9 +263,9 @@ private extension NotificationManager {
             return Calendar.current.dateComponents([.hour, .minute], from: date)
         case .monthly:
             return Calendar.current.dateComponents([.hour, .minute, .day], from: date)
-        case .weekly:
+        case .weekly, .customDays:
             return Calendar.current.dateComponents([.weekday, .hour, .minute], from: date)
-        case .yearly, .never, .customDays:
+        case .yearly, .never:
             return Calendar.current.dateComponents([.hour, .minute, .day, .month], from: date)
         }
     }
