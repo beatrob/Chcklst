@@ -99,4 +99,13 @@ enum ChecklistViewState {
             return true
         }
     }
+    
+    var isEditTemplate: Bool {
+        switch self {
+        case .updateTemplate:
+            return true
+        default:
+            return false
+        }
+    }
 }

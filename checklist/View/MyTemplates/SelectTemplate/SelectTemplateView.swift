@@ -44,6 +44,7 @@ struct SelectTemplateView: View {
                         if let description = viewModel.descriptionText {
                             Text(description)
                                 .modifier(Modifier.Checklist.Description())
+                                .multilineTextAlignment(.center)
                                 .padding(.bottom)
                                 .padding(.horizontal)
                         }

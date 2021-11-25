@@ -112,9 +112,13 @@ class ChecklistViewModel: ObservableObject {
     
     var cancellables =  Set<AnyCancellable>()
     var isNavBarVisible: Bool {
-        !viewState.isCreateTemplate && currentChecklist.value != nil
+        guard !forceBigTitleNavbar else {
+            return false
+        }
+        return !viewState.isCreateTemplate && currentChecklist.value != nil
     }
     private var currentChecklist: ChecklistCurrentValueSubject
+    private var forceBigTitleNavbar = false
     
     
     init(
@@ -198,6 +202,14 @@ class ChecklistViewModel: ObservableObject {
             }
 
         }.store(in: &cancellables)
+    }
+    
+    func setBigTitleNavBar(isTransparent: Bool) {
+        forceBigTitleNavbar = true
+        createViewNavbarViewModel.style = .big
+        createViewNavbarViewModel.isBackButtonHidden = true
+        createViewNavbarViewModel.topPaddingEnabled = true
+        createViewNavbarViewModel.isTransparent = isTransparent
     }
 }
 
@@ -355,6 +367,9 @@ private extension ChecklistViewModel {
     }
     
     func setupTemplate(_ template: TemplateDataModel) {
+        if viewState.isEditTemplate {
+            createViewNavbarViewModel.title = "Edit Template"
+        }
         checklistName = template.title
         checklistDescription = template.description ?? ""
         template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }

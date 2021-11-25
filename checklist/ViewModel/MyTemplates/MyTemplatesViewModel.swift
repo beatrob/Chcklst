@@ -151,6 +151,7 @@ private extension MyTemplatesViewModel {
             self?.sheetView = .empty
             self?.isSheetVisible = false
         }.store(in: &cancellables)
+        viewModel.setBigTitleNavBar(isTransparent: true)
         sheetView = AnyView(ChecklistView(viewModel: viewModel))
         isSheetVisible = true
     }
@@ -163,6 +164,7 @@ private extension MyTemplatesViewModel {
             ChecklistViewModel.self,
             argument: viewState
         )!
+        viewModel.setBigTitleNavBar(isTransparent: true)
         viewModel.dismissView.sink { [weak self] in
             self?.sheetView = .empty
             self?.isSheetVisible = false

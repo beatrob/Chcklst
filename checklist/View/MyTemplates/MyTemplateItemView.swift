@@ -15,15 +15,15 @@ struct MyTemplateItemView: View {
     let displayRightArrow: Bool
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack(spacing:0) {
                 VStack(alignment: .leading, spacing: 0) {
                     Text(name)
                         .modifier(Modifier.Template.SmallTitle())
                         .foregroundColor(.firstAccent)
                         .padding(.top)
-                    description.map {
-                        Text($0)
+                    if let description = description, !description.isEmpty {
+                        Text(description)
                             .modifier(Modifier.Checklist.Description())
                             .lineLimit(3)
                             .padding(.vertical)
@@ -35,11 +35,9 @@ struct MyTemplateItemView: View {
                         .modifier(Modifier.Template.SmallTitle())
                 }
             }
-            Rectangle()
-                .frame(height: 0.5)
-                .foregroundColor(Color.firstAccent)
+            .padding(.horizontal)
+            SeparatorView()
         }
-        .padding(.horizontal)
     }
 }
 

@@ -19,9 +19,9 @@ struct ChecklistItemView: View, Equatable {
     var body: some View {
         HStack {
             Image(systemName: viewModel.isDone ? "checkmark.circle" : "circle")
-                .if(!viewModel.isEditable) {
-                    $0.onTapGesture {
-                        self.viewModel.onCheckMarkTapped.send()
+                .onTapGesture {
+                    if !viewModel.isEditable {
+                        viewModel.onCheckMarkTapped.send()
                     }
                 }
             MultilineTextField(
