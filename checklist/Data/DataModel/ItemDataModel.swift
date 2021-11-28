@@ -16,6 +16,10 @@ struct ItemDataModel: Equatable {
     var isDone: Bool
     var updateDate: Date
     
+    static var empty: ItemDataModel {
+        .init(id: UUID().uuidString, name: "", isDone: false, updateDate: .now)
+    }
+    
     var isUndone: Bool { !isDone }
     
     mutating func toDone() {
@@ -41,5 +45,9 @@ struct ItemDataModel: Equatable {
     
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
+    }
+    
+    func getUnDoneCopy() -> Self {
+        .init(id: id, name: name, isDone: false, updateDate: updateDate)
     }
 }

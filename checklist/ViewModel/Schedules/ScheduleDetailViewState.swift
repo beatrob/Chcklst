@@ -36,11 +36,21 @@ enum ScheduleDetailViewState {
         switch self {
         case .create(let template):
             return template.items.map {
-                ChecklistItemViewModel(id: $0.id, name: $0.name, isDone: false, isEditable: false)
+                ChecklistItemViewModel(
+                    item: $0.getUnDoneCopy(),
+                    isEditable: false,
+                    isCheckable: false,
+                    itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
+                )
             }
         case .update(let schedule):
             return schedule.template.items.map {
-                ChecklistItemViewModel(id: $0.id, name: $0.name, isDone: false, isEditable: false)
+                ChecklistItemViewModel(
+                     item: $0.getUnDoneCopy(),
+                     isEditable: false,
+                     isCheckable: false,
+                     itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
+                )
             }
         }
     }

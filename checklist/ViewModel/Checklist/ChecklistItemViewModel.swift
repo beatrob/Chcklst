@@ -22,6 +22,7 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable, Hashabl
     @Published var isDone: Bool
     @Published var isEditable: Bool
     var updateDate: Date
+    var isCheckable: Bool
     
     let onLongPress = EmptySubject()
     let onCheckMarkTapped = EmptySubject()
@@ -39,30 +40,18 @@ class ChecklistItemViewModel: ObservableObject, Identifiable, Equatable, Hashabl
     
     var cancellables =  Set<AnyCancellable>()
     
-    static var empty: ChecklistItemViewModel {
-        .init(id: "", name: nil, isDone: false, isEditable: false)
-    }
-    
-    init(id: String, name: String?, isDone: Bool, isEditable: Bool) {
-        self.id = id
-        self.name = name ?? ""
-        self.isDone = isDone
+    init(item: ItemDataModel, isEditable: Bool, isCheckable: Bool, itemDataSource: ItemDataSource) {
+        self.id = item.id
+        self.name = item.name
+        self.isDone = item.isDone
         self.isEditable = isEditable
-        self.updateDate = Date()
-    }
-    
-    convenience init(item: ItemDataModel, itemDataSource: ItemDataSource) {
-        self.init(
-            id: item.id,
-            name: item.name,
-            isDone: item.isDone,
-            isEditable: false
-        )
         self.updateDate = item.updateDate
+        self.isCheckable = isCheckable
+        
         onCheckMarkTapped
             .merge(with: onLongPress)
             .sink { [weak self] in
-                guard let self = self else {
+                guard let self = self, self.isCheckable else {
                     return
                 }
                 self.isDone.toggle()

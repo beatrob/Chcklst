@@ -35,11 +35,17 @@ struct ChecklistItemsView: View {
 }
 
 struct AddItemsToChecklistView_Previews: PreviewProvider {
+    
     static var previews: some View {
         ChecklistItemsView(
             shouldDisplayAddItems: .init(get: { true }, set: { _ = $0 }),
             items: [
-                ChecklistItemViewModel(id: "1", name: "Something", isDone: false, isEditable: true)
+                ChecklistItemViewModel(
+                    item: .init(id: "1", name: "Something", isDone: false, updateDate: .now),
+                    isEditable: true,
+                    isCheckable: true,
+                    itemDataSource: MockItemDataSource()
+                )
             ],
             onNext: .init(),
             onDeleteItem: .init()

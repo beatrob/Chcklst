@@ -223,7 +223,10 @@ private extension ChecklistViewModel {
             return
         }
         items.removeAll { $0.name.isEmpty }
-        items.forEach { $0.isEditable = false }
+        items.forEach {
+            $0.isEditable = false
+            $0.isCheckable = true
+        }
         isEditable = false
         resignFirstResponder()
         updateChecklist()
@@ -321,8 +324,12 @@ private extension ChecklistViewModel {
     }
     
     func addNewItem(name: String?, isDone: Bool, isEditable: Bool) {
-        let id = UUID().uuidString
-        let viewModel = ChecklistItemViewModel(id: id, name: name, isDone: isDone, isEditable: isEditable)
+        let viewModel = ChecklistItemViewModel(
+            item: .init(id: UUID().uuidString, name: name ?? "", isDone: isDone, updateDate: .now),
+            isEditable: isEditable,
+            isCheckable: !isEditable,
+            itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
+        )
         viewModel.onTextDidClear.sink { [weak self]  in
             withAnimation {
                 self?.clearEmptyItems()
@@ -343,6 +350,8 @@ private extension ChecklistViewModel {
     func addNewItem(_ item: ItemDataModel) {
         let viewModel = ChecklistItemViewModel(
             item: item,
+            isEditable: false,
+            isCheckable: true,
             itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
         )
         

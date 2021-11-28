@@ -46,6 +46,8 @@ struct ChecklistItemView_Previews: PreviewProvider {
                     isDone: false,
                     updateDate: Date()
                 ),
+                isEditable: true,
+                isCheckable: true,
                 itemDataSource: MockItemDataSource()
             )
         ).previewLayout(.sizeThatFits)

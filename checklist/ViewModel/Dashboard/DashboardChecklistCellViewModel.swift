@@ -89,6 +89,8 @@ private extension DashboardChecklistCellViewModel {
         }
         let viewModel = ChecklistItemViewModel(
             item: item,
+            isEditable: false,
+            isCheckable: true,
             itemDataSource: AppContext.resolver.resolve(ItemDataSource.self)!
         )
         
