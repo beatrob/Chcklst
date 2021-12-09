@@ -19,7 +19,12 @@ class DisabledPurchaseManager: PurchaseManager {
         .failure(.unknown)
     }
     
-    func loadPurchases() { }
+    func restorePurchase(
+        _ productDataModel: ProductDataModel?,
+        shouldSync: Bool
+    ) async -> Result<Bool, PurchaseError> {
+        .failure(.unknown)
+    }
     
     var isPurchaseEnabled: Bool {
         false

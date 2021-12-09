@@ -5,17 +5,17 @@
   ],
   "products" : [
     {
-      "displayPrice" : "12.34",
+      "displayPrice" : "2.99",
       "familyShareable" : false,
       "internalID" : "1C9BB576",
       "localizations" : [
         {
           "description" : "",
-          "displayName" : "Chcklst PLUS TEST",
+          "displayName" : "Chcklst+",
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.robertkonczi.checklist.plus",
+      "productID" : "com.robertkonczi.chcklst.plus",
       "referenceName" : "Chcklst PLUS TEST",
       "type" : "NonConsumable"
     }

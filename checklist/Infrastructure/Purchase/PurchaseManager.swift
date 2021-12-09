@@ -41,7 +41,7 @@ enum PurchaseError: LocalizedError {
         case .purchaseFailed:
             return "Purchase failed, try again later"
         case .restoreFailed:
-            return "Restore purchase failed, try again later"
+            return "Restore purchase failed"
         case .nothingToRestore:
             return "No previous purchase found"
         case .verifyTransactionFailed:
@@ -57,14 +57,13 @@ protocol PurchaseManager {
     var mainProductPurchaseState: AnyPublisher<PurchaseSate, Never> { get }
     func getMainProduct() async -> Result<ProductDataModel, PurchaseError>
     func purchaseProduct(_ productDataModel: ProductDataModel) async -> Result<Bool, PurchaseError>
-    func loadPurchases() async
+    func restorePurchase(_ productDataModel: ProductDataModel?, shouldSync: Bool) async -> Result<Bool, PurchaseError>
 }
 
 class PurchaseManagerImpl: PurchaseManager {
     
-    private static let mainProductId = "com.robertkonczi.checklist.plus"
-    private static let sharedSecret = "fc63bb520ffb45bbb7d2d44e55d809ad"
-    private static let purchaseKey = "kPurchaseKey"
+    private static let mainProductId = "com.robertkonczi.chcklst.plus"
+    private static let sharedSecret = "23e338469a214b8594d7cfbd8036bddb"
     private let mainProductPuchaseStateSubject = CurrentValueSubject<PurchaseSate, Never>(.notPurchased)
     private var cancellables = Set<AnyCancellable>()
     private var products: [Product]?
@@ -129,15 +128,31 @@ class PurchaseManagerImpl: PurchaseManager {
         }
     }
     
-    func loadPurchases() async {
-        guard
-            let result = await Transaction.latest(for: Self.mainProductId),
-            let transaction = try? self.checkVerified(result)
-        else {
-            return
+    func restorePurchase(
+        _ productDataModel: ProductDataModel?,
+        shouldSync: Bool
+    ) async -> Result<Bool, PurchaseError> {
+        let productId = productDataModel?.id ?? Self.mainProductId
+        do {
+            await updatePurchaseState(with: nil, forcedState: .inProgress)
+            if shouldSync {
+                try await AppStore.sync()
+            }
+            guard
+                let result = await Transaction.latest(for: productId)
+            else {
+                await updatePurchaseState(with: nil, forcedState: .notPurchased)
+                return .failure(.nothingToRestore)
+            }
+            let transaction = try self.checkVerified(result)
+            await updatePurchaseState(with: transaction)
+            await transaction.finish()
+        } catch {
+            await updatePurchaseState(with: nil, forcedState: .notPurchased)
+            error.log(message: "Restore purchase failed")
+            return .failure(.restoreFailed)
         }
-        await updatePurchaseState(with: transaction)
-        await transaction.finish()
+        return .success(true)
     }
 }
 

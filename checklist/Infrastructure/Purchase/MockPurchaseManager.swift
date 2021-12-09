@@ -19,7 +19,12 @@ class MockPurchaseManager: PurchaseManager {
         .success(false)
     }
     
-    func loadPurchases() async { }
+    func restorePurchase(
+        _ productDataModel: ProductDataModel?,
+        shouldSync: Bool
+    ) async -> Result<Bool, PurchaseError> {
+        .success(false)
+    }
     
     var isPurchaseEnabled: Bool {
         true

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import ActivityIndicatorView
 
 struct SettingsView: View {
     
@@ -30,9 +31,42 @@ struct SettingsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         
+                        HStack {
+                            Text("Appearance").modifier(Modifier.Settings.ItemTitle())
+                            Spacer()
+                        }
+                        .padding()
+                        Picker(selection: $viewModel.apperance, label: Text(""), content: {
+                            Text(Appearance.automatic.rawValue).tag(Appearance.automatic)
+                            Text(Appearance.light.rawValue).tag(Appearance.light)
+                            Text(Appearance.dark.rawValue).tag(Appearance.dark)
+                        })
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                        
+                        SeparatorView()
+                        
+                        HStack {
+                            Text("Notifications").modifier(Modifier.Settings.ItemTitle())
+                                .padding(.bottom)
+                                .padding(.leading)
+                            Spacer()
+                            Toggle("", isOn: $viewModel.notificationsEnabled)
+                                .toggleStyle(SwitchToggleStyle(tint: .firstAccent))
+                                .padding()
+                        }
+                        Text("Enable push notifications to receive reminders and get notified when a scheduled checklist is ready.")
+                            .modifier(Modifier.Settings.ItemDescription())
+                            .padding(.horizontal)
+                            .padding(.bottom)
+                        
+                        SeparatorView()
+                        
                         if viewModel.isInAppEnabled {
                             Text("Chcklst+").modifier(Modifier.Settings.ItemTitle())
-                                .padding()
+                                .padding(.vertical)
+                                .padding(.leading)
                             if viewModel.isUpgradeComplete {
                                 HStack {
                                     Spacer()
@@ -44,47 +78,35 @@ struct SettingsView: View {
                             } else {
                                 HStack {
                                     Spacer()
-                                    CapsuleButton(
-                                        title: "Upgrade",
-                                        type: .primary,
-                                        onTapSubject: viewModel.onUpgradeTapped
-                                    )
+                                    VStack(spacing: 0) {
+                                        CapsuleButton(
+                                            title: "Upgrade",
+                                            type: .primary,
+                                            onTapSubject: viewModel.onUpgradeTapped
+                                        )
+                                    }
                                     Spacer()
                                 }
                                 .padding(.bottom)
                                 Text("Upgrade to CHCKLST+ to get unlimited checklists, templates & schedules.")
                                     .modifier(Modifier.Settings.ItemDescription())
                                     .padding(.horizontal)
+                                HStack {
+                                    Spacer()
+                                    Button.init("Restore Purchase") {
+                                        viewModel.onRestoreTapped.send()
+                                    }
+                                    .buttonStyle(.plain)
+                                    .modifier(Modifier.Button.MinorAction())
+                                    ActivityIndicatorView(
+                                        isVisible: $viewModel.isRestoreInProgress,
+                                        type: .growingArc(.firstAccent)
+                                    )
+                                        .frame(width: 20, height: 20, alignment: .center)
+                                    Spacer()
+                                }.padding(.vertical)
                             }
-                            SeparatorView()
                         }
-                        
-                        HStack {
-                            Text("Appearance").modifier(Modifier.Settings.ItemTitle())
-                                .padding()
-                            Spacer()
-                        }
-                        Picker(selection: $viewModel.apperance, label: Text(""), content: {
-                            Text(Appearance.automatic.rawValue).tag(Appearance.automatic)
-                            Text(Appearance.light.rawValue).tag(Appearance.light)
-                            Text(Appearance.dark.rawValue).tag(Appearance.dark)
-                        })
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding(.horizontal)
-                        
-                        SeparatorView()
-                        
-                        HStack {
-                            Text("Notifications").modifier(Modifier.Settings.ItemTitle())
-                                .padding()
-                            Spacer()
-                            Toggle("", isOn: $viewModel.notificationsEnabled)
-                                .toggleStyle(SwitchToggleStyle(tint: .firstAccent))
-                                .padding()
-                        }
-                        Text("Enable push notifications to receive reminders and get notified when a scheduled checklist is ready.")
-                            .modifier(Modifier.Settings.ItemDescription())
-                            .padding(.horizontal)
                     }
                 }
             }

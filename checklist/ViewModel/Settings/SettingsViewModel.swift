@@ -14,10 +14,12 @@ import SwiftUI
 class SettingsViewModel: ObservableObject {
     
     private let notificationManager: NotificationManager
+    private let purchaseManager: PurchaseManager
     static var latestNotificationsEnabled: Bool = false
     let navBarViewModel = AppContext.resolver.resolve(BackButtonNavBarViewModel.self, argument: "Settings")!
     let onMyTemplates = EmptySubject()
     let onUpgradeTapped = EmptySubject()
+    let onRestoreTapped = EmptySubject()
     let onViewAppear = EmptySubject()
     let isInAppEnabled: Bool
     var cancellables =  Set<AnyCancellable>()
@@ -35,6 +37,7 @@ class SettingsViewModel: ObservableObject {
     @Published var apperance: Appearance
     @Published var alert: Alert = .empty
     @Published var isAlertVisible = false
+    @Published var isRestoreInProgress = false
     
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
@@ -48,6 +51,7 @@ class SettingsViewModel: ObservableObject {
         notificationManager: NotificationManager
     ) {
         self.notificationManager = notificationManager
+        self.purchaseManager = purchaseManager
         apperance = appearanceManager.getCurrentAppearance()
         isInAppEnabled = restrictionManager.restrictionsEnabled
         onMyTemplates.sink {
@@ -60,6 +64,10 @@ class SettingsViewModel: ObservableObject {
             }
             self.sheet = AnyView(UpgradeView(viewModel: self.upgradeViewModel))
             self.isSheetVisible = true
+        }.store(in: &cancellables)
+        
+        onRestoreTapped.sink { [weak self] in
+            self?.restorePurchase()
         }.store(in: &cancellables)
         
         purchaseManager.mainProductPurchaseState
@@ -121,6 +129,22 @@ class SettingsViewModel: ObservableObject {
         notificationManager.getNotificationsEnabled().done { isEnabled in
             Self.latestNotificationsEnabled = isEnabled
             self.notificationsEnabled = isEnabled
+        }
+    }
+    
+    private func restorePurchase() {
+        setRestoreInProgress(true)
+        Task {
+            _ = await purchaseManager.restorePurchase(nil, shouldSync: true)
+            await MainActor.run {
+                setRestoreInProgress(false)
+            }
+        }
+    }
+    
+    private func setRestoreInProgress(_ inProgress: Bool) {
+        withAnimation {
+            isRestoreInProgress = inProgress
         }
     }
 }

@@ -20,6 +20,7 @@ class UpgradeViewModel: ObservableObject {
     let onAppear = EmptySubject()
     let onCancelTapped = EmptySubject()
     let onPurchaseTapped = EmptySubject()
+    let onRestoreTapped = EmptySubject()
     let onPurchaseSuccess: EmptyPublisher
     
     var alert: Alert = .empty
@@ -53,6 +54,13 @@ class UpgradeViewModel: ObservableObject {
             }
             self?.purchaseProduct(product)
         }.store(in: &cancellables)
+        
+        onRestoreTapped.sink { [weak self] in
+            guard let mainProduct = self?.mainProduct else {
+                return
+            }
+            self?.restorePurchase(mainProduct)
+        }.store(in: &cancellables)
     }
     
     func loadMainProduct() {
@@ -78,6 +86,21 @@ class UpgradeViewModel: ObservableObject {
     func purchaseProduct(_ product: ProductDataModel) {
         Task {
             let result = await purchaseManager.purchaseProduct(product)
+            await MainActor.run {
+                switch result {
+                case .success:
+                    break // state handled publisher
+                case .failure(let error):
+                    isLoading = false
+                    self.showAlert(error: error)
+                }
+            }
+        }
+    }
+    
+    func restorePurchase(_ product: ProductDataModel) {
+        Task {
+            let result = await purchaseManager.restorePurchase(product, shouldSync: true)
             await MainActor.run {
                 switch result {
                 case .success:

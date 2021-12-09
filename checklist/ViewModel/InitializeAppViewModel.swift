@@ -38,8 +38,9 @@ class InitializeAppViewModel: ObservableObject {
             .then { checklistDataSource.deleteExpiredNotificationDates() }
             .then { after(seconds: 1) }
             .done {
+                self.initializeDidFinish.send()
                 Task {
-                    await purchaseManager.loadPurchases()
+                    _ = await purchaseManager.restorePurchase(nil, shouldSync: false)
                     await MainActor.run {
                         self.initializeDidFinish.send()
                     }

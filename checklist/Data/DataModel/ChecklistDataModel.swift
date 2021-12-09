@@ -50,7 +50,7 @@ struct ChecklistDataModel: Equatable, Hashable {
                     id: UUID().uuidString,
                     name: $0.name,
                     isDone: false,
-                    updateDate: Date()
+                    updateDate: $0.updateDate
                 )
             }
         )

@@ -70,15 +70,10 @@ struct UpgradeView: View {
                         Color.checklistBackground.ignoresSafeArea()
                         VStack {
                             Spacer()
-                            Image("chcklst-logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 80)
-                                .padding(.vertical)
                             Text("By upgrading you can unlock\n**UNLIMITED ACCESS** to")
                                 .modifier(Modifier.Upgrade.Description())
                                 .multilineTextAlignment(.center)
-                                .padding()
+                                .padding(.top)
                             getDescriptionItem(title: "Checklists")
                             getDescriptionItem(title: "Templates")
                             getDescriptionItem(title: "Schedules")
@@ -98,6 +93,12 @@ struct UpgradeView: View {
                     type: .secondary,
                     onTapSubject: viewModel.onCancelTapped
                 )
+                .padding(.top)
+                Button.init("Restore Purchase") {
+                    viewModel.onRestoreTapped.send()
+                }
+                .buttonStyle(.plain)
+                .modifier(Modifier.Button.MinorAction())
                 .padding()
             }
         }
@@ -125,5 +126,6 @@ struct UpgradeView_Previews: PreviewProvider {
         viewModel.isLoading = false
         viewModel.loadMainProduct()
         return UpgradeView(viewModel: viewModel)
+            .preferredColorScheme(.dark)
     }
 }

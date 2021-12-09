@@ -73,6 +73,15 @@ extension Modifier {
             }
         }
         
+        struct MinorAction: ViewModifier {
+            
+            func body(content: Content) -> some View {
+                content
+                    .font(Font.Chcklst.item.font)
+                    .foregroundColor(.firstAccent)
+            }
+        }
+        
         //MARK:-
         struct DestructiveAction: ViewModifier {
             

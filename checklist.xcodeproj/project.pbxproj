@@ -119,6 +119,7 @@
 		FE178242274131ED00C17F21 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = FE178241274131ED00C17F21 /* OrderedCollections */; };
 		FE1782442741363400C17F21 /* DebugNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE1782432741363400C17F21 /* DebugNotificationsView.swift */; };
 		FE2E61CC2725FDC0007B9321 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2E61CB2725FDC0007B9321 /* Haptics.swift */; };
+		FE3183F9275CC7BA006EB129 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FEDBAED227137F32005F74F3 /* Configuration.storekit */; };
 		FE4860792702599A0022E6C4 /* TextReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE4860782702599A0022E6C4 /* TextReaderView.swift */; };
 		FE48607B27025A180022E6C4 /* TextReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */; };
 		FE559A482643335300ACF179 /* ScheduleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE559A472643335300ACF179 /* ScheduleDataSource.swift */; };
@@ -153,6 +154,7 @@
 		FEA8B51A2628E4900084909E /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA8B5192628E4900084909E /* SeparatorView.swift */; };
 		FEA913A42641DEB300594478 /* ScheduleDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A32641DEB300594478 /* ScheduleDataModel.swift */; };
 		FEA913A62641E4D700594478 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA913A52641E4D700594478 /* DayDataModel.swift */; };
+		FEB7ED6B275EA82200783309 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB7ED6A275EA82200783309 /* StoreKit.framework */; };
 		FEBB62D62733445F00F107B8 /* CoreDataManager+Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBB62D52733445F00F107B8 /* CoreDataManager+Items.swift */; };
 		FEBE212626618AF100CC001E /* CreateScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */; };
 		FEBE21422664260600CC001E /* CoreDataManager+Schedules.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBE21412664260600CC001E /* CoreDataManager+Schedules.swift */; };
@@ -170,7 +172,6 @@
 		FED6E4CE2657012800D96041 /* ScheduleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CD2657012800D96041 /* ScheduleDetailView.swift */; };
 		FED6E4D02657014500D96041 /* ScheduleDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4CF2657014500D96041 /* ScheduleDetailViewModel.swift */; };
 		FED6E4D22657058400D96041 /* ScheduleDetailViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6E4D12657058400D96041 /* ScheduleDetailViewState.swift */; };
-		FEDBAED327137F32005F74F3 /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FEDBAED227137F32005F74F3 /* Configuration.storekit */; };
 		FEE7E309265924B900FED76C /* CheckboxViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE7E308265924B900FED76C /* CheckboxViewModel.swift */; };
 		FEED93DA2731F4B3003DC108 /* ItemMO.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED93D92731F4B3003DC108 /* ItemMO.swift */; };
 		FEED93DC2731F4DD003DC108 /* ItemMO+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED93DB2731F4DD003DC108 /* ItemMO+Helpers.swift */; };
@@ -347,6 +348,7 @@
 		FEA8B5192628E4900084909E /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		FEA913A32641DEB300594478 /* ScheduleDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleDataModel.swift; sourceTree = "<group>"; };
 		FEA913A52641E4D700594478 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
+		FEB7ED6A275EA82200783309 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		FEBB62D52733445F00F107B8 /* CoreDataManager+Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Items.swift"; sourceTree = "<group>"; };
 		FEBE212526618AF100CC001E /* CreateScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateScheduleViewModel.swift; sourceTree = "<group>"; };
 		FEBE21412664260600CC001E /* CoreDataManager+Schedules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreDataManager+Schedules.swift"; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FEB7ED6B275EA82200783309 /* StoreKit.framework in Frameworks */,
 				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
@@ -723,6 +726,7 @@
 		DDC4C0EE252A63A500F223D3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FEB7ED6A275EA82200783309 /* StoreKit.framework */,
 				DDC4C0EF252A63A500F223D3 /* WidgetKit.framework */,
 				DDC4C0F1252A63A500F223D3 /* SwiftUI.framework */,
 			);
@@ -1031,7 +1035,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD52A63424E19EF100A9A1FC /* LaunchScreen.storyboard in Resources */,
-				FEDBAED327137F32005F74F3 /* Configuration.storekit in Resources */,
+				FE3183F9275CC7BA006EB129 /* Configuration.storekit in Resources */,
 				FE94197727011676001493AB /* Localizable.strings in Resources */,
 				DD52A63124E19EF100A9A1FC /* Preview Assets.xcassets in Resources */,
 				DD52A62E24E19EF100A9A1FC /* Assets.xcassets in Resources */,
@@ -1379,7 +1383,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.19.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1406,7 +1410,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.19.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1537,7 +1541,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.0;
+				MARKETING_VERSION = 0.19.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.robertkonczi.checklist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
