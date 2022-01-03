@@ -170,7 +170,7 @@ class ChecklistViewModel: ObservableObject {
             createViewNavbarViewModel.topPaddingEnabled = viewState.isCreateFromTemplate
             createViewNavbarViewModel.isTransparent = viewState.isCreateFromTemplate
             createViewNavbarViewModel.backButton.didTap.subscribe(onBackTapped).store(in: &cancellables)
-            addNewItem(name: nil, isDone: false, isEditable: true)
+            addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
         }
         
         onDeleteItem.sink { [weak self] item in
@@ -250,8 +250,10 @@ private extension ChecklistViewModel {
         createViewNavbarViewModel.title = "Create Template"
         self.checklistName = currentChecklist.value?.title ?? ""
         self.checklistDescription = currentChecklist.value?.description ?? ""
-        currentChecklist.value?.items.forEach { addNewItem(name: $0.name, isDone: false, isEditable: true) }
-        addNewItem(name: nil, isDone: false, isEditable: true)
+        currentChecklist.value?.items
+            .sorted { $0.updateDate < $1.updateDate }
+            .forEach { addNewItemIfNeeded(name: $0.name, isDone: false, isEditable: true) }
+        addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
     }
     
     func saveNewChecklist() {
@@ -306,10 +308,10 @@ private extension ChecklistViewModel {
     
     func insertEmptyItemIfNeedd() {
         if items.isEmpty {
-            addNewItem(name: nil, isDone: false, isEditable: true)
+            addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
         } else if let lastItem = items.last, !lastItem.name.isEmpty {
             self.enableAutoscrollToNewItem = true
-            addNewItem(name: nil, isDone: false, isEditable: true)
+            addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
         }
     }
     
@@ -323,7 +325,10 @@ private extension ChecklistViewModel {
         objectWillChange.send()
     }
     
-    func addNewItem(name: String?, isDone: Bool, isEditable: Bool) {
+    func addNewItemIfNeeded(name: String?, isDone: Bool, isEditable: Bool) {
+        guard !(items.last?.name.isEmpty ?? false) else {
+            return
+        }
         let viewModel = ChecklistItemViewModel(
             item: .init(id: UUID().uuidString, name: name ?? "", isDone: isDone, updateDate: .now),
             isEditable: isEditable,
@@ -381,8 +386,8 @@ private extension ChecklistViewModel {
         }
         checklistName = template.title
         checklistDescription = template.description ?? ""
-        template.items.forEach { self.addNewItem(name: $0.name, isDone: false, isEditable: true) }
-        addNewItem(name: nil, isDone: false, isEditable: true)
+        template.items.forEach { self.addNewItemIfNeeded(name: $0.name, isDone: false, isEditable: true) }
+        addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
     }
     
     func getChecklistFromUI(id: String? = nil) -> ChecklistDataModel {
@@ -500,7 +505,7 @@ private extension ChecklistViewModel {
         reminderDate = checklist.reminderDate ?? Date()
         viewState = .updateChecklist(checklist: checklist)
         navBarViewModel.shouldDisplayDoneButton = true
-        addNewItem(name: nil, isDone: false, isEditable: true)
+        addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
     }
 }
 
@@ -567,16 +572,20 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
             argument: ChecklistViewState.createTemplateFromChecklist(checklist: checklist)
             )!
         viewModel.onDidCreateTemplate.sink { [weak self] in
-            self?.alert = .templateCreated(onGoToTemplates: {
-                guard let self = self else { return }
-                let viewModel = AppContext.resolver.resolve(MyTemplatesViewModel.self)!
-                self.navigationDestinationView = AnyView(MyTemplatesView(viewModel: viewModel))
-                self.isNavigationLinkActive = true
-                viewModel.onBackTapped.sink { [weak self] in
-                    self?.isNavigationLinkActive = false
-                }.store(in: &self.cancellables)
-            })
-            self?.objectWillChange.send()
+            self?.isSheetVisible = false
+            self?.sheet = .empty
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.alert = .templateCreated(onGoToTemplates: {
+                    guard let self = self else { return }
+                    let viewModel = AppContext.resolver.resolve(MyTemplatesViewModel.self)!
+                    self.navigationDestinationView = AnyView(MyTemplatesView(viewModel: viewModel))
+                    self.isNavigationLinkActive = true
+                    viewModel.onBackTapped.sink { [weak self] in
+                        self?.isNavigationLinkActive = false
+                    }.store(in: &self.cancellables)
+                })
+                self?.objectWillChange.send()
+            }
         }.store(in: &cancellables)
         let view = ChecklistView(viewModel: viewModel)
         sheet = AnyView(view)

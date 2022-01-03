@@ -12,6 +12,7 @@ import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
 import Combine
+import UIKit
 
 class AppContext {
     
@@ -42,4 +43,13 @@ class AppContext {
     }
     
     func configure() { }
+    
+    var statusBarHeight: CGFloat {
+        #if canImport(UIKit)
+        let scene = UIApplication.shared.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene
+        return scene?.statusBarManager?.statusBarFrame.height ?? 0
+        #else
+        return 0
+        #endif
+    }
 }

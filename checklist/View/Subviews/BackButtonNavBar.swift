@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BackButtonNavBar: View {
     
-    private let verticalPadding: CGFloat = 7
+    private let bottomPadding: CGFloat = 10
     @StateObject var viewModel: BackButtonNavBarViewModel
     
     var body: some View {
@@ -28,9 +28,10 @@ struct BackButtonNavBar: View {
                 Text(viewModel.title)
                     .modifier(Modifier.NavBar.Title(isBig: viewModel.style.isBig))
             }
-            .if(viewModel.style.isBig || viewModel.topPaddingEnabled) { $0.padding(.top, verticalPadding) }
+            .if(viewModel.style.isBig || viewModel.topPaddingEnabled) { $0.padding(.top, bottomPadding) }
             .padding(.horizontal)
-            .padding(.bottom, verticalPadding)
+            .padding(.top, 5)
+            .padding(.bottom, bottomPadding)
         }
         .modifier(Modifier.NavBar.NavBar(isTransparent: viewModel.isTransparent))
         .if(viewModel.isTransparent) { $0.background(Color.clear) }

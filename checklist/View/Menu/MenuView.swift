@@ -23,7 +23,7 @@ struct MenuView: View {
                             .scaledToFit()
                             .frame(height: 45)
                             .padding(.leading)
-                            .padding(.top, 45)
+                            .padding(.top, 60)
                             .padding(.bottom, 20)
                         Spacer()
                     }

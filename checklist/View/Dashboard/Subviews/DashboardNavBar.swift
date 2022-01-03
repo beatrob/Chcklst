@@ -73,6 +73,7 @@ struct DashboardNavBar: View {
                 }
             }
             .padding(.bottom, 10)
+            .padding(.top, 5)
             .padding(.horizontal)
         }
         .modifier(Modifier.NavBar.NavBar(isTransparent: false))

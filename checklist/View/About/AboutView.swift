@@ -36,7 +36,7 @@ struct AboutView: View {
                         onTapSubject: viewModel.onPrivacyPolicy
                     )
                     
-                    Spacer(minLength: 150)
+                    Spacer()
                     
                     Image("chcklst-logo")
                         .resizable()
