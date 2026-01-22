@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,8 +21,6 @@
 		DD2D91922530EB430032779C /* ChecklistFilterAndSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91912530EB430032779C /* ChecklistFilterAndSort.swift */; };
 		DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91962531ABDA0032779C /* InitializeAppDataSource.swift */; };
 		DD2D919F2531AD080032779C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D919E2531AD080032779C /* UserDefaults+Extension.swift */; };
-		DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A42531B9BA0032779C /* AppCenterCrashes */; };
-		DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91A62531B9BA0032779C /* AppCenterAnalytics */; };
 		DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91B82532FD420032779C /* ObjcExceptionBridging */; };
 		DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */ = {isa = PBXBuildFile; productRef = DD2D91BA2532FD420032779C /* XCGLogger */; };
 		DD2D91C02532FDF80032779C /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2D91BF2532FDF80032779C /* Logger.swift */; };
@@ -379,11 +377,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEB7ED6B275EA82200783309 /* StoreKit.framework in Frameworks */,
-				DD2D91A72531B9BA0032779C /* AppCenterAnalytics in Frameworks */,
 				FEA82FC526A377FB0008F34A /* ActivityIndicatorView in Frameworks */,
 				DD52A64F24E1A1CD00A9A1FC /* SwinjectAutoregistration in Frameworks */,
 				DD2D91B92532FD420032779C /* ObjcExceptionBridging in Frameworks */,
-				DD2D91A52531B9BA0032779C /* AppCenterCrashes in Frameworks */,
 				DD74DA6A25213FA3004587FC /* PromiseKit in Frameworks */,
 				FE178242274131ED00C17F21 /* OrderedCollections in Frameworks */,
 				DD2D91BB2532FD420032779C /* XCGLogger in Frameworks */,
@@ -954,8 +950,6 @@
 			packageProductDependencies = (
 				DD52A64E24E1A1CD00A9A1FC /* SwinjectAutoregistration */,
 				DD74DA6925213FA3004587FC /* PromiseKit */,
-				DD2D91A42531B9BA0032779C /* AppCenterCrashes */,
-				DD2D91A62531B9BA0032779C /* AppCenterAnalytics */,
 				DD2D91B82532FD420032779C /* ObjcExceptionBridging */,
 				DD2D91BA2532FD420032779C /* XCGLogger */,
 				FEA82FC426A377FB0008F34A /* ActivityIndicatorView */,
@@ -1014,7 +1008,6 @@
 			packageReferences = (
 				DD52A64D24E1A1CD00A9A1FC /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
 				DD74DA6825213FA3004587FC /* XCRemoteSwiftPackageReference "PromiseKit" */,
-				DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */,
 				DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */,
 				FEA82FC326A377FB0008F34A /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 				FE178240274131ED00C17F21 /* XCRemoteSwiftPackageReference "swift-collections" */,
@@ -1609,14 +1602,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/microsoft/appcenter-sdk-apple.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.1.1;
-			};
-		};
 		DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/DaveWoodCom/XCGLogger";
@@ -1660,16 +1645,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DD2D91A42531B9BA0032779C /* AppCenterCrashes */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */;
-			productName = AppCenterCrashes;
-		};
-		DD2D91A62531B9BA0032779C /* AppCenterAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DD2D91A32531B9BA0032779C /* XCRemoteSwiftPackageReference "appcenter-sdk-apple" */;
-			productName = AppCenterAnalytics;
-		};
 		DD2D91B82532FD420032779C /* ObjcExceptionBridging */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DD2D91B72532FD420032779C /* XCRemoteSwiftPackageReference "XCGLogger" */;

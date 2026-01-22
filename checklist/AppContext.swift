@@ -8,9 +8,6 @@
 
 import Foundation
 import Swinject
-import AppCenter
-import AppCenterAnalytics
-import AppCenterCrashes
 import Combine
 import UIKit
 
@@ -35,12 +32,7 @@ class AppContext {
         assembler.resolver
     }
     
-    init() {
-        AppCenter.start(
-            withAppSecret: "2e52e116-6ccb-40e4-a8d9-e91aa19173b4",
-            services: [Analytics.self, Crashes.self]
-        )
-    }
+    init() { }
     
     func configure() { }
     
