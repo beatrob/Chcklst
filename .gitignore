@@ -1,1 +1,6 @@
 *.xcuserstate
+
+# Local App Store Connect Analytics exports and Apple signing keys
+appstore-analytics/
+*.p8
+appstore-analytics.ini

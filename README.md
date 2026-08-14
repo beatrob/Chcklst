@@ -36,3 +36,8 @@ Key components:
    ```bash
    git clone https://github.com/your-org/checklist.git
    cd checklist
+   ```
+
+## App Store Connect analytics
+
+Use [`tools/appstore_analytics.py`](tools/appstore_analytics.py) to download App Store Connect Analytics reports and create a Markdown summary ready for Codex analysis. Setup and usage are in [`tools/README.md`](tools/README.md).
