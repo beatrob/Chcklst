@@ -11,18 +11,25 @@ import SwiftUI
 struct TextReaderView: View {
     
     @StateObject var viewModel: TextReaderViewModel
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: 0) {
-            BackButtonNavBar(viewModel: viewModel.navbarViewModel)
             ScrollView {
                 Text(viewModel.text)
                     .modifier(Modifier.Checklist.Description())
                     .padding()
             }
         }
-        .navigationBarHidden(true)
         .background(Color.mainBackground)
+        .navigationTitle(viewModel.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Close") { dismiss() }
+            }
+        }
+        .chcklstNavigationBar()
     }
 }
 

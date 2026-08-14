@@ -11,6 +11,22 @@ import SwiftUI
 
 
 extension ChecklistViewModel {
+
+    var navigationTitle: String {
+        if isNavBarVisible { return checklistName }
+        switch viewState {
+        case .createChecklist, .createChecklistFromTemplate:
+            return "Create Checklist"
+        case .createTemplate, .createTemplateFromChecklist:
+            return "Create Template"
+        case .updateTemplate:
+            return "Edit Template"
+        case .updateChecklist:
+            return "Edit Checklist"
+        case .display:
+            return checklistName
+        }
+    }
     
     var actionButtonTitle: LocalizedStringKey {
         switch viewState {

@@ -58,7 +58,7 @@ class SettingsViewModel: ObservableObject {
         apperance = appearanceManager.getCurrentAppearance()
         isInAppEnabled = restrictionManager.restrictionsEnabled
         onMyTemplates.sink {
-            navigationHelper.navigateToMyTemplates(source: .settings)
+            navigationHelper.navigateToMyTemplates()
         }.store(in: &cancellables)
         
         onUpgradeTapped.sink { [weak self] in

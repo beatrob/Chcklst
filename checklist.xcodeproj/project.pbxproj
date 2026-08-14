@@ -139,8 +139,6 @@
 		FE7F1BA926F933BC00BA2590 /* AppearanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7F1BA826F933BC00BA2590 /* AppearanceManager.swift */; };
 		FE89850A26545C6A0039CAC1 /* Modifier+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */; };
 		FE8D09AB26795B5B009A7AE5 /* EmptyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */; };
-		FE8D7EC526FD2BBE00671634 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D7EC426FD2BBE00671634 /* AboutView.swift */; };
-		FE8D7EC826FD2C0500671634 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */; };
 		FE94197727011676001493AB /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = FE94197927011676001493AB /* Localizable.strings */; };
 		FE999231272EBDE6001C327F /* DeliveredRemindersDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */; };
 		FE9A8EF82730884600601D55 /* ItemDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A8EF72730884600601D55 /* ItemDataSource.swift */; };
@@ -334,8 +332,6 @@
 		FE7F1BA826F933BC00BA2590 /* AppearanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceManager.swift; sourceTree = "<group>"; };
 		FE89850926545C6A0039CAC1 /* Modifier+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Modifier+Schedule.swift"; sourceTree = "<group>"; };
 		FE8D09AA26795B5B009A7AE5 /* EmptyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyListView.swift; sourceTree = "<group>"; };
-		FE8D7EC426FD2BBE00671634 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
-		FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		FE94197827011676001493AB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FE999230272EBDE6001C327F /* DeliveredRemindersDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveredRemindersDataModel.swift; sourceTree = "<group>"; };
 		FE9A8EF72730884600601D55 /* ItemDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDataSource.swift; sourceTree = "<group>"; };
@@ -893,7 +889,6 @@
 		FE8D7EC326FD2BA900671634 /* About */ = {
 			isa = PBXGroup;
 			children = (
-				FE8D7EC426FD2BBE00671634 /* AboutView.swift */,
 				FE4860782702599A0022E6C4 /* TextReaderView.swift */,
 				FE61E35F2706495400015812 /* HelpView.swift */,
 			);
@@ -903,7 +898,6 @@
 		FE8D7EC626FD2BDA00671634 /* About */ = {
 			isa = PBXGroup;
 			children = (
-				FE8D7EC726FD2C0500671634 /* AboutViewModel.swift */,
 				FE48607A27025A180022E6C4 /* TextReaderViewModel.swift */,
 				FE61E3612706496D00015812 /* HelpViewModel.swift */,
 			);
@@ -1143,7 +1137,6 @@
 				DDD223152526752C00C18BF9 /* SelectTemplateViewModel.swift in Sources */,
 				DD85AD9925D597A400EB4B6A /* Alert+Extension.swift in Sources */,
 				FE17823F27412C2500C17F21 /* DebugCellView.swift in Sources */,
-				FE8D7EC526FD2BBE00671634 /* AboutView.swift in Sources */,
 				FE178235274112CD00C17F21 /* NotificationDataModel.swift in Sources */,
 				DD39A431252A1741003E73EA /* CheckboxView.swift in Sources */,
 				FEBB62D62733445F00F107B8 /* CoreDataManager+Items.swift in Sources */,
@@ -1203,7 +1196,6 @@
 				FEBE2149266433C700CC001E /* TemplateMO.swift in Sources */,
 				DD08D9492544125B00A5BFF2 /* ChecklistView.swift in Sources */,
 				FE0B2083270A53D300EE86CB /* LimitReachedAlert.swift in Sources */,
-				FE8D7EC826FD2C0500671634 /* AboutViewModel.swift in Sources */,
 				DDE08AB325DB1D0600F00D5A /* Modifier+Menu.swift in Sources */,
 				DD2D91972531ABDA0032779C /* InitializeAppDataSource.swift in Sources */,
 				FE559A5026433FEB00ACF179 /* SchedulesView.swift in Sources */,
@@ -1299,7 +1291,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1353,7 +1345,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1375,7 +1367,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1402,7 +1394,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1425,7 +1417,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				INFOPLIST_FILE = checklistTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1447,7 +1439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				INFOPLIST_FILE = checklistTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1511,7 +1503,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1533,7 +1525,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1556,7 +1548,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				INFOPLIST_FILE = checklistTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

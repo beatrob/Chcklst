@@ -1,9 +1,5 @@
-//
-//  TabBarView.swift
-//  checklist
-//
-
 import SwiftUI
+import PromiseKit
 
 struct TabBarView: View {
 
@@ -25,60 +21,122 @@ struct TabBarView: View {
         self.templatesViewModel = templatesViewModel
         self.schedulesViewModel = schedulesViewModel
         self.settingsViewModel = settingsViewModel
-
-        templatesViewModel.navBarViewModel.isBackButtonHidden = true
-        schedulesViewModel.navBarViewModel.isBackButtonHidden = true
-        settingsViewModel.navBarViewModel.isBackButtonHidden = true
     }
 
     var body: some View {
         TabView(selection: $navigationHelper.selectedTab) {
-            DashboardView(viewModel: dashboardViewModel)
-                .tabItem {
-                    Label("Checklists", systemImage: "checklist")
-                }
-                .tag(NavigationHelper.AppTab.checklists)
+            NavigationStack(path: $navigationHelper.checklistPath) {
+                DashboardView(viewModel: dashboardViewModel)
+                    .navigationDestination(for: NavigationHelper.ChecklistRoute.self) { route in
+                        ChecklistRouteDestination(route: route)
+                    }
+            }
+            .tabItem { Label("Checklists", systemImage: "checklist") }
+            .tag(NavigationHelper.AppTab.checklists)
 
-            NavigationView {
+            NavigationStack {
                 MyTemplatesView(viewModel: templatesViewModel)
             }
-            .navigationViewStyle(.stack)
-            .tabItem {
-                Label("Templates", systemImage: "doc.on.doc")
-            }
+            .tabItem { Label("Templates", systemImage: "doc.on.doc") }
             .tag(NavigationHelper.AppTab.templates)
 
-            NavigationView {
+            NavigationStack(path: $navigationHelper.schedulePath) {
                 SchedulesView(viewModel: schedulesViewModel)
+                    .navigationDestination(for: NavigationHelper.ScheduleRoute.self) { route in
+                        ScheduleRouteDestination(route: route)
+                    }
             }
-            .navigationViewStyle(.stack)
-            .tabItem {
-                Label("Schedules", systemImage: "calendar")
-            }
+            .tabItem { Label("Schedules", systemImage: "calendar") }
             .tag(NavigationHelper.AppTab.schedules)
 
-            NavigationView {
+            NavigationStack {
                 SettingsView(viewModel: settingsViewModel)
             }
-            .navigationViewStyle(.stack)
-            .tabItem {
-                Label("Settings", systemImage: "gearshape")
-            }
+            .tabItem { Label("Settings", systemImage: "gearshape") }
             .tag(NavigationHelper.AppTab.settings)
         }
-        .accentColor(.firstAccent)
+        .tint(.firstAccent)
         .environmentObject(navigationHelper)
-        .onReceive(templatesViewModel.onBackTapped) {
-            navigationHelper.popToDashboard()
+    }
+}
+
+private struct ChecklistRouteDestination: View {
+
+    let route: NavigationHelper.ChecklistRoute
+
+    var body: some View {
+        switch route {
+        case .debugNotifications:
+            DebugNotificationsView(viewModel: AppContext.resolver.resolve(DebugNotificationsViewModel.self)!)
+        case .detail(let id, let shouldEdit):
+            if let checklist = AppContext.resolver.resolve(ChecklistDataSource.self)!.getChecklist(withId: id) {
+                ChecklistRouteContent(checklist: checklist, shouldEdit: shouldEdit)
+            } else {
+                MissingDestinationView(message: "This checklist is no longer available.")
+            }
         }
-        .onReceive(templatesViewModel.onGotoSchedules) {
-            navigationHelper.navigateToSchedules()
+    }
+}
+
+private struct ChecklistRouteContent: View {
+
+    @EnvironmentObject private var navigationHelper: NavigationHelper
+    @StateObject private var viewModel: ChecklistViewModel
+
+    init(checklist: ChecklistDataModel, shouldEdit: Bool) {
+        _viewModel = StateObject(wrappedValue: AppContext.resolver.resolve(
+            ChecklistViewModel.self,
+            argument: shouldEdit
+                ? ChecklistViewState.updateChecklist(checklist: checklist)
+                : ChecklistViewState.display(checklist: checklist)
+        )!)
+    }
+
+    var body: some View {
+        ChecklistView(viewModel: viewModel)
+            .onReceive(viewModel.dismissView) { navigationHelper.checklistPath.removeLast() }
+    }
+}
+
+private struct ScheduleRouteDestination: View {
+
+    let route: NavigationHelper.ScheduleRoute
+    @State private var viewModel: ScheduleDetailViewModel?
+    @State private var isMissing = false
+
+    var body: some View {
+        Group {
+            if let viewModel {
+                ScheduleDetailView(viewModel: viewModel)
+            } else if isMissing {
+                MissingDestinationView(message: "This schedule is no longer available.")
+            } else {
+                ProgressView()
+            }
         }
-        .onReceive(schedulesViewModel.onBackTapped) {
-            navigationHelper.popToDashboard()
+        .task(id: route) {
+            guard case .detail(let id) = route else { return }
+            AppContext.resolver.resolve(ScheduleDataSource.self)!
+                .getSchedule(with: id)
+                .done { schedule in
+                    viewModel = AppContext.resolver.resolve(
+                        ScheduleDetailViewModel.self,
+                        argument: ScheduleDetailViewState.update(schedule: schedule)
+                    )!
+                }
+                .catch { _ in isMissing = true }
         }
-        .onReceive(settingsViewModel.onBackTapped) {
-            navigationHelper.popToDashboard()
-        }
+    }
+}
+
+private struct MissingDestinationView: View {
+
+    let message: String
+
+    var body: some View {
+        Text(message)
+            .foregroundColor(.secondary)
+            .padding()
+            .navigationTitle("Unavailable")
     }
 }

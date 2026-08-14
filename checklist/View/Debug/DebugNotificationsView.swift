@@ -14,14 +14,15 @@ struct DebugNotificationsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            BackButtonNavBar(viewModel: viewModel.navbar)
             ScrollView {
                 ForEach(viewModel.cells) {
                     DebugCellView(viewModel: $0)
                 }
             }
         }
-        .navigationBarHidden(true)
+        .navigationTitle("Pending Notifications")
+        .navigationBarTitleDisplayMode(.inline)
+        .chcklstNavigationBar()
     }
 }
 

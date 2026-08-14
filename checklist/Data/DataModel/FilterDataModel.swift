@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FilterDataModel: CaseIterable, Identifiable {
+enum FilterDataModel: CaseIterable, Identifiable, Equatable {
     
     var id: String {
         title

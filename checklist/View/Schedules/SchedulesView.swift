@@ -11,20 +11,13 @@ import SwiftUI
 struct SchedulesView: View {
     
     @StateObject var viewModel: SchedulesViewModel
+    @EnvironmentObject private var navigationHelper: NavigationHelper
     
     var body: some View {
         ZStack {
-            
-            NavigationLink(
-                destination: viewModel.navigationDestination,
-                isActive: $viewModel.isNavigationActive,
-                label: { EmptyView() }
-            ).hidden()
-            
             Color.menuBackground.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                BackButtonNavBar(viewModel: viewModel.navBarViewModel)
                 if viewModel.isEmptyListViewVisible {
                     EmptyListView(
                         message: """
@@ -42,7 +35,7 @@ struct SchedulesView: View {
                                     .padding(.horizontal, 20)
                                     .padding(.vertical, 7)
                                     .onTapGesture {
-                                        viewModel.didSelectSchedule.send(cell)
+                                        navigationHelper.navigateToScheduleDetail(id: cell.id)
                                     }
                             }
                         }
@@ -53,7 +46,15 @@ struct SchedulesView: View {
             .background(Color.checklistBackground)
         }
         .ignoresSafeArea(.container, edges: .bottom)
-        .navigationBarHidden(true)
+        .navigationTitle("Schedules")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { viewModel.onCreateSchedule.send() } label: { Image(systemName: "plus") }
+                    .accessibilityLabel("Create schedule")
+            }
+        }
+        .chcklstNavigationBar()
         .sheet(isPresented: $viewModel.isSheetPresented) {
             viewModel.sheet
         }

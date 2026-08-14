@@ -61,7 +61,6 @@ class ViewModelAssembly: Assembly {
             argument: EmptyPublisher.self,
             initializer: CreateScheduleViewModel.init
         )
-        container.autoregister(AboutViewModel.self, initializer: AboutViewModel.init)
         container.autoregister(UpgradeViewModel.self, initializer: UpgradeViewModel.init)
         container.autoregister(
             DebugNotificationsViewModel.self,

@@ -8,6 +8,14 @@
 
 import SwiftUI
 
+extension View {
+    func chcklstNavigationBar() -> some View {
+        tint(.firstAccent)
+            .toolbarBackground(Color.menuBackground, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+    }
+}
+
 
 extension Modifier {
     

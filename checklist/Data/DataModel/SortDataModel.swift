@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum SortDataModel: CaseIterable, Identifiable {
+enum SortDataModel: CaseIterable, Identifiable, Equatable {
     
     var id: String {
         title

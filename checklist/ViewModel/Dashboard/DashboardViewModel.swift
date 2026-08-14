@@ -29,13 +29,16 @@ class DashboardViewModel: ObservableObject {
     @Published var alert: Alert = .empty
     @Published var isAlertVisible = false
     @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
-    @Published var isSidemenuVisible = false
     @Published var sheet: AnyView = .empty
     @Published var isSheetVisible = false
     @Published var isEmptyListViewVisible = false
     @Published var isNoSearchResultsVisible = false
     @Published var isNoFilterResulrsVisible = false
     @Published var scrollToId: String?
+    @Published var searchText = ""
+    @Published var selectedSort: SortDataModel = .initial
+    @Published var selectedFilter: FilterDataModel = .initial
+    @Published var isSortAndFilterPresented = false
     
     @Published var actionSheet: DashboardActionSheet = .none {
         didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
@@ -43,10 +46,6 @@ class DashboardViewModel: ObservableObject {
     
     let onCreateNewChecklist = EmptySubject()
     let onClearFilter = EmptySubject()
-    let onMenu = EmptySubject()
-    let onDarkOverlayTapped = EmptySubject()
-    let navBarViewModel = AppContext.resolver.resolve(DashboardNavBarViewModel.self)!
-    let menuViewModel = AppContext.resolver.resolve(MenuViewModel.self)!
     
     var cancellables =  Set<AnyCancellable>()
     
@@ -160,63 +159,25 @@ class DashboardViewModel: ObservableObject {
             )
         }.store(in: &cancellables)
         
-        onMenu.sink { [weak self] in
-            self?.sheet = DashboardSheet.menu.view
-            self?.isSheetVisible = true
-        }.store(in: &cancellables)
-        
-        navBarViewModel.onMenuTapped.sink { [weak self] _ in
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
-        
-        navBarViewModel.search.sink { searchText in
-            checklistFilterAndSort.search = searchText
-        }.store(in: &cancellables)
-        
-        navBarViewModel.onAddTapped.subscribe(onCreateNewChecklist).store(in: &cancellables)
-        
-        menuViewModel.onSelectSort.sink { [weak self] sort in
+        $searchText
+            .map { $0.count > 2 ? $0 : nil }
+            .assign(to: \ChecklistFilterAndSort.search, on: checklistFilterAndSort)
+            .store(in: &cancellables)
+
+        $selectedSort.dropFirst().sink { [weak self] sort in
             self?.checklistCells.removeAll()
-            self?.navBarViewModel.sortedByTitle = sort.title
             self?.checklistFilterAndSort.sort = sort
-            self?.closeSideMenu()
         }.store(in: &cancellables)
-        
-        
-        menuViewModel.onSelectFilter
+
+        $selectedFilter
+            .dropFirst()
             .merge(with: onClearFilter.map { FilterDataModel.none })
             .sink { [weak self] filter in
-                self?.checklistCells.removeAll()
-                self?.navBarViewModel.filterTitle = filter.title
-                self?.navBarViewModel.isFilterVisible = filter.isVisibleInNavbar
+            self?.checklistCells.removeAll()
+                self?.selectedFilter = filter
                 self?.checklistFilterAndSort.filter = filter
-                self?.closeSideMenu()
             }
             .store(in: &cancellables)
-        
-        menuViewModel.onSelectMyTemplates.sink { [weak self] _ in
-            navigationHelper.navigateToMyTemplates(source: .dashboard)
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
-        
-        menuViewModel.onSelectSettings.sink { [weak self] _ in
-            navigationHelper.navigateToSettings()
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
-        
-        menuViewModel.onSelectSchedules.sink { [weak self] _ in
-            navigationHelper.navigateToSchedules()
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
-        
-        menuViewModel.onSelectAbout.sink { [weak self] in
-            navigationHelper.navigateToAbout()
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
-        
-        onDarkOverlayTapped.sink { [weak self] in
-            self?.toggleSidemenu()
-        }.store(in: &cancellables)
         
         checklistFilterAndSort.sort = .initial
         loadDeliveredReminders()
@@ -304,19 +265,6 @@ class DashboardViewModel: ObservableObject {
 // MARK: - Private methods
 
 private extension DashboardViewModel {
-    
-    func toggleSidemenu() {
-        withAnimation(.easeOut(duration: 0.2)) {
-            self.isSidemenuVisible.toggle()
-        }
-    }
-    
-    func closeSideMenu() {
-        if isSidemenuVisible {
-            toggleSidemenu()
-        }
-    }
-    
     func showChecklistView(state: ChecklistViewState) {
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
@@ -324,7 +272,7 @@ private extension DashboardViewModel {
         )!
         viewModel.onDidCreateTemplate.delay(for: .seconds(0.5), scheduler: RunLoop.main).sink { [weak self] in
             self?.alert = DashboardAlert.templateCreated(
-                gotoTemplates: { self?.navigationHelper.navigateToMyTemplates(source: .dashboard) }
+                gotoTemplates: { self?.navigationHelper.navigateToMyTemplates() }
             ).alert
             self?.isAlertVisible = true
         }.store(in: &self.cancellables)
@@ -471,7 +419,7 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
                 return
             }
             self.alert = DashboardAlert.templateCreated(gotoTemplates: { [weak self] in
-                self?.navigationHelper.navigateToMyTemplates(source: .dashboard)
+                self?.navigationHelper.navigateToMyTemplates()
             }).alert
             self.isAlertVisible = true
         }.catch {

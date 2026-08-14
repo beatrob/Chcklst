@@ -13,7 +13,7 @@ struct SelectTemplateView: View {
     @ObservedObject var viewModel: SelectTemplateViewModel
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             if viewModel.isEmptyListViewVisible {
                 EmptyListView(
                     message: """
@@ -64,9 +64,11 @@ struct SelectTemplateView: View {
                         Spacer()
                     }
                 }
-                .navigationBarHidden(true)
             }
         }
+        .navigationTitle(viewModel.title ?? "Templates")
+        .navigationBarTitleDisplayMode(.inline)
+        .chcklstNavigationBar()
     }
 }
 

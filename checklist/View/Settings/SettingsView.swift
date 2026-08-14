@@ -17,7 +17,6 @@ struct SettingsView: View {
         ZStack {
             Color.menuBackground.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 0) {
-                BackButtonNavBar(viewModel: viewModel.navBarViewModel)
                 //            NavigationLink(
                 //                destination: navigationHelper.settingsDestination,
                 //                tag: .myTemplates,
@@ -135,7 +134,9 @@ struct SettingsView: View {
             .background(Color.mainBackground)
         }
         .onAppear { viewModel.onViewAppear.send() }
-        .navigationBarHidden(true)
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .chcklstNavigationBar()
         .sheet(isPresented: $viewModel.isSheetVisible) {
             viewModel.sheet
         }

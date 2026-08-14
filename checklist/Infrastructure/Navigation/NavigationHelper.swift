@@ -8,10 +8,7 @@
 
 import Foundation
 import SwiftUI
-import Combine
-
-
-class NavigationHelper: ObservableObject {
+final class NavigationHelper: ObservableObject {
 
     enum AppTab: Hashable {
         case checklists
@@ -20,29 +17,18 @@ class NavigationHelper: ObservableObject {
         case settings
     }
 
-    enum Source {
-        case dashboard
-        case settings
+    enum ChecklistRoute: Hashable {
+        case detail(id: String, shouldEdit: Bool)
+        case debugNotifications
     }
 
-    enum DashboardSelection: String {
-        case settings
-        case about
-        case checklistDetail
-        case myTemplates
-        case schedules
-    }
-
-    enum SettingsSelection: String {
-        case myTemplates
+    enum ScheduleRoute: Hashable {
+        case detail(id: String)
     }
 
     @Published var selectedTab: AppTab = .checklists
-    @Published var dashboardSelection: DashboardSelection? = nil
-    @Published var settingsSelection: SettingsSelection? = nil
-    var dashboardDestination: AnyView = .empty
-    var settingsDestination: AnyView = .empty
-    var cancellables = Set<AnyCancellable>()
+    @Published var checklistPath: [ChecklistRoute] = []
+    @Published var schedulePath: [ScheduleRoute] = []
 
     func navigateToSettings() {
         selectedTab = .settings
@@ -50,69 +36,34 @@ class NavigationHelper: ObservableObject {
 
     func navigateToSchedules() {
         selectedTab = .schedules
+        schedulePath = []
     }
 
-    func navigateToMyTemplates(source: Source) {
-        switch source {
-        case .dashboard, .settings:
-            selectedTab = .templates
-        }
+    func navigateToMyTemplates() {
+        selectedTab = .templates
     }
 
     func navigateToChecklistDetail(with checklist: ChecklistDataModel, shouldEdit: Bool) {
-        guard !navigateToDebugViewIfNeeded(with: checklist) else {
-            return
-        }
         selectedTab = .checklists
-        let viewModel = AppContext.resolver.resolve(
-            ChecklistViewModel.self,
-            argument: shouldEdit ?
-                ChecklistViewState.updateChecklist(checklist: checklist) :
-                ChecklistViewState.display(checklist: checklist)
-        )!
-        viewModel.dismissView.sink { [weak self] in
-            self?.popToDashboard()
-        }.store(in: &cancellables)
-        dashboardDestination = AnyView(ChecklistView(viewModel: viewModel))
-        dashboardSelection = .checklistDetail
+        checklistPath = [
+            checklist.title == DebugNotificationsViewModel.id
+                ? .debugNotifications
+                : .detail(id: checklist.id, shouldEdit: shouldEdit)
+        ]
     }
 
-    func navigateToAbout() {
-        selectedTab = .checklists
-        let viewModel = AppContext.resolver.resolve(AboutViewModel.self)!
-        viewModel.navbarViewModel.backButton.didTap.sink { [weak self] in
-            self?.dashboardSelection = .none
-        }.store(in: &cancellables)
-        dashboardDestination = AnyView(AboutView(viewModel: viewModel))
-        dashboardSelection = .about
+    func navigateToScheduleDetail(id: String) {
+        selectedTab = .schedules
+        schedulePath.append(.detail(id: id))
     }
 
     func popToDashboard() {
         selectedTab = .checklists
-        dashboardSelection = nil
-        settingsSelection = nil
-        dashboardDestination = .empty
-        settingsDestination = .empty
+        checklistPath = []
+        schedulePath = []
     }
 
     var isOnDashboard: Bool {
-        selectedTab == .checklists && dashboardSelection == .none
-    }
-}
-
-private extension NavigationHelper {
-
-    func navigateToDebugViewIfNeeded(with checklist: ChecklistDataModel) -> Bool {
-        if checklist.title == DebugNotificationsViewModel.id {
-            selectedTab = .checklists
-            let viewModel = AppContext.resolver.resolve(DebugNotificationsViewModel.self)!
-            viewModel.navbar.backButton.didTap.sink { [weak self] in
-                self?.popToDashboard()
-            }.store(in: &cancellables)
-            dashboardDestination = AnyView(DebugNotificationsView(viewModel: viewModel))
-            dashboardSelection = .checklistDetail
-            return true
-        }
-        return false
+        selectedTab == .checklists && checklistPath.isEmpty
     }
 }

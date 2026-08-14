@@ -24,7 +24,7 @@ class checklistTests: XCTestCase {
 
         XCTAssertEqual(navigationHelper.selectedTab, .checklists)
 
-        navigationHelper.navigateToMyTemplates(source: .dashboard)
+        navigationHelper.navigateToMyTemplates()
         XCTAssertEqual(navigationHelper.selectedTab, .templates)
 
         navigationHelper.navigateToSchedules()
@@ -42,6 +42,34 @@ class checklistTests: XCTestCase {
 
         XCTAssertEqual(navigationHelper.selectedTab, .checklists)
         XCTAssertTrue(navigationHelper.isOnDashboard)
+    }
+
+    func testChecklistRouteUsesStableIdentifierAndCanBeReset() throws {
+        let navigationHelper = NavigationHelper()
+        let checklist = ChecklistDataModel.getWelcomeChecklist()
+
+        navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: true)
+
+        XCTAssertEqual(navigationHelper.selectedTab, .checklists)
+        XCTAssertEqual(
+            navigationHelper.checklistPath,
+            [.detail(id: checklist.id, shouldEdit: true)]
+        )
+
+        navigationHelper.popToDashboard()
+        XCTAssertTrue(navigationHelper.checklistPath.isEmpty)
+    }
+
+    func testScheduleRouteKeepsChecklistHistoryIndependent() throws {
+        let navigationHelper = NavigationHelper()
+        let checklist = ChecklistDataModel.getWelcomeChecklist()
+        navigationHelper.navigateToChecklistDetail(with: checklist, shouldEdit: false)
+
+        navigationHelper.navigateToScheduleDetail(id: "schedule-id")
+
+        XCTAssertEqual(navigationHelper.selectedTab, .schedules)
+        XCTAssertEqual(navigationHelper.schedulePath, [.detail(id: "schedule-id")])
+        XCTAssertEqual(navigationHelper.checklistPath, [.detail(id: checklist.id, shouldEdit: false)])
     }
 
     func testSettingsAboutActionsPresentSheets() throws {

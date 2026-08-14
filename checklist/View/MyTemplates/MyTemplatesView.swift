@@ -11,20 +11,11 @@ import SwiftUI
 struct MyTemplatesView: View {
     
     @ObservedObject var viewModel: MyTemplatesViewModel
-    @EnvironmentObject var navigationHelper: NavigationHelper
     
     var body: some View {
         ZStack {
-            
-            NavigationLink(
-                destination: viewModel.navigationLinkDesitanation,
-                isActive: $viewModel.isNavigationLinkActive,
-                label: { EmptyView() }
-            ).hidden()
-            
             Color.menuBackground.ignoresSafeArea()
             VStack(spacing: 0) {
-                BackButtonNavBar(viewModel: viewModel.navBarViewModel)
                 if viewModel.isEmptyViewVisible {
                     EmptyListView(
                         message: "Your template list is empty.\nYou can create new templates from the Dashboard.",
@@ -54,7 +45,15 @@ struct MyTemplatesView: View {
             .background(Color.checklistBackground)
         }
         .ignoresSafeArea(.container, edges: .bottom)
-        .navigationBarHidden(true)
+        .navigationTitle("Templates")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button { viewModel.createTemplate() } label: { Image(systemName: "plus") }
+                    .accessibilityLabel("Create template")
+            }
+        }
+        .chcklstNavigationBar()
         .sheet(isPresented: $viewModel.isSheetVisible) {
             self.viewModel.sheetView
         }

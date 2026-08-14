@@ -134,6 +134,10 @@ class MyTemplatesViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+
+    func createTemplate() {
+        displayCreate(nil)
+    }
 }
 
 

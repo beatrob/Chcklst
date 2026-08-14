@@ -22,11 +22,6 @@ struct ChecklistView: View {
                 )
                 Color.mainBackground.ignoresSafeArea()
                 VStack(spacing: 0) {
-                    if viewModel.isNavBarVisible {
-                        ChecklistNavBar(viewModel: viewModel.navBarViewModel)
-                    } else {
-                        BackButtonNavBar(viewModel: viewModel.createViewNavbarViewModel)
-                    }
                     ScrollView {
                         ScrollViewReader { scroller in
                             VStack {
@@ -93,7 +88,6 @@ struct ChecklistView: View {
                         }
                     }
                 }
-                .navigationBarHidden(true)
                 .onTapGesture { self.hideKeyboard() }
                 .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
                     viewModel.alertVisibility.view
@@ -106,6 +100,27 @@ struct ChecklistView: View {
                 }
             }.ignoresSafeArea(.container, edges: .bottom)
         }
+        .navigationTitle(viewModel.navigationTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if viewModel.isNavBarVisible {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if viewModel.isEditable {
+                        Button("Done") { viewModel.navBarViewModel.doneButton.didTapSubject.send() }
+                    } else {
+                        Button { viewModel.navBarViewModel.actionsButton.didTapSubject.send() } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                        .accessibilityLabel("Checklist actions")
+                    }
+                }
+            } else {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { viewModel.dismissView.send() }
+                }
+            }
+        }
+        .chcklstNavigationBar()
     }
 }
 

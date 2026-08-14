@@ -16,7 +16,6 @@ struct ScheduleDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            BackButtonNavBar(viewModel: viewModel.navbarViewModel)
             ScrollView {
                 ScrollViewReader { reader in
                     VStack(alignment: .leading) {
@@ -112,7 +111,25 @@ struct ScheduleDetailView: View {
         .alert(isPresented: $viewModel.isAlertPresented) {
             viewModel.alert
         }
-        .navigationBarHidden(true)
+        .navigationTitle(viewModel.viewTitle.isEmpty ? "Edit Schedule" : viewModel.viewTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if !viewModel.viewTitle.isEmpty {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { viewModel.backButtonViewModel.didTapSubject.send() }
+                }
+            } else {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(role: .destructive) {
+                        viewModel.navbarViewModel.rightButton?.didTapSubject.send()
+                    } label: {
+                        Image(systemName: "trash")
+                    }
+                    .accessibilityLabel("Delete schedule")
+                }
+            }
+        }
+        .chcklstNavigationBar()
     }
 }
 
