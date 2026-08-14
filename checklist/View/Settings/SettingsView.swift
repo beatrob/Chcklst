@@ -30,7 +30,7 @@ struct SettingsView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        
+
                         HStack {
                             Text("Appearance").modifier(Modifier.Settings.ItemTitle())
                             Spacer()
@@ -61,9 +61,8 @@ struct SettingsView: View {
                             .padding(.horizontal)
                             .padding(.bottom)
                         
-                        SeparatorView()
-                        
                         if viewModel.isInAppEnabled {
+                            SeparatorView()
                             Text("Chcklst+").modifier(Modifier.Settings.ItemTitle())
                                 .padding(.vertical)
                                 .padding(.leading)
@@ -107,13 +106,35 @@ struct SettingsView: View {
                                 }.padding(.vertical)
                             }
                         }
+
+                        SeparatorView()
+                        Text("About").modifier(Modifier.Settings.ItemTitle())
+                            .padding()
+                        VStack(spacing: 16) {
+                            CapsuleButton(
+                                title: "Help",
+                                type: .secondary,
+                                onTapSubject: viewModel.onHelp
+                            )
+                            CapsuleButton(
+                                title: "Terms & Conditions",
+                                type: .secondary,
+                                onTapSubject: viewModel.onTermsAndConditions
+                            )
+                            CapsuleButton(
+                                title: "Privacy Policy",
+                                type: .secondary,
+                                onTapSubject: viewModel.onPrivacyPolicy
+                            )
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom)
                     }
                 }
             }
             .background(Color.mainBackground)
         }
         .onAppear { viewModel.onViewAppear.send() }
-        .ignoresSafeArea(.container, edges: .bottom)
         .navigationBarHidden(true)
         .sheet(isPresented: $viewModel.isSheetVisible) {
             viewModel.sheet

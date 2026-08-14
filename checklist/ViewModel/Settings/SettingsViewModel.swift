@@ -21,6 +21,9 @@ class SettingsViewModel: ObservableObject {
     let onUpgradeTapped = EmptySubject()
     let onRestoreTapped = EmptySubject()
     let onViewAppear = EmptySubject()
+    let onHelp = EmptySubject()
+    let onTermsAndConditions = EmptySubject()
+    let onPrivacyPolicy = EmptySubject()
     let isInAppEnabled: Bool
     var cancellables =  Set<AnyCancellable>()
     var sheet: AnyView = .empty
@@ -68,6 +71,24 @@ class SettingsViewModel: ObservableObject {
         
         onRestoreTapped.sink { [weak self] in
             self?.restorePurchase()
+        }.store(in: &cancellables)
+
+        onHelp.sink { [weak self] in
+            self?.presentHelp()
+        }.store(in: &cancellables)
+
+        onTermsAndConditions.sink { [weak self] in
+            self?.presentText(
+                title: .init("terms_and_conditions_title"),
+                text: .init("terms_and_conditions_text")
+            )
+        }.store(in: &cancellables)
+
+        onPrivacyPolicy.sink { [weak self] in
+            self?.presentText(
+                title: .init("privacy_policy_title"),
+                text: .init("privacy_policy_text")
+            )
         }.store(in: &cancellables)
         
         purchaseManager.mainProductPurchaseState
@@ -123,6 +144,21 @@ class SettingsViewModel: ObservableObject {
             self?.reloadNotificationsState()
         }
         self.isAlertVisible = true
+    }
+
+    private func presentHelp() {
+        sheet = AnyView(HelpView(viewModel: HelpViewModel()))
+        isSheetVisible = true
+    }
+
+    private func presentText(title: LocalizedStringKey, text: LocalizedStringKey) {
+        let viewModel = TextReaderViewModel(
+            title: title,
+            text: text,
+            isBackButtonHidden: true
+        )
+        sheet = AnyView(TextReaderView(viewModel: viewModel))
+        isSheetVisible = true
     }
     
     private func reloadNotificationsState() {

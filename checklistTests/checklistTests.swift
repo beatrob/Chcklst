@@ -44,6 +44,27 @@ class checklistTests: XCTestCase {
         XCTAssertTrue(navigationHelper.isOnDashboard)
     }
 
+    func testSettingsAboutActionsPresentSheets() throws {
+        let viewModel = SettingsViewModel(
+            navigationHelper: NavigationHelper(),
+            restrictionManager: MockRestrictionManager(),
+            purchaseManager: MockPurchaseManager(),
+            appearanceManager: AppearanceManager(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
+
+        viewModel.onHelp.send()
+        XCTAssertTrue(viewModel.isSheetVisible)
+
+        viewModel.isSheetVisible = false
+        viewModel.onTermsAndConditions.send()
+        XCTAssertTrue(viewModel.isSheetVisible)
+
+        viewModel.isSheetVisible = false
+        viewModel.onPrivacyPolicy.send()
+        XCTAssertTrue(viewModel.isSheetVisible)
+    }
+
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {

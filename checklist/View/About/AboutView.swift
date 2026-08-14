@@ -19,25 +19,7 @@ struct AboutView: View {
                 BackButtonNavBar(viewModel: viewModel.navbarViewModel)
                 VStack {
                     Spacer()
-                    
-                    CapsuleButton(
-                        title: "Help",
-                        type: .secondary,
-                        onTapSubject: viewModel.onHelp
-                    )
-                    CapsuleButton(
-                        title: "Terms & Conditions",
-                        type: .secondary,
-                        onTapSubject: viewModel.onTermsAndConditions
-                    ).padding()
-                    CapsuleButton(
-                        title: "Privacy Policy",
-                        type: .secondary,
-                        onTapSubject: viewModel.onPrivacyPolicy
-                    )
-                    
-                    Spacer()
-                    
+
                     Image("chcklst-logo")
                         .resizable()
                         .scaledToFit()
@@ -57,19 +39,13 @@ struct AboutView: View {
         }
         .navigationBarHidden(true)
         .ignoresSafeArea(.container, edges: .bottom)
-        .sheet(isPresented: $viewModel.isSheetVisible) {
-            viewModel.sheet
-        }
-        
     }
 }
 
 struct AboutView_Previews: PreviewProvider {
     static var previews: some View {
         AboutView(
-            viewModel: AboutViewModel(
-                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
-            )
+            viewModel: AboutViewModel()
         )
     }
 }

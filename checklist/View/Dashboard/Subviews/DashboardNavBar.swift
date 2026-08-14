@@ -84,7 +84,7 @@ struct DashboardNavigationBar_Previews: PreviewProvider {
     
     static let viewModel: DashboardNavBarViewModel = {
         let viewModel = DashboardNavBarViewModel()
-        viewModel.isSearchBarVisible = true
+        viewModel.isSearchBarVisible = false
         return viewModel
     }()
     
