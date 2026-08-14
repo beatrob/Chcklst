@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A0000022C6F000000000001 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012C6F000000000001 /* TabBarView.swift */; };
 		DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08097225377D3F00F075D4 /* View+Extension.swift */; };
 		DD08D9492544125B00A5BFF2 /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08D9482544125B00A5BFF2 /* ChecklistView.swift */; };
 		DD08D94E254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08D94D254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift */; };
@@ -200,6 +201,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A0000012C6F000000000001 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		DD08097225377D3F00F075D4 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		DD08D9482544125B00A5BFF2 /* ChecklistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
 		DD08D94D254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChecklistViewModel+SwiftUI.swift"; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 		DD52A64924E19FE400A9A1FC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0A0000012C6F000000000001 /* TabBarView.swift */,
 				FE17823B27412BFE00C17F21 /* Debug */,
 				FE8D7EC326FD2BA900671634 /* About */,
 				FE71C7DA2628D90D00BBF63B /* Settings */,
@@ -1049,6 +1052,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A0000022C6F000000000001 /* TabBarView.swift in Sources */,
 				DD90241324FB7A4C0084CDDC /* MyTemplatesView.swift in Sources */,
 				DD52A66224E1C05C00A9A1FC /* MockChecklistDataSource.swift in Sources */,
 				DD8A303525FAB7C800A6937E /* EditReminderViewModel.swift in Sources */,

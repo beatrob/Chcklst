@@ -19,9 +19,29 @@ class checklistTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testTabNavigationSelectsRequestedTabs() throws {
+        let navigationHelper = NavigationHelper()
+
+        XCTAssertEqual(navigationHelper.selectedTab, .checklists)
+
+        navigationHelper.navigateToMyTemplates(source: .dashboard)
+        XCTAssertEqual(navigationHelper.selectedTab, .templates)
+
+        navigationHelper.navigateToSchedules()
+        XCTAssertEqual(navigationHelper.selectedTab, .schedules)
+
+        navigationHelper.navigateToSettings()
+        XCTAssertEqual(navigationHelper.selectedTab, .settings)
+    }
+
+    func testPopToDashboardSelectsChecklistsTab() throws {
+        let navigationHelper = NavigationHelper()
+        navigationHelper.navigateToSettings()
+
+        navigationHelper.popToDashboard()
+
+        XCTAssertEqual(navigationHelper.selectedTab, .checklists)
+        XCTAssertTrue(navigationHelper.isOnDashboard)
     }
 
     func testPerformanceExample() throws {

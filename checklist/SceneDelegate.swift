@@ -21,11 +21,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
         let window = UIWindow(windowScene: windowScene)
-        
+
         showInitializeAppView(in: window) {
-            let contentView = DashboardView(
-                viewModel: AppContext.resolver.resolve(DashboardViewModel.self)!
-            ).environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
+            let contentView = TabBarView(
+                navigationHelper: AppContext.resolver.resolve(NavigationHelper.self)!,
+                dashboardViewModel: AppContext.resolver.resolve(DashboardViewModel.self)!,
+                templatesViewModel: AppContext.resolver.resolve(MyTemplatesViewModel.self)!,
+                schedulesViewModel: AppContext.resolver.resolve(SchedulesViewModel.self)!,
+                settingsViewModel: AppContext.resolver.resolve(SettingsViewModel.self)!
+            )
 
             window.rootViewController = UIHostingController(rootView: contentView)
         }
@@ -63,19 +67,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
-    
+
     func showInitializeAppView(
         in window: UIWindow,
         _ initializeDidFinish: @escaping () -> Void
     ) {
         let viewModel = AppContext.resolver.resolve(InitializeAppViewModel.self)!
         let contentView = InitializeAppView(viewModel: viewModel)
-        
+
         window.rootViewController = HostingController(rootView: contentView)
-        
+
         viewModel.initializeDidFinish.sink {
             initializeDidFinish()
         }.store(in: &cancellables)
     }
 }
-
