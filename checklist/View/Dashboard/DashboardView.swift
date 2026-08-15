@@ -3,6 +3,7 @@ import SwiftUI
 struct DashboardView: View {
 
     @StateObject var viewModel: DashboardViewModel
+    @State var isSearching = false
 
     var body: some View {
         ZStack {
@@ -11,12 +12,20 @@ struct DashboardView: View {
         }
         .navigationTitle("Checklists")
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(
-            text: $viewModel.searchText,
-            prompt: Text("title, description or item")
-        )
+        .if(isSearching) {
+            $0.searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
+        }
         .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
+            ToolbarItemGroup(placement: .topBarLeading) {
+                Button { viewModel.onCreateNewChecklist.send() } label: {
+                    Image(systemName: "plus")
+                }
+                .accessibilityLabel("Create new checklist")
+            }
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 Button {
                     viewModel.isSortAndFilterPresented = true
                 } label: {
@@ -26,32 +35,40 @@ struct DashboardView: View {
                 }
                 .accessibilityLabel("Sort and filter")
 
-                Button { viewModel.onCreateNewChecklist.send() } label: {
-                    Image(systemName: "plus")
+                Button {
+                    withAnimation {
+                        isSearching.toggle()
+                    }
+                } label: {
+                    Image(systemName: "magnifyingglass")
                 }
-                .accessibilityLabel("Create new checklist")
+                .accessibilityLabel("Search")
             }
         }
         .chcklstNavigationBar()
-        .sheet(isPresented: $viewModel.isSortAndFilterPresented) {
-            SortAndFilterView(
-                selectedSort: $viewModel.selectedSort,
-                selectedFilter: $viewModel.selectedFilter
-            )
-            .presentationDetents([.medium])
-        }
         .alert(isPresented: $viewModel.isAlertVisible) { viewModel.alert }
         .sheet(
-            isPresented: Binding(
-                get: { viewModel.isActionSheetPresented },
-                set: { if !$0 { viewModel.dismissActionSheet() } }
-            )
-        ) {
-            BottomActionSheet(title: viewModel.actionSheet.title) {
-                viewModel.actionSheet.buttons(onSelection: viewModel.dismissActionSheet)
+            item: Binding(
+                get: { viewModel.presentedSheet },
+                set: viewModel.updatePresentedSheet
+            ),
+            onDismiss: viewModel.didDismissPresentedSheet
+        ) { presentation in
+            switch presentation {
+            case .sortAndFilter:
+                SortAndFilterView(
+                    selectedSort: $viewModel.selectedSort,
+                    selectedFilter: $viewModel.selectedFilter
+                )
+                .presentationDetents([.medium])
+            case .actions:
+                BottomActionSheet(title: viewModel.actionSheet.title) {
+                    viewModel.actionSheet.buttons(onSelection: viewModel.dismissActionSheet)
+                }
+            case .content:
+                viewModel.sheet
             }
         }
-        .sheet(isPresented: $viewModel.isSheetVisible) { viewModel.sheet }
     }
 
     @ViewBuilder
@@ -59,7 +76,7 @@ struct DashboardView: View {
         if viewModel.isEmptyListViewVisible {
             EmptyListView(
                 message: "Your list is empty",
-                actionTitle: "New Checklist",
+                actionTitle: "+ create new",
                 onActionTappedSubject: viewModel.onCreateNewChecklist
             )
         } else if viewModel.isNoSearchResultsVisible {

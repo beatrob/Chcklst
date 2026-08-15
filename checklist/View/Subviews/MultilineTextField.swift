@@ -48,8 +48,8 @@ struct MultilineTextField: View {
                     .padding(padding)
                     .overlay(
                         GeometryReader { g in
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.text, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.gray, lineWidth: 1)
                                 .preference(key: WidthPreferenceKey.self, value: g.size.width)
                         }
                     )

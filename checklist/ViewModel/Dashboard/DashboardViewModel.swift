@@ -11,6 +11,14 @@ import Combine
 import PromiseKit
 import SwiftUI
 
+enum DashboardPresentation: String, Identifiable {
+    case sortAndFilter
+    case actions
+    case content
+
+    var id: String { rawValue }
+}
+
 class DashboardViewModel: ObservableObject {
     
     @Published var checklistCells: [DashboardChecklistCellViewModel] = [] {
@@ -29,7 +37,7 @@ class DashboardViewModel: ObservableObject {
     @Published var alert: Alert = .empty
     @Published var isAlertVisible = false
     @Published var sheet: AnyView = .empty
-    @Published var isSheetVisible = false
+    @Published var presentedSheet: DashboardPresentation?
     @Published var isEmptyListViewVisible = false
     @Published var isNoSearchResultsVisible = false
     @Published var isNoFilterResulrsVisible = false
@@ -37,13 +45,61 @@ class DashboardViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var selectedSort: SortDataModel = .initial
     @Published var selectedFilter: FilterDataModel = .initial
-    @Published var isSortAndFilterPresented = false
-    
-    @Published var actionSheet: DashboardActionSheet = .none
+
+    @Published var actionSheet: DashboardActionSheet = .none {
+        didSet {
+            if actionSheet.isActionSheedVisible {
+                presentedSheet = .actions
+            } else if presentedSheet == .actions {
+                presentedSheet = nil
+            }
+        }
+    }
+
+    var isSheetVisible: Bool {
+        get { presentedSheet == .content }
+        set {
+            if newValue {
+                presentedSheet = .content
+            } else if presentedSheet == .content {
+                presentedSheet = nil
+            }
+        }
+    }
+
+    var isSortAndFilterPresented: Bool {
+        get { presentedSheet == .sortAndFilter }
+        set {
+            if newValue {
+                presentedSheet = .sortAndFilter
+            } else if presentedSheet == .sortAndFilter {
+                presentedSheet = nil
+            }
+        }
+    }
 
     var isActionSheetPresented: Bool { actionSheet.isActionSheedVisible }
 
-    func dismissActionSheet() { actionSheet = .none }
+    func dismissActionSheet() {
+        guard actionSheet.isActionSheedVisible else { return }
+        isDismissingActionSheet = true
+        actionSheet = .none
+    }
+
+    func didDismissPresentedSheet() {
+        isDismissingActionSheet = false
+        guard let pendingAlert else { return }
+        self.pendingAlert = nil
+        presentAlert(pendingAlert)
+    }
+
+    func updatePresentedSheet(_ presentation: DashboardPresentation?) {
+        let previousPresentation = presentedSheet
+        presentedSheet = presentation
+        if presentation == nil, previousPresentation == .actions {
+            actionSheet = .none
+        }
+    }
     
     let onCreateNewChecklist = EmptySubject()
     let onClearFilter = EmptySubject()
@@ -63,6 +119,8 @@ class DashboardViewModel: ObservableObject {
     private let createScheduleSubject = EmptySubject()
     private let createScheduleViewModel: CreateScheduleViewModel
     private let restrictionManager: RestrictionManager
+    private var isDismissingActionSheet = false
+    private var pendingAlert: Alert?
     
     init(
         checklistDataSource: ChecklistDataSource,
@@ -348,7 +406,7 @@ private extension DashboardViewModel {
     }
     
     func handleDeleteChecklist(_ checklist: ChecklistDataModel) {
-        alert = DashboardAlert.confirmDeleteChecklist(onDelete: { [unowned self] in
+        let confirmationAlert = DashboardAlert.confirmDeleteChecklist(onDelete: { [unowned self] in
             self.checklistDataSource.deleteChecklist(checklist)
             .done {
                 Logger.log.debug("Checklist deleted with id: \(checklist.id)")
@@ -358,6 +416,15 @@ private extension DashboardViewModel {
                 Haptics.notify(.error)
             }
         }).alert
+        presentAlert(confirmationAlert)
+    }
+
+    func presentAlert(_ alert: Alert) {
+        guard !isDismissingActionSheet else {
+            pendingAlert = alert
+            return
+        }
+        self.alert = alert
         isAlertVisible = true
     }
 }
@@ -371,23 +438,23 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
     }
     
     func onMarkAllDoneAction(checklist: ChecklistDataModel) {
-        alert = DashboardAlert.confirmMarkAllItemsDone { [weak self] in
+        let confirmationAlert = DashboardAlert.confirmMarkAllItemsDone { [weak self] in
             guard let self = self else { return }
             self.checklistDataSource.updateChecklist(checklist.getWithAllItemsDone()).catch { error in
                 error.log(message: "Failed to mark all items done")
             }
         }.alert
-        isAlertVisible = true
+        presentAlert(confirmationAlert)
     }
     
     func onMarkAllUndoneAction(checklist: ChecklistDataModel) {
-        alert = DashboardAlert.confirmMarkAllItemsUnDone { [weak self] in
+        let confirmationAlert = DashboardAlert.confirmMarkAllItemsUnDone { [weak self] in
             guard let self = self else { return }
             self.checklistDataSource.updateChecklist(checklist.getWithAllItemsUndone()).catch { error in
                 error.log(message: "Failed to mark all items undone")
             }
         }.alert
-        isAlertVisible = true
+        presentAlert(confirmationAlert)
     }
     
     func onSetReminderAction(checklist: ChecklistDataModel) {

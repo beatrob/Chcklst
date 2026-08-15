@@ -93,6 +93,30 @@ class checklistTests: XCTestCase {
         XCTAssertTrue(viewModel.isSheetVisible)
     }
 
+    func testDashboardDeletePresentsConfirmationAfterActionsSheetDismisses() {
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = DashboardViewModel(
+            checklistDataSource: checklistDataSource,
+            templateDataSource: MockTemplateDataSource(),
+            scheduleDataSource: MockScheduleDataSource(),
+            navigationHelper: NavigationHelper(),
+            checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: checklistDataSource),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource),
+            restrictionManager: MockRestrictionManager()
+        )
+        let checklist = ChecklistDataModel.getWelcomeChecklist()
+        viewModel.actionSheet = .editChecklist(checklist: checklist, delegate: viewModel)
+
+        viewModel.dismissActionSheet()
+        viewModel.onDeleteAction(checklist: checklist)
+
+        XCTAssertFalse(viewModel.isAlertVisible)
+
+        viewModel.didDismissPresentedSheet()
+
+        XCTAssertTrue(viewModel.isAlertVisible)
+    }
+
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {

@@ -21,7 +21,6 @@ struct EmptyListView: View {
             Text(message)
                 .modifier(Modifier.Checklist.Description())
                 .multilineTextAlignment(.center)
-                .padding()
             if let actionTitle = self.actionTitle,
                let tapSubject = self.onActionTappedSubject {
                 CapsuleButton(
@@ -29,9 +28,7 @@ struct EmptyListView: View {
                     type: .primary,
                     onTapSubject: tapSubject
                 )
-                .padding()
             }
-            Spacer()
             Spacer()
         }
     }

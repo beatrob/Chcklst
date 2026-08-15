@@ -33,7 +33,7 @@ enum DashboardActionSheet {
         case .editChecklist(let checklist, let delegate):
             return ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).title
         case .createChecklist:
-            return "Create New"
+            return "Create new"
         case .none:
             return ""
         }
