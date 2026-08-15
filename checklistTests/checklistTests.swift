@@ -117,6 +117,25 @@ class checklistTests: XCTestCase {
         XCTAssertTrue(viewModel.isAlertVisible)
     }
 
+    func testTemplatesDoesNotShowCreationAlertForUnrelatedChecklistChanges() {
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = MyTemplatesViewModel(
+            templateDataSource: MockTemplateDataSource(),
+            checklistDataSource: checklistDataSource,
+            navigationHelper: NavigationHelper(),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource)
+        )
+
+        _ = checklistDataSource.createChecklist(.getWelcomeChecklist())
+
+        let alertDelayElapsed = expectation(description: "Old delayed alert would have been presented")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+            XCTAssertFalse(viewModel.isAlertVisible)
+            alertDelayElapsed.fulfill()
+        }
+        wait(for: [alertDelayElapsed], timeout: 2)
+    }
+
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {

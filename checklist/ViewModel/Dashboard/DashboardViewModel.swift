@@ -324,6 +324,7 @@ class DashboardViewModel: ObservableObject {
 // MARK: - Private methods
 
 private extension DashboardViewModel {
+    
     func showChecklistView(state: ChecklistViewState) {
         let viewModel = AppContext.resolver.resolve(
             ChecklistViewModel.self,
@@ -354,6 +355,11 @@ private extension DashboardViewModel {
                 self?.isAlertVisible = true
             }
         }.store(in: &cancellables)
+
+        createScheduleViewModel.dismissView.sink { [weak self] in
+            self?.sheet = .empty
+            self?.isSheetVisible = false
+        }.store(in: &cancellables)
         
         createScheduleViewModel.presentViewPublisher.sink { [weak self] anyView in
             self?.sheet = anyView
@@ -362,6 +368,7 @@ private extension DashboardViewModel {
         
         createScheduleViewModel.onGotoDashboard
             .merge(with: selectTemplateVM.onGotoDashboard)
+            .merge(with: selectTemplateVM.dismissView)
             .map { false }
             .assign(to: \.isSheetVisible, on: self)
             .store(in: &self.cancellables)

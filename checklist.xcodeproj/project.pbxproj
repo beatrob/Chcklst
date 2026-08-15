@@ -1367,7 +1367,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1394,7 +1394,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1525,7 +1525,7 @@
 				DEVELOPMENT_TEAM = N3HE852DA3;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = checklist/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

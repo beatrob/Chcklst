@@ -121,14 +121,6 @@ class MyTemplatesViewModel: ObservableObject {
             )
         }.store(in: &cancellables)
         
-        checklistDataSource.checkLists.dropFirst().delay(for: .seconds(1.0), scheduler: RunLoop.main).sink { [weak self] _ in
-                self?.alert = .createChecklistSucess(
-                    onGotoDashboard: {
-                        self?.navigationHelper.popToDashboard()
-                    }
-                )
-        }.store(in: &self.cancellables)
-        
         onGotoDashboard.subscribe(navBarViewModel.backButton.didTapSubject).store(in: &cancellables)
         
         notificationManager.deeplinkChecklistId
@@ -174,6 +166,16 @@ private extension MyTemplatesViewModel {
             argument: viewState
         )!
         viewModel.setBigTitleNavBar(isTransparent: true)
+        viewModel.onDidCreateChecklist.sink { [weak self] in
+            self?.isSheetVisible = false
+            DispatchQueue.main.async {
+                self?.alert = .createChecklistSucess(
+                    onGotoDashboard: {
+                        self?.navigationHelper.popToDashboard()
+                    }
+                )
+            }
+        }.store(in: &cancellables)
         viewModel.dismissView.sink { [weak self] in
             self?.sheetView = .empty
             self?.isSheetVisible = false

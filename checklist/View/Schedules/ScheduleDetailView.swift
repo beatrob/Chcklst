@@ -116,7 +116,11 @@ struct ScheduleDetailView: View {
         .toolbar {
             if !viewModel.viewTitle.isEmpty {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { viewModel.backButtonViewModel.didTapSubject.send() }
+                    Button {
+                        viewModel.backButtonViewModel.didTapSubject.send()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
                 }
             } else {
                 ToolbarItem(placement: .navigationBarTrailing) {

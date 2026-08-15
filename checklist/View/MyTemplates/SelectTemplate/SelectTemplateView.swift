@@ -35,12 +35,6 @@ struct SelectTemplateView: View {
                             .isDetailLink(false)
                             .hidden()
                         
-                        if let title = viewModel.title {
-                            Text(title)
-                                .modifier(Modifier.Template.SmallTitle())
-                                .padding()
-                        }
-                        
                         if let description = viewModel.descriptionText {
                             Text(description)
                                 .modifier(Modifier.Checklist.Description())
@@ -64,11 +58,20 @@ struct SelectTemplateView: View {
                         Spacer()
                     }
                 }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button {
+                            viewModel.dismissView.send()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                    }
+                }
+                .navigationTitle(viewModel.title ?? "Templates")
+                .navigationBarTitleDisplayMode(.inline)
+                .chcklstNavigationBar()
             }
         }
-        .navigationTitle(viewModel.title ?? "Templates")
-        .navigationBarTitleDisplayMode(.inline)
-        .chcklstNavigationBar()
     }
 }
 

@@ -12,15 +12,27 @@ import SwiftUI
 private struct FullWidthActionButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
+        let color = getForegroundColor(for: configuration.role)
         configuration.label
             .frame(maxWidth: .infinity, minHeight: 48)
-            .foregroundColor(configuration.role == .cancel ? Color.red : .firstAccent)
-            .background(Color.firstAccent.opacity(configuration.isPressed ? 0.2 : 0.1))
+            .foregroundColor(color)
+            .background(color.opacity(configuration.isPressed ? 0.2 : 0.1))
             .clipShape(Capsule())
             .overlay {
                 Capsule()
-                    .stroke(Color.firstAccent.opacity(0.25))
+                    .stroke(color.opacity(0.25))
             }
+    }
+    
+    private func getForegroundColor(for role: ButtonRole?) -> Color {
+        guard let role else {
+            return .firstAccent
+        }
+        return switch role {
+        case .cancel: .text
+        case .destructive: .red
+        default: .firstAccent
+        }
     }
 }
 
@@ -56,8 +68,9 @@ struct BottomActionSheet<Actions: View>: View {
             
             .padding()
         }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
+        .presentationDetents([.medium])
+        .presentationBackground(Color.checklistBackground)
+        .presentationDragIndicator(.hidden)
     }
 }
 

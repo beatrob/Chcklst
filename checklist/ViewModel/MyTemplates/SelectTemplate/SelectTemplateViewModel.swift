@@ -25,6 +25,7 @@ class SelectTemplateViewModel: ObservableObject {
     @Published var descriptionText: String?
     let onTemplateTapped = TemplatePassthroughSubject()
     let onGotoDashboard = EmptySubject()
+    let dismissView = EmptySubject()
     var desitnationView = AnyView.empty
     var cancellables =  Set<AnyCancellable>()
     var templateTappedCancellable: AnyCancellable?

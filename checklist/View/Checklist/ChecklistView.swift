@@ -123,7 +123,11 @@ struct ChecklistView: View {
                 }
             } else {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { viewModel.dismissView.send() }
+                    Button {
+                        viewModel.dismissView.send()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
                 }
             }
         }

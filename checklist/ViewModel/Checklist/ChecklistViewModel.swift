@@ -68,6 +68,7 @@ class ChecklistViewModel: ObservableObject {
 
     func dismissActionSheet() { actionSheet = .none }
     private let didCreateTemplateSubject = EmptySubject()
+    private let didCreateChecklistSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
     
     /// Create Checklist or Template
@@ -81,6 +82,9 @@ class ChecklistViewModel: ObservableObject {
     let onBackTapped = EmptySubject()
     var onDidCreateTemplate: EmptyPublisher {
         didCreateTemplateSubject.eraseToAnyPublisher()
+    }
+    var onDidCreateChecklist: EmptyPublisher {
+        didCreateChecklistSubject.eraseToAnyPublisher()
     }
     var onDidUpdateTemplate: EmptyPublisher {
         didUpdateTemplate.eraseToAnyPublisher()
@@ -424,6 +428,7 @@ private extension ChecklistViewModel {
                 if shouldCreateTemplate {
                     self.createTemplate(checklist)
                 } else {
+                    self.didCreateChecklistSubject.send()
                     self.dismissView.send()
                 }
             }
@@ -464,8 +469,12 @@ private extension ChecklistViewModel {
         }.get { verified in
             if verified {
                 self.didCreateTemplateSubject.send()
+                if self.viewState.isCreateChecklist {
+                    self.didCreateChecklistSubject.send()
+                }
                 self.dismissView.send()
             } else if self.viewState.isCreateChecklist {
+                self.didCreateChecklistSubject.send()
                 self.dismissView.send()
             }
         }.catch { error in

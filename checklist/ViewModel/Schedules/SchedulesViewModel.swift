@@ -74,6 +74,11 @@ class SchedulesViewModel: ObservableObject {
                 self?.isSheetPresented = false
                 self?.sheet = .empty
             }.store(in: &cancellables)
+
+        createScheduleViewModel.dismissView.sink { [weak self] in
+            self?.isSheetPresented = false
+            self?.sheet = .empty
+        }.store(in: &cancellables)
         
         createScheduleViewModel.onGotoDashboard.sink { [weak self] in
             self?.isSheetPresented = false

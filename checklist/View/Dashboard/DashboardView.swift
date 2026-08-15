@@ -61,6 +61,7 @@ struct DashboardView: View {
                     selectedFilter: $viewModel.selectedFilter
                 )
                 .presentationDetents([.medium])
+                .presentationBackground(Color.checklistBackground)
             case .actions:
                 BottomActionSheet(title: viewModel.actionSheet.title) {
                     viewModel.actionSheet.buttons(onSelection: viewModel.dismissActionSheet)

@@ -21,7 +21,11 @@ enum DashboardSheet {
     var view: AnyView {
         switch self {
         case .createChecklist(let viewModel), .createTemplate(let viewModel):
-            return AnyView(ChecklistView(viewModel: viewModel))
+            return AnyView(
+                NavigationStack {
+                    ChecklistView(viewModel: viewModel)
+                }
+            )
         case .selectTemplate(let viewModel):
             return AnyView(
                 SelectTemplateView(viewModel: viewModel)
