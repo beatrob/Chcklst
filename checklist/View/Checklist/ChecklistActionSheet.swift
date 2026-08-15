@@ -22,33 +22,31 @@ enum ChecklistActionSheet {
     case none
     case actionMenu(checklist: ChecklistDataModel, delegate: ChecklistActionSheetDelegate)
     
-    var view: ActionSheet {
+    var title: String {
+        switch self {
+        case .none: return ""
+        case .actionMenu(let checklist, _): return checklist.title
+        }
+    }
+
+    @ViewBuilder
+    func buttons(onSelection: @escaping () -> Void = {}) -> some View {
         switch self {
         case .none:
-            return ActionSheet(title: Text(""))
+            EmptyView()
         case .actionMenu(let checklist, let delegate):
-            return ActionSheet(
-                title: Text(checklist.title),
-                message: nil,
-                buttons: [
-                    .default(Text("Edit")) {
-                        delegate.onEditAction(checklist: checklist)
-                    },
-                    .default(Text("Edit reminder")) {
-                        delegate.onSetReminderAction(checklist: checklist)
-                    },
-                    checklist.isDone ?
-                        .default(Text("Mark all undone")) { delegate.onMarkAllUndoneAction(checklist: checklist) }
-                    : .default(Text("Mark all done")) { delegate.onMarkAllDoneAction(checklist: checklist) },
-                    .default(Text("Create Template")) {
-                        delegate.onSaveAsTemplateAction(checklist: checklist)
-                    },
-                    .destructive(Text("Delete")) {
-                        delegate.onDeleteAction(checklist: checklist)
-                    },
-                    .cancel()
-                ]
-            )
+            Button("Edit") { onSelection(); delegate.onEditAction(checklist: checklist) }
+            Button("Edit reminder") { onSelection(); delegate.onSetReminderAction(checklist: checklist) }
+            Button(checklist.isDone ? "Mark all undone" : "Mark all done") {
+                onSelection()
+                if checklist.isDone {
+                    delegate.onMarkAllUndoneAction(checklist: checklist)
+                } else {
+                    delegate.onMarkAllDoneAction(checklist: checklist)
+                }
+            }
+            Button("Create Template") { onSelection(); delegate.onSaveAsTemplateAction(checklist: checklist) }
+            Button("Delete", role: .destructive) { onSelection(); delegate.onDeleteAction(checklist: checklist) }
         }
     }
     

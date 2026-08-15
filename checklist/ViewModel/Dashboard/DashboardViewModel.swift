@@ -28,7 +28,6 @@ class DashboardViewModel: ObservableObject {
     }
     @Published var alert: Alert = .empty
     @Published var isAlertVisible = false
-    @Published var actionSheetVisibility = ViewVisibility(view: DashboardActionSheet.none.actionSheet)
     @Published var sheet: AnyView = .empty
     @Published var isSheetVisible = false
     @Published var isEmptyListViewVisible = false
@@ -40,9 +39,11 @@ class DashboardViewModel: ObservableObject {
     @Published var selectedFilter: FilterDataModel = .initial
     @Published var isSortAndFilterPresented = false
     
-    @Published var actionSheet: DashboardActionSheet = .none {
-        didSet { actionSheetVisibility.set(view: actionSheet.actionSheet, isVisible: actionSheet.isActionSheedVisible) }
-    }
+    @Published var actionSheet: DashboardActionSheet = .none
+
+    var isActionSheetPresented: Bool { actionSheet.isActionSheedVisible }
+
+    func dismissActionSheet() { actionSheet = .none }
     
     let onCreateNewChecklist = EmptySubject()
     let onClearFilter = EmptySubject()

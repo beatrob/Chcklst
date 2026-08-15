@@ -27,7 +27,7 @@ enum MyTemplatesActionSheet {
         }
     }
     
-    var actionSheet: ActionSheet {
+    var title: String {
         switch self {
         case .templateActions(
             let template,
@@ -36,27 +36,22 @@ enum MyTemplatesActionSheet {
             let onEdit,
             let onDelete
             ):
-            return ActionSheet(
-                title: Text(template.title),
-                message: nil,
-                buttons: [
-                    .default(Text("Create Checklist")) {
-                        onCreateChecklist()
-                    },
-                    .default(Text("Create Schedule")) {
-                        onCreateSchedule()
-                    },
-                    .default(Text("Edit")) {
-                        onEdit()
-                    },
-                    .destructive(Text("Delete")) {
-                        withAnimation { onDelete() }
-                    },
-                    .cancel()
-                ]
-            )
-        default: return ActionSheet(title: Text(""))
+            return template.title
+        case .none:
+            return ""
         }
-        
+    }
+
+    @ViewBuilder
+    func buttons(onSelection: @escaping () -> Void = {}) -> some View {
+        switch self {
+        case .templateActions(_, let onCreateChecklist, let onCreateSchedule, let onEdit, let onDelete):
+            Button("Create Checklist") { onSelection(); onCreateChecklist() }
+            Button("Create Schedule") { onSelection(); onCreateSchedule() }
+            Button("Edit") { onSelection(); onEdit() }
+            Button("Delete", role: .destructive) { onSelection(); withAnimation { onDelete() } }
+        case .none:
+            EmptyView()
+        }
     }
 }

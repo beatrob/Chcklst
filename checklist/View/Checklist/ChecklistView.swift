@@ -92,9 +92,16 @@ struct ChecklistView: View {
                 .alert(isPresented: self.$viewModel.alertVisibility.isVisible) {
                     viewModel.alertVisibility.view
                 }
-                .actionSheet(isPresented: self.$viewModel.actionSheetVisibility.isVisible, content: {
-                    viewModel.actionSheetVisibility.view
-                })
+                .sheet(
+                    isPresented: Binding(
+                        get: { viewModel.isActionSheetPresented },
+                        set: { if !$0 { viewModel.dismissActionSheet() } }
+                    )
+                ) {
+                    BottomActionSheet(title: viewModel.actionSheetTitle) {
+                        viewModel.actionSheetButtons(onSelection: viewModel.dismissActionSheet)
+                    }
+                }
                 .sheet(isPresented: self.$viewModel.isSheetVisible) {
                     viewModel.sheet
                 }

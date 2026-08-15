@@ -40,7 +40,12 @@ class MyTemplatesViewModel: ObservableObject {
     var cancellables =  Set<AnyCancellable>()
     var createScheduleViewModel: CreateScheduleViewModel?
     
-    var actionSheetView: ActionSheet { actionSheet.actionSheet }
+    var actionSheetTitle: String { actionSheet.title }
+
+    @ViewBuilder
+    func actionSheetButtons(onSelection: @escaping () -> Void = {}) -> some View {
+        actionSheet.buttons(onSelection: onSelection)
+    }
     var sheetView = AnyView(EmptyView())
     var alertView: Alert { alert.alert }
     

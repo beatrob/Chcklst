@@ -28,34 +28,29 @@ enum DashboardActionSheet {
         }
     }
     
-    var actionSheet: ActionSheet {
+    var title: String {
         switch self {
         case .editChecklist(let checklist, let delegate):
-            return ChecklistActionSheet
-                .actionMenu(checklist: checklist, delegate: delegate)
-                .view
-        case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateTemplate, let onCreateSchedule):
-            return ActionSheet(
-                title: Text("CREATE NEW"),
-                message: nil,
-                buttons: [
-                    .default(Text("Checklist")) {
-                        onNewChecklist()
-                    },
-                    .default(Text("Checklist from Template")) {
-                        onNewFromTemplate()
-                    },
-                    .default(Text("Template")) {
-                        onCreateTemplate()
-                    },
-                    .default(Text("Schedule")) {
-                        onCreateSchedule.send()
-                    },
-                    .cancel()
-                ]
-            )
-        default: return ActionSheet(title: Text(""))
+            return ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).title
+        case .createChecklist:
+            return "Create New"
+        case .none:
+            return ""
         }
-        
+    }
+
+    @ViewBuilder
+    func buttons(onSelection: @escaping () -> Void = {}) -> some View {
+        switch self {
+        case .editChecklist(let checklist, let delegate):
+            ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).buttons(onSelection: onSelection)
+        case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateTemplate, let onCreateSchedule):
+            Button("Checklist") { onSelection(); onNewChecklist() }
+            Button("Checklist from Template") { onSelection(); onNewFromTemplate() }
+            Button("Template") { onSelection(); onCreateTemplate() }
+            Button("Schedule") { onSelection(); onCreateSchedule.send() }
+        case .none:
+            EmptyView()
+        }
     }
 }

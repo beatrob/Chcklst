@@ -41,8 +41,15 @@ struct DashboardView: View {
             .presentationDetents([.medium])
         }
         .alert(isPresented: $viewModel.isAlertVisible) { viewModel.alert }
-        .actionSheet(isPresented: $viewModel.actionSheetVisibility.isVisible) {
-            viewModel.actionSheetVisibility.view
+        .sheet(
+            isPresented: Binding(
+                get: { viewModel.isActionSheetPresented },
+                set: { if !$0 { viewModel.dismissActionSheet() } }
+            )
+        ) {
+            BottomActionSheet(title: viewModel.actionSheet.title) {
+                viewModel.actionSheet.buttons(onSelection: viewModel.dismissActionSheet)
+            }
         }
         .sheet(isPresented: $viewModel.isSheetVisible) { viewModel.sheet }
     }
@@ -109,6 +116,7 @@ private struct SortAndFilterView: View {
                 }
             }
             .navigationTitle("Sort & Filter")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Reset") {
@@ -138,16 +146,18 @@ private struct SortAndFilterView: View {
 
 struct DashboardView_Previews: PreviewProvider {
     static var previews: some View {
-        DashboardView(
-            viewModel: DashboardViewModel(
-                checklistDataSource: MockChecklistDataSource(),
-                templateDataSource: MockTemplateDataSource(),
-                scheduleDataSource: MockScheduleDataSource(),
-                navigationHelper: NavigationHelper(),
-                checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
-                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
-                restrictionManager: MockRestrictionManager()
+        NavigationStack {
+            DashboardView(
+                viewModel: DashboardViewModel(
+                    checklistDataSource: MockChecklistDataSource(),
+                    templateDataSource: MockTemplateDataSource(),
+                    scheduleDataSource: MockScheduleDataSource(),
+                    navigationHelper: NavigationHelper(),
+                    checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: MockChecklistDataSource()),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+                    restrictionManager: MockRestrictionManager()
+                )
             )
-        )
+        }
     }
 }

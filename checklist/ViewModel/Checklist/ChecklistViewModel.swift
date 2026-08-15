@@ -50,18 +50,23 @@ class ChecklistViewModel: ObservableObject {
     @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
     @Published var isSheetVisible: Bool = false
     @Published var sheet: AnyView = .empty
-    @Published var actionSheetVisibility = ViewVisibility(view: ChecklistActionSheet.none.view)
     @Published var enableAutoscrollToNewItem = false
     private var alert: ChecklistAlert = .none {
         didSet {
             alertVisibility.set(view: alert.view, isVisible: alert.isVisible)
         }
     }
-    private var actionSheet: ChecklistActionSheet = .none {
-        didSet {
-            actionSheetVisibility.set(view: actionSheet.view, isVisible: actionSheet.isVisible)
-        }
+    private var actionSheet: ChecklistActionSheet = .none
+
+    var isActionSheetPresented: Bool { actionSheet.isVisible }
+    var actionSheetTitle: String { actionSheet.title }
+
+    @ViewBuilder
+    func actionSheetButtons(onSelection: @escaping () -> Void = {}) -> some View {
+        actionSheet.buttons(onSelection: onSelection)
     }
+
+    func dismissActionSheet() { actionSheet = .none }
     private let didCreateTemplateSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
     

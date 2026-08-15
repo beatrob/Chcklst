@@ -57,8 +57,12 @@ struct MyTemplatesView: View {
         .sheet(isPresented: $viewModel.isSheetVisible) {
             self.viewModel.sheetView
         }
-        .actionSheet(isPresented: $viewModel.isActionSheetVisible) {
-            self.viewModel.actionSheetView
+        .sheet(isPresented: $viewModel.isActionSheetVisible) {
+            BottomActionSheet(title: viewModel.actionSheetTitle) {
+                viewModel.actionSheetButtons(onSelection: {
+                    viewModel.isActionSheetVisible = false
+                })
+            }
         }
         .alert(isPresented: $viewModel.isAlertVisible) {
             self.viewModel.alertView
