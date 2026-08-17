@@ -16,6 +16,7 @@ enum ChecklistAlert {
     case confirmDelete(onDelete: EmptyCompletion)
     case confirmMarkAllDone(onConfirm: EmptyCompletion)
     case confirmMarkAllUnDone(onConfirm: EmptyCompletion)
+    case confirmTemplateReplacement(onReplace: EmptyCompletion, onCancel: EmptyCompletion)
     case templateCreated(onGoToTemplates: EmptyCompletion)
     case none
     
@@ -39,6 +40,13 @@ enum ChecklistAlert {
                 primaryButton: .default(Text("Mark all undone"), action: onConfirm),
                 secondaryButton: .cancel()
                 )
+        case .confirmTemplateReplacement(let onReplace, let onCancel):
+            return Alert(
+                title: Text("Replace current checklist?"),
+                message: Text("This will replace the title, description, and items with the selected template."),
+                primaryButton: .destructive(Text("Replace"), action: onReplace),
+                secondaryButton: .cancel(onCancel)
+            )
         case .templateCreated(let onGoToTemplates):
             return .getTemplateCreated {
                 onGoToTemplates()

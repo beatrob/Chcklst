@@ -18,9 +18,9 @@ struct MyTemplatesView: View {
             VStack(spacing: 0) {
                 if viewModel.isEmptyViewVisible {
                     EmptyListView(
-                        message: "Your template list is empty.\nYou can create new templates from the Dashboard.",
-                        actionTitle: "Go to Dasahboard",
-                        onActionTappedSubject: viewModel.onGotoDashboard
+                        message: "Your template list is empty.",
+                        actionTitle: "Create template",
+                        onActionTappedSubject: viewModel.onCreateTemplate
                     )
                 } else {
                     ScrollView {
@@ -49,7 +49,7 @@ struct MyTemplatesView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button { viewModel.createTemplate() } label: { Image(systemName: "plus") }
+                Button { viewModel.onCreateTemplate.send() } label: { Image(systemName: "plus") }
                     .accessibilityLabel("Create template")
             }
         }

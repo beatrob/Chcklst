@@ -14,7 +14,6 @@ enum DashboardAlert {
     
     case none
     case templateCreated(gotoTemplates: EmptyCompletion)
-    case scheduleCreated(gotoSchedules: EmptyCompletion)
     case confirmDeleteChecklist(onDelete: EmptyCompletion)
     case confirmMarkAllItemsDone(onConfirm: EmptyCompletion)
     case confirmMarkAllItemsUnDone(onConfirm: EmptyCompletion)
@@ -27,15 +26,6 @@ enum DashboardAlert {
             }
         case .confirmDeleteChecklist(let onDelete):
             return .getConfirmDeleteChecklist(onDelete: onDelete)
-        case .scheduleCreated(let gotoSchedules):
-            return Alert(
-                title: Text("Schedule created"),
-                message: Text("Do you want to open your schedules?"),
-                primaryButton: .default(Text("Go to schedules"), action: {
-                    gotoSchedules()
-                }),
-                secondaryButton: .cancel()
-            )
         case .none: return .empty
         case .confirmMarkAllItemsDone(let onConfirm):
             return ChecklistAlert.confirmMarkAllDone(onConfirm: onConfirm).view

@@ -80,13 +80,6 @@ class SchedulesViewModel: ObservableObject {
             self?.sheet = .empty
         }.store(in: &cancellables)
         
-        createScheduleViewModel.onGotoDashboard.sink { [weak self] in
-            self?.isSheetPresented = false
-            after(seconds: 0.5).done {
-                self?.navBarViewModel.backButton.didTapSubject.send()
-            }
-        }.store(in: &cancellables)
-        
         navBarViewModel.setRightButton(rightButton)
         
         didSelectSchedule.sink { [weak self] scheduleCell in

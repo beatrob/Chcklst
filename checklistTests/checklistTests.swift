@@ -117,6 +117,53 @@ class checklistTests: XCTestCase {
         XCTAssertTrue(viewModel.isAlertVisible)
     }
 
+    func testDashboardCreatePresentsChecklistSheetWithoutActionSheet() {
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = DashboardViewModel(
+            checklistDataSource: checklistDataSource,
+            templateDataSource: MockTemplateDataSource(),
+            scheduleDataSource: MockScheduleDataSource(),
+            navigationHelper: NavigationHelper(),
+            checklistFilterAndSort: ChecklistFilterAndSortImpl(dataSource: checklistDataSource),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource),
+            restrictionManager: MockRestrictionManager()
+        )
+
+        viewModel.onCreateNewChecklist.send()
+
+        XCTAssertTrue(viewModel.isSheetVisible)
+        XCTAssertFalse(viewModel.isActionSheetPresented)
+    }
+
+    func testSelectingTemplateAppliesItToEmptyChecklistDraft() {
+        let viewModel = makeCreateChecklistViewModel()
+        let template = makeTemplate()
+        let reminderDate = Date(timeIntervalSince1970: 1_000)
+        viewModel.reminderDate = reminderDate
+        viewModel.isCreateTemplateChecked = true
+
+        viewModel.selectTemplate(template)
+        viewModel.didDismissTemplatePicker()
+
+        XCTAssertEqual(viewModel.checklistName, template.title)
+        XCTAssertEqual(viewModel.checklistDescription, template.description)
+        XCTAssertEqual(viewModel.items.map(\.name).filter { !$0.isEmpty }, template.items.map(\.name))
+        XCTAssertEqual(viewModel.reminderDate, reminderDate)
+        XCTAssertTrue(viewModel.isCreateTemplateChecked)
+        XCTAssertFalse(viewModel.alertVisibility.isVisible)
+    }
+
+    func testSelectingTemplateForPopulatedDraftRequiresReplacementConfirmation() {
+        let viewModel = makeCreateChecklistViewModel()
+        viewModel.checklistName = "Draft"
+
+        viewModel.selectTemplate(makeTemplate())
+        viewModel.didDismissTemplatePicker()
+
+        XCTAssertEqual(viewModel.checklistName, "Draft")
+        XCTAssertTrue(viewModel.alertVisibility.isVisible)
+    }
+
     func testTemplatesDoesNotShowCreationAlertForUnrelatedChecklistChanges() {
         let checklistDataSource = MockChecklistDataSource()
         let viewModel = MyTemplatesViewModel(
@@ -141,6 +188,29 @@ class checklistTests: XCTestCase {
         self.measure {
             // Put the code you want to measure the time of here.
         }
+    }
+
+    private func makeCreateChecklistViewModel() -> ChecklistViewModel {
+        ChecklistViewModel(
+            viewState: .createChecklist,
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+            restrictionManager: MockRestrictionManager()
+        )
+    }
+
+    private func makeTemplate() -> TemplateDataModel {
+        TemplateDataModel(
+            id: "template-id",
+            title: "Morning routine",
+            description: "Start well",
+            items: [
+                ItemDataModel(id: "item-1", name: "Coffee", isDone: false, updateDate: .now),
+                ItemDataModel(id: "item-2", name: "Plan day", isDone: false, updateDate: .now)
+            ],
+            created: .now
+        )
     }
 
 }

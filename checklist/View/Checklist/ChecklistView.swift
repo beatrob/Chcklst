@@ -110,6 +110,14 @@ struct ChecklistView: View {
         .navigationTitle(viewModel.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            if viewModel.viewState.isCreateChecklist {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Templates") {
+                        viewModel.showTemplatePicker()
+                    }
+                    .accessibilityLabel("Choose template")
+                }
+            }
             if viewModel.isNavBarVisible {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if viewModel.isEditable {
@@ -130,6 +138,12 @@ struct ChecklistView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.isTemplatePickerVisible, onDismiss: viewModel.didDismissTemplatePicker) {
+            SelectTemplateView(
+                viewModel: viewModel.selectTemplateViewModel,
+                onTemplateSelected: viewModel.selectTemplate
+            )
         }
         .chcklstNavigationBar()
     }

@@ -17,26 +17,18 @@ struct MyTemplateItemView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing:0) {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(name)
                         .modifier(Modifier.Template.SmallTitle())
                         .foregroundColor(.firstAccent)
-                        .padding(.top)
                     if let description = description, !description.isEmpty {
                         Text(description)
                             .modifier(Modifier.Checklist.Description())
                             .lineLimit(3)
-                            .padding(.vertical)
                     }
-                }
-                if displayRightArrow {
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .modifier(Modifier.Template.SmallTitle())
                 }
             }
             .padding(.horizontal)
-            SeparatorView()
         }
     }
 }

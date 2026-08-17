@@ -11,38 +11,21 @@ import SwiftUI
 import Combine
 
 enum DashboardSheet {
-    
-    case none
     case createChecklist(viewModel: ChecklistViewModel)
-    case createTemplate(viewModel: ChecklistViewModel)
-    case selectTemplate(viewModel: SelectTemplateViewModel)
     case editReminder(viewModel: EditReminderViewModel)
     
     var view: AnyView {
         switch self {
-        case .createChecklist(let viewModel), .createTemplate(let viewModel):
+        case .createChecklist(let viewModel):
             return AnyView(
                 NavigationStack {
                     ChecklistView(viewModel: viewModel)
                 }
             )
-        case .selectTemplate(let viewModel):
-            return AnyView(
-                SelectTemplateView(viewModel: viewModel)
-                    .environmentObject(AppContext.resolver.resolve(NavigationHelper.self)!)
-            )
         case .editReminder(let viewModel):
             return AnyView(
                 EditReminderView(viewModel: viewModel)
             )
-        case .none: return AnyView.empty
-        }
-    }
-    
-    var isVisible: Bool {
-        switch self {
-        case .none: return false
-        default: return true
         }
     }
     

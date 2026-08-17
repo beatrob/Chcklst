@@ -50,6 +50,7 @@ class MyTemplatesViewModel: ObservableObject {
     var alertView: Alert { alert.alert }
     
     let onGotoDashboard = EmptySubject()
+    let onCreateTemplate = EmptySubject()
     let onTemplateTapped = TemplatePassthroughSubject()
     let navigationHelper: NavigationHelper
     let navBarViewModel = AppContext.resolver.resolve(
@@ -71,10 +72,12 @@ class MyTemplatesViewModel: ObservableObject {
         self.navigationHelper = navigationHelper
         
         let createButton = NavBarChipButtonViewModel(title: nil, icon: Image(systemName: "plus"))
-        createButton.didTap.sink { [weak self] in
+        createButton.didTap.subscribe(onCreateTemplate).store(in: &cancellables)
+        self.navBarViewModel.setRightButton(createButton)
+
+        onCreateTemplate.sink { [weak self] in
             self?.displayCreate(nil)
         }.store(in: &cancellables)
-        self.navBarViewModel.setRightButton(createButton)
         
         templateDataSource.templates.sink { [weak self] templates in
             self?.templates = templates.sorted(by: { left, right in
@@ -133,7 +136,7 @@ class MyTemplatesViewModel: ObservableObject {
     }
 
     func createTemplate() {
-        displayCreate(nil)
+        onCreateTemplate.send()
     }
 }
 

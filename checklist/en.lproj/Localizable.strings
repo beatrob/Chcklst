@@ -115,11 +115,11 @@ You can edit a Checklist by long-pressing on it’s title on the dashboard, then
 
 **Creating Templates**
 
-You can create Templates from existing or new Checklists on the dashboard. You can also create new Templates from scratch.
+You can save Templates from existing or new Checklists on the dashboard. To create a new Template from scratch, open the Templates page.
 
 **Using Templates**
 
-Your Templates can be accessed from the side-menu, by tapping the “Templates” button. Here you can edit, or delete your existing Templates. On this screem it’s also possible to create new Checklists and Schedules (read more about Schedules on the Help page).
+Your Templates can be accessed from the side-menu, by tapping the “Templates” button. Here you can create, edit, or delete Templates, and create new Checklists and Schedules (read more about Schedules on the Help page).
 ";
 "help_schedules_title" = "Schedules";
 "help_schedules_text" = "Schedules are basically your future Checklists waiting to be created on a certain date and time. Using schedules you can plan and automate your Checklists.

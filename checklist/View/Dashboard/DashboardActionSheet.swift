@@ -12,13 +12,6 @@ import SwiftUI
 
 enum DashboardActionSheet {
     case editChecklist(checklist: ChecklistDataModel, delegate: ChecklistActionSheetDelegate)
-    
-    case createChecklist(
-            onNewChecklist: EmptyCompletion,
-            onNewFromTemplate: EmptyCompletion,
-            onCreateTemplate: EmptyCompletion,
-            onCreateSchedule: EmptySubject
-         )
     case none
     
     var isActionSheedVisible: Bool {
@@ -32,8 +25,6 @@ enum DashboardActionSheet {
         switch self {
         case .editChecklist(let checklist, let delegate):
             return ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).title
-        case .createChecklist:
-            return "Create new"
         case .none:
             return ""
         }
@@ -44,11 +35,6 @@ enum DashboardActionSheet {
         switch self {
         case .editChecklist(let checklist, let delegate):
             ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).buttons(onSelection: onSelection)
-        case .createChecklist(let onNewChecklist, let onNewFromTemplate, let onCreateTemplate, let onCreateSchedule):
-            Button("Checklist") { onSelection(); onNewChecklist() }
-            Button("Checklist from Template") { onSelection(); onNewFromTemplate() }
-            Button("Template") { onSelection(); onCreateTemplate() }
-            Button("Schedule") { onSelection(); onCreateSchedule.send() }
         case .none:
             EmptyView()
         }

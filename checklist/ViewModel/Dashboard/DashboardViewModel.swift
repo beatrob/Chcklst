@@ -106,9 +106,6 @@ class DashboardViewModel: ObservableObject {
     
     var cancellables =  Set<AnyCancellable>()
     
-    private lazy var selectTemplateVM: SelectTemplateViewModel = {
-        AppContext.resolver.resolve(SelectTemplateViewModel.self)!
-    }()
     private var checklistToEdit: DashboardChecklistCellViewModel?
     private let checklistDataSource: ChecklistDataSource
     private let templateDataSource: TemplateDataSource
@@ -116,8 +113,6 @@ class DashboardViewModel: ObservableObject {
     private let notificationManager: NotificationManager
     private let checklistFilterAndSort: ChecklistFilterAndSort
     private let navigationHelper: NavigationHelper
-    private let createScheduleSubject = EmptySubject()
-    private let createScheduleViewModel: CreateScheduleViewModel
     private let restrictionManager: RestrictionManager
     private var isDismissingActionSheet = false
     private var pendingAlert: Alert?
@@ -138,13 +133,6 @@ class DashboardViewModel: ObservableObject {
         self.notificationManager = notificationManager
         self.navigationHelper = navigationHelper
         self.restrictionManager = restrictionManager
-        self.createScheduleViewModel = AppContext.resolver.resolve(
-            CreateScheduleViewModel.self,
-            argument: createScheduleSubject.eraseToAnyPublisher()
-        )!
-        
-        setupCreateScheduleHandling()
-        
         notificationManager.deeplinkChecklistId.sink { [weak self] checklistId in
             log(debug: "Did receive deepling cheklistId \(checklistId)")
             guard !checklistId.isEmpty else {
@@ -195,27 +183,7 @@ class DashboardViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onCreateNewChecklist.sink { [weak self] in
-            guard let self = self else {
-                return
-            }
-            self.actionSheet = .createChecklist(
-                onNewChecklist: {
-                    self.showChecklistView(state: .createChecklist)
-                },
-                onNewFromTemplate: {
-                    let viewModel = self.selectTemplateVM
-                    viewModel.reset(
-                        withTitle: "Create Checklist",
-                        description: "Select a Template to create a new Checklist"
-                    )
-                    self.sheet = DashboardSheet.selectTemplate(viewModel: viewModel).view
-                    self.isSheetVisible = true
-                },
-                onCreateTemplate: {
-                    self.showChecklistView(state: .createTemplate)
-                },
-                onCreateSchedule: self.createScheduleSubject
-            )
+            self?.showChecklistView(state: .createChecklist)
         }.store(in: &cancellables)
         
         $searchText
@@ -342,36 +310,6 @@ private extension DashboardViewModel {
         }.store(in: &cancellables)
         self.sheet = DashboardSheet.createChecklist(viewModel: viewModel).view
         self.isSheetVisible = true
-    }
-    
-    func setupCreateScheduleHandling() {
-        createScheduleViewModel.didCreateSchedulePublisher.sink { [weak self] in
-            self?.sheet = .empty
-            self?.isSheetVisible = false
-            DispatchQueue.main.async {
-                self?.alert = DashboardAlert.scheduleCreated(gotoSchedules: {
-                    self?.navigationHelper.navigateToSchedules()
-                }).alert
-                self?.isAlertVisible = true
-            }
-        }.store(in: &cancellables)
-
-        createScheduleViewModel.dismissView.sink { [weak self] in
-            self?.sheet = .empty
-            self?.isSheetVisible = false
-        }.store(in: &cancellables)
-        
-        createScheduleViewModel.presentViewPublisher.sink { [weak self] anyView in
-            self?.sheet = anyView
-            self?.isSheetVisible = true
-        }.store(in: &cancellables)
-        
-        createScheduleViewModel.onGotoDashboard
-            .merge(with: selectTemplateVM.onGotoDashboard)
-            .merge(with: selectTemplateVM.dismissView)
-            .map { false }
-            .assign(to: \.isSheetVisible, on: self)
-            .store(in: &self.cancellables)
     }
     
     func createChecklist(for scheduleId: String) {

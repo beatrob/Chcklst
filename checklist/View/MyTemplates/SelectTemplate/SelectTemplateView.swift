@@ -11,6 +11,19 @@ import SwiftUI
 struct SelectTemplateView: View {
     
     @ObservedObject var viewModel: SelectTemplateViewModel
+    let onTemplateSelected: (TemplateDataModel) -> Void
+    let onClose: EmptyCompletion
+    @Environment(\.dismiss) private var dismiss
+
+    init(
+        viewModel: SelectTemplateViewModel,
+        onTemplateSelected: @escaping (TemplateDataModel) -> Void,
+        onClose: @escaping EmptyCompletion = {}
+    ) {
+        self.viewModel = viewModel
+        self.onTemplateSelected = onTemplateSelected
+        self.onClose = onClose
+    }
     
     var body: some View {
         NavigationStack {
@@ -18,71 +31,54 @@ struct SelectTemplateView: View {
                 EmptyListView(
                     message: """
                         Your template list is empty.
-                        Go to Dashboard to create a template from a new or an existing checklist
+                        Create one on the Templates page.
                         """,
-                    actionTitle: "Go to Dashboard",
-                    onActionTappedSubject: viewModel.onGotoDashboard
+                    actionTitle: nil,
+                    onActionTappedSubject: nil
                 )
             } else {
-                ScrollView {
-                    VStack {
-                        NavigationLink(
-                            destination: viewModel.desitnationView,
-                            isActive: $viewModel.isDestionationViewVisible,
-                            label: {
-                                EmptyView()
-                            })
-                            .isDetailLink(false)
-                            .hidden()
-                        
-                        if let description = viewModel.descriptionText {
-                            Text(description)
-                                .modifier(Modifier.Checklist.Description())
-                                .multilineTextAlignment(.center)
-                                .padding(.bottom)
-                                .padding(.horizontal)
-                        }
-                        
+                Form {
+                    Section(header: Text("Templates")) {
                         ForEach(
                             viewModel.templates,
                             id: \.id) { template in
-                                MyTemplateItemView(
-                                    name: template.title,
-                                    description: template.description,
-                                    displayRightArrow: true
-                                )
-                                    .onTapGesture {
-                                        self.viewModel.onTemplateTapped.send(template)
-                                    }
+                                Button {
+                                    onTemplateSelected(template)
+                                } label: {
+                                    MyTemplateItemView(
+                                        name: template.title,
+                                        description: template.description,
+                                        displayRightArrow: false
+                                    )
+                                }
+                                .buttonStyle(.plain)
                             }
-                        Spacer()
                     }
                 }
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button {
-                            viewModel.dismissView.send()
-                        } label: {
-                            Image(systemName: "xmark")
-                        }
-                    }
-                }
-                .navigationTitle(viewModel.title ?? "Templates")
-                .navigationBarTitleDisplayMode(.inline)
-                .chcklstNavigationBar()
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
+                    onClose()
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                }
+                .accessibilityLabel("Close template picker")
+            }
+        }
+        .navigationTitle("Templates")
+        .navigationBarTitleDisplayMode(.inline)
+        .chcklstNavigationBar()
     }
 }
 
 struct SelectTemplateView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = SelectTemplateViewModel(
-            checklistDataSource: MockChecklistDataSource(),
             templateDataSource: MockTemplateDataSource()
         )
-        viewModel.title = "Create Checklist"
-        viewModel.descriptionText = "Select a Template to create a new Checklist"
-        return SelectTemplateView(viewModel: viewModel)
+        return SelectTemplateView(viewModel: viewModel, onTemplateSelected: { _ in })
     }
 }

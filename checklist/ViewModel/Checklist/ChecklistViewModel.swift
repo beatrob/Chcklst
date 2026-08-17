@@ -49,6 +49,7 @@ class ChecklistViewModel: ObservableObject {
     @Published var viewState: ChecklistViewState
     @Published var alertVisibility = ViewVisibility(view: ChecklistAlert.none.view)
     @Published var isSheetVisible: Bool = false
+    @Published var isTemplatePickerVisible = false
     @Published var sheet: AnyView = .empty
     @Published var enableAutoscrollToNewItem = false
     private var alert: ChecklistAlert = .none {
@@ -57,6 +58,11 @@ class ChecklistViewModel: ObservableObject {
         }
     }
     private var actionSheet: ChecklistActionSheet = .none
+    private var pendingTemplate: TemplateDataModel?
+
+    lazy var selectTemplateViewModel: SelectTemplateViewModel = {
+        AppContext.resolver.resolve(SelectTemplateViewModel.self)!
+    }()
 
     var isActionSheetPresented: Bool { actionSheet.isVisible }
     var actionSheetTitle: String { actionSheet.title }
@@ -67,6 +73,27 @@ class ChecklistViewModel: ObservableObject {
     }
 
     func dismissActionSheet() { actionSheet = .none }
+
+    func showTemplatePicker() {
+        isTemplatePickerVisible = true
+    }
+
+    func selectTemplate(_ template: TemplateDataModel) {
+        pendingTemplate = template
+        isTemplatePickerVisible = false
+    }
+
+    func didDismissTemplatePicker() {
+        guard let template = pendingTemplate else { return }
+        if hasTemplateReplaceableDraftContent {
+            alert = .confirmTemplateReplacement(
+                onReplace: { [weak self] in self?.applyPendingTemplate() },
+                onCancel: { [weak self] in self?.pendingTemplate = nil }
+            )
+        } else {
+            apply(template)
+        }
+    }
     private let didCreateTemplateSubject = EmptySubject()
     private let didCreateChecklistSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
@@ -226,6 +253,30 @@ class ChecklistViewModel: ObservableObject {
 // MARK: - Private methods
 
 private extension ChecklistViewModel {
+
+    var hasTemplateReplaceableDraftContent: Bool {
+        !checklistName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+        !checklistDescription.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+        items.contains { !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+
+    func applyPendingTemplate() {
+        guard let template = pendingTemplate else { return }
+        apply(template)
+    }
+
+    func apply(_ template: TemplateDataModel) {
+        pendingTemplate = nil
+        checklistName = template.title
+        checklistDescription = template.description ?? ""
+        items.removeAll()
+        template.items.forEach {
+            addNewItemIfNeeded(name: $0.name, isDone: false, isEditable: true)
+        }
+        addNewItemIfNeeded(name: nil, isDone: false, isEditable: true)
+        viewState = .createChecklistFromTemplate(template: template)
+        objectWillChange.send()
+    }
     
     func setEditDoneAndUpdateChecklist() {
         guard let checklist = self.currentChecklist.value else {
