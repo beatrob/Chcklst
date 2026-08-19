@@ -30,7 +30,7 @@ struct DashboardChecklistCell: View {
                     }
                     Text(viewModel.counter).modifier(Modifier.Checklist.Item(color: .lightText))
                 }
-                .padding()
+                .mainListCardPadding()
                 .background(Color.firstAccent)
                 .onTapGesture {
                     viewModel.onTapped.send()
@@ -43,20 +43,18 @@ struct DashboardChecklistCell: View {
                         ChecklistItemView(viewModel: firstUndone)
                         Spacer()
                     }
-                    .padding()
+                    .mainListCardPadding()
                 }
                 
                 if viewModel.shouldDisplayDeleteButton {
                     Button("Delete") {
                         viewModel.onDelete.send()
                     }
-                    .padding()
+                    .mainListCardPadding()
                     .modifier(Modifier.Button.DestructiveAction())
                 }
             }
-            .background(Color.checklistBackground)
-            .cornerRadius(20)
-            .contentShape(Rectangle())
+            .mainListCard(backgroundColor: .checklistBackground)
             
             if viewModel.shouldShowNewBadge {
                 Text("New")

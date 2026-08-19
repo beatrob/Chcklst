@@ -18,7 +18,6 @@ struct ScheduleCellView: View {
                 HStack {
                     Text(viewModel.title)
                         .modifier(Modifier.Schedule.SmallTitle())
-                        .padding(.top)
                     Spacer()
                 }
                 viewModel.description.map {
@@ -26,8 +25,7 @@ struct ScheduleCellView: View {
                         .modifier(Modifier.Schedule.Description())
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom)
+            .mainListCardPadding()
             
             VStack(alignment: .leading) {
                 HStack {
@@ -45,13 +43,10 @@ struct ScheduleCellView: View {
                     }
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom)
+            .mainListCardPadding([.horizontal, .bottom])
             
         }
-        .background(Color.scheduleBackground)
-        .cornerRadius(20)
-        .contentShape(Rectangle())
+        .mainListCard(backgroundColor: .scheduleBackground)
     }
 }
 

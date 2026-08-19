@@ -27,50 +27,52 @@ struct SelectTemplateView: View {
     
     var body: some View {
         NavigationStack {
-            if viewModel.isEmptyListViewVisible {
-                EmptyListView(
-                    message: """
+            Group {
+                if viewModel.isEmptyListViewVisible {
+                    EmptyListView(
+                        message: """
                         Your template list is empty.
                         Create one on the Templates page.
                         """,
-                    actionTitle: nil,
-                    onActionTappedSubject: nil
-                )
-            } else {
-                Form {
-                    Section(header: Text("Templates")) {
-                        ForEach(
-                            viewModel.templates,
-                            id: \.id) { template in
-                                Button {
-                                    onTemplateSelected(template)
-                                } label: {
-                                    MyTemplateItemView(
-                                        name: template.title,
-                                        description: template.description,
-                                        displayRightArrow: false
-                                    )
+                        actionTitle: nil,
+                        onActionTappedSubject: nil
+                    )
+                } else {
+                    Form {
+                        Section(header: Text("Templates")) {
+                            ForEach(
+                                viewModel.templates,
+                                id: \.id) { template in
+                                    Button {
+                                        onTemplateSelected(template)
+                                    } label: {
+                                        MyTemplateItemView(
+                                            name: template.title,
+                                            description: template.description,
+                                            displayRightArrow: false
+                                        )
+                                    }
+                                    .buttonStyle(.plain)
                                 }
-                                .buttonStyle(.plain)
-                            }
+                        }
                     }
                 }
             }
-        }
-        .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button {
-                    onClose()
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button {
+                        onClose()
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                    .accessibilityLabel("Close template picker")
                 }
-                .accessibilityLabel("Close template picker")
             }
+            .navigationTitle("Templates")
+            .navigationBarTitleDisplayMode(.inline)
+            .chcklstNavigationBar()
         }
-        .navigationTitle("Templates")
-        .navigationBarTitleDisplayMode(.inline)
-        .chcklstNavigationBar()
     }
 }
 

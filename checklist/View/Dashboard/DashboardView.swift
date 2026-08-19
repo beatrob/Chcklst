@@ -89,20 +89,17 @@ struct DashboardView: View {
                 onActionTappedSubject: viewModel.onClearFilter
             )
         } else {
-            ScrollView {
-                ScrollViewReader { reader in
-                    LazyVStack {
-                        ForEach(viewModel.checklistCells, id: \.id) { cell in
-                            DashboardChecklistCell(viewModel: cell)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 7)
-                        }
+            ScrollViewReader { reader in
+                List {
+                    ForEach(viewModel.checklistCells, id: \.id) { cell in
+                        DashboardChecklistCell(viewModel: cell)
+                            .mainListRow()
                     }
-                    .onChange(of: viewModel.scrollToId) { newValue in
-                        guard let newValue else { return }
-                        withAnimation { reader.scrollTo(newValue, anchor: .top) }
-                    }
-                    .padding(.vertical)
+                }
+                .mainListStyle()
+                .onChange(of: viewModel.scrollToId) { newValue in
+                    guard let newValue else { return }
+                    withAnimation { reader.scrollTo(newValue, anchor: .top) }
                 }
             }
         }

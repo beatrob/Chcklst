@@ -112,8 +112,10 @@ struct ChecklistView: View {
         .toolbar {
             if viewModel.viewState.isCreateChecklist {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Templates") {
+                    Button {
                         viewModel.showTemplatePicker()
+                    } label: {
+                        Image(systemName: "doc.on.doc")
                     }
                     .accessibilityLabel("Choose template")
                 }

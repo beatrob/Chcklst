@@ -28,22 +28,19 @@ struct SchedulesView: View {
                         onActionTappedSubject: viewModel.onCreateSchedule
                     )
                 } else {
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ForEach(viewModel.cells) { cell in
-                                ScheduleCellView(viewModel: cell)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 7)
-                                    .onTapGesture {
-                                        navigationHelper.navigateToScheduleDetail(id: cell.id)
-                                    }
-                            }
+                    List {
+                        ForEach(viewModel.cells) { cell in
+                            ScheduleCellView(viewModel: cell)
+                                .mainListRow()
+                                .onTapGesture {
+                                    navigationHelper.navigateToScheduleDetail(id: cell.id)
+                                }
                         }
-                        .padding(.vertical)
                     }
+                    .mainListStyle()
                 }
             }
-            .background(Color.checklistBackground)
+            .background(Color.mainBackground)
         }
         .ignoresSafeArea(.container, edges: .bottom)
         .navigationTitle("Schedules")

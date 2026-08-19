@@ -14,7 +14,6 @@ struct MyTemplatesView: View {
     
     var body: some View {
         ZStack {
-            Color.menuBackground.ignoresSafeArea()
             VStack(spacing: 0) {
                 if viewModel.isEmptyViewVisible {
                     EmptyListView(
@@ -23,32 +22,32 @@ struct MyTemplatesView: View {
                         onActionTappedSubject: viewModel.onCreateTemplate
                     )
                 } else {
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            ForEach(
-                                viewModel.templates,
-                                id: \.id) { template in
-                                MyTemplateItemView(
-                                    name: template.title,
-                                    description: template.description,
-                                    displayRightArrow: false
-                                )
-                                .onTapGesture {
-                                    self.viewModel.onTemplateTapped.send(template)
-                                }
+                    List {
+                        ForEach(
+                            viewModel.templates,
+                            id: \.id) { template in
+                            MyTemplateItemView(
+                                name: template.title,
+                                description: template.description,
+                                displayRightArrow: false
+                            )
+                            .mainListCardPadding()
+                            .mainListCard(backgroundColor: .checklistBackground)
+                            .mainListRow()
+                            .onTapGesture {
+                                self.viewModel.onTemplateTapped.send(template)
                             }
-                            Spacer()
                         }
                     }
+                    .mainListStyle()
                 }
             }
-            .background(Color.checklistBackground)
         }
         .ignoresSafeArea(.container, edges: .bottom)
         .navigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarLeading) {
                 Button { viewModel.onCreateTemplate.send() } label: { Image(systemName: "plus") }
                     .accessibilityLabel("Create template")
             }
@@ -72,13 +71,15 @@ struct MyTemplatesView: View {
 
 struct MyTemplatesView_Previews: PreviewProvider {
     static var previews: some View {
-        MyTemplatesView(
-            viewModel: .init(
-                templateDataSource: MockTemplateDataSource(),
-                checklistDataSource: MockChecklistDataSource(),
-                navigationHelper: NavigationHelper(),
-                notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        NavigationStack {
+            MyTemplatesView(
+                viewModel: .init(
+                    templateDataSource: MockTemplateDataSource(),
+                    checklistDataSource: MockChecklistDataSource(),
+                    navigationHelper: NavigationHelper(),
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+                )
             )
-        )
+        }
     }
 }
