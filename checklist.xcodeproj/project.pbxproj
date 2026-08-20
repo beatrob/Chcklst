@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0A0000022C6F000000000001 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012C6F000000000001 /* TabBarView.swift */; };
+		D4F692D83036ED6800FEF092 /* chcklst-logo.icon in Resources */ = {isa = PBXBuildFile; fileRef = D4F692D73036ED5000FEF092 /* chcklst-logo.icon */; };
 		DD08097325377D3F00F075D4 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08097225377D3F00F075D4 /* View+Extension.swift */; };
 		DD08D9492544125B00A5BFF2 /* ChecklistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08D9482544125B00A5BFF2 /* ChecklistView.swift */; };
 		DD08D94E254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08D94D254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift */; };
@@ -200,6 +201,7 @@
 
 /* Begin PBXFileReference section */
 		0A0000012C6F000000000001 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		D4F692D73036ED5000FEF092 /* chcklst-logo.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "chcklst-logo.icon"; sourceTree = "<group>"; };
 		DD08097225377D3F00F075D4 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		DD08D9482544125B00A5BFF2 /* ChecklistView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChecklistView.swift; sourceTree = "<group>"; };
 		DD08D94D254412C100A5BFF2 /* ChecklistViewModel+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChecklistViewModel+SwiftUI.swift"; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 		DD52A62324E19EF000A9A1FC /* checklist */ = {
 			isa = PBXGroup;
 			children = (
+				D4F692D73036ED5000FEF092 /* chcklst-logo.icon */,
 				DDD4FBDC251660A3002B7F50 /* checklist.entitlements */,
 				DD52A63524E19EF100A9A1FC /* Info.plist */,
 				DD52A65124E1A20800A9A1FC /* AppContext.swift */,
@@ -1026,6 +1029,7 @@
 			files = (
 				DD52A63424E19EF100A9A1FC /* LaunchScreen.storyboard in Resources */,
 				FE3183F9275CC7BA006EB129 /* Configuration.storekit in Resources */,
+				D4F692D83036ED6800FEF092 /* chcklst-logo.icon in Resources */,
 				FE94197727011676001493AB /* Localizable.strings in Resources */,
 				DD52A63124E19EF100A9A1FC /* Preview Assets.xcassets in Resources */,
 				DD52A62E24E19EF100A9A1FC /* Assets.xcassets in Resources */,
@@ -1359,7 +1363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "chcklst-logo";
 				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1386,7 +1390,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "chcklst-logo";
 				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1517,7 +1521,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "chcklst-logo";
 				CODE_SIGN_ENTITLEMENTS = checklist/checklist.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
