@@ -19,6 +19,8 @@ struct ChecklistItemView: View, Equatable {
     var body: some View {
         HStack {
             Image(systemName: viewModel.isDone ? "checkmark.circle" : "circle")
+                .resizable()
+                .frame(width: 25, height: 25)
                 .onTapGesture {
                     if !viewModel.isEditable {
                         viewModel.onCheckMarkTapped.send()

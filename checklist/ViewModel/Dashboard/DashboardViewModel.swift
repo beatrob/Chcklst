@@ -402,18 +402,6 @@ extension DashboardViewModel: ChecklistActionSheetDelegate {
         presentAlert(confirmationAlert)
     }
     
-    func onSetReminderAction(checklist: ChecklistDataModel) {
-        let vm = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
-        vm.onDidDeleteReminder
-            .merge(with: vm.onDidCreateReminder.map { _ in () })
-            .sink { [weak self] in
-                self?.sheet = .empty
-                self?.isSheetVisible = false
-        }.store(in: &cancellables)
-        self.sheet = DashboardSheet.editReminder(viewModel: vm).view
-        self.isSheetVisible = true
-    }
-    
     func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
         firstly {
             restrictionManager.verifyCreateTemplate(presenter: self, isCreateFromScratch: true)

@@ -54,7 +54,10 @@ struct ChecklistView: View {
                                         }
                                     })
                                 if viewModel.shouldDisplaySetReminder {
-                                    CheckboxView(viewModel: viewModel.reminderCheckboxViewModel)
+                                    CheckboxView(
+                                        title: "Remind me on this device",
+                                        isChecked: $viewModel.isReminderOn
+                                    )
                                         .padding()
                                     if viewModel.isReminderOn {
                                         HStack {
@@ -69,7 +72,10 @@ struct ChecklistView: View {
                                     }
                                 }
                                 if viewModel.shouldDisplaySaveAsTemplate {
-                                    CheckboxView(viewModel: viewModel.saveAsTemplateCheckboxViewModel)
+                                    CheckboxView(
+                                        title: "Save as template",
+                                        isChecked: $viewModel.isCreateTemplateChecked
+                                    )
                                         .padding()
                                 }
                                 if viewModel.shouldDisplayActionButton {
@@ -96,16 +102,17 @@ struct ChecklistView: View {
                     isPresented: Binding(
                         get: { viewModel.isActionSheetPresented },
                         set: { if !$0 { viewModel.dismissActionSheet() } }
-                    )
+                    ),
+                    onDismiss: viewModel.didDismissActionSheet
                 ) {
                     BottomActionSheet(title: viewModel.actionSheetTitle) {
-                        viewModel.actionSheetButtons(onSelection: viewModel.dismissActionSheet)
+                        viewModel.actionSheetButtons(onSelection: viewModel.selectActionSheetItem)
                     }
                 }
                 .sheet(isPresented: self.$viewModel.isSheetVisible) {
                     viewModel.sheet
                 }
-            }.ignoresSafeArea(.container, edges: .bottom)
+            }
         }
         .navigationTitle(viewModel.navigationTitle)
         .navigationBarTitleDisplayMode(.inline)

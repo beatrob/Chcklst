@@ -12,7 +12,6 @@ import Combine
 
 enum DashboardSheet {
     case createChecklist(viewModel: ChecklistViewModel)
-    case editReminder(viewModel: EditReminderViewModel)
     
     var view: AnyView {
         switch self {
@@ -21,10 +20,6 @@ enum DashboardSheet {
                 NavigationStack {
                     ChecklistView(viewModel: viewModel)
                 }
-            )
-        case .editReminder(let viewModel):
-            return AnyView(
-                EditReminderView(viewModel: viewModel)
             )
         }
     }

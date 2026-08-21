@@ -63,7 +63,6 @@ struct MultilineTextField: View {
                 HStack {
                     Text(text.isEmpty ? placeholder : text)
                         .strikethrough(isCrossedOut)
-                        .padding(.leading, 7)
                         .modifier(Modifier.TextField.Text(font: font, isInPlaceholderMode: false))
                     Spacer()
                 }

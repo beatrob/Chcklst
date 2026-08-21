@@ -12,7 +12,6 @@ protocol ChecklistActionSheetDelegate {
     func onEditAction(checklist: ChecklistDataModel)
     func onMarkAllDoneAction(checklist: ChecklistDataModel)
     func onMarkAllUndoneAction(checklist: ChecklistDataModel)
-    func onSetReminderAction(checklist: ChecklistDataModel)
     func onSaveAsTemplateAction(checklist: ChecklistDataModel)
     func onDeleteAction(checklist: ChecklistDataModel)
 }
@@ -30,23 +29,31 @@ enum ChecklistActionSheet {
     }
 
     @ViewBuilder
-    func buttons(onSelection: @escaping () -> Void = {}) -> some View {
+    func buttons(
+        onSelection: @escaping (@escaping EmptyCompletion) -> Void = { action in action() }
+    ) -> some View {
         switch self {
         case .none:
             EmptyView()
         case .actionMenu(let checklist, let delegate):
-            Button("Edit") { onSelection(); delegate.onEditAction(checklist: checklist) }
-            Button("Edit reminder") { onSelection(); delegate.onSetReminderAction(checklist: checklist) }
+            Button("Edit") {
+                onSelection { delegate.onEditAction(checklist: checklist) }
+            }
             Button(checklist.isDone ? "Mark all undone" : "Mark all done") {
-                onSelection()
-                if checklist.isDone {
-                    delegate.onMarkAllUndoneAction(checklist: checklist)
-                } else {
-                    delegate.onMarkAllDoneAction(checklist: checklist)
+                onSelection {
+                    if checklist.isDone {
+                        delegate.onMarkAllUndoneAction(checklist: checklist)
+                    } else {
+                        delegate.onMarkAllDoneAction(checklist: checklist)
+                    }
                 }
             }
-            Button("Create Template") { onSelection(); delegate.onSaveAsTemplateAction(checklist: checklist) }
-            Button("Delete", role: .destructive) { onSelection(); delegate.onDeleteAction(checklist: checklist) }
+            Button("Create Template") {
+                onSelection { delegate.onSaveAsTemplateAction(checklist: checklist) }
+            }
+            Button("Delete", role: .destructive) {
+                onSelection { delegate.onDeleteAction(checklist: checklist) }
+            }
         }
     }
     

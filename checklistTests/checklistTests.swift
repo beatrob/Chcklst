@@ -183,6 +183,127 @@ class checklistTests: XCTestCase {
         XCTAssertFalse(viewModel.isNavBarVisible)
     }
 
+    func testCancellingUpgradeDismissesPurchaseSheetFromCreateTemplate() {
+        let viewModel = ChecklistViewModel(
+            viewState: .createTemplate,
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+            restrictionManager: MockRestrictionManager()
+        )
+        viewModel.presentUpgradeView(
+            UpgradeView(viewModel: UpgradeViewModel(purchaseManager: MockPurchaseManager()))
+        )
+
+        XCTAssertTrue(viewModel.isSheetVisible)
+
+        viewModel.cancelUpgradeView()
+
+        XCTAssertFalse(viewModel.isSheetVisible)
+    }
+
+    func testChecklistMarkAllDoneWaitsForActionSheetDismissal() {
+        let checklist = ChecklistDataModel.getWelcomeChecklist()
+        let viewModel = makeChecklistDetailViewModel(checklist: checklist)
+        viewModel.navBarViewModel.actionsButton.didTapSubject.send()
+
+        XCTAssertTrue(viewModel.isActionSheetPresented)
+
+        viewModel.selectActionSheetItem {
+            viewModel.onMarkAllDoneAction(checklist: checklist)
+        }
+
+        XCTAssertFalse(viewModel.isActionSheetPresented)
+        XCTAssertFalse(viewModel.alertVisibility.isVisible)
+
+        viewModel.didDismissActionSheet()
+
+        XCTAssertTrue(viewModel.alertVisibility.isVisible)
+    }
+
+    func testChecklistDeleteWaitsForActionSheetDismissal() {
+        let checklist = ChecklistDataModel.getWelcomeChecklist()
+        let viewModel = makeChecklistDetailViewModel(checklist: checklist)
+        viewModel.navBarViewModel.actionsButton.didTapSubject.send()
+
+        XCTAssertTrue(viewModel.isActionSheetPresented)
+
+        viewModel.selectActionSheetItem {
+            viewModel.onDeleteAction(checklist: checklist)
+        }
+
+        XCTAssertFalse(viewModel.isActionSheetPresented)
+        XCTAssertFalse(viewModel.alertVisibility.isVisible)
+
+        viewModel.didDismissActionSheet()
+
+        XCTAssertTrue(viewModel.alertVisibility.isVisible)
+    }
+
+    func testReminderCheckboxMatchesChecklistWhenEnteringEditMode() {
+        let source = ChecklistDataModel.getWelcomeChecklist()
+        let reminderDate = Date().addingTimeInterval(3_600)
+        let checklist = ChecklistDataModel(
+            id: source.id,
+            title: source.title,
+            description: source.description,
+            creationDate: source.creationDate,
+            updateDate: source.updateDate,
+            reminderDate: reminderDate,
+            items: source.items
+        )
+        let viewModel = makeChecklistDetailViewModel(checklist: checklist)
+        viewModel.isReminderOn = false
+
+        viewModel.onEditAction(checklist: checklist)
+
+        XCTAssertTrue(viewModel.isReminderOn)
+        XCTAssertEqual(viewModel.reminderDate, reminderDate)
+    }
+
+    func testFirstReminderUncheckUpdatesCheckboxAndReminderState() {
+        let source = ChecklistDataModel.getWelcomeChecklist()
+        let checklist = ChecklistDataModel(
+            id: source.id,
+            title: source.title,
+            description: source.description,
+            creationDate: source.creationDate,
+            updateDate: source.updateDate,
+            reminderDate: Date().addingTimeInterval(3_600),
+            items: source.items
+        )
+        let viewModel = makeChecklistDetailViewModel(checklist: checklist)
+        viewModel.onEditAction(checklist: checklist)
+
+        viewModel.isReminderOn.toggle()
+
+        XCTAssertFalse(viewModel.isReminderOn)
+    }
+
+    func testUncheckedReminderIsNotSavedWithChecklist() {
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = ChecklistViewModel(
+            viewState: .createChecklist,
+            checklistDataSource: checklistDataSource,
+            templateDataSource: MockTemplateDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource),
+            restrictionManager: MockRestrictionManager()
+        )
+        viewModel.checklistName = "No reminder"
+        viewModel.reminderDate = Date().addingTimeInterval(3_600)
+        let didCreate = expectation(description: "Checklist created")
+        let cancellable = viewModel.onDidCreateChecklist.sink {
+            didCreate.fulfill()
+        }
+
+        viewModel.onActionButtonTapped.send()
+
+        wait(for: [didCreate], timeout: 1)
+        XCTAssertEqual(checklistDataSource._checkLists.value.first?.title, "No reminder")
+        XCTAssertNil(checklistDataSource._checkLists.value.first?.reminderDate)
+        withExtendedLifetime(cancellable) {}
+    }
+
     func testSelectingTemplatePushesCreateScheduleDetail() {
         let createSubject = EmptySubject()
         let viewModel = CreateScheduleViewModel(
@@ -248,6 +369,16 @@ class checklistTests: XCTestCase {
     private func makeCreateChecklistViewModel() -> ChecklistViewModel {
         ChecklistViewModel(
             viewState: .createChecklist,
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+            restrictionManager: MockRestrictionManager()
+        )
+    }
+
+    private func makeChecklistDetailViewModel(checklist: ChecklistDataModel) -> ChecklistViewModel {
+        ChecklistViewModel(
+            viewState: .display(checklist: checklist),
             checklistDataSource: MockChecklistDataSource(),
             templateDataSource: MockTemplateDataSource(),
             notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),

@@ -65,7 +65,7 @@ struct ScheduleDetailView: View {
                     
                     HStack(alignment: .top) {
                         VStack(alignment: .leading) {
-                            CheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
+                            ObservableCheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
                                 .onChange(of: viewModel.isRepeatOn) { newValue in
                                     if newValue {
                                         withAnimation {
@@ -75,7 +75,7 @@ struct ScheduleDetailView: View {
                                 }
                             if viewModel.isRepeatOn {
                                 ForEach(viewModel.repeatFrequencyCheckboxes) {
-                                    CheckboxView(viewModel: $0)
+                                    ObservableCheckboxView(viewModel: $0)
                                         .padding(.top)
                                         .padding(.horizontal)
                                 }
@@ -86,7 +86,7 @@ struct ScheduleDetailView: View {
                                 Text("EVERY")
                                     .modifier(Modifier.Checklist.Description())
                                 ForEach(viewModel.customDaysCheckboxes) {
-                                    CheckboxView(viewModel: $0)
+                                    ObservableCheckboxView(viewModel: $0)
                                 }
                             }
                             .padding(.leading)

@@ -9,20 +9,35 @@
 import SwiftUI
 
 struct CheckboxView: View {
-    
-    @StateObject var viewModel: CheckboxViewModel
-    
+
+    let title: String
+    @Binding var isChecked: Bool
+
     var body: some View {
-        HStack {
-            Image(systemName: viewModel.isChecked ? "checkmark.square" : "square")
-                .resizable()
-                .frame(width: 20, height: 20)
-                .modifier(Modifier.Checklist.Item(color: .text))
-            Text(viewModel.title)
-                .modifier(Modifier.Checklist.Item(color: .text))
-        }.onTapGesture {
-            self.viewModel.isChecked.toggle()
+        Button {
+            withAnimation {
+                isChecked.toggle()
+            }
+        } label: {
+            HStack {
+                Image(systemName: isChecked ? "checkmark.square" : "square")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .modifier(Modifier.Checklist.Item(color: .text))
+                Text(title)
+                    .modifier(Modifier.Checklist.Item(color: .text))
+            }
         }
+        .buttonStyle(.plain)
+    }
+}
+
+struct ObservableCheckboxView: View {
+
+    @ObservedObject var viewModel: CheckboxViewModel
+
+    var body: some View {
+        CheckboxView(title: viewModel.title, isChecked: $viewModel.isChecked)
     }
 }
 
@@ -30,7 +45,8 @@ struct CheckboxView_Previews: PreviewProvider {
     
     static var previews: some View {
         CheckboxView(
-            viewModel: .init(title: "Some checkbox", isChecked: false)
+            title: "Some checkbox",
+            isChecked: .constant(false)
         )
     }
 }

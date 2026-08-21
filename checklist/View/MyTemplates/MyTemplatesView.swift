@@ -42,7 +42,6 @@ struct MyTemplatesView: View {
                 }
             }
         }
-        .ignoresSafeArea(.container, edges: .bottom)
         .navigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

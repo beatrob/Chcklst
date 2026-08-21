@@ -42,11 +42,6 @@ class ViewModelAssembly: Assembly {
             initializer: ChecklistNavBarViewModel.init
         )
         container.autoregister(
-            EditReminderViewModel.self,
-            argument: ChecklistDataModel.self,
-            initializer: EditReminderViewModel.init
-        )
-        container.autoregister(
             BackButtonNavBarViewModel.self,
             argument: String.self,
             initializer: BackButtonNavBarViewModel.init

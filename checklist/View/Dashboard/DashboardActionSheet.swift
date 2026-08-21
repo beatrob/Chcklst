@@ -34,7 +34,10 @@ enum DashboardActionSheet {
     func buttons(onSelection: @escaping () -> Void = {}) -> some View {
         switch self {
         case .editChecklist(let checklist, let delegate):
-            ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).buttons(onSelection: onSelection)
+            ChecklistActionSheet.actionMenu(checklist: checklist, delegate: delegate).buttons { action in
+                onSelection()
+                action()
+            }
         case .none:
             EmptyView()
         }

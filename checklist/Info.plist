@@ -61,9 +61,9 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>numberOfFreeChecklists</key>
-	<integer>10</integer>
-	<key>numberOfFreeSchedules</key>
 	<integer>5</integer>
+	<key>numberOfFreeSchedules</key>
+	<integer>3</integer>
 	<key>numberOfFreeTemplates</key>
 	<integer>2</integer>
 	<key>restrictionsEnabledString</key>

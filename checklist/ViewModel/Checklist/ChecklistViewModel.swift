@@ -17,7 +17,7 @@ class ChecklistViewModel: ObservableObject {
     @Published var shouldDisplayAddItems: Bool = true
     @Published var isReminderOn: Bool = false {
         didSet {
-            guard isReminderOn else {
+            guard isReminderOn, isReminderOn != oldValue else {
                 return
             }
             self.notificationManager.registerPushNotifications()
@@ -57,7 +57,8 @@ class ChecklistViewModel: ObservableObject {
             alertVisibility.set(view: alert.view, isVisible: alert.isVisible)
         }
     }
-    private var actionSheet: ChecklistActionSheet = .none
+    @Published private var actionSheet: ChecklistActionSheet = .none
+    private var pendingActionSheetSelection: EmptyCompletion?
     private var pendingTemplate: TemplateDataModel?
 
     lazy var selectTemplateViewModel: SelectTemplateViewModel = {
@@ -68,11 +69,25 @@ class ChecklistViewModel: ObservableObject {
     var actionSheetTitle: String { actionSheet.title }
 
     @ViewBuilder
-    func actionSheetButtons(onSelection: @escaping () -> Void = {}) -> some View {
+    func actionSheetButtons(
+        onSelection: @escaping (@escaping EmptyCompletion) -> Void
+    ) -> some View {
         actionSheet.buttons(onSelection: onSelection)
     }
 
     func dismissActionSheet() { actionSheet = .none }
+
+    func selectActionSheetItem(_ action: @escaping EmptyCompletion) {
+        pendingActionSheetSelection = action
+        dismissActionSheet()
+    }
+
+    func didDismissActionSheet() {
+        let action = pendingActionSheetSelection
+        pendingActionSheetSelection = nil
+        dismissActionSheet()
+        action?()
+    }
 
     func showTemplatePicker() {
         isTemplatePickerVisible = true
@@ -117,8 +132,6 @@ class ChecklistViewModel: ObservableObject {
         didUpdateTemplate.eraseToAnyPublisher()
     }
     
-    let reminderCheckboxViewModel: CheckboxViewModel
-    let saveAsTemplateCheckboxViewModel: CheckboxViewModel
     let checklistDataSource: ChecklistDataSource
     let templateDataSource: TemplateDataSource
     let notificationManager: NotificationManager
@@ -135,7 +148,6 @@ class ChecklistViewModel: ObservableObject {
                 return
             }
             self.actionSheet = .actionMenu(checklist: checklist, delegate: self)
-            self.objectWillChange.send()
         }.store(in: &cancellables)
         viewModel.doneButton.didTap.sink { [weak self] in
             withAnimation {
@@ -170,24 +182,8 @@ class ChecklistViewModel: ObservableObject {
         self.restrictionManager = restrictionManager
         self.viewState = viewState
         self.currentChecklist = .init(viewState.checklist)
-        self.reminderCheckboxViewModel = .init(
-            title: "Remind me on this device",
-            isChecked: viewState.checklist?.isValidReminderSet ?? false
-        )
-        self.saveAsTemplateCheckboxViewModel = .init(title: "Save as template", isChecked: false)
         self.isEditable = viewState.isEditEnabled
-        
-        reminderCheckboxViewModel.checked.sink { [weak self] isChecked in
-            withAnimation {
-                self?.isReminderOn = isChecked
-            }
-        }.store(in: &cancellables)
-        
-        saveAsTemplateCheckboxViewModel.checked.sink { [weak self] isChecked in
-            withAnimation {
-                self?.isCreateTemplateChecked = isChecked
-            }
-        }.store(in: &cancellables)
+        self.isReminderOn = viewState.checklist?.isValidReminderSet ?? false
         
         if let template = viewState.template {
             setupTemplate(template)
@@ -458,7 +454,7 @@ private extension ChecklistViewModel {
             description: self.checklistDescription,
             creationDate: self.currentChecklist.value?.creationDate ?? now,
             updateDate: now,
-            reminderDate: reminderDate,
+            reminderDate: isReminderOn ? reminderDate : nil,
             items: self.items.compactMap {
                 guard !$0.name.isEmpty else {
                     return nil
@@ -604,30 +600,6 @@ extension ChecklistViewModel: ChecklistActionSheetDelegate {
         })
     }
     
-    func onSetReminderAction(checklist: ChecklistDataModel) {
-        guard let checklist = currentChecklist.value else {
-            return
-        }
-        let viewModel = AppContext.resolver.resolve(EditReminderViewModel.self, argument: checklist)!
-        
-        viewModel.onDidCreateReminder
-            .map { _ in () }
-            .merge(with: viewModel.onDidDeleteReminder)
-            .sink { [weak self] in
-                self?.sheet = .empty
-                self?.isSheetVisible = false
-                self?.checklistDataSource.reloadChecklist(checklist).get {
-                    self?.currentChecklist.value = $0
-                }.catch({ error in
-                    error.log(message: "Failed to reload checklist")
-                })
-        }.store(in: &cancellables)
-        
-        let view = EditReminderView(viewModel: viewModel)
-        sheet = AnyView(view)
-        isSheetVisible = true
-    }
-    
     func onSaveAsTemplateAction(checklist: ChecklistDataModel) {
         guard let checklist = currentChecklist.value else {
             return
@@ -698,7 +670,7 @@ extension ChecklistViewModel: RestrictionPresenter {
     
     func cancelUpgradeView() {
         self.sheet = AnyView.empty
-        self.isSheetVisible = true
+        self.isSheetVisible = false
     }
     
     func dismissUpgradeView() {

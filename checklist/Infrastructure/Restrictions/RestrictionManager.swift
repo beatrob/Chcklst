@@ -61,7 +61,7 @@ class RestrictionManagerImpl: RestrictionManager {
         guard
             !isMainProductPurchased.value,
             let maxFreeChecklists = Bundle.main.numberOfFreeChecklists,
-            self.checklistCount.value > maxFreeChecklists
+            maxFreeChecklists <= self.checklistCount.value
         else {
             return .value(true)
         }
@@ -85,7 +85,7 @@ class RestrictionManagerImpl: RestrictionManager {
         guard
             !isMainProductPurchased.value,
             let maxFreeTemplates = Bundle.main.numberOfFreeTemplates,
-            self.templateCount.value > maxFreeTemplates
+            maxFreeTemplates <= self.templateCount.value
         else {
             return .value(true)
         }
@@ -116,7 +116,7 @@ class RestrictionManagerImpl: RestrictionManager {
         guard
             !isMainProductPurchased.value,
             let maxFreeSchedules = Bundle.main.numberOfFreeSchedules,
-            self.scheduleCount.value > maxFreeSchedules
+            maxFreeSchedules <= self.scheduleCount.value
         else {
             return .value(true)
         }

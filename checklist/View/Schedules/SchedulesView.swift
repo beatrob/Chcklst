@@ -38,7 +38,6 @@ struct SchedulesView: View {
             }
         }
         .background(Color.mainBackground)
-        .ignoresSafeArea(.container, edges: .bottom)
         .navigationTitle("Schedules")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
