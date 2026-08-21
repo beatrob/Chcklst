@@ -18,7 +18,7 @@ extension ChecklistViewModel {
         case .createChecklist, .createChecklistFromTemplate:
             return "Create Checklist"
         case .createTemplate, .createTemplateFromChecklist:
-            return "Create Template"
+            return "Create template"
         case .updateTemplate:
             return "Edit Template"
         case .updateChecklist:

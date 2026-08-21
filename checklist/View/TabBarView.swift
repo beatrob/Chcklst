@@ -100,6 +100,7 @@ private struct ChecklistRouteContent: View {
 
 private struct ScheduleRouteDestination: View {
 
+    @EnvironmentObject private var navigationHelper: NavigationHelper
     let route: NavigationHelper.ScheduleRoute
     @State private var viewModel: ScheduleDetailViewModel?
     @State private var isMissing = false
@@ -108,6 +109,12 @@ private struct ScheduleRouteDestination: View {
         Group {
             if let viewModel {
                 ScheduleDetailView(viewModel: viewModel)
+                    .onReceive(
+                        viewModel.didUpdateSchedule
+                            .merge(with: viewModel.didDeleteSchedule)
+                    ) {
+                        navigationHelper.dismissScheduleDetail()
+                    }
             } else if isMissing {
                 MissingDestinationView(message: "This schedule is no longer available.")
             } else {
@@ -126,6 +133,9 @@ private struct ScheduleRouteDestination: View {
                 }
                 .catch { _ in isMissing = true }
         }
+        .navigationTitle(isMissing ? "Unavailable" : "Edit schedule")
+        .navigationBarTitleDisplayMode(.inline)
+        .chcklstNavigationBar()
     }
 }
 

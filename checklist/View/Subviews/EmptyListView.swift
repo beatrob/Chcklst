@@ -17,7 +17,6 @@ struct EmptyListView: View {
     
     var body: some View {
         VStack(alignment: .center) {
-            Spacer()
             Text(message)
                 .modifier(Modifier.Checklist.Description())
                 .multilineTextAlignment(.center)
@@ -29,7 +28,6 @@ struct EmptyListView: View {
                     onTapSubject: tapSubject
                 )
             }
-            Spacer()
         }
     }
 }

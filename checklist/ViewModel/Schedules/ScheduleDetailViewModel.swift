@@ -113,7 +113,7 @@ class ScheduleDetailViewModel: ObservableObject {
             self.date = referenceDate
         }
         
-        viewTitle = state.isCreate ? "Create Schedule" : ""
+        viewTitle = state.isCreate ? "Create schedule" : ""
         
         self.navbarViewModel.backButton.didTap
             .subscribe(backButtonViewModel.didTapSubject)

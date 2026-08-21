@@ -138,14 +138,17 @@ struct ChecklistView: View {
                     } label: {
                         Image(systemName: "xmark")
                     }
+                    .accessibilityLabel("Close \(viewModel.navigationTitle)")
                 }
             }
         }
         .sheet(isPresented: $viewModel.isTemplatePickerVisible, onDismiss: viewModel.didDismissTemplatePicker) {
-            SelectTemplateView(
-                viewModel: viewModel.selectTemplateViewModel,
-                onTemplateSelected: viewModel.selectTemplate
-            )
+            NavigationStack {
+                SelectTemplateView(
+                    viewModel: viewModel.selectTemplateViewModel,
+                    onTemplateSelected: viewModel.selectTemplate
+                )
+            }
         }
         .chcklstNavigationBar()
     }

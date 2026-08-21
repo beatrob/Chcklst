@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Combine
 @testable import checklist
 
 class checklistTests: XCTestCase {
@@ -69,6 +70,11 @@ class checklistTests: XCTestCase {
 
         XCTAssertEqual(navigationHelper.selectedTab, .schedules)
         XCTAssertEqual(navigationHelper.schedulePath, [.detail(id: "schedule-id")])
+        XCTAssertEqual(navigationHelper.checklistPath, [.detail(id: checklist.id, shouldEdit: false)])
+
+        navigationHelper.dismissScheduleDetail()
+
+        XCTAssertTrue(navigationHelper.schedulePath.isEmpty)
         XCTAssertEqual(navigationHelper.checklistPath, [.detail(id: checklist.id, shouldEdit: false)])
     }
 
@@ -162,6 +168,55 @@ class checklistTests: XCTestCase {
 
         XCTAssertEqual(viewModel.checklistName, "Draft")
         XCTAssertTrue(viewModel.alertVisibility.isVisible)
+    }
+
+    func testCreateTemplateUsesModalNavigationBar() {
+        let viewModel = ChecklistViewModel(
+            viewState: .createTemplate,
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+            restrictionManager: MockRestrictionManager()
+        )
+
+        XCTAssertEqual(viewModel.navigationTitle, "Create template")
+        XCTAssertFalse(viewModel.isNavBarVisible)
+    }
+
+    func testSelectingTemplatePushesCreateScheduleDetail() {
+        let createSubject = EmptySubject()
+        let viewModel = CreateScheduleViewModel(
+            createPublisher: createSubject.eraseToAnyPublisher()
+        )
+
+        viewModel.selectTemplate(makeTemplate())
+
+        XCTAssertTrue(viewModel.isScheduleDetailPresented)
+        XCTAssertEqual(viewModel.scheduleDetailViewModel?.viewTitle, "Create schedule")
+
+        viewModel.isScheduleDetailPresented = false
+
+        XCTAssertFalse(viewModel.isScheduleDetailPresented)
+    }
+
+    func testTemplateActionRunsAfterActionSheetDismissal() {
+        let viewModel = MyTemplatesViewModel(
+            templateDataSource: MockTemplateDataSource(),
+            checklistDataSource: MockChecklistDataSource(),
+            navigationHelper: NavigationHelper(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
+        var didRunAction = false
+
+        viewModel.selectActionSheetItem {
+            didRunAction = true
+        }
+
+        XCTAssertFalse(didRunAction)
+
+        viewModel.didDismissActionSheet()
+
+        XCTAssertTrue(didRunAction)
     }
 
     func testTemplatesDoesNotShowCreationAlertForUnrelatedChecklistChanges() {

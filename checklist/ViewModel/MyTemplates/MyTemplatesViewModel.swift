@@ -37,13 +37,16 @@ class MyTemplatesViewModel: ObservableObject {
             self.isAlertVisible = alert.isVisible
         }
     }
+    private var pendingActionSheetSelection: EmptyCompletion?
     var cancellables =  Set<AnyCancellable>()
     var createScheduleViewModel: CreateScheduleViewModel?
     
     var actionSheetTitle: String { actionSheet.title }
 
     @ViewBuilder
-    func actionSheetButtons(onSelection: @escaping () -> Void = {}) -> some View {
+    func actionSheetButtons(
+        onSelection: @escaping (@escaping EmptyCompletion) -> Void = { action in action() }
+    ) -> some View {
         actionSheet.buttons(onSelection: onSelection)
     }
     var sheetView = AnyView(EmptyView())
@@ -138,6 +141,18 @@ class MyTemplatesViewModel: ObservableObject {
     func createTemplate() {
         onCreateTemplate.send()
     }
+
+    func selectActionSheetItem(_ action: @escaping EmptyCompletion) {
+        pendingActionSheetSelection = action
+        actionSheet = .none
+    }
+
+    func didDismissActionSheet() {
+        let action = pendingActionSheetSelection
+        pendingActionSheetSelection = nil
+        actionSheet = .none
+        action?()
+    }
 }
 
 
@@ -156,7 +171,11 @@ private extension MyTemplatesViewModel {
             self?.isSheetVisible = false
         }.store(in: &cancellables)
         viewModel.setBigTitleNavBar(isTransparent: true)
-        sheetView = AnyView(ChecklistView(viewModel: viewModel))
+        sheetView = AnyView(
+            NavigationStack {
+                ChecklistView(viewModel: viewModel)
+            }
+        )
         isSheetVisible = true
     }
     
@@ -183,7 +202,11 @@ private extension MyTemplatesViewModel {
             self?.sheetView = .empty
             self?.isSheetVisible = false
         }.store(in: &cancellables)
-        sheetView = AnyView(ChecklistView(viewModel: viewModel))
+        sheetView = AnyView(
+            NavigationStack {
+                ChecklistView(viewModel: viewModel)
+            }
+        )
         isSheetVisible = true
     }
     

@@ -14,6 +14,8 @@ class CreateScheduleViewModel: ObservableObject {
 
     let presentViewPublisher: AnyPublisher<AnyView, Never>
     let didCreateSchedulePublisher: EmptyPublisher
+    @Published var isScheduleDetailPresented = false
+    @Published private(set) var scheduleDetailViewModel: ScheduleDetailViewModel?
     var dismissView: EmptyPublisher {
         dismissViewSubject.eraseToAnyPublisher()
     }
@@ -21,7 +23,7 @@ class CreateScheduleViewModel: ObservableObject {
     private let presentViewSubject = PassthroughSubject<AnyView, Never>()
     private let dismissViewSubject = EmptySubject()
     private let didCreateScheduleSubject = EmptySubject()
-    private let selectTemplateViewModel: SelectTemplateViewModel
+    fileprivate let selectTemplateViewModel: SelectTemplateViewModel
     private var cancellables = Set<AnyCancellable>()
     private var scheduleDetailCancellables = Set<AnyCancellable>()
 
@@ -36,22 +38,16 @@ class CreateScheduleViewModel: ObservableObject {
     }
 
     private func showTemplatePicker() {
+        isScheduleDetailPresented = false
+        scheduleDetailViewModel = nil
         presentViewSubject.send(
             AnyView(
-                SelectTemplateView(
-                    viewModel: selectTemplateViewModel,
-                    onTemplateSelected: { [weak self] template in
-                        self?.showScheduleDetail(for: template)
-                    },
-                    onClose: { [weak self] in
-                        self?.dismissViewSubject.send()
-                    }
-                )
+                CreateScheduleFlowView(viewModel: self)
             )
         )
     }
 
-    private func showScheduleDetail(for template: TemplateDataModel) {
+    func selectTemplate(_ template: TemplateDataModel) {
         scheduleDetailCancellables.removeAll()
         let viewModel = AppContext.resolver.resolve(
             ScheduleDetailViewModel.self,
@@ -59,12 +55,40 @@ class CreateScheduleViewModel: ObservableObject {
         )!
 
         viewModel.backButtonViewModel.didTap
-            .sink { [weak self] in self?.showTemplatePicker() }
+            .subscribe(dismissViewSubject)
             .store(in: &scheduleDetailCancellables)
         viewModel.didCreateSchedule
             .subscribe(didCreateScheduleSubject)
             .store(in: &scheduleDetailCancellables)
 
-        presentViewSubject.send(AnyView(ScheduleDetailView(viewModel: viewModel)))
+        scheduleDetailViewModel = viewModel
+        isScheduleDetailPresented = true
+    }
+
+    func dismiss() {
+        dismissViewSubject.send()
+    }
+}
+
+private struct CreateScheduleFlowView: View {
+
+    @ObservedObject var viewModel: CreateScheduleViewModel
+
+    var body: some View {
+        NavigationStack {
+            SelectTemplateView(
+                viewModel: viewModel.selectTemplateViewModel,
+                onTemplateSelected: viewModel.selectTemplate,
+                onClose: viewModel.dismiss
+            )
+            .navigationDestination(isPresented: $viewModel.isScheduleDetailPresented) {
+                if let detailViewModel = viewModel.scheduleDetailViewModel {
+                    ScheduleDetailView(
+                        viewModel: detailViewModel,
+                        createCloseButtonPlacement: .topBarTrailing
+                    )
+                }
+            }
+        }
     }
 }

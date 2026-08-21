@@ -57,6 +57,11 @@ final class NavigationHelper: ObservableObject {
         schedulePath.append(.detail(id: id))
     }
 
+    func dismissScheduleDetail() {
+        guard !schedulePath.isEmpty else { return }
+        schedulePath.removeLast()
+    }
+
     func popToDashboard() {
         selectedTab = .checklists
         checklistPath = []

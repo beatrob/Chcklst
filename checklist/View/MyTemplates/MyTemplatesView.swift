@@ -28,8 +28,7 @@ struct MyTemplatesView: View {
                             id: \.id) { template in
                             MyTemplateItemView(
                                 name: template.title,
-                                description: template.description,
-                                displayRightArrow: false
+                                description: template.description
                             )
                             .mainListCardPadding()
                             .mainListCard(backgroundColor: .checklistBackground)
@@ -56,11 +55,12 @@ struct MyTemplatesView: View {
         .sheet(isPresented: $viewModel.isSheetVisible) {
             self.viewModel.sheetView
         }
-        .sheet(isPresented: $viewModel.isActionSheetVisible) {
+        .sheet(
+            isPresented: $viewModel.isActionSheetVisible,
+            onDismiss: viewModel.didDismissActionSheet
+        ) {
             BottomActionSheet(title: viewModel.actionSheetTitle) {
-                viewModel.actionSheetButtons(onSelection: {
-                    viewModel.isActionSheetVisible = false
-                })
+                viewModel.actionSheetButtons(onSelection: viewModel.selectActionSheetItem)
             }
         }
         .alert(isPresented: $viewModel.isAlertVisible) {

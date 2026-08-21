@@ -14,39 +14,35 @@ struct SchedulesView: View {
     @EnvironmentObject private var navigationHelper: NavigationHelper
     
     var body: some View {
-        ZStack {
-            Color.menuBackground.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                if viewModel.isEmptyListViewVisible {
-                    EmptyListView(
-                        message: """
+        Group {
+            if viewModel.isEmptyListViewVisible {
+                EmptyListView(
+                    message: """
                             Your schedule list is empty
                             To plan your checklists ahead start creating schedules from templates
                             """,
-                        actionTitle: "Create schedule",
-                        onActionTappedSubject: viewModel.onCreateSchedule
-                    )
-                } else {
-                    List {
-                        ForEach(viewModel.cells) { cell in
-                            ScheduleCellView(viewModel: cell)
-                                .mainListRow()
-                                .onTapGesture {
-                                    navigationHelper.navigateToScheduleDetail(id: cell.id)
-                                }
-                        }
+                    actionTitle: "Create schedule",
+                    onActionTappedSubject: viewModel.onCreateSchedule
+                )
+            } else {
+                List {
+                    ForEach(viewModel.cells) { cell in
+                        ScheduleCellView(viewModel: cell)
+                            .mainListRow()
+                            .onTapGesture {
+                                navigationHelper.navigateToScheduleDetail(id: cell.id)
+                            }
                     }
-                    .mainListStyle()
                 }
+                .mainListStyle()
             }
-            .background(Color.mainBackground)
         }
+        .background(Color.mainBackground)
         .ignoresSafeArea(.container, edges: .bottom)
         .navigationTitle("Schedules")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .topBarLeading) {
                 Button { viewModel.onCreateSchedule.send() } label: { Image(systemName: "plus") }
                     .accessibilityLabel("Create schedule")
             }

@@ -43,13 +43,15 @@ enum MyTemplatesActionSheet {
     }
 
     @ViewBuilder
-    func buttons(onSelection: @escaping () -> Void = {}) -> some View {
+    func buttons(
+        onSelection: @escaping (@escaping EmptyCompletion) -> Void = { action in action() }
+    ) -> some View {
         switch self {
         case .templateActions(_, let onCreateChecklist, let onCreateSchedule, let onEdit, let onDelete):
-            Button("Create Checklist") { onSelection(); onCreateChecklist() }
-            Button("Create Schedule") { onSelection(); onCreateSchedule() }
-            Button("Edit") { onSelection(); onEdit() }
-            Button("Delete", role: .destructive) { onSelection(); withAnimation { onDelete() } }
+            Button("Create Checklist") { onSelection(onCreateChecklist) }
+            Button("Create Schedule") { onSelection(onCreateSchedule) }
+            Button("Edit") { onSelection(onEdit) }
+            Button("Delete", role: .destructive) { onSelection(onDelete) }
         case .none:
             EmptyView()
         }

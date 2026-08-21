@@ -11,116 +11,115 @@ import SwiftUI
 struct ScheduleDetailView: View {
     
     @StateObject var viewModel: ScheduleDetailViewModel
+    let createCloseButtonPlacement: ToolbarItemPlacement
     @State var titleHeight: CGFloat = 40
     @State var descriptionHeight: CGFloat = 30
+
+    init(
+        viewModel: ScheduleDetailViewModel,
+        createCloseButtonPlacement: ToolbarItemPlacement = .cancellationAction
+    ) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+        self.createCloseButtonPlacement = createCloseButtonPlacement
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                ScrollViewReader { reader in
-                    VStack(alignment: .leading) {
-                        MultilineTextField(
-                            text: $viewModel.title,
-                            placeholder: "Title",
-                            font: .bigTitle,
-                            isEditable: .constant(true),
-                            isCrossedOut: .constant(false),
-                            didEndEditing: nil
-                        ).padding()
-                        
-                        MultilineTextField(
-                            text: $viewModel.description,
-                            placeholder: "Description",
-                            font: .description,
-                            isEditable: .constant(true),
-                            isCrossedOut: .constant(false),
-                            didEndEditing: nil
-                        ).padding()
-                        
-                        ForEach(viewModel.items) {
-                            ChecklistItemView(viewModel: $0)
-                                .padding(.horizontal)
-                        }
-                        
-                        Text("Schedule date")
-                            .padding()
-                            .modifier(Modifier.Checklist.SmallTitle(color: .text))
-                        HStack {
-                            Spacer()
-                            DatePicker(
-                                "",
-                                selection: $viewModel.date,
-                                displayedComponents: [.date, .hourAndMinute]
-                            ).labelsHidden()
-                            Spacer()
-                        }
-                        
-                        HStack(alignment: .top) {
-                            VStack(alignment: .leading) {
-                                CheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
-                                    .onChange(of: viewModel.isRepeatOn) { newValue in
-                                        if newValue {
-                                            withAnimation {
-                                                reader.scrollTo("actionButton", anchor: .bottom)
-                                            }
+        ScrollView {
+            ScrollViewReader { reader in
+                VStack(alignment: .leading) {
+                    MultilineTextField(
+                        text: $viewModel.title,
+                        placeholder: "Title",
+                        font: .bigTitle,
+                        isEditable: .constant(true),
+                        isCrossedOut: .constant(false),
+                        didEndEditing: nil
+                    ).padding()
+                    
+                    MultilineTextField(
+                        text: $viewModel.description,
+                        placeholder: "Description",
+                        font: .description,
+                        isEditable: .constant(true),
+                        isCrossedOut: .constant(false),
+                        didEndEditing: nil
+                    ).padding()
+                    
+                    ForEach(viewModel.items) {
+                        ChecklistItemView(viewModel: $0)
+                            .padding(.horizontal)
+                    }
+                    
+                    Text("Schedule date")
+                        .padding()
+                        .modifier(Modifier.Checklist.SmallTitle(color: .text))
+                    HStack {
+                        Spacer()
+                        DatePicker(
+                            "",
+                            selection: $viewModel.date,
+                            displayedComponents: [.date, .hourAndMinute]
+                        ).labelsHidden()
+                        Spacer()
+                    }
+                    
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading) {
+                            CheckboxView(viewModel: viewModel.repeatCheckboxViewModel)
+                                .onChange(of: viewModel.isRepeatOn) { newValue in
+                                    if newValue {
+                                        withAnimation {
+                                            reader.scrollTo("actionButton", anchor: .bottom)
                                         }
                                     }
-                                if viewModel.isRepeatOn {
-                                    ForEach(viewModel.repeatFrequencyCheckboxes) {
-                                        CheckboxView(viewModel: $0)
-                                            .padding(.top)
-                                            .padding(.horizontal)
-                                    }
+                                }
+                            if viewModel.isRepeatOn {
+                                ForEach(viewModel.repeatFrequencyCheckboxes) {
+                                    CheckboxView(viewModel: $0)
+                                        .padding(.top)
+                                        .padding(.horizontal)
                                 }
                             }
-                            if viewModel.shouldDisplayDays {
-                                VStack(alignment: .leading) {
-                                    Text("EVERY")
-                                        .modifier(Modifier.Checklist.Description())
-                                    ForEach(viewModel.customDaysCheckboxes) {
-                                        CheckboxView(viewModel: $0)
-                                    }
+                        }
+                        if viewModel.shouldDisplayDays {
+                            VStack(alignment: .leading) {
+                                Text("EVERY")
+                                    .modifier(Modifier.Checklist.Description())
+                                ForEach(viewModel.customDaysCheckboxes) {
+                                    CheckboxView(viewModel: $0)
                                 }
-                                .padding(.leading)
-                            } else {
-                                Spacer()
                             }
-                        }
-                        .padding()
-                        
-                        HStack {
-                            Spacer()
-                            CapsuleButton(
-                                title: viewModel.actionButtonTitle,
-                                type: .primary,
-                                onTapSubject: viewModel.onActionButtonTapped)
+                            .padding(.leading)
+                        } else {
                             Spacer()
                         }
-                        .id("actionButton")
-                        .padding(.bottom)
                     }
+                    .padding()
+                    
+                    HStack {
+                        Spacer()
+                        CapsuleButton(
+                            title: viewModel.actionButtonTitle,
+                            type: .primary,
+                            onTapSubject: viewModel.onActionButtonTapped)
+                        Spacer()
+                    }
+                    .id("actionButton")
+                    .padding(.bottom)
                 }
             }
         }
-        .onTapGesture {
-            hideKeyboard()
-        }
-        .sheet(isPresented: $viewModel.isSheetPresented) {
-            viewModel.sheet
-        }
-        .alert(isPresented: $viewModel.isAlertPresented) {
-            viewModel.alert
-        }
-        .navigationTitle(viewModel.viewTitle.isEmpty ? "Edit Schedule" : viewModel.viewTitle)
+        .navigationTitle(viewModel.viewTitle.isEmpty ? "Edit schedule" : viewModel.viewTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if !viewModel.viewTitle.isEmpty {
-                ToolbarItem(placement: .cancellationAction) {
+                ToolbarItem(placement: createCloseButtonPlacement) {
                     Button {
                         viewModel.backButtonViewModel.didTapSubject.send()
                     } label: {
                         Image(systemName: "xmark")
                     }
+                    .accessibilityLabel("Close create schedule")
                 }
             } else {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -132,6 +131,15 @@ struct ScheduleDetailView: View {
                     .accessibilityLabel("Delete schedule")
                 }
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+        .sheet(isPresented: $viewModel.isSheetPresented) {
+            viewModel.sheet
+        }
+        .alert(isPresented: $viewModel.isAlertPresented) {
+            viewModel.alert
         }
         .chcklstNavigationBar()
     }
