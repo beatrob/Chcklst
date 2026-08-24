@@ -15,6 +15,7 @@ class SettingsViewModel: ObservableObject {
     
     private let notificationManager: NotificationManager
     private let purchaseManager: PurchaseManager
+    let welcomeWizardStateManager: WelcomeWizardStateManaging
     static var latestNotificationsEnabled: Bool = false
     let navBarViewModel = AppContext.resolver.resolve(BackButtonNavBarViewModel.self, argument: "Settings")!
     let onMyTemplates = EmptySubject()
@@ -41,6 +42,7 @@ class SettingsViewModel: ObservableObject {
     @Published var alert: Alert = .empty
     @Published var isAlertVisible = false
     @Published var isRestoreInProgress = false
+    @Published var isWelcomeWizardVisible = false
     
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
@@ -51,10 +53,12 @@ class SettingsViewModel: ObservableObject {
         restrictionManager: RestrictionManager,
         purchaseManager: PurchaseManager,
         appearanceManager: AppearanceManager,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
+        welcomeWizardStateManager: WelcomeWizardStateManaging
     ) {
         self.notificationManager = notificationManager
         self.purchaseManager = purchaseManager
+        self.welcomeWizardStateManager = welcomeWizardStateManager
         apperance = appearanceManager.getCurrentAppearance()
         isInAppEnabled = restrictionManager.restrictionsEnabled
         onMyTemplates.sink {
@@ -74,7 +78,7 @@ class SettingsViewModel: ObservableObject {
         }.store(in: &cancellables)
 
         onHelp.sink { [weak self] in
-            self?.presentHelp()
+            self?.isWelcomeWizardVisible = true
         }.store(in: &cancellables)
 
         onTermsAndConditions.sink { [weak self] in
@@ -144,11 +148,6 @@ class SettingsViewModel: ObservableObject {
             self?.reloadNotificationsState()
         }
         self.isAlertVisible = true
-    }
-
-    private func presentHelp() {
-        sheet = AnyView(HelpView(viewModel: HelpViewModel()))
-        isSheetVisible = true
     }
 
     private func presentText(title: LocalizedStringKey, text: LocalizedStringKey) {

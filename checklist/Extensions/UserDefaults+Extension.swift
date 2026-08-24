@@ -12,18 +12,10 @@ import Foundation
 extension UserDefaults {
     
     enum Key: String {
-        case isAppInitialized = "kIsAppInitialized"
         case appearance = "kAppearance"
+        case lastViewedWelcomeWizardVersion = "kLastViewedWelcomeWizardVersion"
         
         var key: String { rawValue }
-    }
-    
-    var isAppInitialized: Bool {
-        bool(forKey: Key.isAppInitialized.key)
-    }
-    
-    func setAppInitialized() {
-        set(true, forKey: Key.isAppInitialized.key)
     }
     
     var appearance: Appearance? {
@@ -35,5 +27,13 @@ extension UserDefaults {
     
     func setAppearance(_ appearance: Appearance) {
         set(appearance.rawValue, forKey: Key.appearance.key)
+    }
+
+    var lastViewedWelcomeWizardVersion: Int {
+        integer(forKey: Key.lastViewedWelcomeWizardVersion.key)
+    }
+
+    func setLastViewedWelcomeWizardVersion(_ version: Int) {
+        set(version, forKey: Key.lastViewedWelcomeWizardVersion.key)
     }
 }

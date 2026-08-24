@@ -25,13 +25,11 @@ class InitializeAppViewModel: ObservableObject {
         checklistDataSource: ChecklistDataSource,
         templateDataSource: TemplateDataSource,
         scheduleDataSource: ScheduleDataSource,
-        initializeAppDataSource: InitializeAppDataSource,
         purchaseManager: PurchaseManager
     ) {
         coreDataManager.initialize()
             .then { appearanceManager.initializeAppAppearance() }
             .then { Self.logAppDirectoryPath() }
-            .then { initializeAppDataSource.initializeApp() }
             .then { checklistDataSource.loadAllChecklists().asVoid() }
             .then { templateDataSource.loadAllTemplates().asVoid() }
             .then { scheduleDataSource.loadAllSchedules().asVoid() }

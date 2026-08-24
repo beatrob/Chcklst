@@ -86,57 +86,22 @@ These terms and conditions are effective as of 2021-09-26
 **Contact Us**
 
 If you have any questions or suggestions about my Terms and Conditions, do not hesitate to contact me at chcklst.app@gmail.com.";
-"help_title" = "Help";
-"help_checklists_title" = "Checklists";
-"help_checklists_text" = "With checklists you can significantly improve your productivity. Creating a shopping, a to-do, a backpack or other types of lists is very easy and straight-forward using Chcklst.
-
-**Creating a Checklist**
-
-Start to create your checklist by tapping the “+” button on your dashboard. Next, you can choose to create a new empty list, or you can use one of your templates created earlier (you can read more about templates on the Help page)
-
-When creating a new list from scratch you can enter a title and a description. Then you can add as many items as you want, or you can leave the items empty, and fill them later.
-
-Before creating a new checklist you can choose to set a reminder to get notified when things are needed to be done. To set a reminder you have to enable push notifications, when prompted select “Allow”, or you can enable it later in the Settings menu.
-
-You can check the “Save as Template” checkbox to create a new template from your new list. The checklist title, description and all the items will be copied to the new template so you can reuse it later.
-
-After your new checklist is created you will be prompted to the dashboard, where the checklists are displayed with the title and the items done/undone ratio. The first undone item in your list is also visible under the title.
-
-**Using Checklists**
-
-You can open a checklist from the dashboard. By tapping the bullet icon on before each item you can set the item done or undone. Done items are marked with a check-mark, their text is crossed out and are moved to the bottom of the list. By un-checking, the item will be moved back to the top of the list.
-
-**Editing & Deleting Checklists**
-
-You can edit a checklist by long-pressing on it’s title on the dashboard, then select “Edit” from the bottom action sheet, select “Delete” to remove your list (this operation is not reversible). You can achieve the same results from the Cheklist detail page by tapping the “...” icon on the navigation bar.
-";
-"help_templates_title" = "Templates";
-"help_templates_text" = "With templates you can easily reuse your most frequent checklists.
-
-**Creating Templates**
-
-You can save templates from existing or new checklists on the dashboard. To create a new template from scratch, open the templates page.
-
-**Using Templates**
-
-Your templates can be accessed from the side-menu, by tapping the “Templates” button. Here you can create, edit, or delete templates, and create new checklists and schedules (read more about schedules on the Help page).
-";
-"help_schedules_title" = "Schedules";
-"help_schedules_text" = "Schedules are basically your future checklists waiting to be created on a certain date and time. Using schedules you can plan and automate your checklists.
-
-**Creating Schedules**
-
-Schedules can be created from existing templates. Start with selecting a template from the list. Next you can change the schedule’s title & description, these are prefilled from the template. As a last step you have to set the schedule date and time when your new checklist is going to be created. It’s also possible to set a repeat frequency of you schedule. This will ensure that your checklist will be created repeatedly in the given time interval.
-
-**Using Schedules**
-
-Your planned schedules are visible in the “Schedules” page where you can edit, delete or re-schedule them. Expired or used schedules are automatically deleted.
-";
-"help_chcklstplus_title" = "Chcklst+";
-"help_chcklstplus_text" = "Chcklst is a free to use app, with some limitations in the number of available checklists, templates and schedules. To disable these limitations and get access to unlimited usage you can upgrade to Chcklst+.
-
-This app is an indie-developer project, you can also support the developer to maintain and improve the application.
-";
+"welcome_wizard_welcome_title" = "Welcome to Chcklst";
+"welcome_wizard_welcome_description" = "Turn anything you need to remember into a clear list, then check items off as you go.";
+"welcome_wizard_checklists_title" = "Make every task manageable";
+"welcome_wizard_checklists_description" = "Create a checklist from the Checklists tab, add a title, notes, and items, then check each item off as you make progress.";
+"welcome_wizard_templates_title" = "Reuse your best lists";
+"welcome_wizard_templates_description" = "Save any checklist as a template, or build one in Templates, so recurring lists are ready in seconds.";
+"welcome_wizard_schedules_title" = "Put routines on autopilot";
+"welcome_wizard_schedules_description" = "Create schedules from templates and choose when—or how often—Chcklst should create the next checklist.";
+"welcome_wizard_reminders_title" = "Never miss what matters";
+"welcome_wizard_reminders_description" = "Add a reminder to a checklist and enable notifications so Chcklst can alert you when it is time to act.";
+"welcome_wizard_cancel_button" = "Cancel";
+"welcome_wizard_back_button" = "Back";
+"welcome_wizard_next_button" = "Next";
+"welcome_wizard_get_started_button" = "Get Started";
+"welcome_wizard_done_button" = "Done";
+"welcome_wizard_page_progress_accessibility_value" = "Page %d of %d";
 
 "upgrade_alert_checklist_limit_reached" = "You have reached the maximum number of checklists";
 "upgrade_alert_template_limit_reached" = "You have reached the maximum number of templates";

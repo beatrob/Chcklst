@@ -8,16 +8,101 @@
 
 import XCTest
 import Combine
+import PromiseKit
 @testable import checklist
 
 class checklistTests: XCTestCase {
 
+    private var welcomeWizardDefaults: UserDefaults!
+    private var welcomeWizardSuiteName: String!
+
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        welcomeWizardSuiteName = "WelcomeWizardTests.\(UUID().uuidString)"
+        welcomeWizardDefaults = UserDefaults(suiteName: welcomeWizardSuiteName)
+        welcomeWizardDefaults.removePersistentDomain(forName: welcomeWizardSuiteName)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        welcomeWizardDefaults.removePersistentDomain(forName: welcomeWizardSuiteName)
+        welcomeWizardDefaults = nil
+        welcomeWizardSuiteName = nil
+    }
+
+    func testWelcomeWizardMissingVersionShowsEveryInitialPage() {
+        let manager = WelcomeWizardStateManager(userDefaults: welcomeWizardDefaults)
+
+        XCTAssertEqual(manager.lastViewedVersion, 0)
+        XCTAssertEqual(
+            manager.pages(for: .automatic).map(\.id),
+            ["welcome", "checklists", "templates", "schedules", "reminders"]
+        )
+    }
+
+    func testWelcomeWizardMarkingCurrentVersionPreventsAutomaticPresentation() {
+        let manager = WelcomeWizardStateManager(userDefaults: welcomeWizardDefaults)
+
+        manager.markCurrentVersionViewed()
+
+        XCTAssertEqual(manager.lastViewedVersion, 1)
+        XCTAssertTrue(manager.pages(for: .automatic).isEmpty)
+        XCTAssertEqual(manager.pages(for: .help).count, 5)
+    }
+
+    func testWelcomeWizardAutomaticPresentationOnlyIncludesNewerPages() {
+        let versionTwoPage = WelcomeWizardPage(
+            id: "version-two",
+            introducedInVersion: 2,
+            titleKey: "title",
+            descriptionKey: "description",
+            systemImage: "sparkles"
+        )
+        let allPages = WelcomeWizardCatalog.allPages + [versionTwoPage]
+        welcomeWizardDefaults.setLastViewedWelcomeWizardVersion(1)
+        let manager = WelcomeWizardStateManager(
+            userDefaults: welcomeWizardDefaults,
+            allPages: allPages,
+            currentVersion: 2
+        )
+
+        XCTAssertEqual(manager.pages(for: .automatic).map(\.id), ["version-two"])
+
+        welcomeWizardDefaults.setLastViewedWelcomeWizardVersion(0)
+        XCTAssertEqual(manager.pages(for: .automatic).map(\.id), allPages.map(\.id))
+    }
+
+    func testWelcomeWizardDoesNotReduceNewerStoredVersion() {
+        welcomeWizardDefaults.setLastViewedWelcomeWizardVersion(3)
+        let manager = WelcomeWizardStateManager(
+            userDefaults: welcomeWizardDefaults,
+            currentVersion: 2
+        )
+
+        manager.markCurrentVersionViewed()
+
+        XCTAssertEqual(manager.lastViewedVersion, 3)
+        XCTAssertTrue(manager.pages(for: .automatic).isEmpty)
+    }
+
+    func testAppInitializationDoesNotSeedWelcomeChecklist() {
+        let coreDataManager = WelcomeSeedTrackingCoreDataManager()
+        let initializeDidFinish = expectation(description: "App initialization finishes")
+        var cancellable: AnyCancellable?
+        let viewModel = InitializeAppViewModel(
+            coreDataManager: coreDataManager,
+            appearanceManager: AppearanceManager(),
+            checklistDataSource: MockChecklistDataSource(),
+            templateDataSource: MockTemplateDataSource(),
+            scheduleDataSource: MockScheduleDataSource(),
+            purchaseManager: MockPurchaseManager()
+        )
+        cancellable = viewModel.initializeDidFinish
+            .prefix(1)
+            .sink { initializeDidFinish.fulfill() }
+
+        wait(for: [initializeDidFinish], timeout: 3)
+
+        XCTAssertTrue(coreDataManager.savedChecklists.isEmpty)
+        withExtendedLifetime(cancellable) { }
     }
 
     func testTabNavigationSelectsRequestedTabs() throws {
@@ -84,13 +169,15 @@ class checklistTests: XCTestCase {
             restrictionManager: MockRestrictionManager(),
             purchaseManager: MockPurchaseManager(),
             appearanceManager: AppearanceManager(),
-            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+            welcomeWizardStateManager: WelcomeWizardStateManager(userDefaults: welcomeWizardDefaults)
         )
 
         viewModel.onHelp.send()
-        XCTAssertTrue(viewModel.isSheetVisible)
+        XCTAssertTrue(viewModel.isWelcomeWizardVisible)
+        XCTAssertFalse(viewModel.isSheetVisible)
 
-        viewModel.isSheetVisible = false
+        viewModel.isWelcomeWizardVisible = false
         viewModel.onTermsAndConditions.send()
         XCTAssertTrue(viewModel.isSheetVisible)
 
@@ -577,4 +664,14 @@ class checklistTests: XCTestCase {
         )
     }
 
+}
+
+private final class WelcomeSeedTrackingCoreDataManager: MockCoreDataManager {
+
+    private(set) var savedChecklists: [ChecklistDataModel] = []
+
+    override func save(checklist: ChecklistDataModel) -> Promise<Void> {
+        savedChecklists.append(checklist)
+        return .value
+    }
 }

@@ -28,7 +28,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 dashboardViewModel: AppContext.resolver.resolve(DashboardViewModel.self)!,
                 templatesViewModel: AppContext.resolver.resolve(MyTemplatesViewModel.self)!,
                 schedulesViewModel: AppContext.resolver.resolve(SchedulesViewModel.self)!,
-                settingsViewModel: AppContext.resolver.resolve(SettingsViewModel.self)!
+                settingsViewModel: AppContext.resolver.resolve(SettingsViewModel.self)!,
+                welcomeWizardStateManager: AppContext.resolver.resolve(WelcomeWizardStateManaging.self)!
             )
 
             window.rootViewController = UIHostingController(rootView: contentView)

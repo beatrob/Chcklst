@@ -8,19 +8,25 @@ struct TabBarView: View {
     private let templatesViewModel: MyTemplatesViewModel
     private let schedulesViewModel: SchedulesViewModel
     private let settingsViewModel: SettingsViewModel
+    private let welcomeWizardStateManager: WelcomeWizardStateManaging
+
+    @State private var welcomeWizardPresentation: WelcomeWizardPresentation?
+    @State private var didCheckWelcomeWizard = false
 
     init(
         navigationHelper: NavigationHelper,
         dashboardViewModel: DashboardViewModel,
         templatesViewModel: MyTemplatesViewModel,
         schedulesViewModel: SchedulesViewModel,
-        settingsViewModel: SettingsViewModel
+        settingsViewModel: SettingsViewModel,
+        welcomeWizardStateManager: WelcomeWizardStateManaging
     ) {
         self.navigationHelper = navigationHelper
         self.dashboardViewModel = dashboardViewModel
         self.templatesViewModel = templatesViewModel
         self.schedulesViewModel = schedulesViewModel
         self.settingsViewModel = settingsViewModel
+        self.welcomeWizardStateManager = welcomeWizardStateManager
     }
 
     var body: some View {
@@ -57,6 +63,30 @@ struct TabBarView: View {
         }
         .tint(.firstAccent)
         .environmentObject(navigationHelper)
+        .task {
+            presentWelcomeWizardIfNeeded()
+        }
+        .fullScreenCover(
+            item: $welcomeWizardPresentation,
+            onDismiss: welcomeWizardStateManager.markCurrentVersionViewed
+        ) { presentation in
+            WelcomeWizardView(
+                pages: presentation.pages,
+                mode: presentation.mode,
+                stateManager: welcomeWizardStateManager
+            )
+        }
+    }
+
+    private func presentWelcomeWizardIfNeeded() {
+        guard !didCheckWelcomeWizard else { return }
+        didCheckWelcomeWizard = true
+        let pages = welcomeWizardStateManager.pages(for: .automatic)
+        guard !pages.isEmpty else { return }
+        welcomeWizardPresentation = WelcomeWizardPresentation(
+            pages: pages,
+            mode: .automatic
+        )
     }
 }
 

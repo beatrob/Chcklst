@@ -24,5 +24,8 @@ class InfrastructureAssembly: Assembly {
             container.autoregister(PurchaseManager.self, initializer: DisabledPurchaseManager.init).inObjectScope(.container)
         }
         container.autoregister(AppearanceManager.self, initializer: AppearanceManager.init).inObjectScope(.container)
+        container.register(WelcomeWizardStateManaging.self) { _ in
+            WelcomeWizardStateManager()
+        }.inObjectScope(.container)
     }
 }

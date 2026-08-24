@@ -140,6 +140,13 @@ struct SettingsView: View {
         .sheet(isPresented: $viewModel.isSheetVisible) {
             viewModel.sheet
         }
+        .fullScreenCover(isPresented: $viewModel.isWelcomeWizardVisible) {
+            WelcomeWizardView(
+                pages: viewModel.welcomeWizardStateManager.pages(for: .help),
+                mode: .help,
+                stateManager: viewModel.welcomeWizardStateManager
+            )
+        }
         .alert(isPresented: $viewModel.isAlertVisible) {
             viewModel.alert
         }
@@ -155,7 +162,8 @@ struct SettingsView_Previews: PreviewProvider {
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
                     appearanceManager: AppearanceManager(),
-                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+                    welcomeWizardStateManager: WelcomeWizardStateManager()
                 )
             )
             SettingsView(
@@ -164,7 +172,8 @@ struct SettingsView_Previews: PreviewProvider {
                     restrictionManager: MockRestrictionManager(),
                     purchaseManager: MockPurchaseManager(),
                     appearanceManager: AppearanceManager(),
-                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+                    notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource()),
+                    welcomeWizardStateManager: WelcomeWizardStateManager()
                 )
             )
             .preferredColorScheme(.dark)
