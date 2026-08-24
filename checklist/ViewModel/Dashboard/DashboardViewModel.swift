@@ -139,7 +139,7 @@ class DashboardViewModel: ObservableObject {
                 return
             }
             guard let checklist = checklistDataSource.getChecklist(withId: checklistId) else {
-                log(warning: "Checklist with id \(checklistId) not found")
+                log(warning: "checklist with id \(checklistId) not found")
                 return
             }
             log(debug: "Deeplinking to checklist: \(checklist)")
@@ -178,7 +178,7 @@ class DashboardViewModel: ObservableObject {
         let createChecklist = ChecklistPassthroughSubject()
         createChecklist.sink { checklist in
             checklistDataSource.createChecklist(checklist)
-            .done { _ in Logger.log.debug("Checklist created \(checklist)")}
+            .done { _ in Logger.log.debug("checklist created \(checklist)")}
             .catch { $0.log(message: "Create checklist failed") }
         }.store(in: &cancellables)
         
@@ -354,7 +354,7 @@ private extension DashboardViewModel {
         let confirmationAlert = DashboardAlert.confirmDeleteChecklist(onDelete: { [unowned self] in
             self.checklistDataSource.deleteChecklist(checklist)
             .done {
-                Logger.log.debug("Checklist deleted with id: \(checklist.id)")
+                Logger.log.debug("checklist deleted with id: \(checklist.id)")
                 Haptics.notify(.success)
             }.catch { _ in
                 Logger.log.error("Delete checklist failed")

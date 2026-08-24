@@ -367,7 +367,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         } else if let id = getChecklistId(from: identifier) {
             return await withCheckedContinuation { continuation in
                 checklistDataSource.deleteExpiredNotification(for: id).done {
-                    log(debug: "Checklist with id \(id) deleted")
+                    log(debug: "checklist with id \(id) deleted")
                 }.ensure {
                     continuation.resume(returning: .banner)
                 }.catch { error in

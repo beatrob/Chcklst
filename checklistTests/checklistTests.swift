@@ -340,6 +340,184 @@ class checklistTests: XCTestCase {
         XCTAssertTrue(didRunAction)
     }
 
+    func testTemplateListSearchMatchesLowercasedTitleOrDescription() {
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = MyTemplatesViewModel(
+            templateDataSource: MockTemplateDataSource(),
+            checklistDataSource: checklistDataSource,
+            navigationHelper: NavigationHelper(),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource)
+        )
+
+        XCTAssertTrue(viewModel.isSearchVisible)
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["2", "1"])
+
+        viewModel.searchText = "TEMPLATE ONE"
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["1"])
+
+        viewModel.searchText = "MY SECOND"
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["2"])
+
+        viewModel.searchText = "FIRST THINGS"
+        XCTAssertTrue(viewModel.filteredTemplates.isEmpty)
+        XCTAssertTrue(viewModel.isNoSearchResultsVisible)
+
+        viewModel.searchText = ""
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["2", "1"])
+        XCTAssertFalse(viewModel.isNoSearchResultsVisible)
+    }
+
+    func testTemplatePickerSearchMatchesLowercasedTitleOrDescription() {
+        let viewModel = SelectTemplateViewModel(templateDataSource: MockTemplateDataSource())
+
+        XCTAssertTrue(viewModel.isSearchVisible)
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["1", "2"])
+
+        viewModel.searchText = "TEMPLATE TWO"
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["2"])
+
+        viewModel.searchText = "MY FIRST"
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["1"])
+
+        viewModel.searchText = "MISSING"
+        XCTAssertTrue(viewModel.filteredTemplates.isEmpty)
+        XCTAssertTrue(viewModel.isNoSearchResultsVisible)
+
+        viewModel.searchText = ""
+        XCTAssertEqual(viewModel.filteredTemplates.map(\.id), ["1", "2"])
+        XCTAssertFalse(viewModel.isNoSearchResultsVisible)
+    }
+
+    func testTemplateSearchIsHiddenWhenTheTemplateListIsEmpty() {
+        let templateDataSource = MockTemplateDataSource()
+        templateDataSource._templates.value = []
+        let checklistDataSource = MockChecklistDataSource()
+        let listViewModel = MyTemplatesViewModel(
+            templateDataSource: templateDataSource,
+            checklistDataSource: checklistDataSource,
+            navigationHelper: NavigationHelper(),
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource)
+        )
+        let pickerViewModel = SelectTemplateViewModel(templateDataSource: templateDataSource)
+
+        XCTAssertFalse(listViewModel.isSearchVisible)
+        XCTAssertFalse(pickerViewModel.isSearchVisible)
+    }
+
+    func testScheduleSearchMatchesLowercasedTitleOrDescription() {
+        let scheduleDataSource = MockScheduleDataSource()
+        let checklistDataSource = MockChecklistDataSource()
+        let viewModel = SchedulesViewModel(
+            scheduleDataSource: scheduleDataSource,
+            notificationManager: NotificationManager(checklistDataSource: checklistDataSource)
+        )
+        _ = scheduleDataSource.loadAllSchedules()
+
+        XCTAssertTrue(viewModel.isSearchVisible)
+        XCTAssertEqual(viewModel.filteredCells.map(\.id), ["1", "2", "3"])
+
+        viewModel.searchText = "FIRST SCHEDULE"
+        XCTAssertEqual(viewModel.filteredCells.map(\.id), ["1"])
+
+        viewModel.searchText = "IMPROVE PRODUCTIVITY"
+        XCTAssertEqual(viewModel.filteredCells.map(\.id), ["1"])
+
+        viewModel.searchText = "WELCOME"
+        XCTAssertTrue(viewModel.filteredCells.isEmpty)
+        XCTAssertTrue(viewModel.isNoSearchResultsVisible)
+
+        viewModel.searchText = ""
+        XCTAssertEqual(viewModel.filteredCells.map(\.id), ["1", "2", "3"])
+        XCTAssertFalse(viewModel.isNoSearchResultsVisible)
+    }
+
+    func testScheduleSearchIsHiddenWhenTheScheduleListIsEmpty() {
+        let viewModel = SchedulesViewModel(
+            scheduleDataSource: MockScheduleDataSource(),
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
+
+        XCTAssertFalse(viewModel.isSearchVisible)
+    }
+
+    func testScheduleSearchMatchesCommonDateAndTimeFormats() {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = .current
+        let scheduleDate = calendar.date(
+            from: DateComponents(year: 2026, month: 8, day: 24, hour: 23, minute: 56)
+        )!
+        let schedule = MockScheduleDataSource.mockData[0].copy(
+            with: "Date search example",
+            description: nil,
+            scheduleDate: scheduleDate,
+            repeatFrequency: .never
+        )
+
+        for searchText in [
+            "august", "aug", "8.24", "24/8", "23:56",
+            "08/24/2026", "24.08.2026", "2026-08-24", "11:56 pm"
+        ] {
+            XCTAssertTrue(
+                schedule.matchesSearchText(searchText),
+                "Expected the schedule date to match \(searchText)"
+            )
+        }
+
+        XCTAssertFalse(schedule.matchesSearchText("september"))
+    }
+
+    func testTemplateScheduleCreationShowsAlertAfterSheetDismissal() {
+        let navigationHelper = NavigationHelper()
+        navigationHelper.navigateToScheduleDetail(id: "schedule-id")
+        navigationHelper.navigateToMyTemplates()
+        let viewModel = MyTemplatesViewModel(
+            templateDataSource: MockTemplateDataSource(),
+            checklistDataSource: MockChecklistDataSource(),
+            navigationHelper: navigationHelper,
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
+
+        viewModel.dismissSheet(afterCreating: .schedules)
+
+        XCTAssertEqual(navigationHelper.selectedTab, .templates)
+
+        viewModel.didDismissSheet()
+
+        XCTAssertTrue(viewModel.isAlertVisible)
+        XCTAssertEqual(navigationHelper.selectedTab, .templates)
+
+        viewModel.showCreatedContent(.schedules)
+
+        XCTAssertEqual(navigationHelper.selectedTab, .schedules)
+        XCTAssertTrue(navigationHelper.schedulePath.isEmpty)
+    }
+
+    func testTemplateChecklistCreationShowsAlertAfterSheetDismissal() {
+        let navigationHelper = NavigationHelper()
+        navigationHelper.navigateToChecklistDetail(with: .getWelcomeChecklist(), shouldEdit: false)
+        navigationHelper.navigateToMyTemplates()
+        let viewModel = MyTemplatesViewModel(
+            templateDataSource: MockTemplateDataSource(),
+            checklistDataSource: MockChecklistDataSource(),
+            navigationHelper: navigationHelper,
+            notificationManager: NotificationManager(checklistDataSource: MockChecklistDataSource())
+        )
+
+        viewModel.dismissSheet(afterCreating: .checklists)
+
+        XCTAssertEqual(navigationHelper.selectedTab, .templates)
+
+        viewModel.didDismissSheet()
+
+        XCTAssertTrue(viewModel.isAlertVisible)
+        XCTAssertEqual(navigationHelper.selectedTab, .templates)
+
+        viewModel.showCreatedContent(.checklists)
+
+        XCTAssertEqual(navigationHelper.selectedTab, .checklists)
+        XCTAssertTrue(navigationHelper.checklistPath.isEmpty)
+    }
+
     func testTemplatesDoesNotShowCreationAlertForUnrelatedChecklistChanges() {
         let checklistDataSource = MockChecklistDataSource()
         let viewModel = MyTemplatesViewModel(

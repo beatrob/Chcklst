@@ -29,6 +29,20 @@ struct ChecklistView: View {
                                     checklistName: $viewModel.checklistName,
                                     isEditable: $viewModel.isEditable
                                 )
+                                if let reminderDate = viewModel.reminderDateDescription {
+                                    HStack {
+                                        Image(systemName: "bell.badge")
+                                            .accessibilityHidden(true)
+                                        Text(reminderDate)
+                                        Spacer()
+                                    }
+                                    .modifier(Modifier.Checklist.Description())
+                                    .italic()
+                                    .padding(.horizontal)
+                                    .padding(.bottom, 20)
+                                    .accessibilityElement(children: .combine)
+                                    .accessibilityLabel("Reminder \(reminderDate)")
+                                }
                                 if viewModel.shouldDisplayDescription {
                                     ChecklistDescriptionView(
                                         description: $viewModel.checklistDescription,

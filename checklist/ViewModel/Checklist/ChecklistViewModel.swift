@@ -38,6 +38,10 @@ class ChecklistViewModel: ObservableObject {
     var shouldDisplaySaveAsTemplate: Bool { viewState.isCreateChecklist }
     var shouldDisplayActionButton: Bool { viewState.isEditEnabled }
     var shouldDisplayDescription: Bool { viewState.isEditEnabled || !checklistDescription.isEmpty }
+    var reminderDateDescription: String? {
+        guard !isEditable, isReminderOn else { return nil }
+        return reminderDate.formatedReminderDate()
+    }
     
     @Published var isEditable: Bool
     @Published var checklistName: String = ""
@@ -113,7 +117,7 @@ class ChecklistViewModel: ObservableObject {
     private let didCreateChecklistSubject = EmptySubject()
     private let didUpdateTemplate = EmptySubject()
     
-    /// Create Checklist or Template
+    /// Create checklist or template
     let createViewNavbarViewModel: BackButtonNavBarViewModel = BackButtonNavBarViewModel(title: "Create Checklist")
     let onAddItemsNext: EmptySubject = .init()
     let onDeleteItem: PassthroughSubject<ChecklistItemViewModel, Never> = .init()
@@ -184,6 +188,7 @@ class ChecklistViewModel: ObservableObject {
         self.currentChecklist = .init(viewState.checklist)
         self.isEditable = viewState.isEditEnabled
         self.isReminderOn = viewState.checklist?.isValidReminderSet ?? false
+        self.reminderDate = viewState.checklist?.reminderDate ?? Date()
         
         if let template = viewState.template {
             setupTemplate(template)
@@ -303,7 +308,7 @@ private extension ChecklistViewModel {
     }
     
     func setupCreateTemplate() {
-        createViewNavbarViewModel.title = "Create Template"
+        createViewNavbarViewModel.title = "Create template"
         self.checklistName = currentChecklist.value?.title ?? ""
         self.checklistDescription = currentChecklist.value?.description ?? ""
         currentChecklist.value?.items
@@ -432,7 +437,7 @@ private extension ChecklistViewModel {
             self.currentChecklist.value = $0
             self.reorderItems()
         }.catch { error in
-            error.log(message: "Failed to update current Checklist")
+            error.log(message: "Failed to update current checklist")
         }
     }
     
@@ -531,7 +536,7 @@ private extension ChecklistViewModel {
     
     func updateTemplate() {
         guard let template = viewState.template else {
-            log(warning: "Template not available")
+            log(warning: "template not available")
             return
         }
         let checklist = getChecklistFromUI()

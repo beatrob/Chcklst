@@ -48,8 +48,8 @@ enum MyTemplatesActionSheet {
     ) -> some View {
         switch self {
         case .templateActions(_, let onCreateChecklist, let onCreateSchedule, let onEdit, let onDelete):
-            Button("Create Checklist") { onSelection(onCreateChecklist) }
-            Button("Create Schedule") { onSelection(onCreateSchedule) }
+            Button("Create checklist") { onSelection(onCreateChecklist) }
+            Button("Create schedule") { onSelection(onCreateSchedule) }
             Button("Edit") { onSelection(onEdit) }
             Button("Delete", role: .destructive) { onSelection(onDelete) }
         case .none:

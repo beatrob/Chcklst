@@ -30,11 +30,23 @@ class SchedulesViewModel: ObservableObject {
             isEmptyListViewVisible = cells.isEmpty
         }
     }
+    @Published var searchText = ""
     @Published var isSheetPresented = false
     @Published var sheet = AnyView.empty
     @Published var navigationDestination = AnyView.empty
     @Published var isNavigationActive = false
     @Published var isEmptyListViewVisible = false
+
+    var filteredCells: [ScheduleCellViewModel] {
+        guard !searchText.isEmpty else { return cells }
+        return cells.filter { $0.schedule.matchesSearchText(searchText) }
+    }
+
+    var isNoSearchResultsVisible: Bool {
+        !cells.isEmpty && filteredCells.isEmpty
+    }
+
+    var isSearchVisible: Bool { !cells.isEmpty }
     
     init(scheduleDataSource: ScheduleDataSource, notificationManager: NotificationManager) {
         

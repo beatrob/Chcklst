@@ -16,13 +16,13 @@ extension ChecklistViewModel {
         if isNavBarVisible { return checklistName }
         switch viewState {
         case .createChecklist, .createChecklistFromTemplate:
-            return "Create Checklist"
+            return "Create checklist"
         case .createTemplate, .createTemplateFromChecklist:
             return "Create template"
         case .updateTemplate:
-            return "Edit Template"
+            return "Edit template"
         case .updateChecklist:
-            return "Edit Checklist"
+            return "Edit checklist"
         case .display:
             return checklistName
         }
@@ -35,7 +35,7 @@ extension ChecklistViewModel {
         case .updateChecklist, .updateTemplate:
             return .init("Save")
         case .createTemplateFromChecklist, .createTemplate:
-            return .init("Create Template")
+            return .init("Create template")
         case .display:
             return .init("")
         }

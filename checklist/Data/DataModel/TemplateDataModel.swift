@@ -53,4 +53,11 @@ struct TemplateDataModel: Equatable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(id.hashValue)
     }
+
+    func matchesSearchText(_ searchText: String) -> Bool {
+        guard !searchText.isEmpty else { return true }
+        let lowercasedSearchText = searchText.lowercased()
+        return title.lowercased().contains(lowercasedSearchText) ||
+            description?.lowercased().contains(lowercasedSearchText) == true
+    }
 }

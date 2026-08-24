@@ -24,9 +24,15 @@ struct SchedulesView: View {
                     actionTitle: "Create schedule",
                     onActionTappedSubject: viewModel.onCreateSchedule
                 )
+            } else if viewModel.isNoSearchResultsVisible {
+                EmptyListView(
+                    message: "No results found",
+                    actionTitle: nil,
+                    onActionTappedSubject: nil
+                )
             } else {
                 List {
-                    ForEach(viewModel.cells) { cell in
+                    ForEach(viewModel.filteredCells) { cell in
                         ScheduleCellView(viewModel: cell)
                             .mainListRow()
                             .onTapGesture {
@@ -40,6 +46,13 @@ struct SchedulesView: View {
         .background(Color.mainBackground)
         .navigationTitle("Schedules")
         .navigationBarTitleDisplayMode(.inline)
+        .if(viewModel.isSearchVisible) {
+            $0.searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search schedules"
+            )
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button { viewModel.onCreateSchedule.send() } label: { Image(systemName: "plus") }

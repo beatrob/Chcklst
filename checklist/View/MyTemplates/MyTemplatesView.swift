@@ -21,10 +21,16 @@ struct MyTemplatesView: View {
                         actionTitle: "Create template",
                         onActionTappedSubject: viewModel.onCreateTemplate
                     )
+                } else if viewModel.isNoSearchResultsVisible {
+                    EmptyListView(
+                        message: "No results found",
+                        actionTitle: nil,
+                        onActionTappedSubject: nil
+                    )
                 } else {
                     List {
                         ForEach(
-                            viewModel.templates,
+                            viewModel.filteredTemplates,
                             id: \.id) { template in
                             MyTemplateItemView(
                                 name: template.title,
@@ -44,6 +50,13 @@ struct MyTemplatesView: View {
         }
         .navigationTitle("Templates")
         .navigationBarTitleDisplayMode(.inline)
+        .if(viewModel.isSearchVisible) {
+            $0.searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search templates"
+            )
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button { viewModel.onCreateTemplate.send() } label: { Image(systemName: "plus") }
@@ -51,7 +64,10 @@ struct MyTemplatesView: View {
             }
         }
         .chcklstNavigationBar()
-        .sheet(isPresented: $viewModel.isSheetVisible) {
+        .sheet(
+            isPresented: $viewModel.isSheetVisible,
+            onDismiss: viewModel.didDismissSheet
+        ) {
             self.viewModel.sheetView
         }
         .sheet(

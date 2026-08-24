@@ -17,9 +17,19 @@ class SelectTemplateViewModel: ObservableObject {
             isEmptyListViewVisible = templates.isEmpty
         }
     }
-    
+    @Published var searchText = ""
     @Published var isEmptyListViewVisible = false
     var cancellables =  Set<AnyCancellable>()
+
+    var filteredTemplates: [TemplateDataModel] {
+        templates.filter { $0.matchesSearchText(searchText) }
+    }
+
+    var isNoSearchResultsVisible: Bool {
+        !templates.isEmpty && filteredTemplates.isEmpty
+    }
+
+    var isSearchVisible: Bool { !templates.isEmpty }
     
     init(templateDataSource: TemplateDataSource) {
         templateDataSource.templates.sink { [weak self] templates in

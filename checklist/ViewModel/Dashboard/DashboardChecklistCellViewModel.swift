@@ -100,7 +100,7 @@ private extension DashboardChecklistCellViewModel {
                     return
                 }
                 self.checklistDataSource.reloadChecklist(self.checklist).catch { error in
-                    error.log(message: "Faied to update Checklist")
+                    error.log(message: "Faied to update checklist")
                 }
             }
             .store(in: &cancellables)

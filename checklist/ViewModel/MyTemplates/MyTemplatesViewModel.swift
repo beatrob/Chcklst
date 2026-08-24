@@ -12,12 +12,18 @@ import SwiftUI
 
 
 class MyTemplatesViewModel: ObservableObject {
+
+    enum SheetDismissDestination {
+        case checklists
+        case schedules
+    }
     
     @Published var templates: [TemplateDataModel] = [] {
         didSet {
             isEmptyViewVisible = templates.isEmpty
         }
     }
+    @Published var searchText = ""
     @Published var isActionSheetVisible = false
     @Published var isViewToNavigateVisible = false
     @Published var isSheetVisible = false
@@ -38,10 +44,18 @@ class MyTemplatesViewModel: ObservableObject {
         }
     }
     private var pendingActionSheetSelection: EmptyCompletion?
+    private var pendingSheetDestination: SheetDismissDestination?
     var cancellables =  Set<AnyCancellable>()
     var createScheduleViewModel: CreateScheduleViewModel?
     
     var actionSheetTitle: String { actionSheet.title }
+    var filteredTemplates: [TemplateDataModel] {
+        templates.filter { $0.matchesSearchText(searchText) }
+    }
+    var isNoSearchResultsVisible: Bool {
+        !templates.isEmpty && filteredTemplates.isEmpty
+    }
+    var isSearchVisible: Bool { !templates.isEmpty }
 
     @ViewBuilder
     func actionSheetButtons(
@@ -63,8 +77,6 @@ class MyTemplatesViewModel: ObservableObject {
     var onBackTapped: EmptyPublisher {
         navBarViewModel.backButton.didTap.eraseToAnyPublisher()
     }
-    
-    let onGotoSchedules = EmptySubject()
     
     init(
         templateDataSource: TemplateDataSource,
@@ -128,12 +140,11 @@ class MyTemplatesViewModel: ObservableObject {
         }.store(in: &cancellables)
         
         onGotoDashboard.subscribe(navBarViewModel.backButton.didTapSubject).store(in: &cancellables)
-        
+
         notificationManager.deeplinkChecklistId
             .merge(with: notificationManager.deeplinkScheduleId)
             .sink { [weak self] _ in
                 self?.isSheetVisible = false
-                self?.sheetView = .empty
             }
             .store(in: &cancellables)
     }
@@ -153,6 +164,37 @@ class MyTemplatesViewModel: ObservableObject {
         actionSheet = .none
         action?()
     }
+
+    func dismissSheet(afterCreating destination: SheetDismissDestination) {
+        pendingSheetDestination = destination
+        isSheetVisible = false
+    }
+
+    func didDismissSheet() {
+        sheetView = .empty
+        guard let destination = pendingSheetDestination else { return }
+        pendingSheetDestination = nil
+
+        switch destination {
+        case .checklists:
+            alert = .createChecklistSucess(onGotoDashboard: { [weak self] in
+                self?.showCreatedContent(.checklists)
+            })
+        case .schedules:
+            alert = .createScheduleSuccess(onGotoSchedules: { [weak self] in
+                self?.showCreatedContent(.schedules)
+            })
+        }
+    }
+
+    func showCreatedContent(_ destination: SheetDismissDestination) {
+        switch destination {
+        case .checklists:
+            navigationHelper.popToDashboard()
+        case .schedules:
+            navigationHelper.navigateToSchedules()
+        }
+    }
 }
 
 
@@ -167,7 +209,6 @@ private extension MyTemplatesViewModel {
             self?.isSheetVisible = false
         }.store(in: &cancellables)
         viewModel.dismissView.sink { [weak self] in
-            self?.sheetView = .empty
             self?.isSheetVisible = false
         }.store(in: &cancellables)
         viewModel.setBigTitleNavBar(isTransparent: true)
@@ -189,17 +230,9 @@ private extension MyTemplatesViewModel {
         )!
         viewModel.setBigTitleNavBar(isTransparent: true)
         viewModel.onDidCreateChecklist.sink { [weak self] in
-            self?.isSheetVisible = false
-            DispatchQueue.main.async {
-                self?.alert = .createChecklistSucess(
-                    onGotoDashboard: {
-                        self?.navigationHelper.popToDashboard()
-                    }
-                )
-            }
+            self?.dismissSheet(afterCreating: .checklists)
         }.store(in: &cancellables)
         viewModel.dismissView.sink { [weak self] in
-            self?.sheetView = .empty
             self?.isSheetVisible = false
         }.store(in: &cancellables)
         sheetView = AnyView(
@@ -211,24 +244,21 @@ private extension MyTemplatesViewModel {
     }
     
     func createSchedule(_ template: TemplateDataModel) {
-        
         let viewModel = AppContext.resolver.resolve(
             ScheduleDetailViewModel.self,
             argument: ScheduleDetailViewState.create(template: template)
         )!
-        viewModel.isBackButtonVisible = false
-        let view = ScheduleDetailView(viewModel: viewModel)
-        sheetView = AnyView(view)
-        isSheetVisible = true
-        viewModel.didCreateSchedule.sink { [weak self] _ in
-            self?.isSheetVisible = false
-            DispatchQueue.main.async {
-                self?.alert = .createScheduleSuccess(onGotoSchedules: {
-                    DispatchQueue.main.async {
-                        self?.onGotoSchedules.send()
-                    }
-                })
+        sheetView = AnyView(
+            NavigationStack {
+                ScheduleDetailView(viewModel: viewModel)
             }
+        )
+        isSheetVisible = true
+        viewModel.backButtonViewModel.didTap.sink { [weak self] in
+            self?.isSheetVisible = false
+        }.store(in: &cancellables)
+        viewModel.didCreateSchedule.sink { [weak self] _ in
+            self?.dismissSheet(afterCreating: .schedules)
         }.store(in: &cancellables)
     }
 }

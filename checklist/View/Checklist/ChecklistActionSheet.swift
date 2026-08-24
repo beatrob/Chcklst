@@ -48,7 +48,7 @@ enum ChecklistActionSheet {
                     }
                 }
             }
-            Button("Create Template") {
+            Button("Create template") {
                 onSelection { delegate.onSaveAsTemplateAction(checklist: checklist) }
             }
             Button("Delete", role: .destructive) {

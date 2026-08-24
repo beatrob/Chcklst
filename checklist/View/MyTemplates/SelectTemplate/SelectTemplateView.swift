@@ -31,15 +31,21 @@ struct SelectTemplateView: View {
                 EmptyListView(
                     message: """
                     Your template list is empty.
-                    Create one on the Templates page.
+                    Create one on the templates page.
                     """,
+                    actionTitle: nil,
+                    onActionTappedSubject: nil
+                )
+            } else if viewModel.isNoSearchResultsVisible {
+                EmptyListView(
+                    message: "No results found",
                     actionTitle: nil,
                     onActionTappedSubject: nil
                 )
             } else {
                 List {
                     ForEach(
-                        viewModel.templates,
+                        viewModel.filteredTemplates,
                         id: \.id) { template in
                             MyTemplateItemView(
                                 name: template.title,
@@ -69,6 +75,13 @@ struct SelectTemplateView: View {
         }
         .navigationTitle("Select template")
         .navigationBarTitleDisplayMode(.inline)
+        .if(viewModel.isSearchVisible) {
+            $0.searchable(
+                text: $viewModel.searchText,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search templates"
+            )
+        }
         .chcklstNavigationBar()
     }
 }

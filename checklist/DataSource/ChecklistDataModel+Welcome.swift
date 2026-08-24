@@ -35,25 +35,25 @@ extension ChecklistDataModel {
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Select \"Checklist\" to start a new checklist form scratch",
+                    name: "Select \"checklist\" to start a new checklist form scratch",
                     isDone: false,
                     updateDate: now.addingTimeInterval(3)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Select \"Checklist from template\" to create a checklist from your saved tamplets",
+                    name: "Select \"checklist from template\" to create a checklist from your saved tamplets",
                     isDone: false,
                     updateDate: now.addingTimeInterval(4)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Fill your new Checklist with items",
+                    name: "Fill your new checklist with items",
                     isDone: false,
                     updateDate: now.addingTimeInterval(5)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Create a new Template in addition to reuse your TODO list later",
+                    name: "Create a new template in addition to reuse your TODO list later",
                     isDone: false,
                     updateDate: now.addingTimeInterval(6)
                 ),
@@ -65,13 +65,13 @@ extension ChecklistDataModel {
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Edit, delete and do more with your Checklist byt long-pressing the titles on the Dashboard",
+                    name: "Edit, delete and do more with your checklist byt long-pressing the titles on the Dashboard",
                     isDone: false,
                     updateDate: now.addingTimeInterval(8)
                 ),
                 .init(
                     id: UUID().uuidString,
-                    name: "Create Schedules from Templates to plan your Checklists ahead",
+                    name: "Create schedules from templates to plan your checklists ahead",
                     isDone: false,
                     updateDate: now.addingTimeInterval(9)
                 ),

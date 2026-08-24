@@ -23,13 +23,13 @@ enum MyTemplatesAlert {
         case .createChecklistSucess(let onGotoDashboard):
             return Alert(
                 title: Text("New Checklist created"),
-                primaryButton: .default(Text("Go to Dashboard"), action: onGotoDashboard),
+                primaryButton: .default(Text("Open checklists"), action: onGotoDashboard),
                 secondaryButton: .cancel()
             )
         case .createScheduleSuccess(let onGotoSchedules):
             return Alert(
                 title: Text("New Schedule created"),
-                primaryButton: .default(Text("Go to Schedules"), action: onGotoSchedules),
+                primaryButton: .default(Text("Open schedules"), action: onGotoSchedules),
                 secondaryButton: .cancel()
             )
         case .confirmDelete(let onConfirm):
